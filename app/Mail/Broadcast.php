@@ -30,7 +30,7 @@ class Broadcast extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->title ?? 'New Message From University Exams Archive System',
+            subject: 'New Message From University Exams Archive System',
         );
     }
 
