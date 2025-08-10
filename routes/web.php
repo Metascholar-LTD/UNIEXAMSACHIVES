@@ -7,6 +7,7 @@ use App\Http\Controllers\Dashboard\DetailsController;
 use App\Http\Controllers\Dashboard\ExamsController;
 use App\Http\Controllers\Dashboard\FilesController;
 use App\Http\Controllers\Dashboard\HomeController;
+use App\Http\Controllers\Dashboard\AdvancedCommunicationController;
 use App\Http\Controllers\Frontend\PagesController;
 use Illuminate\Support\Facades\Route;
 
@@ -101,4 +102,13 @@ Route::middleware(['auth'])->group(function () {
 
     #logout
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');
+
+    # Advanced Communication System (super-admin only UI; reuse is_admin for now)
+    Route::middleware([])->group(function () {
+        Route::get('/dashboard/comms', [AdvancedCommunicationController::class, 'index'])->name('comms.index');
+        Route::get('/dashboard/comms/compose', [AdvancedCommunicationController::class, 'create'])->name('comms.create');
+        Route::post('/dashboard/comms', [AdvancedCommunicationController::class, 'store'])->name('comms.store');
+        Route::get('/dashboard/comms/{communication}', [AdvancedCommunicationController::class, 'show'])->name('comms.show');
+        Route::get('/dashboard/comms/users/search', [AdvancedCommunicationController::class, 'searchUsers'])->name('comms.users.search');
+    });
 });

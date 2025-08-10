@@ -71,6 +71,10 @@
 
             </ul>
         </div>
+        
+        
+
+        {{-- Exams --}}
         {{-- Exams --}}
         <div class="dashboard__nav__title mt-40">
             <h6>EXAMS CLASS PORTFOLIO </h6>
@@ -238,6 +242,28 @@
 
             </ul>
         </div>
+        {{-- Advanced Communication System --}}
+        @auth
+        @if(auth()->user()->is_admin)
+        <div class="dashboard__nav__title mt-40">
+            <h6>ADVANCED COMMUNICATION SYSTEM</h6>
+        </div>
+        <div class="dashboard__nav">
+            <ul>
+                <li>
+                    <a href="{{ route('comms.create') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit-3"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/></svg>
+                        Compose</a>
+                </li>
+                <li>
+                    <a href="{{ route('comms.index') }}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-list"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                        Campaigns</a>
+                </li>
+            </ul>
+        </div>
+        @endif
+        @endauth
         {{-- Users --}}
         <div class="dashboard__nav__title mt-40">
             <h6>user</h6>
