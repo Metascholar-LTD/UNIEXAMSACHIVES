@@ -1,0 +1,439 @@
+<div class="col-xl-3 col-lg-3 col-md-12">
+    <div class="dashboard__inner sticky-top">
+        <div class="dashboard__nav__title">
+            <h6>Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}</h6>
+        </div>
+        <div class="dashboard__nav">
+            <ul>
+                <li>
+                    <a class="active" href="{{route('dashboard')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-home">
+                            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                            <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                        </svg>
+                        Dashboard</a>
+                </li>
+                <li>
+                    <a href="{{route('dashboard.profile')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-user">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                            <circle cx="12" cy="7" r="4"></circle>
+                        </svg>
+                        My Profile</a>
+                </li>
+                @auth
+                    @if(auth()->user()->is_admin)
+                        <li>
+                            <a href="{{route('dashboard.message')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-book-open">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                                Message</a><span class="dashboard__label">{{$newMessagesCount}}</span>
+                        </li>
+                    @endif
+                @endauth
+                @auth
+                    @unless(auth()->user()->is_admin)
+                        <li>
+                            <a href="{{route('dashboard.message.create')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-book-open">
+                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+                                </svg>
+                                Broadcast Message</a>
+                        </li>
+                    @endunless
+                @endauth
+
+                <li>
+                    <a href="{{route('dashboard.document')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-bookmark">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        All Documents</a>
+                </li>
+
+            </ul>
+        </div>
+        {{-- Exams --}}
+        <div class="dashboard__nav__title mt-40">
+            <h6>EXAMS CLASS PORTFOLIO </h6>
+        </div>
+        <div class="dashboard__nav">
+            <ul>
+                @auth
+                @if(auth()->user()->is_admin)
+                <li>
+                    <a href="{{route('dashboard.pending.exams')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-bookmark">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Pending Exams</a><span class="dashboard__label">{{$pendingCount}}</span>
+                </li>
+                <li>
+                    <a href="{{route('dashboard.approve.exams')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-bookmark">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Approved Exams </a><span class="dashboard__label">{{$approvedCount}}</span>
+                </li>
+                    <li>
+                        <a href="{{route('dashboard.upload.document')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bookmark">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            All Exams Archive</a><span class="dashboard__label">{{$allExansCount}}</span>
+                    </li>
+                @endif
+                @endauth
+                @auth
+                    @unless(auth()->user()->is_admin)
+                    <li>
+                        <a href="{{route('dashboard.all.pending.exams')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bookmark">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Pending Exams
+                        </a><span class="dashboard__label">{{$pendingCount}}</span>
+
+                    </li>
+                    <li>
+                        <a href="{{route('dashboard.all.approve.exams')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bookmark">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Approved Exams
+                        </a><span class="dashboard__label">{{$approvedCount}}</span>
+
+                    </li>
+                        <li>
+                            <a href="{{route('dashboard.all.upload.document')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-bookmark">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                All Exams Archive
+                            </a><span class="dashboard__label">{{$allExansCount}}</span>
+
+                        </li>
+                    @endunless
+                @endauth
+
+            </ul>
+        </div>
+
+        {{-- File --}}
+        <div class="dashboard__nav__title mt-40">
+            <h6>FILES CLASS PORTFOLIO</h6>
+        </div>
+        <div class="dashboard__nav">
+            <ul>
+                @auth
+                @if(auth()->user()->is_admin)
+                <li>
+                    <a href="{{route('dashboard.pending.files')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-bookmark">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Pending Files</a><span class="dashboard__label">{{$pendingFilesCount}}</span>
+                </li>
+                <li>
+                    <a href="{{route('dashboard.approve.files')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-bookmark">
+                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                        </svg>
+                        Files Approved</a><span class="dashboard__label">{{$approvedFilesCount}}</span>
+                </li>
+                    <li>
+                        <a href="{{route('dashboard.upload.file')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bookmark">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            All Files Archive</a><span class="dashboard__label">{{$allFilesCount}}</span>
+                    </li>
+                @endif
+                @endauth
+                @auth
+                    @unless(auth()->user()->is_admin)
+                    <li>
+                        <a href="{{route('dashboard.all.pending.files')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bookmark">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Pending Files
+                        </a><span class="dashboard__label">{{$pendingFilesCount}}</span>
+
+                    </li>
+                    <li>
+                        <a href="{{route('dashboard.all.approve.files')}}">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-bookmark">
+                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                            </svg>
+                            Approved Files
+                        </a><span class="dashboard__label">{{$approvedFilesCount}}</span>
+
+                    </li>
+                        <li>
+                            <a href="{{route('dashboard.all.upload.file')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-bookmark">
+                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                                </svg>
+                                All Files Archive
+                            </a><span class="dashboard__label">{{$allFilesCount}}</span>
+
+                        </li>
+                    @endunless
+                @endauth
+
+            </ul>
+        </div>
+        {{-- Users --}}
+        <div class="dashboard__nav__title mt-40">
+            <h6>user</h6>
+        </div>
+
+        <div class="dashboard__nav">
+            <ul>
+                @auth
+                    @unless(auth()->user()->is_admin)
+                        <li>
+                            <a href="{{route('dashboard.users')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-user">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Manage Users</a>
+                        </li>
+                        <li>
+                            <a href="#" id="triggerLogoModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-user">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Set Logo / Title</a>
+                        </li>
+                        <li>
+                            <a href="{{route('departments.index')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-user">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Department/Faculty</a>
+                        </li>
+                        <li>
+                            <a href="#" id="triggerAcademicModal">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-user">
+                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="12" cy="7" r="4"></circle>
+                                </svg>
+                                Academic Year</a>
+                        </li>
+                    @endunless
+                @endauth
+                <li>
+                    <a href="{{route('dashboard.settings')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-settings">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path
+                                d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                            </path>
+                        </svg>
+                        Settings</a>
+                </li>
+                <li>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                    <a href="{{route('logout')}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-volume-1">
+                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+                        </svg>
+                        Logout</a>
+                    </form>
+                </li>
+
+
+
+            </ul>
+        </div>
+
+
+    </div>
+</div>
+
+<!-- Logo Modal -->
+<div class="modal fade" id="myLogoModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Logo and System Name</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{-- content --}}
+                <form action="{{route('dashboard.details.store')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="col-xl-12">
+                        <div class="dashboard__form__wraper">
+                            <div class="dashboard__form__input">
+                                <label >System Title</label>
+                                <input type="text" placeholder="Enter Title" name="title">
+                            </div>
+                            <div class="dashboard__form__input">
+                                <label >Logo</label>
+                                <input type="file" placeholder="Choose a file" name="logo_image">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Department Modal -->
+<div class="modal fade" id="myDepartmentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Department/Faculty</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{-- content --}}
+                <form action="{{route('departments.store')}}" method="POST">
+                    @csrf
+                    <div class="col-xl-12">
+                        <div class="dashboard__form__wraper">
+                            <div class="dashboard__form__input">
+                                <label >Name</label>
+                                <input type="text" placeholder="Enter Department or Faculty Name" name="name" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Academic Year Modal -->
+<div class="modal fade" id="myAcademicModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Academic Year</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                {{-- content --}}
+                <form action="{{route('dashboard.academic.store')}}" method="POST">
+                    @csrf
+                    <div class="col-xl-12">
+                        <div class="dashboard__form__wraper">
+                            <div class="dashboard__form__input">
+                                <label >Academic Year</label>
+                                <input type="text" placeholder="Enter Academic Year" name="year" required>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Save changes</button>
+
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
