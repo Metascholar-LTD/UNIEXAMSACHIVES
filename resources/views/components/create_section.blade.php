@@ -7,17 +7,9 @@
                     <span class="uda-avatar-inner">
                         @if (auth()->user()->profile_picture)
                             @php
-                                // Alternative URL generation if symlink is broken
-                                $avatarUrl = asset('storage/' . auth()->user()->profile_picture);
+                                $avatarUrl = Storage::url(auth()->user()->profile_picture);
                                 $cacheBuster = optional(auth()->user()->updated_at)->timestamp ?? time();
                             @endphp
-                            <!-- DEBUG INFO -->
-                            <div style="position: fixed; top: 10px; left: 10px; background: red; color: white; padding: 10px; z-index: 9999; font-size: 12px;">
-                                <strong>DEBUG:</strong><br>
-                                Profile Picture DB Value: {{ auth()->user()->profile_picture }}<br>
-                                Generated URL: {{ $avatarUrl }}<br>
-                                Full URL with cache: {{ $avatarUrl }}?v={{ $cacheBuster }}
-                            </div>
                             <img class="uda-avatar" loading="lazy" src="{{ $avatarUrl }}?v={{ $cacheBuster }}" alt="Profile Picture">
                         @else
                             <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">

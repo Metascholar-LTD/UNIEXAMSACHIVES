@@ -172,26 +172,10 @@ class HomeController extends Controller
             // Store new profile picture
             $path = $request->file('profile_picture')->store('profile_pictures', 'public');
             $user->profile_picture = $path;
-            
-            // DEBUG: Log what's happening
-            \Log::info('Profile picture upload debug:', [
-                'original_name' => $request->file('profile_picture')->getClientOriginalName(),
-                'generated_path' => $path,
-                'full_path' => Storage::disk('public')->path($path),
-                'url' => Storage::url($path),
-                'file_exists' => Storage::disk('public')->exists($path)
-            ]);
         }
 
         // Save user
         $user->save();
-
-        // DEBUG: Log user data after save
-        \Log::info('User saved with profile_picture:', [
-            'user_id' => $user->id,
-            'profile_picture_db_value' => $user->profile_picture,
-            'fresh_user_check' => User::find($user->id)->profile_picture
-        ]);
 
         // Redirect or return a response
         return redirect()->back()->with('success', 'Profile updated successfully!');
