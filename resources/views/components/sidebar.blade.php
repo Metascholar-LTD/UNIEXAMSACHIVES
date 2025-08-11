@@ -3,7 +3,7 @@
         <div class="dashboard__nav__title">
             <h6>
                 @if(auth()->check() && auth()->user()->is_admin)
-                    Welcome, Super Admin
+                    Welcome, Admin
                 @else
                     Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}
                 @endif
