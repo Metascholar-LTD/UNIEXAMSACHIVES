@@ -1,69 +1,43 @@
 <div class="col-xl-12">
-    <div class="dashboardarea__wraper">
-        <div class="dashboardarea__img">
-            <div class="dashboardarea__inner admin__dashboard__inner">
-                <div class="dashboardarea__left">
-                    <div class="dashboardarea__left__img">
-                        @if (auth()->user()->profile_picture)
-                            <img loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="">
-                        @else
-                            <img loading="lazy" src="../img/dashbord/dashbord__2.jpg" alt="">
-                        @endif
-                    </div>
-                    <div class="dashboardarea__left__content">
-                        <h5>Hello</h5>
-                        <h4>{{auth()->user()->first_name}} {{auth()->user()->last_name}}</h4>
-                    </div>
+    <div class="uda-hero">
+        <div class="uda-hero-grid">
+            <!-- Greeting -->
+            <div class="uda-greeting">
+                <div class="uda-avatar-wrap">
+                    @if (auth()->user()->profile_picture)
+                        <img class="uda-avatar" loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="Profile Picture">
+                    @else
+                        <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">
+                    @endif
                 </div>
-                <div class="dashboardarea__star">
-                    <form action="{{ route('exam.search') }}" method="GET">
-                        <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 mt-4">
-                          <div class="input-group">
-                                <input type="search" name="query" placeholder="Search for document" aria-describedby="button-addon1" class="form-control border-0 bg-light">
-                                <div class="input-group-append">
-                                    <button id="button-addon1" type="submit" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
-                                </div>
-                          </div>
-                        </div>
-                    </form>
+                <div class="uda-greeting-text">
+                    <div class="uda-hello">Hello</div>
+                    <div class="uda-name">{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</div>
                 </div>
-                <div class="dashboardarea__right">
-                    <div class="dashboardarea__right__button">
-                        <a class="default__button" href="{{route('dashboard.create')}}">Add Exam
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-edit">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
-                        <a class="default__button" href="{{route('dashboard.file.create')}}">Add File
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-edit">
-                                <line x1="5" y1="12" x2="19" y2="12"></line>
-                                <polyline points="12 5 19 12 12 19"></polyline>
-                            </svg>
-                        </a>
+            </div>
 
+            <!-- Search -->
+            <div class="uda-search">
+                <form action="{{ route('exam.search') }}" method="GET">
+                    <div class="uda-search-box">
+                        <i class="icofont-search-1 uda-search-icon" aria-hidden="true"></i>
+                        <input class="uda-search-input" type="search" name="query" placeholder="Search for documents..." aria-label="Search for documents">
+                        <button type="submit" class="uda-btn uda-btn-primary uda-search-btn">Search</button>
                     </div>
-                </div>
+                </form>
+            </div>
 
+            <!-- Actions -->
+            <div class="uda-actions">
+                <a href="{{ route('dashboard.create') }}" class="uda-btn uda-btn-primary">
+                    <i class="icofont-plus-circle"></i>
+                    <span>Add Exam</span>
+                </a>
+                <a href="{{ route('dashboard.file.create') }}" class="uda-btn uda-btn-secondary">
+                    <i class="icofont-file-alt"></i>
+                    <span>Add File</span>
+                </a>
             </div>
         </div>
     </div>
 </div>
-<style>
-.form-control:focus {
-  box-shadow: none;
-}
-
-.form-control-underlined {
-  border-width: 0;
-  border-bottom-width: 1px;
-  border-radius: 0;
-  padding-left: 0;
-}
-</style>
