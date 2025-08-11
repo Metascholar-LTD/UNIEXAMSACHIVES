@@ -9,6 +9,9 @@
                     @else
                         <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">
                     @endif
+                    <a href="{{ route('dashboard.settings') }}" class="uda-avatar-edit" title="Update profile picture" aria-label="Update profile picture">
+                        <i class="icofont-plus"></i>
+                    </a>
                 </div>
                 <div class="uda-greeting-text">
                     <div class="uda-hello">Hello</div>
@@ -41,3 +44,15 @@
         </div>
     </div>
 </div>
+<!-- <style>
+.form-control:focus {
+  box-shadow: none;
+} 
+
+.form-control-underlined {
+  border-width: 0;
+  border-bottom-width: 1px;
+  border-radius: 0;
+  padding-left: 0;
+}
+</style> -->
