@@ -141,6 +141,7 @@
 .uda-btn:active { transform: translateY(1px); }
 
 @media (min-width: 1600px) {
+  .uda-header-container { width: 100%; max-width: none; padding-left: 24px; padding-right: 24px; }
   .uda-navbar { padding: 12px 0; }
   .uda-title-pill { font-size: 18px; padding: 10px 22px; }
   .uda-logo { max-height: 64px; }

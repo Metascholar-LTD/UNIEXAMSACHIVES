@@ -1,6 +1,6 @@
 <header>
     <div class="headerarea headerarea__2 header__sticky header__area">
-        <div class="container desktop__menu__wrapper">
+        <div class="container desktop__menu__wrapper uda-header-container">
             <div class="uda-navbar">
                 <!-- Left: Logo -->
                 <div class="uda-nav-left">
