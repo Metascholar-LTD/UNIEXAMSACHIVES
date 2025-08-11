@@ -30,9 +30,9 @@
                 <!-- Right: Auth Buttons -->
                 <div class="uda-nav-right">
                     @if (Auth::check())
-                        <a href="{{route('logout')}}" class="uda-btn">Logout</a>
+                        <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
                     @else
-                        <a href="{{route('frontend.login')}}" class="uda-btn">Register / Login</a>
+                        <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
                     @endif
                 </div>
             </div>
