@@ -118,7 +118,7 @@
 .uda-btn-primary:hover { box-shadow: 0 6px 16px rgba(95,45,237,0.25); background: #5726e0; color: #fff; }
 
 .uda-btn-secondary { background: #111827; color: #fff; }
-.uda-btn-secondary:hover { box-shadow: none; }
+.uda-btn-secondary:hover { box-shadow: none; transform: none; background: #111827; color: #fff; }
 
 /* Responsive adjustments */
 @media (max-width: 1199.98px) {
