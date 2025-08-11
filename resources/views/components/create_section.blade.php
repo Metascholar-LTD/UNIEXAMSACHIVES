@@ -4,11 +4,13 @@
             <!-- Greeting -->
             <div class="uda-greeting">
                 <div class="uda-avatar-wrap">
-                    @if (auth()->user()->profile_picture)
-                        <img class="uda-avatar" loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="Profile Picture">
-                    @else
-                        <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">
-                    @endif
+                    <span class="uda-avatar-inner">
+                        @if (auth()->user()->profile_picture)
+                            <img class="uda-avatar" loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="Profile Picture">
+                        @else
+                            <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">
+                        @endif
+                    </span>
                     <a href="{{ route('dashboard.settings') }}" class="uda-avatar-edit" title="Update profile picture" aria-label="Update profile picture">
                         <i class="icofont-plus"></i>
                     </a>
