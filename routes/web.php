@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Dashboard\AcademicController;
+use App\Http\Controllers\Dashboard\AdvanceCommunicationController;
 use App\Http\Controllers\Dashboard\BroadcastController;
 use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\DetailsController;
@@ -98,6 +99,22 @@ Route::middleware(['auth'])->group(function () {
 
     #Academic Year
     Route::post('/dashboard/academic-year/store', [AcademicController::class, 'store'])->name('dashboard.academic.store');
+
+    #Advanced Communication System (Admin Only)
+    Route::prefix('admin/communication')->name('admin.communication.')->middleware('auth')->group(function () {
+        Route::get('/', [AdvanceCommunicationController::class, 'index'])->name('index');
+        Route::get('/create', [AdvanceCommunicationController::class, 'create'])->name('create');
+        Route::post('/store', [AdvanceCommunicationController::class, 'store'])->name('store');
+        Route::get('/{campaign}', [AdvanceCommunicationController::class, 'show'])->name('show');
+        Route::get('/{campaign}/edit', [AdvanceCommunicationController::class, 'edit'])->name('edit');
+        Route::put('/{campaign}', [AdvanceCommunicationController::class, 'update'])->name('update');
+        Route::delete('/{campaign}', [AdvanceCommunicationController::class, 'destroy'])->name('destroy');
+        Route::post('/{campaign}/send', [AdvanceCommunicationController::class, 'send'])->name('send');
+        Route::get('/statistics/overview', [AdvanceCommunicationController::class, 'statistics'])->name('statistics');
+        Route::get('/{campaign}/attachment/{index}/download', [AdvanceCommunicationController::class, 'downloadAttachment'])->name('download-attachment');
+        Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'removeAttachment'])->name('remove-attachment');
+        Route::get('/ajax/users', [AdvanceCommunicationController::class, 'getUsersAjax'])->name('users.ajax');
+    });
 
     #logout
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');

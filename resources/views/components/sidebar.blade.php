@@ -238,6 +238,54 @@
 
             </ul>
         </div>
+
+        {{-- Advanced Communication System (Admin Only) --}}
+        @auth
+            @if(auth()->user()->is_admin)
+                <div class="dashboard__nav__title mt-40">
+                    <h6>ADVANCED COMMUNICATION SYSTEM</h6>
+                </div>
+                <div class="dashboard__nav">
+                    <ul>
+                        <li>
+                            <a href="{{route('admin.communication.index')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-mail">
+                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                                    <polyline points="22,6 12,13 2,6"></polyline>
+                                </svg>
+                                Email Campaigns</a>
+                        </li>
+                        <li>
+                            <a href="{{route('admin.communication.create')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-edit">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                                Compose Email</a>
+                        </li>
+                        <li>
+                            <a href="{{route('admin.communication.statistics')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                    class="feather feather-bar-chart-2">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                </svg>
+                                Statistics</a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
+        @endauth
+
         {{-- Users --}}
         <div class="dashboard__nav__title mt-40">
             <h6>user</h6>
