@@ -15,19 +15,17 @@ use Carbon\Carbon;
 
 class AdvanceCommunicationController extends Controller
 {
-    public function __construct()
+    private function checkAdminAccess()
     {
-        $this->middleware('auth');
-        $this->middleware(function ($request, $next) {
-            if (!auth()->user()->is_admin) {
-                abort(403, 'Unauthorized action.');
-            }
-            return $next($request);
-        });
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
     }
 
     public function index()
     {
+        $this->checkAdminAccess();
+        
         $campaigns = EmailCampaign::with(['creator', 'recipients'])
                                 ->recentFirst()
                                 ->paginate(10);
@@ -48,6 +46,8 @@ class AdvanceCommunicationController extends Controller
 
     public function create()
     {
+        $this->checkAdminAccess();
+        
         $users = User::where('is_approve', true)
                     ->select('id', 'first_name', 'last_name', 'email')
                     ->orderBy('first_name')
@@ -58,6 +58,8 @@ class AdvanceCommunicationController extends Controller
 
     public function store(Request $request)
     {
+        $this->checkAdminAccess();
+        
         $validator = Validator::make($request->all(), [
             'title' => 'required|string|max:255',
             'subject' => 'required|string|max:500',
@@ -130,6 +132,8 @@ class AdvanceCommunicationController extends Controller
 
     public function show(EmailCampaign $campaign)
     {
+        $this->checkAdminAccess();
+        
         $campaign->load(['creator', 'recipients.user']);
         
         return view('admin.communication.show', compact('campaign'));
@@ -137,6 +141,8 @@ class AdvanceCommunicationController extends Controller
 
     public function edit(EmailCampaign $campaign)
     {
+        $this->checkAdminAccess();
+        
         if ($campaign->status !== 'draft') {
             return redirect()->back()->with('error', 'Only draft campaigns can be edited.');
         }
@@ -151,6 +157,8 @@ class AdvanceCommunicationController extends Controller
 
     public function update(Request $request, EmailCampaign $campaign)
     {
+        $this->checkAdminAccess();
+        
         if ($campaign->status !== 'draft') {
             return redirect()->back()->with('error', 'Only draft campaigns can be updated.');
         }
@@ -217,6 +225,8 @@ class AdvanceCommunicationController extends Controller
 
     public function destroy(EmailCampaign $campaign)
     {
+        $this->checkAdminAccess();
+        
         if ($campaign->status === 'sending') {
             return redirect()->back()->with('error', 'Cannot delete campaign while sending.');
         }
@@ -236,6 +246,8 @@ class AdvanceCommunicationController extends Controller
 
     public function send(EmailCampaign $campaign)
     {
+        $this->checkAdminAccess();
+        
         if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
             return redirect()->back()->with('error', 'Campaign cannot be sent in current status.');
         }
@@ -252,6 +264,8 @@ class AdvanceCommunicationController extends Controller
 
     public function removeAttachment(EmailCampaign $campaign, $attachmentIndex)
     {
+        $this->checkAdminAccess();
+        
         if ($campaign->status !== 'draft') {
             return response()->json(['error' => 'Only draft campaigns can be modified.'], 400);
         }
@@ -279,6 +293,8 @@ class AdvanceCommunicationController extends Controller
 
     public function downloadAttachment(EmailCampaign $campaign, $attachmentIndex)
     {
+        $this->checkAdminAccess();
+        
         $attachments = $campaign->attachments ?? [];
         
         if (isset($attachments[$attachmentIndex])) {
@@ -295,6 +311,8 @@ class AdvanceCommunicationController extends Controller
 
     public function getUsersAjax(Request $request)
     {
+        $this->checkAdminAccess();
+        
         $search = $request->get('search', '');
         
         $users = User::where('is_approve', true)
@@ -318,6 +336,8 @@ class AdvanceCommunicationController extends Controller
 
     public function statistics()
     {
+        $this->checkAdminAccess();
+        
         $stats = [
             'total_campaigns' => EmailCampaign::count(),
             'sent_campaigns' => EmailCampaign::byStatus('sent')->count(),
