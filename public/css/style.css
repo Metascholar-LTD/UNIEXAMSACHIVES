@@ -148,8 +148,8 @@
     padding-right: 0 !important;
   }
   .uda-navbar { padding-left: 0; padding-right: 0; }
-  .uda-nav-left { padding-left: 8px; }
-  .uda-nav-right { padding-right: 8px; }
+  .uda-nav-left { padding-left: 15px; }
+  .uda-nav-right { padding-right: 15px; }
   .uda-navbar { padding: 12px 0; }
   .uda-title-pill { font-size: 18px; padding: 10px 22px; }
   .uda-logo { max-height: 64px; }
