@@ -116,6 +116,13 @@
 
 .uda-btn-primary { background: #5f2ded; color: #fff; }
 .uda-btn-primary:hover { box-shadow: 0 6px 16px rgba(95,45,237,0.25); background: #5726e0; color: #fff; }
+.uda-btn-ihb { position: relative; overflow: hidden; }
+.uda-btn-ihb .uda-label { display: inline-block; transform: translateX(4px); transition: all .3s ease; opacity: 1; }
+.uda-btn-ihb .uda-label-hover { position: absolute; inset: 0; display: inline-flex; align-items: center; justify-content: center; gap: 8px; transform: translateX(48px); opacity: 0; transition: all .3s ease; color: #fff; }
+.uda-btn-ihb:hover .uda-label { transform: translateX(48px); opacity: 0; }
+.uda-btn-ihb:hover .uda-label-hover { transform: translateX(0); opacity: 1; }
+.uda-btn-ihb::after { content: ""; position: absolute; left: 20%; top: 40%; width: 8px; height: 8px; background: rgba(255,255,255,0.35); border-radius: 8px; transform: scale(1); transition: all .3s ease; }
+.uda-btn-ihb:hover::after { left: 0; top: 0; width: 100%; height: 100%; border-radius: 12px; background: rgba(255,255,255,0.15); }
 
 .uda-btn-secondary { background: #111827; color: #fff; }
 .uda-btn-secondary:hover { box-shadow: none; transform: none; background: #111827; color: #fff; }
