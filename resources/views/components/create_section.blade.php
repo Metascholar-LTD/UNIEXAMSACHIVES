@@ -7,7 +7,8 @@
                     <span class="uda-avatar-inner">
                         @if (auth()->user()->profile_picture)
                             @php
-                                $avatarUrl = Storage::url(auth()->user()->profile_picture);
+                                // Alternative URL generation if symlink is broken
+                                $avatarUrl = asset('storage/' . auth()->user()->profile_picture);
                                 $cacheBuster = optional(auth()->user()->updated_at)->timestamp ?? time();
                             @endphp
                             <!-- DEBUG INFO -->
