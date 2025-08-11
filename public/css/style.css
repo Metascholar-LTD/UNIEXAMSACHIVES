@@ -141,7 +141,15 @@
 .uda-btn:active { transform: translateY(1px); }
 
 @media (min-width: 1600px) {
-  .uda-header-container { width: 100%; max-width: none; padding-left: 24px; padding-right: 24px; }
+  .uda-header-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .uda-navbar { padding-left: 0; padding-right: 0; }
+  .uda-nav-left { padding-left: 8px; }
+  .uda-nav-right { padding-right: 8px; }
   .uda-navbar { padding: 12px 0; }
   .uda-title-pill { font-size: 18px; padding: 10px 22px; }
   .uda-logo { max-height: 64px; }
