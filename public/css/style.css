@@ -118,7 +118,7 @@
 .uda-btn-primary:hover { box-shadow: 0 6px 16px rgba(95,45,237,0.25); background: #5726e0; color: #fff; }
 .uda-btn-ihb { position: relative; overflow: hidden; }
 .uda-btn-ihb .uda-label { display: inline-block; transform: translateX(4px); transition: all .3s ease; opacity: 1; }
-.uda-btn-ihb .uda-label-hover { position: absolute; inset: 0; display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 0 16px; transform: translateX(48px); opacity: 0; transition: all .3s ease; color: #fff; }
+.uda-btn-ihb .uda-label-hover { position: absolute; top: 0; bottom: 0; left: 10px; right: 10px; display: inline-flex; align-items: center; justify-content: center; gap: 12px; padding: 0 6px; transform: translateX(48px); opacity: 0; transition: all .3s ease; color: #fff; }
 .uda-btn-ihb:hover .uda-label { transform: translateX(48px); opacity: 0; }
 .uda-btn-ihb:hover .uda-label-hover { transform: translateX(0); opacity: 1; }
 .uda-btn-ihb::after { content: ""; position: absolute; left: 12%; top: 50%; width: 6px; height: 6px; background: rgba(255,255,255,0.35); border-radius: 8px; transform: translateY(-50%) scale(1); transition: all .3s ease; }
