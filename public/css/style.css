@@ -155,6 +155,32 @@
   .uda-logo { max-height: 64px; }
 }
 
+/* Laptop and large desktop (>=1200px) */
+@media (min-width: 1200px) and (max-width: 1599.98px) {
+  .uda-header-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .uda-navbar { padding-left: 0; padding-right: 0; }
+  .uda-nav-left { padding-left: 15px; }
+  .uda-nav-right { padding-right: 15px; }
+}
+
+/* Tablet landscape and small laptop (>=992px) */
+@media (min-width: 992px) and (max-width: 1199.98px) {
+  .uda-header-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+  .uda-navbar { padding-left: 0; padding-right: 0; }
+  .uda-nav-left { padding-left: 12px; }
+  .uda-nav-right { padding-right: 12px; }
+}
+
 /*********************************************************************************
 
 	Template Name: Edurock - Education LMS Template
