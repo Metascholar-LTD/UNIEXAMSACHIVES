@@ -101,14 +101,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/academic-year/store', [AcademicController::class, 'store'])->name('dashboard.academic.store');
 
     #Advanced Communication System (Admin Only)
-    Route::prefix('admin/communication')->name('admin.communication.')->middleware(['auth'])->group(function () {
-        // Guard: ensure admin access on all routes in this group
-        Route::middleware(function ($request, $next) {
-            if (!auth()->check() || !auth()->user()->is_admin) {
-                abort(403);
-            }
-            return $next($request);
-        })->group(function () {
+    Route::prefix('admin/communication')->name('admin.communication.')->middleware('auth')->group(function () {
         Route::get('/', [AdvanceCommunicationController::class, 'index'])->name('index');
         Route::get('/create', [AdvanceCommunicationController::class, 'create'])->name('create');
         Route::post('/store', [AdvanceCommunicationController::class, 'store'])->name('store');
@@ -121,7 +114,6 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{campaign}/attachment/{index}/download', [AdvanceCommunicationController::class, 'downloadAttachment'])->name('download-attachment');
         Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'removeAttachment'])->name('remove-attachment');
         Route::get('/ajax/users', [AdvanceCommunicationController::class, 'getUsersAjax'])->name('users.ajax');
-        });
     });
 
     #logout

@@ -241,7 +241,7 @@
 
         {{-- Advanced Communication System (Admin Only) --}}
         @auth
-            @unless(!auth()->user()->is_admin)
+            @if(auth()->user()->is_admin)
                 <div class="dashboard__nav__title mt-40">
                     <h6>ADVANCED COMMUNICATION SYSTEM</h6>
                 </div>
@@ -283,7 +283,7 @@
                         </li>
                     </ul>
                 </div>
-            @endunless
+            @endif
         @endauth
 
         {{-- Users --}}
