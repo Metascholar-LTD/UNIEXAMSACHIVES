@@ -43,22 +43,22 @@ class EmailCampaign extends Model
 
     public function recipients(): HasMany
     {
-        return $this->hasMany(EmailCampaignRecipient::class);
+        return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id');
     }
 
     public function sentRecipients(): HasMany
     {
-        return $this->hasMany(EmailCampaignRecipient::class)->where('status', 'sent');
+        return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id')->where('status', 'sent');
     }
 
     public function failedRecipients(): HasMany
     {
-        return $this->hasMany(EmailCampaignRecipient::class)->where('status', 'failed');
+        return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id')->where('status', 'failed');
     }
 
     public function pendingRecipients(): HasMany
     {
-        return $this->hasMany(EmailCampaignRecipient::class)->where('status', 'pending');
+        return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id')->where('status', 'pending');
     }
 
     public function getProgressPercentageAttribute(): float
