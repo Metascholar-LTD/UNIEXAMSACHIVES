@@ -48,7 +48,7 @@ class CampaignEmail extends Mailable implements ShouldQueue
         return new Content(
             markdown: 'mails.campaign',
             with: [
-                'title' => $this->campaign->title,
+                'title' => $this->campaign->subject,
                 'message' => $this->campaign->message,
                 'user' => $this->user,
                 'campaign' => $this->campaign,

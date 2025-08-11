@@ -21,7 +21,7 @@
                             <h4>Advanced Communication System</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.create')}}" class="default__button">
-                                    <i class="icofont-plus"></i> Compose New Email
+                                    <i class="icofont-plus"></i> Compose Email
                                 </a>
                             </div>
                         </div>
@@ -56,7 +56,7 @@
                                             <div class="counter__number">
                                                 <span class="counter">{{ $totalCampaigns }}</span>
                                             </div>
-                                            <p>Total Campaigns</p>
+                                            <p>Total Emails</p>
                                         </div>
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                             <div class="counter__number">
                                                 <span class="counter">{{ $sentCampaigns }}</span>
                                             </div>
-                                            <p>Sent Campaigns</p>
+                                            <p>Sent Emails</p>
                                         </div>
                                     </div>
                                 </div>
@@ -86,7 +86,7 @@
                                             <div class="counter__number">
                                                 <span class="counter">{{ $pendingCampaigns }}</span>
                                             </div>
-                                            <p>Pending Campaigns</p>
+                                            <p>Pending Emails</p>
                                         </div>
                                     </div>
                                 </div>
@@ -108,10 +108,10 @@
                             </div>
                         </div>
 
-                        <!-- Campaigns Table -->
+                        <!-- Emails Table -->
                         <div class="dashboard__table__wrapper">
                             <div class="dashboard__table__top">
-                                <h4>Email Campaigns</h4>
+                                <h4>Emails</h4>
                                 <div class="dashboard__table__actions">
                                     <form method="GET" class="dashboard__search__form">
                                         <input type="text" name="search" placeholder="Search campaigns..." 
@@ -125,7 +125,6 @@
                                 <table class="table table-striped campaign-table">
                                     <thead>
                                         <tr>
-                                            <th>Title</th>
                                             <th>Subject</th>
                                             <th>Recipients</th>
                                             <th>Status</th>
@@ -139,13 +138,12 @@
                                         <tr>
                                             <td>
                                                 <div class="campaign-title">
-                                                    <strong>{{ Str::limit($campaign->title, 25) }}</strong>
+                                                    <strong>{{ Str::limit($campaign->subject, 40) }}</strong>
                                                     @if($campaign->attachments && count($campaign->attachments) > 0)
                                                         <i class="icofont-attachment" title="Has attachments"></i>
                                                     @endif
                                                 </div>
                                             </td>
-                                            <td>{{ Str::limit($campaign->subject, 30) }}</td>
                                             <td>
                                                 <span class="badge badge-info">{{ $campaign->total_recipients }} users</span>
                                             </td>
@@ -234,10 +232,10 @@
                                             <td colspan="7" class="text-center py-4">
                                                 <div class="empty-state">
                                                     <i class="icofont-inbox" style="font-size: 48px; color: #ccc;"></i>
-                                                    <h5>No Email Campaigns Found</h5>
-                                                    <p>Start by creating your first email campaign to communicate with users.</p>
+                                                    <h5>No Emails Found</h5>
+                                                    <p>Start by composing your first email to communicate with users.</p>
                                                     <a href="{{ route('admin.communication.create') }}" class="btn btn-primary">
-                                                        <i class="icofont-plus"></i> Create Campaign
+                                                        <i class="icofont-plus"></i> Compose Email
                                                     </a>
                                                 </div>
                                             </td>

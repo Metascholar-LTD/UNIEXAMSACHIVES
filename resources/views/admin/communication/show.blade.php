@@ -18,10 +18,10 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Campaign Details: {{ $campaign->title }}</h4>
+                            <h4>Email Details</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.index')}}" class="default__button">
-                                    <i class="icofont-arrow-left"></i> Back to Campaigns
+                                    <i class="icofont-arrow-left"></i> Back to Emails
                                 </a>
                                 @if($campaign->status === 'draft')
                                     <a href="{{ route('admin.communication.edit', $campaign) }}" class="default__button">
@@ -93,7 +93,7 @@
 
                                     <div class="campaign-details">
                                         <div class="detail-section">
-                                            <h5><i class="icofont-info-circle"></i> Campaign Information</h5>
+                                            <h5><i class="icofont-info-circle"></i> Email Information</h5>
                                             <div class="detail-item">
                                                 <strong>Subject:</strong>
                                                 <p>{{ $campaign->subject }}</p>
@@ -269,7 +269,7 @@
                                                   onsubmit="return confirm('Are you sure you want to send this campaign now?')">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-block">
-                                                    <i class="icofont-send-mail"></i> Send Campaign Now
+                                                    <i class="icofont-send-mail"></i> Send Email Now
                                                 </button>
                                             </form>
                                         </div>

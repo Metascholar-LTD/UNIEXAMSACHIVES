@@ -18,10 +18,10 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Edit Email Campaign</h4>
+                            <h4>Edit Email</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.show', $campaign)}}" class="default__button">
-                                    <i class="icofont-arrow-left"></i> Back to Campaign
+                                    <i class="icofont-arrow-left"></i> Back
                                 </a>
                             </div>
                         </div>
@@ -43,13 +43,7 @@
                             <div class="row">
                                 <div class="col-xl-8">
                                     <div class="dashboard__form__wraper">
-                                        <div class="dashboard__form__input">
-                                            <label for="title">Campaign Title <span class="required">*</span></label>
-                                            <input type="text" id="title" name="title" 
-                                                   placeholder="Enter campaign title" 
-                                                   value="{{ old('title', $campaign->title) }}" required>
-                                            <small class="form-text text-muted">Internal name for this email campaign</small>
-                                        </div>
+                                        
 
                                         <div class="dashboard__form__input">
                                             <label for="subject">Email Subject <span class="required">*</span></label>

@@ -61,7 +61,6 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
             'recipient_type' => 'required|in:all,selected',
@@ -100,7 +99,6 @@ class AdvanceCommunicationController extends Controller
 
         // Create campaign
         $campaign = EmailCampaign::create([
-            'title' => $request->title,
             'subject' => $request->subject,
             'message' => $request->message,
             'attachments' => $attachmentPaths,
@@ -164,7 +162,6 @@ class AdvanceCommunicationController extends Controller
         }
 
         $validator = Validator::make($request->all(), [
-            'title' => 'required|string|max:255',
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
             'recipient_type' => 'required|in:all,selected',
@@ -201,7 +198,6 @@ class AdvanceCommunicationController extends Controller
 
         // Update campaign
         $campaign->update([
-            'title' => $request->title,
             'subject' => $request->subject,
             'message' => $request->message,
             'attachments' => $attachmentPaths,

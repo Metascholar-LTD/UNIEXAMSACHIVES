@@ -21,10 +21,10 @@
                             <h4>Communication Statistics</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.index')}}" class="default__button">
-                                    <i class="icofont-arrow-left"></i> Back to Campaigns
+                                    <i class="icofont-arrow-left"></i> Back to Emails
                                 </a>
                                 <a href="{{route('admin.communication.create')}}" class="default__button">
-                                    <i class="icofont-plus"></i> New Campaign
+                                    <i class="icofont-plus"></i> Compose Email
                                 </a>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                                             <div class="counter__number">
                                                 <span class="counter">{{ $stats['total_campaigns'] }}</span>
                                             </div>
-                                            <p>Total Campaigns</p>
+                                             <p>Total Emails</p>
                                         </div>
                                     </div>
                                 </div>
@@ -57,7 +57,7 @@
                                             <div class="counter__number">
                                                 <span class="counter">{{ $stats['sent_campaigns'] }}</span>
                                             </div>
-                                            <p>Sent Campaigns</p>
+                                             <p>Sent Emails</p>
                                         </div>
                                     </div>
                                 </div>
@@ -111,7 +111,7 @@
                                                     <i class="icofont-edit"></i>
                                                 </div>
                                                 <div class="status-details">
-                                                    <span class="status-name">Draft Campaigns</span>
+                                                     <span class="status-name">Draft Emails</span>
                                                     <span class="status-count">{{ $stats['draft_campaigns'] }}</span>
                                                 </div>
                                             </div>
@@ -127,7 +127,7 @@
                                                     <i class="icofont-clock-time"></i>
                                                 </div>
                                                 <div class="status-details">
-                                                    <span class="status-name">Scheduled Campaigns</span>
+                                                     <span class="status-name">Scheduled Emails</span>
                                                     <span class="status-count">{{ $stats['scheduled_campaigns'] }}</span>
                                                 </div>
                                             </div>
@@ -143,7 +143,7 @@
                                                     <i class="icofont-check-circled"></i>
                                                 </div>
                                                 <div class="status-details">
-                                                    <span class="status-name">Sent Campaigns</span>
+                                                     <span class="status-name">Sent Emails</span>
                                                     <span class="status-count">{{ $stats['sent_campaigns'] }}</span>
                                                 </div>
                                             </div>
@@ -190,7 +190,7 @@
                                                         $height = $maxCount > 0 ? ($month->count / $maxCount) * 100 : 0;
                                                     @endphp
                                                     <div class="chart-bar">
-                                                        <div class="bar" style="height: {{ $height }}%" title="{{ $month->count }} campaigns"></div>
+                                                         <div class="bar" style="height: {{ $height }}%" title="{{ $month->count }} emails"></div>
                                                         <div class="bar-label">{{ \Carbon\Carbon::parse($month->month . '-01')->format('M Y') }}</div>
                                                         <div class="bar-value">{{ $month->count }}</div>
                                                     </div>
@@ -243,7 +243,7 @@
                                                     </div>
                                                     <div class="timeline-content">
                                                         <div class="timeline-header">
-                                                            <h6><a href="{{ route('admin.communication.show', $campaign) }}">{{ $campaign->title }}</a></h6>
+                                                             <h6><a href="{{ route('admin.communication.show', $campaign) }}">{{ Str::limit($campaign->subject, 40) }}</a></h6>
                                                             <span class="timeline-date">{{ $campaign->created_at->diffForHumans() }}</span>
                                                         </div>
                                                         <p class="timeline-description">

@@ -18,10 +18,10 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Compose New Email Campaign</h4>
+                            <h4>Compose Email</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.index')}}" class="default__button">
-                                    <i class="icofont-arrow-left"></i> Back to Campaigns
+                                    <i class="icofont-arrow-left"></i> Back to Emails
                                 </a>
                             </div>
                         </div>
@@ -42,13 +42,7 @@
                             <div class="row">
                                 <div class="col-xl-8">
                                     <div class="dashboard__form__wraper">
-                                        <div class="dashboard__form__input">
-                                            <label for="title">Campaign Title <span class="required">*</span></label>
-                                            <input type="text" id="title" name="title" 
-                                                   placeholder="Enter campaign title" 
-                                                   value="{{ old('title') }}" required>
-                                            <small class="form-text text-muted">Internal name for this email campaign</small>
-                                        </div>
+                                        
 
                                         <div class="dashboard__form__input">
                                             <label for="subject">Email Subject <span class="required">*</span></label>
@@ -160,7 +154,7 @@
 
                                         <div class="form-actions">
                                             <button type="submit" name="action" value="send" class="btn btn-success btn-block">
-                                                <i class="icofont-send-mail"></i> Send Campaign
+                                                <i class="icofont-send-mail"></i> Send Email
                                             </button>
                                             <button type="submit" name="action" value="draft" class="btn btn-secondary btn-block">
                                                 <i class="icofont-save"></i> Save as Draft

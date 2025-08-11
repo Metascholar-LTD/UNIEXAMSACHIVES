@@ -14,7 +14,6 @@ class EmailCampaign extends Model
     protected $table = 'comm_campaigns';
 
     protected $fillable = [
-        'title',
         'subject',
         'message',
         'attachments',
