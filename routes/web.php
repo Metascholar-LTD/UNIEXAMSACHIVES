@@ -100,7 +100,7 @@ Route::middleware(['auth'])->group(function () {
     #Academic Year
     Route::post('/dashboard/academic-year/store', [AcademicController::class, 'store'])->name('dashboard.academic.store');
 
-    #Advanced Communication System (Admin Only)
+    #Advanced Communication System (Users Only)
     Route::prefix('admin/communication')->name('admin.communication.')->middleware('auth')->group(function () {
         Route::get('/', [AdvanceCommunicationController::class, 'index'])->name('index');
         Route::get('/create', [AdvanceCommunicationController::class, 'create'])->name('create');

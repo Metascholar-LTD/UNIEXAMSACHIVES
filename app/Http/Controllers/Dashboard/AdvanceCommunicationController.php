@@ -17,7 +17,8 @@ class AdvanceCommunicationController extends Controller
 {
     private function checkAdminAccess()
     {
-        if (!auth()->check() || !auth()->user()->is_admin) {
+        // Inverted: only non-admin users are allowed to access communication pages
+        if (!auth()->check() || auth()->user()->is_admin) {
             abort(403, 'Unauthorized action.');
         }
     }
