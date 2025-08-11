@@ -1,7 +1,13 @@
 <div class="col-xl-3 col-lg-3 col-md-12">
     <div class="dashboard__inner sticky-top">
         <div class="dashboard__nav__title">
-            <h6>Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}</h6>
+            <h6>
+                @if(auth()->check() && auth()->user()->is_admin)
+                    Welcome, Super Admin
+                @else
+                    Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}
+                @endif
+            </h6>
         </div>
         <div class="dashboard__nav">
             <ul>
@@ -40,10 +46,6 @@
                                 </svg>
                                 Message</a><span class="dashboard__label">{{$newMessagesCount}}</span>
                         </li>
-                    @endif
-                @endauth
-                @auth
-                    @unless(auth()->user()->is_admin)
                         <li>
                             <a href="{{route('dashboard.message.create')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -55,6 +57,11 @@
                                 </svg>
                                 Broadcast Message</a>
                         </li>
+                    @endif
+                @endauth
+                @auth
+                    @unless(auth()->user()->is_admin)
+                        
                     @endunless
                 @endauth
 
@@ -294,7 +301,7 @@
         <div class="dashboard__nav">
             <ul>
                 @auth
-                    @unless(auth()->user()->is_admin)
+                    @if(auth()->user()->is_admin)
                         <li>
                             <a href="{{route('dashboard.users')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
@@ -339,7 +346,7 @@
                                 </svg>
                                 Academic Year</a>
                         </li>
-                    @endunless
+                    @endauth
                 @endauth
                 <li>
                     <a href="{{route('dashboard.settings')}}">
