@@ -10,8 +10,10 @@ class EmailCampaignRecipient extends Model
 {
     use HasFactory;
 
+    protected $table = 'advanced_email_campaign_recipients';
+
     protected $fillable = [
-        'email_campaign_id',
+        'advanced_email_campaign_id',
         'user_id',
         'status',
         'sent_at',
@@ -24,7 +26,7 @@ class EmailCampaignRecipient extends Model
 
     public function campaign(): BelongsTo
     {
-        return $this->belongsTo(EmailCampaign::class, 'email_campaign_id');
+        return $this->belongsTo(EmailCampaign::class, 'advanced_email_campaign_id');
     }
 
     public function user(): BelongsTo
@@ -34,7 +36,7 @@ class EmailCampaignRecipient extends Model
 
     public function scopeByCampaign($query, $campaignId)
     {
-        return $query->where('email_campaign_id', $campaignId);
+        return $query->where('advanced_email_campaign_id', $campaignId);
     }
 
     public function scopeByStatus($query, $status)

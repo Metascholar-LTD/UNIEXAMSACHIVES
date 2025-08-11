@@ -113,7 +113,7 @@ class AdvanceCommunicationController extends Controller
         // Create recipient records
         foreach ($recipients as $userId) {
             EmailCampaignRecipient::create([
-                'email_campaign_id' => $campaign->id,
+                'advanced_email_campaign_id' => $campaign->id,
                 'user_id' => $userId,
                 'status' => 'pending',
             ]);
@@ -205,7 +205,7 @@ class AdvanceCommunicationController extends Controller
         // Create new recipient records
         foreach ($recipients as $userId) {
             EmailCampaignRecipient::create([
-                'email_campaign_id' => $campaign->id,
+                'advanced_email_campaign_id' => $campaign->id,
                 'user_id' => $userId,
                 'status' => 'pending',
             ]);

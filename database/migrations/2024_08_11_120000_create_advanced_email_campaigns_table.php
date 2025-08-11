@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('email_campaigns', function (Blueprint $table) {
+        Schema::create('advanced_email_campaigns', function (Blueprint $table) {
             $table->id();
             $table->string('title');
             $table->text('subject');
@@ -38,6 +38,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('email_campaigns');
+        Schema::dropIfExists('advanced_email_campaigns');
     }
 };

@@ -11,6 +11,8 @@ class EmailCampaign extends Model
 {
     use HasFactory;
 
+    protected $table = 'advanced_email_campaigns';
+
     protected $fillable = [
         'title',
         'subject',
