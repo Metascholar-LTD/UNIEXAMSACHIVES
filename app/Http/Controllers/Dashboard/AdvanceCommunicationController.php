@@ -222,10 +222,6 @@ class AdvanceCommunicationController extends Controller
     public function destroy(EmailCampaign $campaign)
     {
         $this->checkAdminAccess();
-        
-        if ($campaign->status === 'sending') {
-            return redirect()->back()->with('error', 'Cannot delete campaign while sending.');
-        }
 
         // Delete attachment files
         if ($campaign->attachments) {
@@ -237,7 +233,7 @@ class AdvanceCommunicationController extends Controller
         $campaign->delete();
 
         return redirect()->route('admin.communication.index')
-                        ->with('success', 'Campaign deleted successfully!');
+                        ->with('success', 'Email deleted successfully!');
     }
 
     public function send(EmailCampaign $campaign)

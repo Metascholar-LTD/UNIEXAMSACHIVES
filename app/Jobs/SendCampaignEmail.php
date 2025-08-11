@@ -38,6 +38,10 @@ class SendCampaignEmail implements ShouldQueue
     public function handle(): void
     {
         try {
+            // If campaign no longer exists, skip
+            if (!$this->campaign->exists) {
+                return;
+            }
             // Update campaign status
             $this->campaign->update(['status' => 'sending']);
 
@@ -78,12 +82,14 @@ class SendCampaignEmail implements ShouldQueue
             }
 
             // Update campaign final status and counts
-            $this->campaign->update([
-                'status' => 'sent',
-                'sent_at' => now(),
-                'sent_count' => $sentCount,
-                'failed_count' => $failedCount,
-            ]);
+            if ($this->campaign->fresh()) {
+                $this->campaign->update([
+                    'status' => 'sent',
+                    'sent_at' => now(),
+                    'sent_count' => $sentCount,
+                    'failed_count' => $failedCount,
+                ]);
+            }
 
             Log::info("Campaign {$this->campaign->id} completed. Sent: {$sentCount}, Failed: {$failedCount}");
 
@@ -91,9 +97,11 @@ class SendCampaignEmail implements ShouldQueue
             Log::error("Campaign {$this->campaign->id} failed: " . $e->getMessage());
             
             // Mark campaign as failed
-            $this->campaign->update([
-                'status' => 'failed',
-            ]);
+            if ($this->campaign->fresh()) {
+                $this->campaign->update([
+                    'status' => 'failed',
+                ]);
+            }
 
             throw $e;
         }

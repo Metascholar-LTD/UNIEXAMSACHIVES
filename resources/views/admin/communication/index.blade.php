@@ -194,6 +194,15 @@
                                                        class="btn btn-sm btn-info" title="View Details">
                                                         <i class="icofont-eye"></i>
                                                     </a>
+                                                    <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
+                                                          style="display: inline-block;" 
+                                                          onsubmit="return confirm('Are you sure you want to delete this email?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="btn btn-sm btn-danger" title="Delete">
+                                                            <i class="icofont-trash"></i>
+                                                        </button>
+                                                    </form>
                                                     
                                                     @if($campaign->status === 'draft')
                                                         <a href="{{ route('admin.communication.edit', $campaign) }}" 
@@ -205,22 +214,10 @@
                                                     @if(in_array($campaign->status, ['draft', 'scheduled']))
                                                         <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
                                                               style="display: inline-block;" 
-                                                              onsubmit="return confirm('Are you sure you want to send this campaign?')">
+                                                              onsubmit="return confirm('Are you sure you want to send this email?')">
                                                             @csrf
                                                             <button type="submit" class="btn btn-sm btn-success" title="Send Now">
                                                                 <i class="icofont-send-mail"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
-
-                                                    @if($campaign->status !== 'sending')
-                                                        <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
-                                                              style="display: inline-block;" 
-                                                              onsubmit="return confirm('Are you sure you want to delete this campaign?')">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                                                <i class="icofont-trash"></i>
                                                             </button>
                                                         </form>
                                                     @endif
