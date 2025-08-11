@@ -1,59 +1,41 @@
 <header>
     <div class="headerarea headerarea__2 header__sticky header__area">
         <div class="container desktop__menu__wrapper">
-            <div class="row">
-                <div class="col-xl-2 col-lg-2 col-md-6">
-                    <div class="headerarea__left">
-                        <div class="headerarea__left__logo">
-                            @if (Auth::check())
-                                @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                                <a href="{{route('dashboard')}}"><img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo"></a>
-                                @else
-                                    <a href="{{route('dashboard')}}"><img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo"></a>
-
-                                @endif
-
-                            @else
-                                @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                                    <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo"></a>
-                                @else
-                                    <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo"></a>
-
-                                @endif
-                            @endif
-                        </div>
-
-                    </div>
-                </div>
-                <div class="col-xl-7 col-lg-7 main_menu_wrap">
-                    <div class="headerarea__main__menu">
-                        @if (count($systemDetail) > 0 && $systemDetail[0]->title !== null)
-                            <h3 class="pt-4 text-center" style="color: #5f2ded">{{$systemDetail[0]->title }}</h3>
+            <div class="uda-navbar">
+                <!-- Left: Logo -->
+                <div class="uda-nav-left">
+                    @if (Auth::check())
+                        @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
+                            <a href="{{route('dashboard')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
                         @else
-                            <h3 class="pt-4 text-center" style="color: #5f2ded">University Exams Archive System</h3>
+                            <a href="{{route('dashboard')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
                         @endif
-                    </div>
-                </div>
-                <div class="col-xl-3 col-lg-3 col-md-6">
-                    <div class="headerarea__right">
-                        @if (Auth::check())
-                            <div class="headerarea__button">
-                                <a href="{{route('logout')}}">Logout</a>
-                            </div>
+                    @else
+                        @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
+                            <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
                         @else
-                        <div class="headerarea__button">
-                            <a href="{{route('frontend.login')}}">Register / Login</a>
-                        </div>
+                            <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
                         @endif
-                        {{-- &nbsp;
-                        <div class="headerarea__button">
-                            <a href="{{route('frontend.login')}}">Login</a>
-                        </div> --}}
-                    </div>
+                    @endif
                 </div>
 
+                <!-- Center: Title Pill -->
+                <div class="uda-nav-center">
+                    @php
+                        $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Archive System';
+                    @endphp
+                    <div class="uda-title-pill">{{ $udaTitle }}</div>
+                </div>
+
+                <!-- Right: Auth Buttons -->
+                <div class="uda-nav-right">
+                    @if (Auth::check())
+                        <a href="{{route('logout')}}" class="uda-btn">Logout</a>
+                    @else
+                        <a href="{{route('frontend.login')}}" class="uda-btn">Register / Login</a>
+                    @endif
+                </div>
             </div>
-
         </div>
 
 

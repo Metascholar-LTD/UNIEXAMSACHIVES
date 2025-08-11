@@ -1,3 +1,53 @@
+/* University Digital Archive navbar */
+.uda-navbar {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+}
+.uda-nav-left { justify-self: start; }
+.uda-nav-center { justify-self: center; }
+.uda-nav-right { justify-self: end; }
+
+.uda-logo {
+  max-height: 56px;
+  width: auto;
+}
+
+.uda-title-pill {
+  display: inline-block;
+  padding: 8px 18px;
+  border-radius: 9999px;
+  background: #eef6ff;
+  color: #1e3a8a;
+  border: 1px solid #cfe3ff;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.06);
+  white-space: nowrap;
+  text-align: center;
+}
+
+.uda-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: #5f2ded;
+  color: #fff !important;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+}
+.uda-btn:hover { background: #4b22bb; }
+.uda-btn:active { transform: translateY(1px); }
+
+@media (min-width: 1600px) {
+  .uda-navbar { padding: 12px 0; }
+  .uda-title-pill { font-size: 18px; padding: 10px 22px; }
+  .uda-logo { max-height: 64px; }
+}
+
 /*********************************************************************************
 
 	Template Name: Edurock - Education LMS Template
