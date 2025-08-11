@@ -79,7 +79,24 @@
   color: #111827;
 }
 .uda-search-input::placeholder { color: #9ca3af; }
-.uda-search-btn { padding: 10px 16px; border-radius: 9999px; }
+.uda-actions .uda-btn { min-width: 140px; }
+
+/* Make search button smaller, outlined and cute */
+.uda-search-btn {
+  padding: 6px 12px;
+  min-height: 34px;
+  font-size: 13px;
+  border-radius: 9999px;
+  background: #ffffff;
+  color: #5f2ded;
+  border: 1px solid #c8b7ff;
+  box-shadow: 0 2px 6px rgba(95,45,237,0.15);
+}
+.uda-search-btn:hover {
+  background: #f7f4ff;
+  border-color: #a892ff;
+  box-shadow: 0 4px 10px rgba(95,45,237,0.2);
+}
 
 .uda-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; }
 .uda-btn {
@@ -128,17 +145,23 @@
 }
 
 .uda-btn {
-  display: inline-block;
-  padding: 8px 14px;
-  border-radius: 8px;
-  background: #5f2ded;
-  color: #fff !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: 10px;
   text-decoration: none;
   font-weight: 600;
-  transition: background 0.2s ease-in-out, transform 0.1s ease-in-out;
+  font-size: 14px;
+  line-height: 1;
+  min-height: 40px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+  transition: transform .12s ease, box-shadow .2s ease;
 }
-.uda-btn:hover { background: #4b22bb; }
-.uda-btn:active { transform: translateY(1px); }
+.uda-btn i { font-size: 16px; line-height: 1; }
+.uda-btn:hover { transform: translateY(-1px); }
+.uda-btn:active { transform: translateY(0); }
 
 @media (min-width: 1600px) {
   .uda-header-container {
