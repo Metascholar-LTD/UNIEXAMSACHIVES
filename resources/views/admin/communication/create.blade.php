@@ -107,17 +107,66 @@
                                         </div>
 
                                         <div id="user-selector" class="user-selector mt-3" style="display: none;">
-                                            <label for="selected_users_list">Select Users:</label>
-                                            <select name="selected_users[]" id="selected_users_list" multiple 
-                                                    class="form-control user-select">
-                                                @foreach($users as $user)
-                                                    <option value="{{ $user->id }}"
-                                                            {{ in_array($user->id, old('selected_users', [])) ? 'selected' : '' }}>
-                                                        {{ $user->first_name }} {{ $user->last_name }} ({{ $user->email }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple users</small>
+                                            <div class="user-selector-header">
+                                                <label for="user-search">Search & Select Users:</label>
+                                                <div class="search-container">
+                                                    <input type="text" id="user-search" 
+                                                           placeholder="Search by name or email..." 
+                                                           class="form-control search-input">
+                                                    <i class="icofont-search search-icon"></i>
+                                                </div>
+                                                <div class="user-stats">
+                                                    <span class="selected-count">0</span> of <span class="total-count">{{ $users->count() }}</span> users selected
+                                                    <div class="progress-bar-container">
+                                                        <div class="progress-bar" id="selection-progress"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="user-list-container">
+                                                <div class="user-list" id="user-list">
+                                                    @foreach($users as $user)
+                                                        <div class="user-item" data-user-id="{{ $user->id }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
+                                                            <div class="user-avatar">
+                                                                @if($user->profile_picture)
+                                                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="{{ $user->first_name }}" class="avatar-img">
+                                                                @else
+                                                                    <div class="avatar-placeholder">
+                                                                        {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
+                                                                    </div>
+                                                                @endif
+                                                            </div>
+                                                            <div class="user-info">
+                                                                <div class="user-name">{{ $user->first_name }} {{ $user->last_name }}</div>
+                                                                <div class="user-email">{{ $user->email }}</div>
+                                                                <div class="user-status">
+                                                                    <span class="status-indicator online"></span>
+                                                                    <small>Active User</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="user-select-checkbox">
+                                                                <input type="checkbox" name="selected_users[]" 
+                                                                       value="{{ $user->id }}" 
+                                                                       class="user-checkbox"
+                                                                       {{ in_array($user->id, old('selected_users', [])) ? 'checked' : '' }}>
+                                                                <span class="checkmark"></span>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="user-actions">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" id="select-all-btn">
+                                                    <i class="icofont-check-circled"></i> Select All
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" id="clear-all-btn">
+                                                    <i class="icofont-close-circled"></i> Clear All
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-info" id="export-selected-btn">
+                                                    <i class="icofont-download"></i> Export
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <hr>
@@ -201,15 +250,251 @@
 }
 
 .user-selector {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
 }
 
-.user-select {
-    height: 200px;
-    border-radius: 5px;
+.user-selector-header {
+    padding: 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.user-selector-header label {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 15px;
+    display: block;
+}
+
+.search-container {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.search-input {
+    padding: 12px 40px 12px 15px;
+    border: none;
+    border-radius: 25px;
+    background: rgba(255,255,255,0.9);
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    background: white;
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+    outline: none;
+}
+
+.search-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #6c757d;
+    font-size: 16px;
+}
+
+.user-stats {
+    text-align: center;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.selected-count {
+    font-weight: bold;
+    color: #28a745;
+}
+
+.progress-bar-container {
+    margin-top: 10px;
+    background: rgba(255,255,255,0.2);
+    border-radius: 10px;
+    height: 6px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, #28a745, #20c997);
+    width: 0%;
+    transition: width 0.3s ease;
+    border-radius: 10px;
+}
+
+.user-list-container {
+    max-height: 300px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+.user-list {
+    padding: 0;
+    margin: 0;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.user-item:hover {
+    background: #e9ecef;
+    transform: translateX(5px);
+}
+
+.user-item:last-child {
+    border-bottom: none;
+}
+
+.user-avatar {
+    margin-right: 15px;
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.avatar-placeholder {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 16px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name {
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 4px;
+    font-size: 14px;
+}
+
+.user-email {
+    color: #6c757d;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 4px;
+}
+
+.user-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #28a745;
+    animation: pulse 2s infinite;
+}
+
+.status-indicator.online {
+    background: #28a745;
+}
+
+.status-indicator.offline {
+    background: #6c757d;
+}
+
+@keyframes pulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7);
+    }
+    70% {
+        box-shadow: 0 0 0 10px rgba(40, 167, 69, 0);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(40, 167, 69, 0);
+    }
+}
+
+.user-select-checkbox {
+    position: relative;
+    margin-left: 15px;
+}
+
+.user-checkbox {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.checkmark {
+    height: 22px;
+    width: 22px;
+    background-color: #fff;
+    border: 2px solid #dee2e6;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.user-checkbox:checked ~ .checkmark {
+    background-color: #28a745;
+    border-color: #28a745;
+}
+
+.checkmark:after {
+    content: '';
+    display: none;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.user-checkbox:checked ~ .checkmark:after {
+    display: block;
+}
+
+.user-actions {
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 10px;
+}
+
+.user-actions .btn {
+    flex: 1;
+    font-size: 12px;
+    padding: 8px 12px;
 }
 
 .sending-options .form-check {
@@ -325,13 +610,80 @@
 .form-actions button {
     margin-bottom: 10px;
 }
+
+/* Custom scrollbar for user list */
+.user-list-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.user-list-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 3px;
+}
+
+.user-list-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 3px;
+}
+
+.user-list-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
+/* Animation for user items */
+.user-item {
+    animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .user-selector-header {
+        padding: 15px;
+    }
+    
+    .user-item {
+        padding: 12px 15px;
+    }
+    
+    .avatar-img, .avatar-placeholder {
+        width: 35px;
+        height: 35px;
+        font-size: 14px;
+    }
+    
+    .user-name {
+        font-size: 13px;
+    }
+    
+    .user-email {
+        font-size: 11px;
+    }
+}
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const recipientRadios = document.querySelectorAll('input[name="recipient_type"]');
     const userSelector = document.getElementById('user-selector');
-    const selectedUsersList = document.getElementById('selected_users_list');
+    const userSearch = document.getElementById('user-search');
+    const userList = document.getElementById('user-list');
+    const userItems = document.querySelectorAll('.user-item');
+    const userCheckboxes = document.querySelectorAll('.user-checkbox');
+    const selectAllBtn = document.getElementById('select-all-btn');
+    const clearAllBtn = document.getElementById('clear-all-btn');
+    const exportSelectedBtn = document.getElementById('export-selected-btn');
+    const selectedCountSpan = document.querySelector('.selected-count');
     
     const sendOptionRadios = document.querySelectorAll('input[name="send_option"]');
     const scheduleDateTime = document.getElementById('schedule-datetime');
@@ -347,11 +699,10 @@ document.addEventListener('DOMContentLoaded', function() {
         radio.addEventListener('change', function() {
             if (this.value === 'selected') {
                 userSelector.style.display = 'block';
-                selectedUsersList.required = true;
+                updateSelectedCount();
                 updatePreview();
             } else {
                 userSelector.style.display = 'none';
-                selectedUsersList.required = false;
                 updatePreview();
             }
         });
@@ -369,6 +720,116 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Search functionality
+    userSearch.addEventListener('input', function() {
+        const searchTerm = this.value.toLowerCase();
+        
+        userItems.forEach(item => {
+            const searchData = item.getAttribute('data-search');
+            if (searchData.includes(searchTerm)) {
+                item.style.display = 'flex';
+                item.style.animation = 'slideIn 0.3s ease-out';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    });
+    
+    // User selection handling
+    userCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateSelectedCount();
+            updatePreview();
+        });
+    });
+    
+    // Select all functionality
+    selectAllBtn.addEventListener('click', function() {
+        const visibleCheckboxes = Array.from(userCheckboxes).filter(checkbox => {
+            const userItem = checkbox.closest('.user-item');
+            return userItem.style.display !== 'none';
+        });
+        
+        visibleCheckboxes.forEach(checkbox => {
+            checkbox.checked = true;
+        });
+        
+        updateSelectedCount();
+        updatePreview();
+    });
+    
+    // Clear all functionality
+    clearAllBtn.addEventListener('click', function() {
+        userCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        
+        updateSelectedCount();
+        updatePreview();
+    });
+    
+    // Export selected users functionality
+    exportSelectedBtn.addEventListener('click', function() {
+        const selectedUsers = Array.from(userCheckboxes)
+            .filter(checkbox => checkbox.checked)
+            .map(checkbox => {
+                const userItem = checkbox.closest('.user-item');
+                const name = userItem.querySelector('.user-name').textContent;
+                const email = userItem.querySelector('.user-email').textContent;
+                return { name, email };
+            });
+        
+        if (selectedUsers.length === 0) {
+            alert('No users selected to export');
+            return;
+        }
+        
+        // Create CSV content
+        const csvContent = 'Name,Email\n' + 
+            selectedUsers.map(user => `"${user.name}","${user.email}"`).join('\n');
+        
+        // Create and download file
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `selected_users_${new Date().toISOString().split('T')[0]}.csv`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+        // Show success message
+        this.innerHTML = '<i class="icofont-check-circled"></i> Exported!';
+        setTimeout(() => {
+            this.innerHTML = '<i class="icofont-download"></i> Export';
+        }, 2000);
+    });
+    
+    // Update selected count
+    function updateSelectedCount() {
+        const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
+        const totalCount = userCheckboxes.length;
+        const progressPercentage = totalCount > 0 ? (selectedCount / totalCount) * 100 : 0;
+        
+        selectedCountSpan.textContent = selectedCount;
+        
+        // Update progress bar
+        const progressBar = document.getElementById('selection-progress');
+        if (progressBar) {
+            progressBar.style.width = progressPercentage + '%';
+        }
+        
+        // Update button states
+        if (selectedCount > 0) {
+            clearAllBtn.disabled = false;
+            exportSelectedBtn.disabled = false;
+        } else {
+            clearAllBtn.disabled = true;
+            exportSelectedBtn.disabled = true;
+        }
+    }
     
     // Handle file uploads
     const fileInput = document.getElementById('attachments');
@@ -434,14 +895,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (recipientType === 'all') {
             previewRecipients.textContent = `Recipients: All users ({{ $users->count() }} users)`;
         } else {
-            const selectedCount = selectedUsersList.selectedOptions.length;
+            const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
             previewRecipients.textContent = `Recipients: ${selectedCount} selected users`;
         }
     }
     
     subjectInput.addEventListener('input', updatePreview);
     messageInput.addEventListener('input', updatePreview);
-    selectedUsersList.addEventListener('change', updatePreview);
     
     // Initialize
     if (document.getElementById('selected_users').checked) {
@@ -452,6 +912,10 @@ document.addEventListener('DOMContentLoaded', function() {
         scheduleDateTime.style.display = 'block';
     }
     
+    // Initialize button states
+    exportSelectedBtn.disabled = true;
+    
+    updateSelectedCount();
     updatePreview();
     
     // Form submission
