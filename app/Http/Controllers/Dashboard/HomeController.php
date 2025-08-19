@@ -151,34 +151,58 @@ class HomeController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
-            'profile_picture' => 'image|mimes:jpeg,png,jpg,gif',
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
+        ], [
+            'profile_picture.image' => 'The profile picture must be an image file.',
+            'profile_picture.mimes' => 'The profile picture must be a JPEG, PNG, JPG, or GIF file.',
+            'profile_picture.max' => 'The profile picture must not be larger than 2MB.',
         ]);
 
-        // Fetch authenticated user
-        $user = Auth::user();
+        try {
+            // Fetch authenticated user
+            $user = Auth::user();
 
-        // Update user information
-        $user->first_name = $request->input('first_name');
-        $user->last_name = $request->input('last_name');
-        $user->email = $request->input('email');
+            // Update user information
+            $user->first_name = $request->input('first_name');
+            $user->last_name = $request->input('last_name');
+            $user->email = $request->input('email');
 
-        // Handle profile picture upload
-        if ($request->hasFile('profile_picture')) {
-            // Delete old profile picture if exists
-            if ($user->profile_picture) {
-                Storage::disk('public')->delete($user->profile_picture);
+            // Handle profile picture upload
+            if ($request->hasFile('profile_picture')) {
+                $file = $request->file('profile_picture');
+                
+                // Additional validation
+                if (!$file->isValid()) {
+                    return redirect()->back()->withErrors(['profile_picture' => 'The uploaded file is not valid.'])->withInput();
+                }
+
+                // Delete old profile picture if exists
+                if ($user->profile_picture) {
+                    try {
+                        Storage::disk('public')->delete($user->profile_picture);
+                    } catch (\Exception $e) {
+                        // Log error but continue
+                        \Log::warning('Failed to delete old profile picture: ' . $e->getMessage());
+                    }
+                }
+
+                // Store new profile picture
+                $path = $file->store('profile_pictures', 'public');
+                $user->profile_picture = $path;
             }
 
-            // Store new profile picture
-            $path = $request->file('profile_picture')->store('profile_pictures', 'public');
-            $user->profile_picture = $path;
+            // Save user
+            $user->save();
+
+            // Refresh the authenticated user session
+            Auth::setUser($user);
+
+            return redirect()->back()->with('success', 'Profile updated successfully!');
+            
+        } catch (\Exception $e) {
+            \Log::error('Profile update failed: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Failed to update profile. Please try again.'])->withInput();
         }
-
-        // Save user
-        $user->save();
-
-        // Redirect or return a response
-        return redirect()->back()->with('success', 'Profile updated successfully!');
     }
     public function createMessage(){
         return view('admin.create_message');

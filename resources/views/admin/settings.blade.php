@@ -47,6 +47,29 @@
                                     aria-labelledby="projects__one">
                                     <div class="row">
                                         <div class="col-xl-12">
+                                            <!-- Success/Error Messages -->
+                                            @if(session('success'))
+                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                                    {{ session('success') }}
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+
+                                            @if($errors->any())
+                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                                    <ul class="mb-0">
+                                                        @foreach($errors->all() as $error)
+                                                            <li>{{ $error }}</li>
+                                                        @endforeach
+                                                    </ul>
+                                                    <button type="button" class="close" data-dismiss="alert">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                            @endif
+
                                             <form action="{{route('dashboard.user.info')}}" method="post" enctype="multipart/form-data">
                                                 @csrf
                                                 <div class="row">
@@ -80,8 +103,33 @@
                                                     <div class="col-xl-6">
                                                         <div class="dashboard__form__wraper">
                                                             <div class="dashboard__form__input">
-                                                                <label >Profile Picture</label>
-                                                                <input type="file" name="profile_picture" placeholder="Select an image" >
+                                                                <label>Profile Picture</label>
+                                                                
+                                                                <!-- Current Profile Picture Display -->
+                                                                @if($data->profile_picture)
+                                                                    <div class="current-profile-pic mb-3">
+                                                                        <img src="{{ Storage::url($data->profile_picture) }}" 
+                                                                             alt="Current Profile Picture" 
+                                                                             style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #e6e0ff;">
+                                                                        <p class="text-muted mt-2">Current Profile Picture</p>
+                                                                    </div>
+                                                                @endif
+                                                                
+                                                                <input type="file" name="profile_picture" 
+                                                                       accept="image/jpeg,image/png,image/jpg,image/gif" 
+                                                                       class="form-control" 
+                                                                       onchange="previewImage(this)">
+                                                                
+                                                                <!-- Image Preview -->
+                                                                <div id="imagePreview" class="mt-3" style="display: none;">
+                                                                    <img id="previewImg" src="" alt="Preview" 
+                                                                         style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #e6e0ff;">
+                                                                    <p class="text-muted mt-2">New Profile Picture Preview</p>
+                                                                </div>
+                                                                
+                                                                <small class="form-text text-muted">
+                                                                    Supported formats: JPEG, PNG, JPG, GIF. Max size: 2MB
+                                                                </small>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -259,4 +307,87 @@
         </div>
     </div>
 </div>
+
+<style>
+.current-profile-pic {
+    text-align: center;
+}
+
+.current-profile-pic img {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+}
+
+.current-profile-pic img:hover {
+    transform: scale(1.05);
+}
+
+#imagePreview {
+    text-align: center;
+}
+
+#imagePreview img {
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    border: 3px solid #28a745;
+}
+
+.dashboard__form__input input[type="file"] {
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+}
+
+.dashboard__form__input input[type="file"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+</style>
+
+<script>
+function previewImage(input) {
+    const preview = document.getElementById('imagePreview');
+    const previewImg = document.getElementById('previewImg');
+    
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            previewImg.src = e.target.result;
+            preview.style.display = 'block';
+        }
+        
+        reader.readAsDataURL(input.files[0]);
+    } else {
+        preview.style.display = 'none';
+    }
+}
+
+// Form validation
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.querySelector('form[action*="dashboard.user.info"]');
+    const fileInput = document.querySelector('input[name="profile_picture"]');
+    
+    form.addEventListener('submit', function(e) {
+        if (fileInput.files.length > 0) {
+            const file = fileInput.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            
+            if (file.size > maxSize) {
+                e.preventDefault();
+                alert('Profile picture size must be less than 2MB');
+                return false;
+            }
+            
+            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif'];
+            if (!allowedTypes.includes(file.type)) {
+                e.preventDefault();
+                alert('Please select a valid image file (JPEG, PNG, JPG, or GIF)');
+                return false;
+            }
+        }
+    });
+});
+</script>
+
 @endsection
