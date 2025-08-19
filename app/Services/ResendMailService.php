@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use Resend\Laravel\Facades\Resend;
+use Resend;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Support\Str;
@@ -11,12 +11,13 @@ class ResendMailService
 {
     protected $apiKey;
     protected $domain;
+    protected $resend;
 
     public function __construct()
     {
-        // API key is automatically handled by Resend facade
-        // Domain is used for logging purposes only
+        $this->apiKey = config('services.resend.api_key');
         $this->domain = config('services.resend.domain', 'academicdigital.space');
+        $this->resend = new \Resend\Client($this->apiKey);
     }
 
     /**
@@ -67,7 +68,7 @@ class ResendMailService
                 }
             }
 
-            $response = Resend::emails()->create($params);
+            $response = $this->resend->emails->send($params);
 
             return [
                 'success' => true,
@@ -98,7 +99,7 @@ class ResendMailService
                 'data' => $templateData,
             ];
 
-            $response = Resend::emails()->create($params);
+            $response = $this->resend->emails->send($params);
             
             Log::info('Template email sent successfully via Resend', [
                 'to' => $to,
