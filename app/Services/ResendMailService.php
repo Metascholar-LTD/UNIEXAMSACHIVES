@@ -26,6 +26,11 @@ class ResendMailService
         try {
             $from = $from ?: config('mail.from.address');
             
+            // Validate from address format for Resend
+            if (!str_contains($from, '@')) {
+                throw new Exception("Invalid from address: {$from}");
+            }
+            
             $params = [
                 'from' => $from,
                 'to' => [$to],
@@ -33,10 +38,41 @@ class ResendMailService
                 'html' => $htmlContent,
             ];
 
-            // Add attachments if any
+            // Add attachments if any - Resend expects specific format
             if (!empty($attachments)) {
-                $params['attachments'] = $attachments;
+                $validAttachments = [];
+                foreach ($attachments as $attachment) {
+                    // Validate attachment structure
+                    if (!isset($attachment['filename']) || !isset($attachment['content'])) {
+                        Log::warning('Invalid attachment structure', $attachment);
+                        continue;
+                    }
+                    
+                    // Ensure content is base64 encoded
+                    $content = $attachment['content'];
+                    if (!base64_decode($content, true)) {
+                        // If not base64, encode it
+                        $content = base64_encode($content);
+                    }
+                    
+                    $validAttachments[] = [
+                        'filename' => $attachment['filename'],
+                        'content' => $content,
+                        'type' => $attachment['type'] ?? 'application/octet-stream',
+                    ];
+                }
+                
+                if (!empty($validAttachments)) {
+                    $params['attachments'] = $validAttachments;
+                }
             }
+
+            Log::info('Sending email via Resend API', [
+                'to' => $to,
+                'subject' => $subject,
+                'attachments_count' => count($params['attachments'] ?? []),
+                'params' => array_merge($params, ['html' => '[HTML_CONTENT_OMITTED]'])
+            ]);
 
             $response = Resend::emails()->create($params);
             
@@ -44,7 +80,8 @@ class ResendMailService
                 'to' => $to,
                 'subject' => $subject,
                 'response_id' => $response->id ?? null,
-                'attachments_count' => count($attachments)
+                'attachments_count' => count($attachments),
+                'response' => $response
             ]);
 
             return [
@@ -58,6 +95,7 @@ class ResendMailService
                 'to' => $to,
                 'subject' => $subject,
                 'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
                 'attachments_count' => count($attachments)
             ]);
 
@@ -150,17 +188,21 @@ class ResendMailService
                     'message' => $campaign->message,
                 ])->render();
 
-                // Prepare attachments
+                // Prepare attachments for Resend API
                 $attachments = [];
                 if ($campaign->attachments) {
                     foreach ($campaign->attachments as $attachment) {
                         $filePath = storage_path('app/public/' . $attachment['path']);
                         if (file_exists($filePath)) {
+                            $fileContent = file_get_contents($filePath);
                             $attachments[] = [
-                                'content' => base64_encode(file_get_contents($filePath)),
                                 'filename' => $attachment['name'],
-                                'type' => $attachment['type'],
+                                'content' => base64_encode($fileContent),
+                                'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                'disposition' => 'attachment',
                             ];
+                        } else {
+                            Log::warning("Attachment file not found: {$filePath}");
                         }
                     }
                 }
