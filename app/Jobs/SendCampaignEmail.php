@@ -106,14 +106,26 @@ class SendCampaignEmail implements ShouldQueue
                         }
                     }
                     
-                    // Send email directly using sendEmail method (not sendCampaignEmails)
-                    $result = $resendService->sendEmail(
-                        $recipient->user->email,
-                        $this->campaign->subject,
-                        $htmlContent,
-                        config('mail.from.address'),
-                        $attachments
-                    );
+                                         // Send email directly using sendEmail method (not sendCampaignEmails)
+                     Log::info("About to send email via Resend", [
+                         'recipient_email' => $recipient->user->email,
+                         'subject' => $this->campaign->subject,
+                         'attachments_count' => count($attachments),
+                         'attachments_data' => $attachments
+                     ]);
+                     
+                     $result = $resendService->sendEmail(
+                         $recipient->user->email,
+                         $this->campaign->subject,
+                         $htmlContent,
+                         config('mail.from.address'),
+                         $attachments
+                     );
+                     
+                     Log::info("Resend sendEmail result", [
+                         'result' => $result,
+                         'success' => $result['success'] ?? false
+                     ]);
 
                     if ($result['success']) {
                         // Mark as sent
