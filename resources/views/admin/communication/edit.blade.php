@@ -207,7 +207,7 @@
                                                                 <div class="user-email">{{ $user->email }}</div>
                                                                 <div class="user-meta">
                                                                     <span class="user-status active">Active</span>
-                                                                    <span class="user-joined">Joined {{ $user->created_at->diffForHumans() }}</span>
+                                                                    <span class="user-joined">Joined {{ $user->created_at ? $user->created_at->diffForHumans() : 'Recently' }}</span>
                                                                 </div>
                                                             </div>
                                                             <div class="user-actions">
@@ -1135,8 +1135,21 @@ document.addEventListener('DOMContentLoaded', function() {
             let matchesFilter = true;
             if (currentFilter === 'recent') {
                 // Show users who joined in the last 30 days
-                const joinedDate = new Date(item.querySelector('.user-joined').textContent.replace('Joined ', ''));
-                matchesFilter = (Date.now() - joinedDate.getTime()) < (30 * 24 * 60 * 60 * 1000);
+                const joinedText = item.querySelector('.user-joined').textContent.replace('Joined ', '');
+                if (joinedText !== 'Recently') {
+                    try {
+                        const joinedDate = new Date(joinedText);
+                        if (!isNaN(joinedDate.getTime())) {
+                            matchesFilter = (Date.now() - joinedDate.getTime()) < (30 * 24 * 60 * 60 * 1000);
+                        } else {
+                            matchesFilter = false;
+                        }
+                    } catch (e) {
+                        matchesFilter = false;
+                    }
+                } else {
+                    matchesFilter = true; // "Recently" users are considered recent
+                }
             } else if (currentFilter === 'active') {
                 // Show users with active status
                 matchesFilter = item.querySelector('.user-status').textContent === 'Active';
