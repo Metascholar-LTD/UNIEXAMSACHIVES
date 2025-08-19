@@ -19,9 +19,9 @@ class ResendMailService
     }
 
     /**
-     * Send a simple email using Resend
+     * Send a simple email using Resend with retry logic for rate limits
      */
-    public function sendEmail($to, $subject, $htmlContent, $from = null, $attachments = [])
+    public function sendEmail($to, $subject, $htmlContent, $from = null, $attachments = [], $retryCount = 0)
     {
         try {
             $from = $from ?: config('mail.from.address');
@@ -91,17 +91,34 @@ class ResendMailService
             ];
 
         } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            
+            // Check if it's a rate limit error and retry
+            if (strpos($errorMessage, '450 Too many requests') !== false && $retryCount < 3) {
+                Log::warning('Rate limit hit, retrying in 1 second...', [
+                    'to' => $to,
+                    'retry_count' => $retryCount + 1
+                ]);
+                
+                // Wait 1 second before retry
+                sleep(1);
+                
+                // Retry the email
+                return $this->sendEmail($to, $subject, $htmlContent, $from, $attachments, $retryCount + 1);
+            }
+            
             Log::error('Failed to send email via Resend', [
                 'to' => $to,
                 'subject' => $subject,
-                'error' => $e->getMessage(),
+                'error' => $errorMessage,
                 'trace' => $e->getTraceAsString(),
-                'attachments_count' => count($attachments)
+                'attachments_count' => count($attachments),
+                'retry_count' => $retryCount
             ]);
 
             return [
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $errorMessage
             ];
         }
     }
@@ -163,23 +180,40 @@ class ResendMailService
                 'result' => $result
             ];
             
-            // Small delay to prevent rate limiting
-            usleep(100000); // 0.1 second
+            // Smart rate limiting for Resend (2 requests per second)
+            $requestCount++;
+            $elapsedTime = microtime(true) - $startTime;
+            $expectedTime = $requestCount * 0.5; // 0.5 seconds per request
+            
+            if ($elapsedTime < $expectedTime) {
+                $sleepTime = ($expectedTime - $elapsedTime) * 1000000; // Convert to microseconds
+                usleep((int)$sleepTime);
+            }
+            
+            // Ensure minimum delay between requests
+            usleep(500000); // 0.5 second minimum
         }
 
         return $results;
     }
 
     /**
-     * Send campaign emails with better error handling
+     * Send campaign emails with better error handling and rate limiting
      */
     public function sendCampaignEmails($campaign, $recipients, $from = null)
     {
         $results = [];
         $from = $from ?: config('mail.from.address');
+        $requestCount = 0;
+        $startTime = microtime(true);
         
-        foreach ($recipients as $recipient) {
+        $totalRecipients = count($recipients);
+        Log::info("Starting campaign email send to {$totalRecipients} recipients");
+        
+        foreach ($recipients as $index => $recipient) {
             try {
+                Log::info("Processing recipient " . ($index + 1) . "/{$totalRecipients}: {$recipient->email}");
+                
                 // Generate HTML content for each recipient
                 $htmlContent = view('mails.campaign', [
                     'campaign' => $campaign,
@@ -223,8 +257,18 @@ class ResendMailService
                     'user_id' => $recipient->id
                 ];
 
-                // Rate limiting delay
-                usleep(100000); // 0.1 second
+                // Smart rate limiting for Resend (2 requests per second)
+                $requestCount++;
+                $elapsedTime = microtime(true) - $startTime;
+                $expectedTime = $requestCount * 0.5; // 0.5 seconds per request
+                
+                if ($elapsedTime < $expectedTime) {
+                    $sleepTime = ($expectedTime - $elapsedTime) * 1000000; // Convert to microseconds
+                    usleep((int)$sleepTime);
+                }
+                
+                // Ensure minimum delay between requests
+                usleep(500000); // 0.5 second minimum
 
             } catch (Exception $e) {
                 $results[] = [
