@@ -943,7 +943,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const recipientRadios = document.querySelectorAll('input[name="recipient_type"]');
     const userSelector = document.getElementById('user-selector');
-    const selectedUsersList = document.getElementById('selected_users_list');
     
     const subjectInput = document.getElementById('subject');
     const messageInput = document.getElementById('message');
@@ -956,11 +955,9 @@ document.addEventListener('DOMContentLoaded', function() {
         radio.addEventListener('change', function() {
             if (this.value === 'selected') {
                 userSelector.style.display = 'block';
-                selectedUsersList.required = true;
                 updatePreview();
             } else {
                 userSelector.style.display = 'none';
-                selectedUsersList.required = false;
                 updatePreview();
             }
         });
@@ -1030,14 +1027,22 @@ document.addEventListener('DOMContentLoaded', function() {
         if (recipientType === 'all') {
             previewRecipients.textContent = `Recipients: All users ({{ $users->count() }} users)`;
         } else {
-            const selectedCount = selectedUsersList.selectedOptions.length;
+            // Count selected user checkboxes
+            const selectedCheckboxes = document.querySelectorAll('.user-select-checkbox:checked');
+            const selectedCount = selectedCheckboxes.length;
             previewRecipients.textContent = `Recipients: ${selectedCount} selected users`;
         }
     }
     
     subjectInput.addEventListener('input', updatePreview);
     messageInput.addEventListener('input', updatePreview);
-    selectedUsersList.addEventListener('change', updatePreview);
+    
+    // Update preview when user selection changes
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('user-select-checkbox')) {
+            updatePreview();
+        }
+    });
     
     // Form submission
     document.getElementById('emailForm').addEventListener('submit', function(e) {

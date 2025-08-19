@@ -925,7 +925,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const recipientRadios = document.querySelectorAll('input[name="recipient_type"]');
     const userSelector = document.getElementById('user-selector');
-    const selectedUsersList = document.getElementById('selected_users_list');
     
     const sendOptionRadios = document.querySelectorAll('input[name="send_option"]');
     const scheduleDateTime = document.getElementById('schedule-datetime');
@@ -941,11 +940,9 @@ document.addEventListener('DOMContentLoaded', function() {
         radio.addEventListener('change', function() {
             if (this.value === 'selected') {
                 userSelector.style.display = 'block';
-                selectedUsersList.required = true;
                 updatePreview();
             } else {
                 userSelector.style.display = 'none';
-                selectedUsersList.required = false;
                 updatePreview();
             }
         });
@@ -1028,20 +1025,24 @@ document.addEventListener('DOMContentLoaded', function() {
         if (recipientType === 'all') {
             previewRecipients.textContent = `Recipients: All users ({{ $users->count() }} users)`;
         } else {
-            const selectedCount = selectedUsersList.selectedOptions.length;
+            // Count selected user checkboxes
+            const selectedCheckboxes = document.querySelectorAll('.user-select-checkbox:checked');
+            const selectedCount = selectedCheckboxes.length;
             previewRecipients.textContent = `Recipients: ${selectedCount} selected users`;
         }
     }
     
     subjectInput.addEventListener('input', updatePreview);
     messageInput.addEventListener('input', updatePreview);
-    selectedUsersList.addEventListener('change', updatePreview);
+    
+    // Update preview when user selection changes
+    document.addEventListener('change', function(e) {
+        if (e.target.classList.contains('user-select-checkbox')) {
+            updatePreview();
+        }
+    });
     
     // Initialize
-    if (document.getElementById('selected_users').checked) {
-        userSelector.style.display = 'block';
-    }
-    
     if (document.getElementById('schedule_send').checked) {
         scheduleDateTime.style.display = 'block';
     }
