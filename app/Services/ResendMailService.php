@@ -5,6 +5,7 @@ namespace App\Services;
 use Resend\Laravel\Facades\Resend;
 use Illuminate\Support\Facades\Log;
 use Exception;
+use Illuminate\Support\Str;
 
 class ResendMailService
 {
@@ -32,6 +33,7 @@ class ResendMailService
             }
             
             $params = [
+                'id' => $this->generateResendId(), // Generate unique UUID for Resend
                 'from' => $from,
                 'to' => [$to],
                 'subject' => $subject,
@@ -107,6 +109,17 @@ class ResendMailService
                 return $this->sendEmail($to, $subject, $htmlContent, $from, $attachments, $retryCount + 1);
             }
             
+            // Check if it's a UUID validation error and retry
+            if (strpos($errorMessage, 'must be a valid UUID') !== false && $retryCount < 3) {
+                Log::warning('UUID validation error, retrying with new UUID...', [
+                    'to' => $to,
+                    'retry_count' => $retryCount + 1
+                ]);
+                
+                // Retry the email (will generate new UUID)
+                return $this->sendEmail($to, $subject, $htmlContent, $from, $attachments, $retryCount + 1);
+            }
+            
             Log::error('Failed to send email via Resend', [
                 'to' => $to,
                 'subject' => $subject,
@@ -132,6 +145,7 @@ class ResendMailService
             $from = $from ?: config('mail.from.address');
             
             $params = [
+                'id' => $this->generateResendId(), // Generate unique UUID for Resend
                 'from' => $from,
                 'to' => [$to],
                 'template' => $templateId,
@@ -241,7 +255,7 @@ class ResendMailService
                     }
                 }
 
-                // Send email
+                // Send email with unique ID for each recipient
                 $result = $this->sendEmail(
                     $recipient->email,
                     $campaign->subject,
@@ -318,5 +332,21 @@ class ResendMailService
                 'error' => $e->getMessage()
             ];
         }
+    }
+
+    /**
+     * Generate a valid UUID for Resend API
+     */
+    private function generateResendId()
+    {
+        return Str::uuid()->toString();
+    }
+
+    /**
+     * Validate UUID format
+     */
+    private function isValidUuid($uuid)
+    {
+        return Str::isUuid($uuid);
     }
 }
