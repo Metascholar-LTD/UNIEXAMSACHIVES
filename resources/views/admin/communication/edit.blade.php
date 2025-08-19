@@ -115,39 +115,119 @@
                                         <h5><i class="icofont-users"></i> Recipients</h5>
                                         
                                         <div class="recipient-options">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="recipient_type" 
-                                                       id="all_users" value="all" 
-                                                       {{ old('recipient_type', $campaign->recipient_type) === 'all' ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="all_users">
-                                                    <strong>All Registered Users</strong>
-                                                    <br><small class="text-muted">Send to all approved users ({{ $users->count() }} users)</small>
-                                                </label>
+                                            <div class="recipient-option-card" data-option="all">
+                                                <div class="option-header">
+                                                    <div class="option-icon">
+                                                        <i class="icofont-users-alt-3"></i>
+                                                    </div>
+                                                    <div class="option-content">
+                                                        <h6 class="option-title">All Registered Users</h6>
+                                                        <p class="option-description">Send to all approved users</p>
+                                                        <span class="user-count">{{ $users->count() }} users</span>
+                                                    </div>
+                                                    <div class="option-radio">
+                                                        <input class="form-check-input" type="radio" name="recipient_type" 
+                                                               id="all_users" value="all" 
+                                                               {{ old('recipient_type', $campaign->recipient_type) === 'all' ? 'checked' : '' }}>
+                                                    </div>
+                                                </div>
                                             </div>
 
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="recipient_type" 
-                                                       id="selected_users" value="selected"
-                                                       {{ old('recipient_type', $campaign->recipient_type) === 'selected' ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="selected_users">
-                                                    <strong>Selected Users</strong>
-                                                    <br><small class="text-muted">Choose specific users to send to</small>
-                                                </label>
+                                            <div class="recipient-option-card" data-option="selected">
+                                                <div class="option-header">
+                                                    <div class="option-icon">
+                                                        <i class="icofont-user-alt-3"></i>
+                                                    </div>
+                                                    <div class="option-content">
+                                                        <h6 class="option-title">Selected Users</h6>
+                                                        <p class="option-description">Choose specific users to send to</p>
+                                                        <span class="user-count" id="selected-count">{{ count($campaign->selected_users ?? []) }} users</span>
+                                                    </div>
+                                                    <div class="option-radio">
+                                                        <input class="form-check-input" type="radio" name="recipient_type" 
+                                                               id="selected_users" value="selected"
+                                                               {{ old('recipient_type', $campaign->recipient_type) === 'selected' ? 'checked' : '' }}>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div id="user-selector" class="user-selector mt-3" style="display: {{ old('recipient_type', $campaign->recipient_type) === 'selected' ? 'block' : 'none' }};">
-                                            <label for="selected_users_list">Select Users:</label>
-                                            <select name="selected_users[]" id="selected_users_list" multiple 
-                                                    class="form-control user-select">
-                                                @foreach($users as $user)
-                                                    <option value="{{ $user->id }}"
-                                                            {{ in_array($user->id, old('selected_users', $campaign->selected_users ?? [])) ? 'selected' : '' }}>
-                                                        {{ $user->first_name }} {{ $user->last_name }} ({{ $user->email }})
-                                                    </option>
-                                                @endforeach
-                                            </select>
-                                            <small class="form-text text-muted">Hold Ctrl/Cmd to select multiple users</small>
+                                        <!-- Advanced User Selector -->
+                                        <div id="user-selector" class="user-selector mt-4" style="display: {{ old('recipient_type', $campaign->recipient_type) === 'selected' ? 'block' : 'none' }};">
+                                            <div class="selector-header">
+                                                <h6><i class="icofont-search-1"></i> Search & Select Users</h6>
+                                                <div class="selector-stats">
+                                                    <span class="selected-indicator" id="selected-indicator">{{ count($campaign->selected_users ?? []) }} selected</span>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Search Bar -->
+                                            <div class="search-container">
+                                                <div class="search-input-wrapper">
+                                                    <i class="icofont-search-1 search-icon"></i>
+                                                    <input type="text" id="userSearch" placeholder="Search users by name or email..." 
+                                                           class="search-input">
+                                                    <div class="search-clear" id="searchClear" style="display: none;">
+                                                        <i class="icofont-close"></i>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <!-- User List Container -->
+                                            <div class="user-list-container">
+                                                <div class="user-list-header">
+                                                    <div class="select-all-wrapper">
+                                                        <input type="checkbox" id="selectAllUsers" class="select-all-checkbox">
+                                                        <label for="selectAllUsers">Select All Visible</label>
+                                                    </div>
+                                                    <div class="filter-tabs">
+                                                        <button type="button" class="filter-tab active" data-filter="all">All</button>
+                                                        <button type="button" class="filter-tab" data-filter="recent">Recent</button>
+                                                        <button type="button" class="filter-tab" data-filter="active">Active</button>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="user-list" id="userList">
+                                                    @foreach($users as $user)
+                                                        <div class="user-item" data-user-id="{{ $user->id }}" data-name="{{ strtolower($user->first_name . ' ' . $user->last_name) }}" data-email="{{ strtolower($user->email) }}">
+                                                            <div class="user-checkbox">
+                                                                <input type="checkbox" name="selected_users[]" value="{{ $user->id }}" 
+                                                                       class="user-select-checkbox"
+                                                                       {{ in_array($user->id, old('selected_users', $campaign->selected_users ?? [])) ? 'checked' : '' }}>
+                                                            </div>
+                                                            <div class="user-avatar">
+                                                                @if($user->profile_picture)
+                                                                    <img src="{{ Storage::url($user->profile_picture) }}" alt="{{ $user->first_name }}" onerror="this.src='/img/dashbord/profile.png'">
+                                                                @else
+                                                                    <img src="/img/dashbord/profile.png" alt="{{ $user->first_name }}">
+                                                                @endif
+                                                            </div>
+                                                            <div class="user-info">
+                                                                <div class="user-name">{{ $user->first_name }} {{ $user->last_name }}</div>
+                                                                <div class="user-email">{{ $user->email }}</div>
+                                                                <div class="user-meta">
+                                                                    <span class="user-status active">Active</span>
+                                                                    <span class="user-joined">Joined {{ $user->created_at->diffForHumans() }}</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="user-actions">
+                                                                <button type="button" class="btn-quick-select" title="Quick Select">
+                                                                    <i class="icofont-plus"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                                
+                                                <div class="user-list-footer">
+                                                    <div class="list-info">
+                                                        <span id="visibleCount">{{ $users->count() }}</span> users visible
+                                                    </div>
+                                                    <div class="list-actions">
+                                                        <button type="button" class="btn-clear-selection" id="clearSelection">Clear Selection</button>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <hr>
@@ -185,6 +265,520 @@
 
 <style>
 .required { color: #e74c3c; }
+
+/* Professional Recipient Selection Styling */
+.recipient-options {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.recipient-option-card {
+    background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.recipient-option-card:hover {
+    border-color: #007bff;
+    box-shadow: 0 8px 25px rgba(0, 123, 255, 0.15);
+    transform: translateY(-2px);
+}
+
+.recipient-option-card[data-option="all"]:hover {
+    border-color: #28a745;
+    box-shadow: 0 8px 25px rgba(40, 167, 69, 0.15);
+}
+
+.recipient-option-card[data-option="selected"]:hover {
+    border-color: #ffc107;
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.15);
+}
+
+.recipient-option-card input[type="radio"]:checked + .option-header {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+}
+
+.recipient-option-card input[type="radio"]:checked ~ .option-header .option-icon {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.recipient-option-card input[type="radio"]:checked ~ .option-header .user-count {
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+}
+
+.option-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
+}
+
+.option-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.recipient-option-card[data-option="all"] .option-icon {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+}
+
+.recipient-option-card[data-option="selected"] .option-icon {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+}
+
+.option-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.option-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #2c3e50;
+}
+
+.option-description {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0 0 8px 0;
+    line-height: 1.4;
+}
+
+.user-count {
+    display: inline-block;
+    background: #e9ecef;
+    color: #495057;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.option-radio {
+    flex-shrink: 0;
+}
+
+.option-radio input[type="radio"] {
+    width: 20px;
+    height: 20px;
+    accent-color: #007bff;
+}
+
+/* Advanced User Selector */
+.user-selector {
+    background: #ffffff;
+    border: 2px solid #e9ecef;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.selector-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.selector-header h6 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.selected-indicator {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Search Container */
+.search-container {
+    margin-bottom: 20px;
+}
+
+.search-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 16px;
+    color: #6c757d;
+    font-size: 16px;
+    z-index: 2;
+}
+
+.search-input {
+    width: 100%;
+    padding: 14px 16px 14px 48px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: #007bff;
+    background: #ffffff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.search-clear {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 20px;
+    height: 20px;
+    background: #6c757d;
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.3s ease;
+}
+
+.search-clear:hover {
+    background: #495057;
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* User List Container */
+.user-list-container {
+    background: #f8f9fa;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.user-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.select-all-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.select-all-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff;
+}
+
+.select-all-wrapper label {
+    font-size: 14px;
+    font-weight: 500;
+    color: #495057;
+    margin: 0;
+    cursor: pointer;
+}
+
+.filter-tabs {
+    display: flex;
+    gap: 8px;
+}
+
+.filter-tab {
+    padding: 6px 16px;
+    border: 1px solid #e9ecef;
+    background: #ffffff;
+    color: #6c757d;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-tab:hover {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.filter-tab.active {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+/* User List */
+.user-list {
+    max-height: 400px;
+    overflow-y: auto;
+    padding: 0;
+}
+
+.user-item {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-bottom: 1px solid #f8f9fa;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.user-item:hover {
+    background: #f8f9fa;
+    transform: translateX(4px);
+}
+
+.user-item.selected {
+    background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
+    border-left: 4px solid #007bff;
+}
+
+.user-checkbox {
+    flex-shrink: 0;
+}
+
+.user-select-checkbox {
+    width: 18px;
+    height: 18px;
+    accent-color: #007bff;
+}
+
+.user-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    border: 3px solid #e9ecef;
+    transition: all 0.3s ease;
+}
+
+.user-item:hover .user-avatar {
+    border-color: #007bff;
+    transform: scale(1.05);
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.user-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    margin: 0 0 4px 0;
+    line-height: 1.2;
+}
+
+.user-email {
+    font-size: 14px;
+    color: #6c757d;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+    word-break: break-word;
+}
+
+.user-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-status {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.user-status.active {
+    background: #d4edda;
+    color: #155724;
+}
+
+.user-joined {
+    font-size: 12px;
+    color: #6c757d;
+}
+
+.user-actions {
+    flex-shrink: 0;
+}
+
+.btn-quick-select {
+    width: 32px;
+    height: 32px;
+    border: 2px solid #e9ecef;
+    background: #ffffff;
+    color: #6c757d;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 14px;
+}
+
+.btn-quick-select:hover {
+    border-color: #007bff;
+    color: #007bff;
+    background: #f8f9fa;
+    transform: scale(1.1);
+}
+
+/* User List Footer */
+.user-list-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 20px;
+    background: #ffffff;
+    border-top: 1px solid #e9ecef;
+}
+
+.list-info {
+    font-size: 14px;
+    color: #6c757d;
+}
+
+.list-info span {
+    font-weight: 600;
+    color: #007bff;
+}
+
+.btn-clear-selection {
+    padding: 8px 16px;
+    border: 1px solid #dc3545;
+    background: #ffffff;
+    color: #dc3545;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-clear-selection:hover {
+    background: #dc3545;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .recipient-option-card {
+        padding: 16px;
+    }
+    
+    .option-header {
+        gap: 12px;
+    }
+    
+    .option-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 18px;
+    }
+    
+    .user-selector {
+        padding: 16px;
+    }
+    
+    .selector-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .user-list-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: flex-start;
+    }
+    
+    .filter-tabs {
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    .user-item {
+        padding: 12px 16px;
+        gap: 12px;
+    }
+    
+    .user-avatar {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .user-name {
+        font-size: 14px;
+    }
+    
+    .user-email {
+        font-size: 12px;
+    }
+    
+    .user-meta {
+        flex-direction: column;
+        gap: 4px;
+        align-items: flex-start;
+    }
+}
 
 .existing-attachments {
     margin-bottom: 20px;
@@ -451,6 +1045,214 @@ document.addEventListener('DOMContentLoaded', function() {
         e.target.querySelector('button[type="submit"]').disabled = true;
         e.target.querySelector('button[type="submit"]').innerHTML = '<i class="icofont-spinner fa-spin"></i> Updating...';
     });
+    
+    // Advanced User Selection Functionality
+    const recipientCards = document.querySelectorAll('.recipient-option-card');
+    const userSelector = document.getElementById('user-selector');
+    const userSearch = document.getElementById('userSearch');
+    const searchClear = document.getElementById('searchClear');
+    const selectAllUsers = document.getElementById('selectAllUsers');
+    const userCheckboxes = document.querySelectorAll('.user-select-checkbox');
+    const clearSelection = document.getElementById('clearSelection');
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const userItems = document.querySelectorAll('.user-item');
+    const selectedCount = document.getElementById('selected-count');
+    const selectedIndicator = document.getElementById('selected-indicator');
+    const visibleCount = document.getElementById('visibleCount');
+    
+    let currentFilter = 'all';
+    let searchTerm = '';
+    
+    // Recipient option selection
+    recipientCards.forEach(card => {
+        const radio = card.querySelector('input[type="radio"]');
+        const option = card.dataset.option;
+        
+        card.addEventListener('click', function() {
+            radio.checked = true;
+            updateRecipientSelection();
+        });
+        
+        // Update visual state when radio changes
+        radio.addEventListener('change', function() {
+            updateRecipientSelection();
+        });
+    });
+    
+    function updateRecipientSelection() {
+        const selectedOption = document.querySelector('input[name="recipient_type"]:checked').value;
+        
+        if (selectedOption === 'selected') {
+            userSelector.style.display = 'block';
+            updateSelectedCount();
+        } else {
+            userSelector.style.display = 'none';
+            // Clear all selections when switching to "all users"
+            userCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectedCount();
+        }
+    }
+    
+    // Search functionality
+    userSearch.addEventListener('input', function() {
+        searchTerm = this.value.toLowerCase();
+        filterUsers();
+        
+        if (searchTerm.length > 0) {
+            searchClear.style.display = 'flex';
+        } else {
+            searchClear.style.display = 'none';
+        }
+    });
+    
+    searchClear.addEventListener('click', function() {
+        userSearch.value = '';
+        searchTerm = '';
+        filterUsers();
+        this.style.display = 'none';
+    });
+    
+    // Filter tabs
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            filterTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            currentFilter = this.dataset.filter;
+            filterUsers();
+        });
+    });
+    
+    function filterUsers() {
+        let visibleCount = 0;
+        
+        userItems.forEach(item => {
+            const name = item.dataset.name;
+            const email = item.dataset.email;
+            const matchesSearch = !searchTerm || name.includes(searchTerm) || email.includes(searchTerm);
+            
+            let matchesFilter = true;
+            if (currentFilter === 'recent') {
+                // Show users who joined in the last 30 days
+                const joinedDate = new Date(item.querySelector('.user-joined').textContent.replace('Joined ', ''));
+                matchesFilter = (Date.now() - joinedDate.getTime()) < (30 * 24 * 60 * 60 * 1000);
+            } else if (currentFilter === 'active') {
+                // Show users with active status
+                matchesFilter = item.querySelector('.user-status').textContent === 'Active';
+            }
+            
+            if (matchesSearch && matchesFilter) {
+                item.style.display = 'flex';
+                visibleCount++;
+            } else {
+                item.style.display = 'none';
+            }
+        });
+        
+        document.getElementById('visibleCount').textContent = visibleCount;
+        updateSelectAllState();
+    }
+    
+    // Select all functionality
+    selectAllUsers.addEventListener('change', function() {
+        const visibleItems = Array.from(userItems).filter(item => 
+            item.style.display !== 'none'
+        );
+        
+        visibleItems.forEach(item => {
+            const checkbox = item.querySelector('.user-select-checkbox');
+            checkbox.checked = this.checked;
+        });
+        
+        updateSelectedCount();
+        updateUserItemStates();
+    });
+    
+    // Individual checkbox changes
+    userCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            updateSelectedCount();
+            updateUserItemStates();
+            updateSelectAllState();
+        });
+    });
+    
+    // Quick select buttons
+    userItems.forEach(item => {
+        const quickSelectBtn = item.querySelector('.btn-quick-select');
+        const checkbox = item.querySelector('.user-select-checkbox');
+        
+        quickSelectBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            checkbox.checked = !checkbox.checked;
+            updateSelectedCount();
+            updateUserItemStates();
+            updateSelectAllState();
+        });
+        
+        // Click on user item to select
+        item.addEventListener('click', function(e) {
+            if (e.target !== checkbox && e.target !== quickSelectBtn) {
+                checkbox.checked = !checkbox.checked;
+                updateSelectedCount();
+                updateUserItemStates();
+                updateSelectAllState();
+            }
+        });
+    });
+    
+    // Clear selection
+    clearSelection.addEventListener('click', function() {
+        userCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
+        updateSelectedCount();
+        updateUserItemStates();
+        updateSelectAllState();
+    });
+    
+    function updateSelectedCount() {
+        const selectedCount = userCheckboxes.filter(checkbox => checkbox.checked).length;
+        document.getElementById('selected-count').textContent = selectedCount + ' users';
+        document.getElementById('selected-indicator').textContent = selectedCount + ' selected';
+    }
+    
+    function updateUserItemStates() {
+        userItems.forEach(item => {
+            const checkbox = item.querySelector('.user-select-checkbox');
+            if (checkbox.checked) {
+                item.classList.add('selected');
+            } else {
+                item.classList.remove('selected');
+            }
+        });
+    }
+    
+    function updateSelectAllState() {
+        const visibleItems = Array.from(userItems).filter(item => 
+            item.style.display !== 'none'
+        );
+        const visibleCheckboxes = visibleItems.map(item => 
+            item.querySelector('.user-select-checkbox')
+        );
+        const checkedCount = visibleCheckboxes.filter(checkbox => checkbox.checked).length;
+        
+        if (checkedCount === 0) {
+            selectAllUsers.indeterminate = false;
+            selectAllUsers.checked = false;
+        } else if (checkedCount === visibleCheckboxes.length) {
+            selectAllUsers.indeterminate = false;
+            selectAllUsers.checked = true;
+        } else {
+            selectAllUsers.indeterminate = true;
+            selectAllUsers.checked = false;
+        }
+    }
+    
+    // Initialize
+    updateRecipientSelection();
+    filterUsers();
 });
 
 function removeFile(index) {
