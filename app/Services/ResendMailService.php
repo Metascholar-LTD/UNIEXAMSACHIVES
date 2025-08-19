@@ -13,8 +13,9 @@ class ResendMailService
 
     public function __construct()
     {
-        $this->apiKey = config('services.resend.api_key');
-        $this->domain = config('services.resend.domain');
+        // API key is automatically handled by Resend facade
+        // Domain is used for logging purposes only
+        $this->domain = config('services.resend.domain', 'academicdigital.space');
     }
 
     /**
@@ -205,17 +206,25 @@ class ResendMailService
     }
 
     /**
-     * Verify email address
+     * Verify email address (simplified for restricted API keys)
      */
     public function verifyEmail($email)
     {
         try {
-            $response = Resend::domains()->verify($this->domain);
-            return [
-                'success' => true,
-                'verified' => true,
-                'response' => $response
-            ];
+            // For restricted API keys, we'll just validate the email format
+            if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+                return [
+                    'success' => true,
+                    'verified' => true,
+                    'message' => 'Email format is valid'
+                ];
+            } else {
+                return [
+                    'success' => false,
+                    'verified' => false,
+                    'error' => 'Invalid email format'
+                ];
+            }
         } catch (Exception $e) {
             return [
                 'success' => false,
