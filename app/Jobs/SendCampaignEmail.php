@@ -6,6 +6,7 @@ use App\Mail\CampaignEmail;
 use App\Models\EmailCampaign;
 use App\Models\EmailCampaignRecipient;
 use App\Models\User;
+use App\Services\ResendMailService;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -62,13 +63,38 @@ class SendCampaignEmail implements ShouldQueue
                         continue;
                     }
 
-                    // Send the email
-                    Mail::to($recipient->user->email)
-                        ->send(new CampaignEmail($this->campaign, $recipient->user));
+                    // Use Resend service to send campaign email
+                    $resendService = new ResendMailService();
+                    
+                    // Send email via Resend using the campaign method
+                    $response = $resendService->sendCampaignEmails(
+                        $this->campaign,
+                        [$recipient->user],
+                        config('mail.from.address')
+                    );
 
-                    // Mark as sent
-                    $recipient->markAsSent();
-                    $sentCount++;
+                    if (!empty($response) && $response[0]['result']['success']) {
+                        // Mark as sent
+                        $recipient->markAsSent();
+                        $sentCount++;
+                        
+                        Log::info("Campaign email sent successfully via Resend", [
+                            'user_id' => $recipient->user->id,
+                            'email' => $recipient->user->email,
+                            'message_id' => $response[0]['result']['message_id'] ?? null
+                        ]);
+                    } else {
+                        // Mark as failed
+                        $error = !empty($response) ? $response[0]['result']['error'] ?? 'Unknown error' : 'No response from Resend';
+                        $recipient->markAsFailed('Resend API error: ' . $error);
+                        $failedCount++;
+                        
+                        Log::error("Failed to send campaign email via Resend", [
+                            'user_id' => $recipient->user->id,
+                            'email' => $recipient->user->email,
+                            'error' => $error
+                        ]);
+                    }
 
                     // Add small delay to prevent overwhelming the mail server
                     usleep(100000); // 0.1 second delay

@@ -42,7 +42,8 @@ class ResendMailService
             Log::info('Email sent successfully via Resend', [
                 'to' => $to,
                 'subject' => $subject,
-                'response_id' => $response->id ?? null
+                'response_id' => $response->id ?? null,
+                'attachments_count' => count($attachments)
             ]);
 
             return [
@@ -55,7 +56,8 @@ class ResendMailService
             Log::error('Failed to send email via Resend', [
                 'to' => $to,
                 'subject' => $subject,
-                'error' => $e->getMessage()
+                'error' => $e->getMessage(),
+                'attachments_count' => count($attachments)
             ]);
 
             return [
@@ -124,6 +126,79 @@ class ResendMailService
             
             // Small delay to prevent rate limiting
             usleep(100000); // 0.1 second
+        }
+
+        return $results;
+    }
+
+    /**
+     * Send campaign emails with better error handling
+     */
+    public function sendCampaignEmails($campaign, $recipients, $from = null)
+    {
+        $results = [];
+        $from = $from ?: config('mail.from.address');
+        
+        foreach ($recipients as $recipient) {
+            try {
+                // Generate HTML content for each recipient
+                $htmlContent = view('mails.campaign', [
+                    'campaign' => $campaign,
+                    'user' => $recipient,
+                    'subject' => $campaign->subject,
+                    'message' => $campaign->message,
+                ])->render();
+
+                // Prepare attachments
+                $attachments = [];
+                if ($campaign->attachments) {
+                    foreach ($campaign->attachments as $attachment) {
+                        $filePath = storage_path('app/public/' . $attachment['path']);
+                        if (file_exists($filePath)) {
+                            $attachments[] = [
+                                'content' => base64_encode(file_get_contents($filePath)),
+                                'filename' => $attachment['name'],
+                                'type' => $attachment['type'],
+                            ];
+                        }
+                    }
+                }
+
+                // Send email
+                $result = $this->sendEmail(
+                    $recipient->email,
+                    $campaign->subject,
+                    $htmlContent,
+                    $from,
+                    $attachments
+                );
+
+                $results[] = [
+                    'recipient' => $recipient,
+                    'result' => $result,
+                    'email' => $recipient->email,
+                    'user_id' => $recipient->id
+                ];
+
+                // Rate limiting delay
+                usleep(100000); // 0.1 second
+
+            } catch (Exception $e) {
+                $results[] = [
+                    'recipient' => $recipient,
+                    'result' => [
+                        'success' => false,
+                        'error' => $e->getMessage()
+                    ],
+                    'email' => $recipient->email,
+                    'user_id' => $recipient->id
+                ];
+
+                Log::error("Failed to send campaign email to user {$recipient->id}", [
+                    'campaign_id' => $campaign->id,
+                    'error' => $e->getMessage()
+                ]);
+            }
         }
 
         return $results;
