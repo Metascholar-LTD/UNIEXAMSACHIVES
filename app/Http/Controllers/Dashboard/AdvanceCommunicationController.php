@@ -11,7 +11,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
+use Exception;
 
 class AdvanceCommunicationController extends Controller
 {
@@ -90,13 +93,10 @@ class AdvanceCommunicationController extends Controller
             }
         }
 
-        // Determine recipients
-        $recipients = $request->recipient_type === 'all' 
-            ? User::where('is_approve', true)->pluck('id')->toArray()
-            : $request->selected_users;
-
-        $status = $request->boolean('send_immediately') ? 'sending' : 'scheduled';
-        $scheduledAt = $request->boolean('send_immediately') ? now() : $request->scheduled_at;
+        // Get recipients
+        $recipientUsers = $request->recipient_type === 'all' 
+            ? User::where('is_approve', true)->get()
+            : User::whereIn('id', $request->selected_users)->where('is_approve', true)->get();
 
         // Create campaign
         $campaign = EmailCampaign::create([
@@ -104,29 +104,99 @@ class AdvanceCommunicationController extends Controller
             'message' => $request->message,
             'attachments' => $attachmentPaths,
             'recipient_type' => $request->recipient_type,
-            'selected_users' => $request->recipient_type === 'selected' ? $recipients : null,
-            'status' => $status,
-            'scheduled_at' => $scheduledAt,
-            'total_recipients' => count($recipients),
+            'selected_users' => $request->recipient_type === 'selected' ? $recipientUsers->pluck('id')->toArray() : null,
+            'status' => 'sending',
+            'scheduled_at' => now(),
+            'total_recipients' => $recipientUsers->count(),
             'created_by' => auth()->id(),
         ]);
 
         // Create recipient records
-        foreach ($recipients as $userId) {
+        foreach ($recipientUsers as $user) {
             EmailCampaignRecipient::create([
                 'comm_campaign_id' => $campaign->id,
-                'user_id' => $userId,
+                'user_id' => $user->id,
                 'status' => 'pending',
             ]);
         }
 
-        // Dispatch email sending job if immediate
-        if ($request->boolean('send_immediately')) {
-            SendCampaignEmail::dispatch($campaign);
+        // Send emails directly (like broadcast system)
+        $sentCount = 0;
+        $failedCount = 0;
+        
+        Log::info("Starting direct email campaign send", [
+            'campaign_id' => $campaign->id,
+            'total_recipients' => $recipientUsers->count(),
+            'subject' => $campaign->subject,
+            'has_attachments' => !empty($attachmentPaths)
+        ]);
+
+        foreach ($recipientUsers as $user) {
+            try {
+                Log::info("Sending campaign email to user", [
+                    'campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'user_email' => $user->email
+                ]);
+
+                // Send email directly using Laravel Mail (like broadcast system)
+                Mail::to($user->email)->send(new CampaignEmail($campaign, $user));
+                
+                // Mark recipient as sent
+                EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                    ->where('user_id', $user->id)
+                    ->update([
+                        'status' => 'sent',
+                        'sent_at' => now()
+                    ]);
+                
+                $sentCount++;
+                
+                Log::info("Campaign email sent successfully", [
+                    'campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'user_email' => $user->email
+                ]);
+                
+                // Small delay to prevent overwhelming the mail server
+                usleep(100000); // 0.1 second
+                
+            } catch (Exception $e) {
+                Log::error("Failed to send campaign email", [
+                    'campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'user_email' => $user->email,
+                    'error' => $e->getMessage()
+                ]);
+                
+                // Mark recipient as failed
+                EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                    ->where('user_id', $user->id)
+                    ->update([
+                        'status' => 'failed',
+                        'error_message' => $e->getMessage()
+                    ]);
+                
+                $failedCount++;
+            }
         }
 
+        // Update campaign final status
+        $campaign->update([
+            'status' => 'sent',
+            'sent_at' => now(),
+            'sent_count' => $sentCount,
+            'failed_count' => $failedCount,
+        ]);
+
+        Log::info("Campaign completed", [
+            'campaign_id' => $campaign->id,
+            'sent_count' => $sentCount,
+            'failed_count' => $failedCount
+        ]);
+
         return redirect()->route('admin.communication.index')
-                        ->with('success', 'Email campaign created successfully!');
+                        ->with('success', "Email campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}");
     }
 
     public function show(EmailCampaign $campaign)

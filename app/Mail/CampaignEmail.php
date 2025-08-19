@@ -12,8 +12,10 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
+use Exception;
 
-class CampaignEmail extends Mailable implements ShouldQueue
+class CampaignEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -46,9 +48,9 @@ class CampaignEmail extends Mailable implements ShouldQueue
     public function content(): Content
     {
         return new Content(
-            markdown: 'mails.campaign',
+            view: 'mails.campaign_simple',
             with: [
-                'title' => $this->campaign->subject,
+                'subject' => $this->campaign->subject,
                 'message' => $this->campaign->message,
                 'user' => $this->user,
                 'campaign' => $this->campaign,
@@ -65,17 +67,59 @@ class CampaignEmail extends Mailable implements ShouldQueue
     {
         $attachments = [];
 
-        if ($this->campaign->attachments) {
+        if ($this->campaign->attachments && is_array($this->campaign->attachments)) {
+            Log::info("Processing attachments for CampaignEmail", [
+                'campaign_id' => $this->campaign->id,
+                'user_email' => $this->user->email,
+                'attachments_count' => count($this->campaign->attachments)
+            ]);
+            
             foreach ($this->campaign->attachments as $attachment) {
-                $filePath = storage_path('app/public/' . $attachment['path']);
-                
-                if (file_exists($filePath)) {
-                    $attachments[] = Attachment::fromPath($filePath)
-                                               ->as($attachment['name'])
-                                               ->withMime($attachment['type']);
+                try {
+                    if (!isset($attachment['path']) || !isset($attachment['name'])) {
+                        Log::warning("Invalid attachment structure in CampaignEmail", [
+                            'campaign_id' => $this->campaign->id,
+                            'attachment' => $attachment
+                        ]);
+                        continue;
+                    }
+                    
+                    $filePath = storage_path('app/public/' . $attachment['path']);
+                    
+                    if (file_exists($filePath)) {
+                        $attachments[] = Attachment::fromPath($filePath)
+                                                   ->as($attachment['name'])
+                                                   ->withMime($attachment['type'] ?? 'application/octet-stream');
+                                                   
+                        Log::info("Attachment added to CampaignEmail", [
+                            'campaign_id' => $this->campaign->id,
+                            'filename' => $attachment['name'],
+                            'path' => $filePath,
+                            'exists' => true
+                        ]);
+                    } else {
+                        Log::error("Attachment file not found in CampaignEmail", [
+                            'campaign_id' => $this->campaign->id,
+                            'filename' => $attachment['name'],
+                            'path' => $filePath,
+                            'exists' => false
+                        ]);
+                    }
+                } catch (Exception $e) {
+                    Log::error("Error processing attachment in CampaignEmail", [
+                        'campaign_id' => $this->campaign->id,
+                        'attachment' => $attachment,
+                        'error' => $e->getMessage()
+                    ]);
                 }
             }
         }
+        
+        Log::info("Final attachments for CampaignEmail", [
+            'campaign_id' => $this->campaign->id,
+            'user_email' => $this->user->email,
+            'final_attachments_count' => count($attachments)
+        ]);
 
         return $attachments;
     }
