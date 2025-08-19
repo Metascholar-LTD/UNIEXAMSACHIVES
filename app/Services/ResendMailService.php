@@ -2,81 +2,77 @@
 
 namespace App\Services;
 
-use Resend;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 use Exception;
 use Illuminate\Support\Str;
+use Illuminate\Mail\Message;
 
 class ResendMailService
 {
     protected $apiKey;
     protected $domain;
-    protected $resend;
 
     public function __construct()
     {
         $this->apiKey = config('services.resend.api_key');
         $this->domain = config('services.resend.domain', 'academicdigital.space');
-        $this->resend = new \Resend\Client($this->apiKey);
     }
 
     /**
-     * Send a simple email using Resend with retry logic for rate limits
+     * Send a simple email using Resend SMTP
      */
     public function sendEmail($to, $subject, $htmlContent, $from = null, $attachments = [], $retryCount = 0)
     {
         try {
             $from = $from ?: config('mail.from.address');
             
-            // Validate from address format for Resend
+            // Validate from address format
             if (!str_contains($from, '@')) {
                 throw new Exception("Invalid from address: {$from}");
             }
             
-            $params = [
-                'from' => $from,
-                'to' => [$to],
-                'subject' => $subject,
-                'html' => $htmlContent,
-            ];
-
-            // Add attachments if any
-            if (!empty($attachments)) {
-                $validAttachments = [];
+            $messageId = Str::uuid()->toString();
+            
+            Mail::send([], [], function (Message $message) use ($to, $subject, $htmlContent, $from, $attachments) {
+                $message->to($to)
+                        ->subject($subject)
+                        ->from($from)
+                        ->html($htmlContent);
                 
-                foreach ($attachments as $attachment) {
-                    // Validate attachment structure
-                    if (!isset($attachment['filename']) || !isset($attachment['content'])) {
-                        continue;
+                // Add attachments if any
+                if (!empty($attachments)) {
+                    foreach ($attachments as $attachment) {
+                        if (isset($attachment['filename']) && isset($attachment['content'])) {
+                            // If content is base64 encoded, decode it
+                            $content = $attachment['content'];
+                            if (base64_decode($content, true) !== false) {
+                                $content = base64_decode($content);
+                            }
+                            
+                            $message->attachData(
+                                $content,
+                                $attachment['filename'],
+                                ['mime' => $attachment['type'] ?? 'application/octet-stream']
+                            );
+                        }
                     }
-                    
-                    // Ensure content is base64 encoded
-                    $content = $attachment['content'];
-                    if (!base64_decode($content, true)) {
-                        $content = base64_encode($content);
-                    }
-                    
-                    $validAttachments[] = [
-                        'filename' => $attachment['filename'],
-                        'content' => $content,
-                        'type' => $attachment['type'] ?? 'application/octet-stream',
-                    ];
                 }
-                
-                if (!empty($validAttachments)) {
-                    $params['attachments'] = $validAttachments;
-                }
-            }
-
-            $response = $this->resend->emails->send($params);
+            });
 
             return [
                 'success' => true,
-                'message_id' => $response->id ?? null,
-                'response' => $response
+                'message_id' => $messageId,
+                'response' => 'Email sent via SMTP'
             ];
 
         } catch (Exception $e) {
+            Log::error('Failed to send email via SMTP', [
+                'to' => $to,
+                'subject' => $subject,
+                'error' => $e->getMessage()
+            ]);
+            
             return [
                 'success' => false,
                 'error' => $e->getMessage()
@@ -85,36 +81,30 @@ class ResendMailService
     }
 
     /**
-     * Send email using Resend template
+     * Send email using template (fallback to regular email since we're using SMTP)
      */
     public function sendTemplateEmail($to, $templateId, $templateData, $from = null)
     {
         try {
             $from = $from ?: config('mail.from.address');
             
-            $params = [
-                'from' => $from,
-                'to' => [$to],
-                'template' => $templateId,
-                'data' => $templateData,
-            ];
-
-            $response = $this->resend->emails->send($params);
+            // Since we're using SMTP, we'll generate HTML content from template data
+            $htmlContent = $this->generateTemplateContent($templateId, $templateData);
             
-            Log::info('Template email sent successfully via Resend', [
-                'to' => $to,
-                'template_id' => $templateId,
-                'response_id' => $response->id ?? null
-            ]);
+            $result = $this->sendEmail($to, $templateData['subject'] ?? 'Template Email', $htmlContent, $from);
+            
+            if ($result['success']) {
+                Log::info('Template email sent successfully via SMTP', [
+                    'to' => $to,
+                    'template_id' => $templateId,
+                    'message_id' => $result['message_id']
+                ]);
+            }
 
-            return [
-                'success' => true,
-                'message_id' => $response->id ?? null,
-                'response' => $response
-            ];
+            return $result;
 
         } catch (Exception $e) {
-            Log::error('Failed to send template email via Resend', [
+            Log::error('Failed to send template email via SMTP', [
                 'to' => $to,
                 'template_id' => $templateId,
                 'error' => $e->getMessage()
@@ -125,6 +115,27 @@ class ResendMailService
                 'error' => $e->getMessage()
             ];
         }
+    }
+    
+    /**
+     * Generate HTML content from template data
+     */
+    private function generateTemplateContent($templateId, $templateData)
+    {
+        // Basic template generation - you can customize this based on your needs
+        $content = "<html><body>";
+        $content .= "<h2>" . ($templateData['title'] ?? 'Email') . "</h2>";
+        $content .= "<p>" . ($templateData['message'] ?? 'No message content') . "</p>";
+        
+        // Add any other template data
+        foreach ($templateData as $key => $value) {
+            if (!in_array($key, ['title', 'message', 'subject']) && is_string($value)) {
+                $content .= "<p><strong>" . ucfirst($key) . ":</strong> " . htmlspecialchars($value) . "</p>";
+            }
+        }
+        
+        $content .= "</body></html>";
+        return $content;
     }
 
     /**
