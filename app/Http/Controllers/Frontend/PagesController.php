@@ -11,8 +11,7 @@ use App\Models\Visit;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\Registration;
-use Mailjet\LaravelMailjet\Facades\Mailjet;
-use \Mailjet\Resources;
+use App\Services\ResendMailService;
 
 class PagesController extends Controller
 {
@@ -62,18 +61,24 @@ class PagesController extends Controller
         ]);
 
         #send mail to user
-        if (env('MAIL_MAILER') == 'mailjet') {
-            $mj = Mailjet::getClient();
-            $body = [
-            'FromEmail' => "support@turnitincompany.com",
-            'FromName' => "University Exams Archive System",
-            'Subject' => "Registration Successful",
-            'MJ-TemplateID' => 6346415,
-            'MJ-TemplateLanguage' => true,
-            'Recipients' => [['Email' => $request['email']]],
-            'Vars' => ["firstname" => $validatedData['first_name']]
-            ];
-            $response =  $mj->post(Resources::$Email, ['body' => $body]);
+        if (env('MAIL_MAILER') == 'resend') {
+            $resendService = new ResendMailService();
+            
+            $htmlContent = view('mails.registration', [
+                'firstname' => $validatedData['first_name'],
+                'email' => $request['email']
+            ])->render();
+            
+            $response = $resendService->sendEmail(
+                $request['email'],
+                'Registration Successful',
+                $htmlContent,
+                'cug@academicdigital.space'
+            );
+            
+            if (!$response['success']) {
+                \Log::error('Failed to send registration email', $response);
+            }
         }
 
         return redirect()->route('frontend.login')->with('success', 'Registration successful, Please wait while your account is been approve');

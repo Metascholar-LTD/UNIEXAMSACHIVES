@@ -36,7 +36,7 @@ class CampaignEmail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             subject: $this->campaign->subject,
-            from: config('mail.from.address', 'noreply@example.com'),
+            from: config('mail.from.address', 'cug@academicdigital.space'),
         );
     }
 

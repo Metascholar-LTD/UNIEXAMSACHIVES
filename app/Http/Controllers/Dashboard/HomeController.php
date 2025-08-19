@@ -17,8 +17,7 @@ use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-use Mailjet\LaravelMailjet\Facades\Mailjet;
-use \Mailjet\Resources;
+use App\Services\ResendMailService;
 
 class HomeController extends Controller
 {
@@ -218,17 +217,24 @@ class HomeController extends Controller
     {
         $user->update(['is_approve' => true]);
         // Mail::to($user->email)->send(new Approval());
-        if (env('MAIL_MAILER') == 'mailjet') {
-            $mj = Mailjet::getClient();
-            $body = [
-            'FromEmail' => "support@turnitincompany.com",
-            'FromName' => "University Exams Archive System",
-            'Subject' => "Account Successfully Approved",
-            'MJ-TemplateID' => 6346512,
-            'MJ-TemplateLanguage' => true,
-            'Recipients' => [['Email' => $user->email]],
-            ];
-            $response =  $mj->post(Resources::$Email, ['body' => $body]);
+        if (env('MAIL_MAILER') == 'resend') {
+            $resendService = new ResendMailService();
+            
+            $htmlContent = view('mails.approval', [
+                'firstname' => $user->first_name,
+                'email' => $user->email
+            ])->render();
+            
+            $response = $resendService->sendEmail(
+                $user->email,
+                'Account Successfully Approved',
+                $htmlContent,
+                'cug@academicdigital.space'
+            );
+            
+            if (!$response['success']) {
+                \Log::error('Failed to send approval email', $response);
+            }
         }
         return redirect()->route('dashboard.users')->with('success', 'User approved successfully');
     }

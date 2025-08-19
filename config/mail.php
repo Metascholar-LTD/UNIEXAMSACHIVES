@@ -14,7 +14,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'mailjet'),
+    'default' => env('MAIL_MAILER', 'resend'),
 
     /*
     |--------------------------------------------------------------------------
@@ -37,6 +37,16 @@ return [
     'mailers' => [
         'mailjet' => [
             'transport' => 'mailjet',
+        ],
+        'resend' => [
+            'transport' => 'smtp',
+            'host' => env('MAIL_HOST', 'smtp.resend.com'),
+            'port' => env('MAIL_PORT', 465),
+            'encryption' => env('MAIL_ENCRYPTION', 'ssl'),
+            'username' => env('MAIL_USERNAME', 'cug@academicdigital.space'),
+            'password' => env('MAIL_PASSWORD', 'Metascholar@2025'),
+            'timeout' => null,
+            'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
         'smtp' => [
             'transport' => 'smtp',
@@ -98,7 +108,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'support@turnitincompany.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'cug@academicdigital.space'),
         'name' => env('MAIL_FROM_NAME', 'University Exams Archive System'),
     ],
 

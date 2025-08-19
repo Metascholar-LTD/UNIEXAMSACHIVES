@@ -61,5 +61,9 @@ return [
             ]
         ],
     ],
+    'resend' => [
+        'api_key' => env('RESEND_API_KEY', 're_QdiydcHv_FfZMuBpdreedW1fDsBsfEz7a'),
+        'domain' => env('RESEND_DOMAIN', 'academicdigital.space'),
+    ],
 
 ];
