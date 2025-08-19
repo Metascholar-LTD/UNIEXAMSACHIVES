@@ -1056,7 +1056,9 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearSelection = document.getElementById('clearSelection');
     const filterTabs = document.querySelectorAll('.filter-tab');
     const userItems = document.querySelectorAll('.user-item');
-
+    const selectedCount = document.getElementById('selected-count');
+    const selectedIndicator = document.getElementById('selected-indicator');
+    const visibleCount = document.getElementById('visibleCount');
     
     let currentFilter = 'all';
     let searchTerm = '';
@@ -1064,11 +1066,17 @@ document.addEventListener('DOMContentLoaded', function() {
     // Recipient option selection
     recipientCards.forEach(card => {
         const radio = card.querySelector('input[type="radio"]');
+        const option = card.dataset.option;
+        
         card.addEventListener('click', function() {
             radio.checked = true;
             updateRecipientSelection();
         });
-        radio.addEventListener('change', updateRecipientSelection);
+        
+        // Update visual state when radio changes
+        radio.addEventListener('change', function() {
+            updateRecipientSelection();
+        });
     });
     
     function updateRecipientSelection() {
@@ -1076,11 +1084,15 @@ document.addEventListener('DOMContentLoaded', function() {
         
         if (selectedOption === 'selected') {
             userSelector.style.display = 'block';
+            updateSelectedCount();
         } else {
             userSelector.style.display = 'none';
-            userCheckboxes.forEach(checkbox => checkbox.checked = false);
+            // Clear all selections when switching to "all users"
+            userCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updateSelectedCount();
         }
-        updateSelectedCount();
     }
     
     // Search functionality
@@ -1088,7 +1100,11 @@ document.addEventListener('DOMContentLoaded', function() {
         searchTerm = this.value.toLowerCase();
         filterUsers();
         
-        searchClear.style.display = searchTerm.length > 0 ? 'flex' : 'none';
+        if (searchTerm.length > 0) {
+            searchClear.style.display = 'flex';
+        } else {
+            searchClear.style.display = 'none';
+        }
     });
     
     searchClear.addEventListener('click', function() {
@@ -1118,9 +1134,24 @@ document.addEventListener('DOMContentLoaded', function() {
             
             let matchesFilter = true;
             if (currentFilter === 'recent') {
+                // Show users who joined in the last 30 days
                 const joinedText = item.querySelector('.user-joined').textContent.replace('Joined ', '');
-                matchesFilter = joinedText === 'Recently' || joinedText.includes('ago');
+                if (joinedText !== 'Recently') {
+                    try {
+                        const joinedDate = new Date(joinedText);
+                        if (!isNaN(joinedDate.getTime())) {
+                            matchesFilter = (Date.now() - joinedDate.getTime()) < (30 * 24 * 60 * 60 * 1000);
+                        } else {
+                            matchesFilter = false;
+                        }
+                    } catch (e) {
+                        matchesFilter = false;
+                    }
+                } else {
+                    matchesFilter = true; // "Recently" users are considered recent
+                }
             } else if (currentFilter === 'active') {
+                // Show users with active status
                 matchesFilter = item.querySelector('.user-status').textContent === 'Active';
             }
             
@@ -1138,11 +1169,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Select all functionality
     selectAllUsers.addEventListener('change', function() {
-        const visibleItems = Array.from(userItems).filter(item => item.style.display !== 'none');
+        const visibleItems = Array.from(userItems).filter(item => 
+            item.style.display !== 'none'
+        );
+        
         visibleItems.forEach(item => {
             const checkbox = item.querySelector('.user-select-checkbox');
             checkbox.checked = this.checked;
         });
+        
         updateSelectedCount();
         updateUserItemStates();
     });
@@ -1169,6 +1204,7 @@ document.addEventListener('DOMContentLoaded', function() {
             updateSelectAllState();
         });
         
+        // Click on user item to select
         item.addEventListener('click', function(e) {
             if (e.target !== checkbox && e.target !== quickSelectBtn) {
                 checkbox.checked = !checkbox.checked;
@@ -1181,14 +1217,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clear selection
     clearSelection.addEventListener('click', function() {
-        userCheckboxes.forEach(checkbox => checkbox.checked = false);
+        userCheckboxes.forEach(checkbox => {
+            checkbox.checked = false;
+        });
         updateSelectedCount();
         updateUserItemStates();
         updateSelectAllState();
     });
     
     function updateSelectedCount() {
-        const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
+        const selectedCount = userCheckboxes.filter(checkbox => checkbox.checked).length;
         document.getElementById('selected-count').textContent = selectedCount + ' users';
         document.getElementById('selected-indicator').textContent = selectedCount + ' selected';
     }
@@ -1205,8 +1243,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     function updateSelectAllState() {
-        const visibleItems = Array.from(userItems).filter(item => item.style.display !== 'none');
-        const visibleCheckboxes = visibleItems.map(item => item.querySelector('.user-select-checkbox'));
+        const visibleItems = Array.from(userItems).filter(item => 
+            item.style.display !== 'none'
+        );
+        const visibleCheckboxes = visibleItems.map(item => 
+            item.querySelector('.user-select-checkbox')
+        );
         const checkedCount = visibleCheckboxes.filter(checkbox => checkbox.checked).length;
         
         if (checkedCount === 0) {
@@ -1216,7 +1258,7 @@ document.addEventListener('DOMContentLoaded', function() {
             selectAllUsers.indeterminate = false;
             selectAllUsers.checked = true;
         } else {
-            selectAllUsers.indeterminate = false;
+            selectAllUsers.indeterminate = true;
             selectAllUsers.checked = false;
         }
     }
