@@ -36,7 +36,7 @@
                             </div>
                         @endif
 
-                        <form method="POST" action="{{ route('admin.communication.store') }}" enctype="multipart/form-data" id="campaignForm">
+                        <form method="POST" action="{{ route('admin.communication.store') }}" enctype="multipart/form-data" id="emailForm">
                             @csrf
                             
                             <div class="row">
@@ -161,7 +161,7 @@
                                             </button>
                                         </div>
 
-                                        <div class="campaign-preview mt-3">
+                                        <div class="email-preview mt-3">
                                             <h6><i class="icofont-eye"></i> Preview</h6>
                                             <div class="preview-card">
                                                 <div class="preview-subject" id="preview-subject">Subject will appear here</div>
@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', function() {
     updatePreview();
     
     // Form submission
-    document.getElementById('campaignForm').addEventListener('submit', function(e) {
+    document.getElementById('emailForm').addEventListener('submit', function(e) {
         const action = e.submitter.value;
         
         // Set the hidden input for send_immediately

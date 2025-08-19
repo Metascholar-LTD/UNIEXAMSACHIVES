@@ -97,11 +97,11 @@
                         </div>
 
                         <div class="row">
-                            <!-- Campaign Status Breakdown -->
+                            <!-- Email Status Breakdown -->
                             <div class="col-xl-6 col-lg-12">
                                 <div class="dashboard__form__wraper">
                                     <div class="chart-header">
-                                        <h5><i class="icofont-pie-chart"></i> Campaign Status Breakdown</h5>
+                                        <h5><i class="icofont-pie-chart"></i> Email Status Breakdown</h5>
                                     </div>
                                     
                                     <div class="status-breakdown">
@@ -173,14 +173,14 @@
                             <div class="col-xl-6 col-lg-12">
                                 <div class="dashboard__form__wraper">
                                     <div class="chart-header">
-                                        <h5><i class="icofont-chart-line"></i> Monthly Campaign Activity</h5>
+                                        <h5><i class="icofont-chart-line"></i> Monthly Email Activity</h5>
                                     </div>
                                     
                                     <div class="monthly-chart">
                                         @if($monthlyStats->isEmpty())
                                             <div class="no-data">
                                                 <i class="icofont-chart-line" style="font-size: 48px; color: #ccc;"></i>
-                                                <p>No campaign data available yet</p>
+                                                <p>No email data available yet</p>
                                             </div>
                                         @else
                                             <div class="chart-bars">
@@ -207,15 +207,15 @@
                             <div class="col-xl-12">
                                 <div class="dashboard__form__wraper">
                                     <div class="chart-header">
-                                        <h5><i class="icofont-history"></i> Recent Campaign Activity</h5>
+                                        <h5><i class="icofont-history"></i> Recent Email Activity</h5>
                                     </div>
                                     
                                     @if($recentActivity->isEmpty())
                                         <div class="no-activity">
                                             <i class="icofont-history" style="font-size: 48px; color: #ccc;"></i>
-                                            <p>No recent campaign activity</p>
+                                            <p>No recent email activity</p>
                                             <a href="{{ route('admin.communication.create') }}" class="btn btn-primary">
-                                                Create Your First Campaign
+                                                Create Your First Email
                                             </a>
                                         </div>
                                     @else

@@ -143,7 +143,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft') {
-            return redirect()->back()->with('error', 'Only draft campaigns can be edited.');
+            return redirect()->back()->with('error', 'Only draft emails can be edited.');
         }
 
         $users = User::where('is_approve', true)
@@ -159,7 +159,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft') {
-            return redirect()->back()->with('error', 'Only draft campaigns can be updated.');
+            return redirect()->back()->with('error', 'Only draft emails can be updated.');
         }
 
         $validator = Validator::make($request->all(), [
@@ -217,7 +217,7 @@ class AdvanceCommunicationController extends Controller
         }
 
         return redirect()->route('admin.communication.show', $campaign)
-                        ->with('success', 'Campaign updated successfully!');
+                        ->with('success', 'Email updated successfully!');
     }
 
     public function destroy(EmailCampaign $campaign)
@@ -242,7 +242,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
-            return redirect()->back()->with('error', 'Campaign cannot be sent in current status.');
+            return redirect()->back()->with('error', 'Email cannot be sent in current status.');
         }
 
         $campaign->update([
@@ -252,7 +252,7 @@ class AdvanceCommunicationController extends Controller
 
         SendCampaignEmail::dispatch($campaign);
 
-        return redirect()->back()->with('success', 'Campaign is being sent!');
+        return redirect()->back()->with('success', 'Email is being sent!');
     }
 
     public function removeAttachment(EmailCampaign $campaign, $attachmentIndex)
@@ -260,7 +260,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft') {
-            return response()->json(['error' => 'Only draft campaigns can be modified.'], 400);
+            return response()->json(['error' => 'Only draft emails can be modified.'], 400);
         }
 
         $attachments = $campaign->attachments ?? [];
@@ -275,7 +275,7 @@ class AdvanceCommunicationController extends Controller
             // Re-index array
             $attachments = array_values($attachments);
             
-            // Update campaign
+            // Update email
             $campaign->update(['attachments' => $attachments]);
             
             return response()->json(['success' => 'Attachment removed successfully.']);
@@ -340,7 +340,7 @@ class AdvanceCommunicationController extends Controller
             'total_users' => User::where('is_approve', true)->count(),
         ];
 
-        // Get recent campaign activity
+        // Get recent email activity
         $recentActivity = EmailCampaign::with('creator')
                                     ->recentFirst()
                                     ->limit(5)

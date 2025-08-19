@@ -114,7 +114,7 @@
                                 <h4>Emails</h4>
                                 <div class="dashboard__table__actions">
                                     <form method="GET" class="dashboard__search__form">
-                                        <input type="text" name="search" placeholder="Search campaigns..." 
+                                        <input type="text" name="search" placeholder="Search emails..." 
                                                value="{{ request('search') }}" class="form-control">
                                         <button type="submit"><i class="icofont-search-1"></i></button>
                                     </form>
@@ -122,7 +122,7 @@
                             </div>
 
                             <div class="table-responsive">
-                                <table class="table table-striped campaign-table">
+                                <table class="table table-striped email-table">
                                     <thead>
                                         <tr>
                                             <th>Subject</th>
@@ -137,7 +137,7 @@
                                         @forelse($campaigns as $campaign)
                                         <tr>
                                             <td>
-                                                <div class="campaign-title">
+                                                <div class="email-title">
                                                     <strong>{{ Str::limit($campaign->subject, 40) }}</strong>
                                                     @if($campaign->attachments && count($campaign->attachments) > 0)
                                                         <i class="icofont-attachment" title="Has attachments"></i>
@@ -148,7 +148,7 @@
                                                 <span class="badge badge-info">{{ $campaign->total_recipients }} users</span>
                                             </td>
                                             <td>
-                                                <span class="campaign-status status-{{ $campaign->status }}">
+                                                <span class="email-status status-{{ $campaign->status }}">
                                                     @switch($campaign->status)
                                                         @case('draft')
                                                             <i class="icofont-edit"></i> Draft
@@ -189,7 +189,7 @@
                                             </td>
                                             <td>{{ $campaign->created_at->format('M j, Y') }}</td>
                                             <td>
-                                                <div class="campaign-actions">
+                                                <div class="email-actions">
                                                     <a href="{{ route('admin.communication.show', $campaign) }}" 
                                                        class="btn btn-sm btn-info" title="View Details">
                                                         <i class="icofont-eye"></i>
@@ -264,14 +264,14 @@
     box-shadow: 0 10px 30px rgba(0,0,0,0.1);
 }
 
-.campaign-table th {
+.email-table th {
     background-color: #f8f9fa;
     border-bottom: 2px solid #dee2e6;
     font-weight: 600;
     color: #495057;
 }
 
-.campaign-status {
+.email-status {
     padding: 5px 12px;
     border-radius: 20px;
     font-size: 12px;
@@ -294,12 +294,12 @@
     background-color: #e9ecef;
 }
 
-.campaign-actions .btn {
+.email-actions .btn {
     margin: 0 2px;
     padding: 5px 8px;
 }
 
-.campaign-title {
+.email-title {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -346,9 +346,9 @@ document.addEventListener('DOMContentLoaded', function() {
         $('.alert').fadeOut('slow');
     }, 5000);
 
-    // Refresh page every 30 seconds for sending campaigns
-    const hasSendingCampaigns = document.querySelector('.status-sending');
-    if (hasSendingCampaigns) {
+        // Refresh page every 30 seconds for sending emails
+    const hasSendingEmails = document.querySelector('.status-sending');
+        if (hasSendingEmails) {
         setTimeout(function() {
             location.reload();
         }, 30000);

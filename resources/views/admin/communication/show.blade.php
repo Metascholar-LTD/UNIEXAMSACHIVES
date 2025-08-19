@@ -25,7 +25,7 @@
                                 </a>
                                 @if($campaign->status === 'draft')
                                     <a href="{{ route('admin.communication.edit', $campaign) }}" class="default__button">
-                                        <i class="icofont-edit"></i> Edit Campaign
+                                        <i class="icofont-edit"></i> Edit Email
                                     </a>
                                 @endif
                             </div>
@@ -41,12 +41,12 @@
                         @endif
 
                         <div class="row">
-                            <!-- Campaign Information -->
+                            <!-- Email Information -->
                             <div class="col-xl-8">
                                 <div class="dashboard__form__wraper">
-                                    <div class="campaign-header">
-                                        <div class="campaign-status-badge">
-                                            <span class="campaign-status status-{{ $campaign->status }}">
+                                    <div class="email-header">
+                                        <div class="email-status-badge">
+                                            <span class="email-status status-{{ $campaign->status }}">
                                                 @switch($campaign->status)
                                                     @case('draft')
                                                         <i class="icofont-edit"></i> Draft
@@ -67,7 +67,7 @@
                                             </span>
                                         </div>
                                         
-                                        <div class="campaign-meta">
+                                        <div class="email-meta">
                                             <div class="meta-item">
                                                 <i class="icofont-calendar"></i>
                                                 <strong>Created:</strong> {{ $campaign->created_at->format('F j, Y \a\t g:i A') }}
@@ -91,7 +91,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="campaign-details">
+                                    <div class="email-details">
                                         <div class="detail-section">
                                             <h5><i class="icofont-info-circle"></i> Email Information</h5>
                                             <div class="detail-item">
@@ -197,10 +197,10 @@
                                 @endif
                             </div>
 
-                            <!-- Campaign Statistics -->
+                            <!-- Email Statistics -->
                             <div class="col-xl-4">
                                 <div class="dashboard__form__wraper">
-                                    <h5><i class="icofont-chart-bar-graph"></i> Campaign Statistics</h5>
+                                    <h5><i class="icofont-chart-bar-graph"></i> Email Statistics</h5>
                                     
                                     <div class="stats-grid">
                                         <div class="stat-item">
@@ -264,9 +264,9 @@
                                     @endif
 
                                     @if(in_array($campaign->status, ['draft', 'scheduled']))
-                                        <div class="campaign-actions">
+                                        <div class="email-actions">
                                             <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to send this campaign now?')">
+                                                  onsubmit="return confirm('Are you sure you want to send this email now?')">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-block">
                                                     <i class="icofont-send-mail"></i> Send Email Now
@@ -279,11 +279,11 @@
                                         <div class="danger-zone mt-4">
                                             <h6 class="text-danger">Danger Zone</h6>
                                             <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to delete this campaign? This action cannot be undone.')">
+                                                  onsubmit="return confirm('Are you sure you want to delete this email? This action cannot be undone.')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="icofont-trash"></i> Delete Campaign
+                                                    <i class="icofont-trash"></i> Delete Email
                                                 </button>
                                             </form>
                                         </div>
@@ -299,7 +299,7 @@
 </div>
 
 <style>
-.campaign-header {
+.email-header {
     padding: 20px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
@@ -307,11 +307,11 @@
     margin-bottom: 30px;
 }
 
-.campaign-status-badge {
+.email-status-badge {
     margin-bottom: 15px;
 }
 
-.campaign-status {
+.email-status {
     padding: 8px 16px;
     border-radius: 20px;
     font-size: 14px;
@@ -320,7 +320,7 @@
     color: white;
 }
 
-.campaign-meta {
+.email-meta {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 10px;
@@ -461,12 +461,12 @@
     margin-bottom: 10px;
 }
 
-.campaign-actions {
+.email-actions {
     margin-top: 20px;
 }
 
 @media (max-width: 768px) {
-    .campaign-meta {
+    .email-meta {
         grid-template-columns: 1fr;
     }
     
@@ -486,7 +486,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-refresh for sending campaigns
+    // Auto-refresh for sending emails
     @if($campaign->status === 'sending')
         setInterval(function() {
             location.reload();
