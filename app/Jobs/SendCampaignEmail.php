@@ -2,7 +2,6 @@
 
 namespace App\Jobs;
 
-use App\Mail\CampaignEmail;
 use App\Models\EmailCampaign;
 use App\Models\EmailCampaignRecipient;
 use App\Models\User;
@@ -114,13 +113,21 @@ class SendCampaignEmail implements ShouldQueue
                          'attachments_data' => $attachments
                      ]);
                      
-                     $result = $resendService->sendEmail(
-                         $recipient->user->email,
-                         $this->campaign->subject,
-                         $htmlContent,
-                         config('mail.from.address'),
-                         $attachments
-                     );
+                     try {
+                         $result = $resendService->sendEmail(
+                             $recipient->user->email,
+                             $this->campaign->subject,
+                             $htmlContent,
+                             config('mail.from.address'),
+                             $attachments
+                         );
+                     } catch (Exception $e) {
+                         Log::error("Exception in Resend sendEmail", [
+                             'error' => $e->getMessage(),
+                             'trace' => $e->getTraceAsString()
+                         ]);
+                         $result = ['success' => false, 'error' => $e->getMessage()];
+                     }
                      
                      Log::info("Resend sendEmail result", [
                          'result' => $result,

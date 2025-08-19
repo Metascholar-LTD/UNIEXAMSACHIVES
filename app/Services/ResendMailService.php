@@ -101,6 +101,11 @@ class ResendMailService
                 'params' => array_merge($params, ['html' => '[HTML_CONTENT_OMITTED]'])
             ]);
 
+            // Test if Resend facade is working
+            if (!class_exists('Resend\Laravel\Facades\Resend')) {
+                throw new Exception('Resend facade not found. Package may not be installed correctly.');
+            }
+            
             $response = Resend::emails()->create($params);
             
             Log::info('Email sent successfully via Resend', [
