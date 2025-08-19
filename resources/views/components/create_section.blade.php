@@ -5,8 +5,8 @@
             <div class="uda-greeting">
                 <div class="uda-avatar-wrap">
                     <span class="uda-avatar-inner">
-                        @if (auth()->user()->profile_picture && Storage::disk('public')->exists(auth()->user()->profile_picture))
-                            <img class="uda-avatar" loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="Profile Picture">
+                        @if (auth()->user()->profile_picture)
+                            <img class="uda-avatar" loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="Profile Picture" onerror="this.src='/img/dashbord/profile.png'">
                         @else
                             <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">
                         @endif
