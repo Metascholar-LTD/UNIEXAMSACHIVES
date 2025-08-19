@@ -66,6 +66,13 @@ class SendCampaignEmail implements ShouldQueue
                     // Use Resend service to send campaign email
                     $resendService = new ResendMailService();
                     
+                    Log::info("Sending campaign email via Resend", [
+                        'campaign_id' => $this->campaign->id,
+                        'user_id' => $recipient->user->id,
+                        'user_email' => $recipient->user->email,
+                        'campaign_attachments' => $this->campaign->attachments
+                    ]);
+                    
                     // Send email via Resend using the campaign method
                     $response = $resendService->sendCampaignEmails(
                         $this->campaign,

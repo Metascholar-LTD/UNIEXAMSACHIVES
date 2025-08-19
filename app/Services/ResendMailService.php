@@ -43,30 +43,55 @@ class ResendMailService
             // Add attachments if any - Resend expects specific format
             if (!empty($attachments)) {
                 $validAttachments = [];
+                Log::info("Processing attachments in sendEmail", [
+                    'attachments_count' => count($attachments),
+                    'attachment_types' => array_column($attachments, 'type')
+                ]);
+                
                 foreach ($attachments as $attachment) {
-                    // Validate attachment structure
-                    if (!isset($attachment['filename']) || !isset($attachment['content'])) {
-                        Log::warning('Invalid attachment structure', $attachment);
-                        continue;
+                    try {
+                        // Validate attachment structure
+                        if (!isset($attachment['filename']) || !isset($attachment['content'])) {
+                            Log::warning('Invalid attachment structure', $attachment);
+                            continue;
+                        }
+                        
+                        // Ensure content is base64 encoded
+                        $content = $attachment['content'];
+                        if (!base64_decode($content, true)) {
+                            // If not base64, encode it
+                            $content = base64_encode($content);
+                        }
+                        
+                        $validAttachments[] = [
+                            'filename' => $attachment['filename'],
+                            'content' => $content,
+                            'type' => $attachment['type'] ?? 'application/octet-stream',
+                        ];
+                        
+                        Log::info("Attachment validated successfully", [
+                            'filename' => $attachment['filename'],
+                            'type' => $attachment['type'] ?? 'application/octet-stream',
+                            'content_length' => strlen($content)
+                        ]);
+                    } catch (Exception $e) {
+                        Log::error("Error processing attachment in sendEmail", [
+                            'attachment' => $attachment,
+                            'error' => $e->getMessage()
+                        ]);
                     }
-                    
-                    // Ensure content is base64 encoded
-                    $content = $attachment['content'];
-                    if (!base64_decode($content, true)) {
-                        // If not base64, encode it
-                        $content = base64_encode($content);
-                    }
-                    
-                    $validAttachments[] = [
-                        'filename' => $attachment['filename'],
-                        'content' => $content,
-                        'type' => $attachment['type'] ?? 'application/octet-stream',
-                    ];
                 }
                 
                 if (!empty($validAttachments)) {
                     $params['attachments'] = $validAttachments;
+                    Log::info("Attachments added to email params", [
+                        'valid_attachments_count' => count($validAttachments)
+                    ]);
+                } else {
+                    Log::warning("No valid attachments found after processing");
                 }
+            } else {
+                Log::info("No attachments to process in sendEmail");
             }
 
             Log::info('Sending email via Resend API', [
@@ -238,24 +263,67 @@ class ResendMailService
 
                 // Prepare attachments for Resend API
                 $attachments = [];
-                if ($campaign->attachments) {
+                if ($campaign->attachments && is_array($campaign->attachments)) {
+                    Log::info("Processing attachments for campaign {$campaign->id}", [
+                        'attachments_count' => count($campaign->attachments),
+                        'attachments' => $campaign->attachments
+                    ]);
+                    
                     foreach ($campaign->attachments as $attachment) {
-                        $filePath = storage_path('app/public/' . $attachment['path']);
-                        if (file_exists($filePath)) {
-                            $fileContent = file_get_contents($filePath);
-                            $attachments[] = [
-                                'filename' => $attachment['name'],
-                                'content' => base64_encode($fileContent),
-                                'type' => $attachment['type'] ?? mime_content_type($filePath),
-                                'disposition' => 'attachment',
-                            ];
-                        } else {
-                            Log::warning("Attachment file not found: {$filePath}");
+                        try {
+                            // Validate attachment structure
+                            if (!isset($attachment['path']) || !isset($attachment['name'])) {
+                                Log::warning("Invalid attachment structure", $attachment);
+                                continue;
+                            }
+                            
+                            $filePath = storage_path('app/public/' . $attachment['path']);
+                            Log::info("Processing attachment file", [
+                                'file_path' => $filePath,
+                                'attachment_data' => $attachment
+                            ]);
+                            
+                            if (file_exists($filePath)) {
+                                $fileContent = file_get_contents($filePath);
+                                if ($fileContent !== false) {
+                                    $attachments[] = [
+                                        'filename' => $attachment['name'],
+                                        'content' => base64_encode($fileContent),
+                                        'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                    ];
+                                    
+                                    Log::info("Attachment prepared successfully", [
+                                        'filename' => $attachment['name'],
+                                        'size' => strlen($fileContent),
+                                        'type' => $attachment['type'] ?? mime_content_type($filePath)
+                                    ]);
+                                } else {
+                                    Log::error("Failed to read file content", ['file_path' => $filePath]);
+                                }
+                            } else {
+                                Log::error("Attachment file not found", [
+                                    'file_path' => $filePath,
+                                    'attachment' => $attachment
+                                ]);
+                            }
+                        } catch (Exception $e) {
+                            Log::error("Error processing attachment", [
+                                'attachment' => $attachment,
+                                'error' => $e->getMessage()
+                            ]);
                         }
                     }
+                } else {
+                    Log::info("No attachments to process for campaign {$campaign->id}");
                 }
 
                 // Send email with unique ID for each recipient
+                Log::info("Sending email to recipient", [
+                    'email' => $recipient->email,
+                    'attachments_count' => count($attachments),
+                    'has_attachments' => !empty($attachments)
+                ]);
+                
                 $result = $this->sendEmail(
                     $recipient->email,
                     $campaign->subject,
