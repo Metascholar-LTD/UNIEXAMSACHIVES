@@ -8,6 +8,7 @@ use App\Mail\CampaignEmail;
 use App\Models\EmailCampaign;
 use App\Models\EmailCampaignRecipient;
 use App\Models\User;
+use App\Services\ResendMailService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
@@ -120,11 +121,12 @@ class AdvanceCommunicationController extends Controller
             ]);
         }
 
-        // Send emails directly (like broadcast system)
+        // Send emails directly using ResendMailService (reliable method)
         $sentCount = 0;
         $failedCount = 0;
+        $resendService = new ResendMailService();
         
-        Log::info("Starting direct email campaign send", [
+        Log::info("Starting direct email campaign send via ResendMailService", [
             'campaign_id' => $campaign->id,
             'total_recipients' => $recipientUsers->count(),
             'subject' => $campaign->subject,
@@ -139,34 +141,94 @@ class AdvanceCommunicationController extends Controller
                     'user_email' => $user->email
                 ]);
 
-                // Send email directly using Laravel Mail (like broadcast system)
-                Mail::to($user->email)->send(new CampaignEmail($campaign, $user));
+                // Generate HTML content for this recipient (like the job does)
+                $htmlContent = view('mails.campaign_simple', [
+                    'campaign' => $campaign,
+                    'user' => $user,
+                    'subject' => $campaign->subject,
+                    'message' => $campaign->message,
+                ])->render();
+
+                // Prepare attachments for Resend API
+                $attachments = [];
+                if ($campaign->attachments && is_array($campaign->attachments)) {
+                    foreach ($campaign->attachments as $attachment) {
+                        $filePath = storage_path('app/public/' . $attachment['path']);
+                        if (file_exists($filePath)) {
+                            $fileContent = file_get_contents($filePath);
+                            if ($fileContent !== false) {
+                                $attachments[] = [
+                                    'filename' => $attachment['name'],
+                                    'content' => base64_encode($fileContent),
+                                    'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                ];
+                            }
+                        } else {
+                            Log::warning("Attachment file not found", [
+                                'campaign_id' => $campaign->id,
+                                'filename' => $attachment['name'],
+                                'path' => $filePath
+                            ]);
+                        }
+                    }
+                }
                 
-                // Mark recipient as sent
-                EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
-                    ->where('user_id', $user->id)
-                    ->update([
-                        'status' => 'sent',
-                        'sent_at' => now()
+                // Send email using ResendMailService directly (proven to work)
+                $result = $resendService->sendEmail(
+                    $user->email,
+                    $campaign->subject,
+                    $htmlContent,
+                    config('mail.from.address'),
+                    $attachments
+                );
+
+                if ($result['success']) {
+                    // Mark recipient as sent
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update([
+                            'status' => 'sent',
+                            'sent_at' => now()
+                        ]);
+                    
+                    $sentCount++;
+                    
+                    Log::info("Campaign email sent successfully via ResendMailService", [
+                        'campaign_id' => $campaign->id,
+                        'user_id' => $user->id,
+                        'user_email' => $user->email,
+                        'message_id' => $result['message_id'] ?? null
                     ]);
+                } else {
+                    // Mark recipient as failed
+                    $error = $result['error'] ?? 'Unknown error';
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update([
+                            'status' => 'failed',
+                            'error_message' => 'ResendMailService error: ' . $error
+                        ]);
+                    
+                    $failedCount++;
+                    
+                    Log::error("Campaign email failed via ResendMailService", [
+                        'campaign_id' => $campaign->id,
+                        'user_id' => $user->id,
+                        'user_email' => $user->email,
+                        'error' => $error
+                    ]);
+                }
                 
-                $sentCount++;
-                
-                Log::info("Campaign email sent successfully", [
-                    'campaign_id' => $campaign->id,
-                    'user_id' => $user->id,
-                    'user_email' => $user->email
-                ]);
-                
-                // Small delay to prevent overwhelming the mail server
-                usleep(100000); // 0.1 second
+                // Rate limiting delay (Resend allows 2 emails per second)
+                usleep(500000); // 0.5 second
                 
             } catch (Exception $e) {
-                Log::error("Failed to send campaign email", [
+                Log::error("Exception during campaign email send", [
                     'campaign_id' => $campaign->id,
                     'user_id' => $user->id,
                     'user_email' => $user->email,
-                    'error' => $e->getMessage()
+                    'error' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
                 ]);
                 
                 // Mark recipient as failed
@@ -174,7 +236,7 @@ class AdvanceCommunicationController extends Controller
                     ->where('user_id', $user->id)
                     ->update([
                         'status' => 'failed',
-                        'error_message' => $e->getMessage()
+                        'error_message' => 'Exception: ' . $e->getMessage()
                     ]);
                 
                 $failedCount++;
