@@ -33,88 +33,41 @@ class ResendMailService
             }
             
             $params = [
-                'id' => $this->generateResendId(), // Generate unique UUID for Resend
                 'from' => $from,
                 'to' => [$to],
                 'subject' => $subject,
                 'html' => $htmlContent,
             ];
 
-            // Add attachments if any - Resend expects specific format
+            // Add attachments if any
             if (!empty($attachments)) {
                 $validAttachments = [];
-                Log::info("Processing attachments in sendEmail", [
-                    'attachments_count' => count($attachments),
-                    'attachment_types' => array_column($attachments, 'type')
-                ]);
                 
                 foreach ($attachments as $attachment) {
-                    try {
-                        // Validate attachment structure
-                        if (!isset($attachment['filename']) || !isset($attachment['content'])) {
-                            Log::warning('Invalid attachment structure', $attachment);
-                            continue;
-                        }
-                        
-                        // Ensure content is base64 encoded
-                        $content = $attachment['content'];
-                        if (!base64_decode($content, true)) {
-                            // If not base64, encode it
-                            $content = base64_encode($content);
-                        }
-                        
-                        $validAttachments[] = [
-                            'filename' => $attachment['filename'],
-                            'content' => $content,
-                            'type' => $attachment['type'] ?? 'application/octet-stream',
-                        ];
-                        
-                        Log::info("Attachment validated successfully", [
-                            'filename' => $attachment['filename'],
-                            'type' => $attachment['type'] ?? 'application/octet-stream',
-                            'content_length' => strlen($content)
-                        ]);
-                    } catch (Exception $e) {
-                        Log::error("Error processing attachment in sendEmail", [
-                            'attachment' => $attachment,
-                            'error' => $e->getMessage()
-                        ]);
+                    // Validate attachment structure
+                    if (!isset($attachment['filename']) || !isset($attachment['content'])) {
+                        continue;
                     }
+                    
+                    // Ensure content is base64 encoded
+                    $content = $attachment['content'];
+                    if (!base64_decode($content, true)) {
+                        $content = base64_encode($content);
+                    }
+                    
+                    $validAttachments[] = [
+                        'filename' => $attachment['filename'],
+                        'content' => $content,
+                        'type' => $attachment['type'] ?? 'application/octet-stream',
+                    ];
                 }
                 
                 if (!empty($validAttachments)) {
                     $params['attachments'] = $validAttachments;
-                    Log::info("Attachments added to email params", [
-                        'valid_attachments_count' => count($validAttachments)
-                    ]);
-                } else {
-                    Log::warning("No valid attachments found after processing");
                 }
-            } else {
-                Log::info("No attachments to process in sendEmail");
             }
 
-            Log::info('Sending email via Resend API', [
-                'to' => $to,
-                'subject' => $subject,
-                'attachments_count' => count($params['attachments'] ?? []),
-                'params' => array_merge($params, ['html' => '[HTML_CONTENT_OMITTED]'])
-            ]);
-
-            // Test if Resend facade is working
-            if (!class_exists('Resend\Laravel\Facades\Resend')) {
-                throw new Exception('Resend facade not found. Package may not be installed correctly.');
-            }
-            
             $response = Resend::emails()->create($params);
-            
-            Log::info('Email sent successfully via Resend', [
-                'to' => $to,
-                'subject' => $subject,
-                'response_id' => $response->id ?? null,
-                'attachments_count' => count($attachments),
-                'response' => $response
-            ]);
 
             return [
                 'success' => true,
@@ -123,45 +76,9 @@ class ResendMailService
             ];
 
         } catch (Exception $e) {
-            $errorMessage = $e->getMessage();
-            
-            // Check if it's a rate limit error and retry
-            if (strpos($errorMessage, '450 Too many requests') !== false && $retryCount < 3) {
-                Log::warning('Rate limit hit, retrying in 1 second...', [
-                    'to' => $to,
-                    'retry_count' => $retryCount + 1
-                ]);
-                
-                // Wait 1 second before retry
-                sleep(1);
-                
-                // Retry the email
-                return $this->sendEmail($to, $subject, $htmlContent, $from, $attachments, $retryCount + 1);
-            }
-            
-            // Check if it's a UUID validation error and retry
-            if (strpos($errorMessage, 'must be a valid UUID') !== false && $retryCount < 3) {
-                Log::warning('UUID validation error, retrying with new UUID...', [
-                    'to' => $to,
-                    'retry_count' => $retryCount + 1
-                ]);
-                
-                // Retry the email (will generate new UUID)
-                return $this->sendEmail($to, $subject, $htmlContent, $from, $attachments, $retryCount + 1);
-            }
-            
-            Log::error('Failed to send email via Resend', [
-                'to' => $to,
-                'subject' => $subject,
-                'error' => $errorMessage,
-                'trace' => $e->getTraceAsString(),
-                'attachments_count' => count($attachments),
-                'retry_count' => $retryCount
-            ]);
-
             return [
                 'success' => false,
-                'error' => $errorMessage
+                'error' => $e->getMessage()
             ];
         }
     }
@@ -175,7 +92,6 @@ class ResendMailService
             $from = $from ?: config('mail.from.address');
             
             $params = [
-                'id' => $this->generateResendId(), // Generate unique UUID for Resend
                 'from' => $from,
                 'to' => [$to],
                 'template' => $templateId,

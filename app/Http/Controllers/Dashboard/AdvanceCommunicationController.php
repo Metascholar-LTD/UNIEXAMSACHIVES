@@ -126,20 +126,9 @@ class AdvanceCommunicationController extends Controller
         $failedCount = 0;
         $resendService = new ResendMailService();
         
-        Log::info("Starting direct email campaign send via ResendMailService", [
-            'campaign_id' => $campaign->id,
-            'total_recipients' => $recipientUsers->count(),
-            'subject' => $campaign->subject,
-            'has_attachments' => !empty($attachmentPaths)
-        ]);
 
         foreach ($recipientUsers as $user) {
             try {
-                Log::info("Sending campaign email to user", [
-                    'campaign_id' => $campaign->id,
-                    'user_id' => $user->id,
-                    'user_email' => $user->email
-                ]);
 
                 // Generate HTML content for this recipient (like the job does)
                 $htmlContent = view('mails.campaign_simple', [
@@ -163,12 +152,6 @@ class AdvanceCommunicationController extends Controller
                                     'type' => $attachment['type'] ?? mime_content_type($filePath),
                                 ];
                             }
-                        } else {
-                            Log::warning("Attachment file not found", [
-                                'campaign_id' => $campaign->id,
-                                'filename' => $attachment['name'],
-                                'path' => $filePath
-                            ]);
                         }
                     }
                 }
@@ -193,12 +176,6 @@ class AdvanceCommunicationController extends Controller
                     
                     $sentCount++;
                     
-                    Log::info("Campaign email sent successfully via ResendMailService", [
-                        'campaign_id' => $campaign->id,
-                        'user_id' => $user->id,
-                        'user_email' => $user->email,
-                        'message_id' => $result['message_id'] ?? null
-                    ]);
                 } else {
                     // Mark recipient as failed
                     $error = $result['error'] ?? 'Unknown error';
@@ -211,32 +188,18 @@ class AdvanceCommunicationController extends Controller
                     
                     $failedCount++;
                     
-                    Log::error("Campaign email failed via ResendMailService", [
-                        'campaign_id' => $campaign->id,
-                        'user_id' => $user->id,
-                        'user_email' => $user->email,
-                        'error' => $error
-                    ]);
                 }
                 
                 // Rate limiting delay (Resend allows 2 emails per second)
                 usleep(500000); // 0.5 second
                 
             } catch (Exception $e) {
-                Log::error("Exception during campaign email send", [
-                    'campaign_id' => $campaign->id,
-                    'user_id' => $user->id,
-                    'user_email' => $user->email,
-                    'error' => $e->getMessage(),
-                    'trace' => $e->getTraceAsString()
-                ]);
-                
                 // Mark recipient as failed
                 EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                     ->where('user_id', $user->id)
                     ->update([
                         'status' => 'failed',
-                        'error_message' => 'Exception: ' . $e->getMessage()
+                        'error_message' => $e->getMessage()
                     ]);
                 
                 $failedCount++;
@@ -251,11 +214,6 @@ class AdvanceCommunicationController extends Controller
             'failed_count' => $failedCount,
         ]);
 
-        Log::info("Campaign completed", [
-            'campaign_id' => $campaign->id,
-            'sent_count' => $sentCount,
-            'failed_count' => $failedCount
-        ]);
 
         return redirect()->route('admin.communication.index')
                         ->with('success', "Email campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}");
