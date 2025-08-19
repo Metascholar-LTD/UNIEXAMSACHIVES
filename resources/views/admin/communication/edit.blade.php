@@ -486,8 +486,9 @@
     position: absolute;
     opacity: 0;
     cursor: pointer;
-    height: 0;
-    width: 0;
+    height: 22px;
+    width: 22px;
+    z-index: 2;
 }
 
 .checkmark {
@@ -500,6 +501,9 @@
     align-items: center;
     justify-content: center;
     transition: all 0.2s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
 }
 
 .user-checkbox:checked ~ .checkmark {
@@ -519,6 +523,39 @@
 
 .user-checkbox:checked ~ .checkmark:after {
     display: block;
+}
+
+/* Ensure the checkbox container is properly positioned */
+.user-select-checkbox {
+    position: relative;
+    margin-left: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 22px;
+    min-height: 22px;
+}
+
+/* Make sure checkboxes are clickable */
+.user-checkbox:focus + .checkmark {
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+/* Hover effect for better UX */
+.user-item:hover .checkmark {
+    border-color: #007bff;
+}
+
+/* Ensure the checkbox is properly layered */
+.user-select-checkbox input[type="checkbox"] {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    opacity: 0;
+    cursor: pointer;
 }
 
 .user-actions {
@@ -741,9 +778,22 @@ document.addEventListener('DOMContentLoaded', function() {
     // User selection handling
     userCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
+            console.log('Checkbox changed:', this.checked, this.value);
             updateSelectedCount();
             updatePreview();
         });
+        
+        // Also add click event to the user item for better UX
+        const userItem = checkbox.closest('.user-item');
+        if (userItem) {
+            userItem.addEventListener('click', function(e) {
+                // Don't trigger if clicking on the checkbox itself
+                if (e.target !== checkbox && !checkbox.contains(e.target)) {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change'));
+                }
+            });
+        }
     });
     
     // Select all functionality
@@ -814,6 +864,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
         const totalCount = userCheckboxes.length;
         const progressPercentage = totalCount > 0 ? (selectedCount / totalCount) * 100 : 0;
+        
+        console.log('Selected count:', selectedCount, 'Total:', totalCount, 'Progress:', progressPercentage + '%');
         
         selectedCountSpan.textContent = selectedCount;
         
@@ -912,6 +964,10 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize button states
     exportSelectedBtn.disabled = true;
+    
+    // Debug: Log checkbox count
+    console.log('Found checkboxes:', userCheckboxes.length);
+    console.log('Found user items:', userItems.length);
     
     updateSelectedCount();
     updatePreview();
