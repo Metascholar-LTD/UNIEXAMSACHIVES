@@ -54,6 +54,15 @@ class SendCampaignEmail implements ShouldQueue
             $sentCount = 0;
             $failedCount = 0;
 
+            // Use Resend service to send campaign email
+            $resendService = new ResendMailService();
+            
+            Log::info("Starting campaign email send", [
+                'campaign_id' => $this->campaign->id,
+                'total_recipients' => count($recipients),
+                'campaign_attachments' => $this->campaign->attachments
+            ]);
+
             foreach ($recipients as $recipient) {
                 try {
                     // Skip if user is not approved
@@ -63,24 +72,50 @@ class SendCampaignEmail implements ShouldQueue
                         continue;
                     }
 
-                    // Use Resend service to send campaign email
-                    $resendService = new ResendMailService();
-                    
-                    Log::info("Sending campaign email via Resend", [
+                    Log::info("Sending campaign email to individual recipient", [
                         'campaign_id' => $this->campaign->id,
                         'user_id' => $recipient->user->id,
                         'user_email' => $recipient->user->email,
-                        'campaign_attachments' => $this->campaign->attachments
                     ]);
                     
-                    // Send email via Resend using the campaign method
-                    $response = $resendService->sendCampaignEmails(
-                        $this->campaign,
-                        [$recipient->user],
-                        config('mail.from.address')
+                    // Generate HTML content for this recipient
+                    $htmlContent = view('mails.campaign', [
+                        'campaign' => $this->campaign,
+                        'user' => $recipient->user,
+                        'subject' => $this->campaign->subject,
+                        'message' => $this->campaign->message,
+                    ])->render();
+
+                    // Prepare attachments for Resend API
+                    $attachments = [];
+                    if ($this->campaign->attachments && is_array($this->campaign->attachments)) {
+                        foreach ($this->campaign->attachments as $attachment) {
+                            $filePath = storage_path('app/public/' . $attachment['path']);
+                            if (file_exists($filePath)) {
+                                $fileContent = file_get_contents($filePath);
+                                if ($fileContent !== false) {
+                                    $attachments[] = [
+                                        'filename' => $attachment['name'],
+                                        'content' => base64_encode($fileContent),
+                                        'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                    ];
+                                }
+                            } else {
+                                Log::warning("Attachment file not found: {$filePath}");
+                            }
+                        }
+                    }
+                    
+                    // Send email directly using sendEmail method (not sendCampaignEmails)
+                    $result = $resendService->sendEmail(
+                        $recipient->user->email,
+                        $this->campaign->subject,
+                        $htmlContent,
+                        config('mail.from.address'),
+                        $attachments
                     );
 
-                    if (!empty($response) && $response[0]['result']['success']) {
+                    if ($result['success']) {
                         // Mark as sent
                         $recipient->markAsSent();
                         $sentCount++;
@@ -88,11 +123,11 @@ class SendCampaignEmail implements ShouldQueue
                         Log::info("Campaign email sent successfully via Resend", [
                             'user_id' => $recipient->user->id,
                             'email' => $recipient->user->email,
-                            'message_id' => $response[0]['result']['message_id'] ?? null
+                            'message_id' => $result['message_id'] ?? null
                         ]);
                     } else {
                         // Mark as failed
-                        $error = !empty($response) ? $response[0]['result']['error'] ?? 'Unknown error' : 'No response from Resend';
+                        $error = $result['error'] ?? 'Unknown error';
                         $recipient->markAsFailed('Resend API error: ' . $error);
                         $failedCount++;
                         
@@ -104,10 +139,12 @@ class SendCampaignEmail implements ShouldQueue
                     }
 
                     // Add small delay to prevent overwhelming the mail server
-                    usleep(100000); // 0.1 second delay
+                    usleep(500000); // 0.5 second delay (respects Resend rate limits)
 
                 } catch (Exception $e) {
-                    Log::error("Failed to send campaign email to user {$recipient->user->id}: " . $e->getMessage());
+                    Log::error("Failed to send campaign email to user {$recipient->user->id}: " . $e->getMessage(), [
+                        'trace' => $e->getTraceAsString()
+                    ]);
                     
                     $recipient->markAsFailed($e->getMessage());
                     $failedCount++;
