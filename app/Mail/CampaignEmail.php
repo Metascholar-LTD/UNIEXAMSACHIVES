@@ -135,8 +135,8 @@ class CampaignEmail extends Mailable
     /**
      * Set the priority of the message.
      */
-    public function priority(): int
+    public function priority($level = 3): int
     {
-        return 3; // Normal priority
+        return $level; // Allow custom priority or default to 3
     }
 }
