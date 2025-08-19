@@ -1048,7 +1048,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     updatePreview();
     
-    // Advanced User Selection Functionality
+        // Advanced User Selection Functionality
     document.addEventListener('DOMContentLoaded', function() {
         const recipientCards = document.querySelectorAll('.recipient-option-card');
         const userSelector = document.getElementById('user-selector');
@@ -1120,6 +1120,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Filter tabs
         filterTabs.forEach(tab => {
             tab.addEventListener('click', function() {
+                console.log('Filter tab clicked:', this.dataset.filter);
                 filterTabs.forEach(t => t.classList.remove('active'));
                 this.classList.add('active');
                 currentFilter = this.dataset.filter;
@@ -1136,27 +1137,27 @@ document.addEventListener('DOMContentLoaded', function() {
                 const matchesSearch = !searchTerm || name.includes(searchTerm) || email.includes(searchTerm);
                 
                 let matchesFilter = true;
-                            if (currentFilter === 'recent') {
-                // Show users who joined in the last 30 days
-                const joinedText = item.querySelector('.user-joined').textContent.replace('Joined ', '');
-                if (joinedText !== 'Recently') {
-                    try {
-                        const joinedDate = new Date(joinedText);
-                        if (!isNaN(joinedDate.getTime())) {
-                            matchesFilter = (Date.now() - joinedDate.getTime()) < (30 * 24 * 60 * 60 * 1000);
-                        } else {
+                if (currentFilter === 'recent') {
+                    // Show users who joined in the last 30 days
+                    const joinedText = item.querySelector('.user-joined').textContent.replace('Joined ', '');
+                    if (joinedText !== 'Recently') {
+                        try {
+                            const joinedDate = new Date(joinedText);
+                            if (!isNaN(joinedDate.getTime())) {
+                                matchesFilter = (Date.now() - joinedDate.getTime()) < (30 * 24 * 60 * 60 * 1000);
+                            } else {
+                                matchesFilter = false;
+                            }
+                        } catch (e) {
                             matchesFilter = false;
                         }
-                    } catch (e) {
-                        matchesFilter = false;
+                    } else {
+                        matchesFilter = true; // "Recently" users are considered recent
                     }
-                } else {
-                    matchesFilter = true; // "Recently" users are considered recent
+                } else if (currentFilter === 'active') {
+                    // Show users with active status
+                    matchesFilter = item.querySelector('.user-status').textContent === 'Active';
                 }
-            } else if (currentFilter === 'active') {
-                // Show users with active status
-                matchesFilter = item.querySelector('.user-status').textContent === 'Active';
-            }
                 
                 if (matchesSearch && matchesFilter) {
                     item.style.display = 'flex';
@@ -1172,13 +1173,18 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Select all functionality
         selectAllUsers.addEventListener('change', function() {
+            console.log('Select all changed:', this.checked);
             const visibleItems = Array.from(userItems).filter(item => 
                 item.style.display !== 'none'
             );
+            console.log('Visible items:', visibleItems.length);
             
             visibleItems.forEach(item => {
                 const checkbox = item.querySelector('.user-select-checkbox');
-                checkbox.checked = this.checked;
+                if (checkbox) {
+                    checkbox.checked = this.checked;
+                    console.log('Setting checkbox:', checkbox.value, 'to:', this.checked);
+                }
             });
             
             updateSelectedCount();
@@ -1220,6 +1226,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Clear selection
         clearSelection.addEventListener('click', function() {
+            console.log('Clear selection clicked');
             userCheckboxes.forEach(checkbox => {
                 checkbox.checked = false;
             });
@@ -1229,7 +1236,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         function updateSelectedCount() {
-            const selectedCount = userCheckboxes.filter(checkbox => checkbox.checked).length;
+            const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
             document.getElementById('selected-count').textContent = selectedCount + ' users';
             document.getElementById('selected-indicator').textContent = selectedCount + ' selected';
         }
@@ -1267,6 +1274,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         
         // Initialize
+        console.log('Initializing user selection functionality...');
+        console.log('Found elements:', {
+            recipientCards: recipientCards.length,
+            userSelector: !!userSelector,
+            userSearch: !!userSearch,
+            searchClear: !!searchClear,
+            selectAllUsers: !!selectAllUsers,
+            userCheckboxes: userCheckboxes.length,
+            clearSelection: !!clearSelection,
+            filterTabs: filterTabs.length,
+            userItems: userItems.length
+        });
+        
         updateRecipientSelection();
         filterUsers();
     });

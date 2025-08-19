@@ -1117,6 +1117,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Filter tabs
     filterTabs.forEach(tab => {
         tab.addEventListener('click', function() {
+            console.log('Filter tab clicked:', this.dataset.filter);
             filterTabs.forEach(t => t.classList.remove('active'));
             this.classList.add('active');
             currentFilter = this.dataset.filter;
@@ -1167,20 +1168,25 @@ document.addEventListener('DOMContentLoaded', function() {
         updateSelectAllState();
     }
     
-    // Select all functionality
-    selectAllUsers.addEventListener('change', function() {
-        const visibleItems = Array.from(userItems).filter(item => 
-            item.style.display !== 'none'
-        );
-        
-        visibleItems.forEach(item => {
-            const checkbox = item.querySelector('.user-select-checkbox');
-            checkbox.checked = this.checked;
+            // Select all functionality
+        selectAllUsers.addEventListener('change', function() {
+            console.log('Select all changed:', this.checked);
+            const visibleItems = Array.from(userItems).filter(item => 
+                item.style.display !== 'none'
+            );
+            console.log('Visible items:', visibleItems.length);
+            
+            visibleItems.forEach(item => {
+                const checkbox = item.querySelector('.user-select-checkbox');
+                if (checkbox) {
+                    checkbox.checked = this.checked;
+                    console.log('Setting checkbox:', checkbox.value, 'to:', this.checked);
+                }
+            });
+            
+            updateSelectedCount();
+            updateUserItemStates();
         });
-        
-        updateSelectedCount();
-        updateUserItemStates();
-    });
     
     // Individual checkbox changes
     userCheckboxes.forEach(checkbox => {
@@ -1217,6 +1223,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Clear selection
     clearSelection.addEventListener('click', function() {
+        console.log('Clear selection clicked');
         userCheckboxes.forEach(checkbox => {
             checkbox.checked = false;
         });
@@ -1226,7 +1233,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     function updateSelectedCount() {
-        const selectedCount = userCheckboxes.filter(checkbox => checkbox.checked).length;
+        const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
         document.getElementById('selected-count').textContent = selectedCount + ' users';
         document.getElementById('selected-indicator').textContent = selectedCount + ' selected';
     }
@@ -1264,6 +1271,19 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Initialize
+    console.log('Initializing user selection functionality...');
+    console.log('Found elements:', {
+        recipientCards: recipientCards.length,
+        userSelector: !!userSelector,
+        userSearch: !!userSearch,
+        searchClear: !!searchClear,
+        selectAllUsers: !!selectAllUsers,
+        userCheckboxes: userCheckboxes.length,
+        clearSelection: !!clearSelection,
+        filterTabs: filterTabs.length,
+        userItems: userItems.length
+    });
+    
     updateRecipientSelection();
     filterUsers();
 });
