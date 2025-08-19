@@ -778,7 +778,6 @@ document.addEventListener('DOMContentLoaded', function() {
     // User selection handling
     userCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', function() {
-            console.log('Checkbox changed:', this.checked, this.value);
             updateSelectedCount();
             updatePreview();
         });
@@ -864,8 +863,6 @@ document.addEventListener('DOMContentLoaded', function() {
         const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
         const totalCount = userCheckboxes.length;
         const progressPercentage = totalCount > 0 ? (selectedCount / totalCount) * 100 : 0;
-        
-        console.log('Selected count:', selectedCount, 'Total:', totalCount, 'Progress:', progressPercentage + '%');
         
         selectedCountSpan.textContent = selectedCount;
         
@@ -964,10 +961,6 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize button states
     exportSelectedBtn.disabled = true;
-    
-    // Debug: Log checkbox count
-    console.log('Found checkboxes:', userCheckboxes.length);
-    console.log('Found user items:', userItems.length);
     
     updateSelectedCount();
     updatePreview();
