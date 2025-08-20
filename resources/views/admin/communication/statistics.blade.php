@@ -275,17 +275,21 @@
 
 <style>
 /* Modern Statistics Page Styles */
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .metric-card {
-    background: #ffffff;
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-    border: 1px solid #f1f5f9;
-    transition: all 0.3s ease;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    gap: 20px;
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }
 
 .metric-card:hover {
@@ -311,18 +315,23 @@
 }
 
 .metric-number {
-    font-size: 32px;
-    font-weight: 700;
-    color: #1e293b;
-    margin: 0 0 8px 0;
-    line-height: 1;
+  font-size: 36px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .metric-label {
-    font-size: 14px;
-    color: #64748b;
-    margin: 0;
-    font-weight: 500;
+  font-size: 15px;
+  color: #475569;
+  margin: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
 }
 
 .stats-panel {
@@ -340,16 +349,21 @@
 }
 
 .panel-header h5 {
-    font-size: 20px;
-    font-weight: 600;
-    color: #1e293b;
-    margin: 0 0 8px 0;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .panel-subtitle {
-    font-size: 14px;
-    color: #64748b;
-    margin: 0;
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
 }
 
 .status-grid {
@@ -404,15 +418,19 @@
 }
 
 .status-name {
-    font-weight: 600;
-    color: #374151;
-    font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+  text-transform: capitalize;
 }
 
 .status-count {
-    font-weight: 700;
-    font-size: 24px;
-    color: #1e293b;
+  font-weight: 800;
+  font-size: 26px;
+  color: #0f172a;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .status-progress {
@@ -456,15 +474,20 @@
 }
 
 .metric-label {
-    font-weight: 500;
-    color: #64748b;
-    font-size: 14px;
+  font-weight: 600;
+  color: #475569;
+  font-size: 14px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.9;
 }
 
 .metric-value {
-    font-weight: 700;
-    font-size: 20px;
-    color: #1e293b;
+  font-weight: 800;
+  font-size: 22px;
+  color: #0f172a;
+  letter-spacing: -0.015em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .metric-value.success {
@@ -511,19 +534,22 @@
 }
 
 .bar-tooltip {
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #1e293b;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 6px;
-    font-size: 12px;
-    font-weight: 600;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-    white-space: nowrap;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #0f172a;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
 .column-bar:hover .bar-tooltip {
@@ -531,11 +557,13 @@
 }
 
 .column-label {
-    font-size: 12px;
-    color: #64748b;
-    margin-top: 12px;
-    font-weight: 500;
-    text-align: center;
+  font-size: 13px;
+  color: #475569;
+  margin-top: 12px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
 }
 
 .empty-state {
@@ -545,15 +573,34 @@
 }
 
 .empty-state i {
-    font-size: 48px;
-    margin-bottom: 16px;
-    opacity: 0.5;
+  font-size: 56px;
+  margin-bottom: 20px;
+  opacity: 0.4;
+  color: #94a3b8;
+}
+
+.empty-state .btn {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .empty-state p {
-    font-size: 16px;
-    margin-bottom: 20px;
-    color: #64748b;
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .activity-list {
@@ -602,9 +649,11 @@
 }
 
 .activity-main h6 {
-    margin: 0 0 8px 0;
-    font-size: 16px;
-    font-weight: 600;
+  margin: 0 0 8px 0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #0f172a;
 }
 
 .activity-main h6 a {
@@ -617,10 +666,12 @@
 }
 
 .activity-main p {
-    margin: 0 0 16px 0;
-    color: #64748b;
-    font-size: 14px;
-    line-height: 1.5;
+  margin: 0 0 16px 0;
+  color: #64748b;
+  font-size: 14px;
+  line-height: 1.6;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
 .activity-meta {
@@ -638,18 +689,51 @@
 }
 
 .meta-item {
-    font-size: 13px;
-    color: #64748b;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-weight: 500;
+  font-size: 13px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
 }
 
 .activity-time {
-    font-size: 12px;
-    color: #94a3b8;
-    font-weight: 500;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+
+/* Enhanced Dashboard Section Title */
+.dashboard__section__title h4 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 26px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin: 0;
+}
+
+/* Enhanced Button Styling */
+.default__button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.default__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 /* Responsive Design */
