@@ -29,170 +29,165 @@
                             </div>
                         </div>
 
-                        <!-- Overview Statistics -->
-                        <div class="row mb-4">
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter stats-card total">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-email"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $stats['total_campaigns'] }}</span>
-                                            </div>
-                                             <p>Total Emails</p>
-                                        </div>
+                        <!-- Key Metrics Cards -->
+                        <div class="row mb-5">
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-email"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $stats['total_campaigns'] }}</h3>
+                                        <p class="metric-label">Total Emails</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter stats-card sent">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-check-circled"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $stats['sent_campaigns'] }}</span>
-                                            </div>
-                                             <p>Sent Emails</p>
-                                        </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-check-circled"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $stats['sent_campaigns'] }}</h3>
+                                        <p class="metric-label">Sent Emails</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter stats-card emails">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-send-mail"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $stats['total_emails_sent'] }}</span>
-                                            </div>
-                                            <p>Emails Delivered</p>
-                                        </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-send-mail"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $stats['total_emails_sent'] }}</h3>
+                                        <p class="metric-label">Emails Delivered</p>
                                     </div>
                                 </div>
                             </div>
                             
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter stats-card users">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-users-alt-3"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $stats['total_users'] }}</span>
-                                            </div>
-                                            <p>Active Users</p>
-                                        </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-users-alt-3"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $stats['total_users'] }}</h3>
+                                        <p class="metric-label">Active Users</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
-                            <!-- Email Status Breakdown -->
-                            <div class="col-xl-6 col-lg-12">
-                                <div class="dashboard__form__wraper">
-                                    <div class="chart-header">
-                                        <h5><i class="icofont-pie-chart"></i> Email Status Breakdown</h5>
+                            <!-- Email Status Overview -->
+                            <div class="col-xl-8 col-lg-12 mb-4">
+                                <div class="stats-panel">
+                                    <div class="panel-header">
+                                        <h5>Email Status Overview</h5>
+                                        <p class="panel-subtitle">Current campaign distribution and performance metrics</p>
                                     </div>
                                     
-                                    <div class="status-breakdown">
-                                        <div class="status-item">
-                                            <div class="status-info">
+                                    <div class="status-grid">
+                                        <div class="status-card">
+                                            <div class="status-header">
                                                 <div class="status-icon draft">
                                                     <i class="icofont-edit"></i>
                                                 </div>
-                                                <div class="status-details">
-                                                     <span class="status-name">Draft Emails</span>
+                                                <div class="status-info">
+                                                    <span class="status-name">Draft</span>
                                                     <span class="status-count">{{ $stats['draft_campaigns'] }}</span>
                                                 </div>
                                             </div>
-                                            <div class="status-bar">
-                                                <div class="status-progress" 
-                                                     style="width: {{ $stats['total_campaigns'] ? ($stats['draft_campaigns'] / $stats['total_campaigns']) * 100 : 0 }}%; background-color: #6c757d;"></div>
+                                            <div class="status-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill draft-fill" 
+                                                         style="width: {{ $stats['total_campaigns'] ? ($stats['draft_campaigns'] / $stats['total_campaigns']) * 100 : 0 }}%"></div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="status-item">
-                                            <div class="status-info">
+                                        <div class="status-card">
+                                            <div class="status-header">
                                                 <div class="status-icon scheduled">
                                                     <i class="icofont-clock-time"></i>
                                                 </div>
-                                                <div class="status-details">
-                                                     <span class="status-name">Scheduled Emails</span>
+                                                <div class="status-info">
+                                                    <span class="status-name">Scheduled</span>
                                                     <span class="status-count">{{ $stats['scheduled_campaigns'] }}</span>
                                                 </div>
                                             </div>
-                                            <div class="status-bar">
-                                                <div class="status-progress" 
-                                                     style="width: {{ $stats['total_campaigns'] ? ($stats['scheduled_campaigns'] / $stats['total_campaigns']) * 100 : 0 }}%; background-color: #ffc107;"></div>
+                                            <div class="status-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill scheduled-fill" 
+                                                         style="width: {{ $stats['total_campaigns'] ? ($stats['scheduled_campaigns'] / $stats['total_campaigns']) * 100 : 0 }}%"></div>
+                                                </div>
                                             </div>
                                         </div>
 
-                                        <div class="status-item">
-                                            <div class="status-info">
+                                        <div class="status-card">
+                                            <div class="status-header">
                                                 <div class="status-icon sent">
                                                     <i class="icofont-check-circled"></i>
                                                 </div>
-                                                <div class="status-details">
-                                                     <span class="status-name">Sent Emails</span>
+                                                <div class="status-info">
+                                                    <span class="status-name">Sent</span>
                                                     <span class="status-count">{{ $stats['sent_campaigns'] }}</span>
                                                 </div>
                                             </div>
-                                            <div class="status-bar">
-                                                <div class="status-progress" 
-                                                     style="width: {{ $stats['total_campaigns'] ? ($stats['sent_campaigns'] / $stats['total_campaigns']) * 100 : 0 }}%; background-color: #28a745;"></div>
+                                            <div class="status-progress">
+                                                <div class="progress-bar">
+                                                    <div class="progress-fill sent-fill" 
+                                                         style="width: {{ $stats['total_campaigns'] ? ($stats['sent_campaigns'] / $stats['total_campaigns']) * 100 : 0 }}%"></div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
 
                                     @if($stats['total_campaigns'] > 0)
-                                        <div class="summary-stats">
-                                            <div class="summary-item">
-                                                <span class="summary-label">Success Rate:</span>
-                                                <span class="summary-value">{{ round(($stats['sent_campaigns'] / $stats['total_campaigns']) * 100, 1) }}%</span>
-                                            </div>
-                                            <div class="summary-item">
-                                                <span class="summary-label">Average Recipients:</span>
-                                                <span class="summary-value">{{ $stats['total_campaigns'] ? round($stats['total_emails_sent'] / $stats['total_campaigns']) : 0 }}</span>
+                                        <div class="performance-metrics">
+                                            <div class="metric-row">
+                                                <div class="metric-item">
+                                                    <span class="metric-label">Success Rate</span>
+                                                    <span class="metric-value success">{{ round(($stats['sent_campaigns'] / $stats['total_campaigns']) * 100, 1) }}%</span>
+                                                </div>
+                                                <div class="metric-item">
+                                                    <span class="metric-label">Avg Recipients</span>
+                                                    <span class="metric-value">{{ $stats['total_campaigns'] ? round($stats['total_emails_sent'] / $stats['total_campaigns']) : 0 }}</span>
+                                                </div>
                                             </div>
                                         </div>
                                     @endif
                                 </div>
                             </div>
 
-                            <!-- Monthly Activity Chart -->
-                            <div class="col-xl-6 col-lg-12">
-                                <div class="dashboard__form__wraper">
-                                    <div class="chart-header">
-                                        <h5><i class="icofont-chart-line"></i> Monthly Email Activity</h5>
+                            <!-- Monthly Activity -->
+                            <div class="col-xl-4 col-lg-12 mb-4">
+                                <div class="stats-panel">
+                                    <div class="panel-header">
+                                        <h5>Monthly Activity</h5>
+                                        <p class="panel-subtitle">Email activity trends over time</p>
                                     </div>
                                     
-                                    <div class="monthly-chart">
+                                    <div class="activity-chart">
                                         @if($monthlyStats->isEmpty())
-                                            <div class="no-data">
-                                                <i class="icofont-chart-line" style="font-size: 48px; color: #ccc;"></i>
-                                                <p>No email data available yet</p>
+                                            <div class="empty-state">
+                                                <i class="icofont-chart-line"></i>
+                                                <p>No data available</p>
                                             </div>
                                         @else
-                                            <div class="chart-bars">
+                                            <div class="chart-container">
                                                 @foreach($monthlyStats as $month)
                                                     @php
                                                         $maxCount = $monthlyStats->max('count');
                                                         $height = $maxCount > 0 ? ($month->count / $maxCount) * 100 : 0;
                                                     @endphp
-                                                    <div class="chart-bar">
-                                                         <div class="bar" style="height: {{ $height }}%" title="{{ $month->count }} emails"></div>
-                                                        <div class="bar-label">{{ \Carbon\Carbon::parse($month->month . '-01')->format('M Y') }}</div>
-                                                        <div class="bar-value">{{ $month->count }}</div>
+                                                    <div class="chart-column">
+                                                        <div class="column-bar" style="height: {{ $height }}%">
+                                                            <span class="bar-tooltip">{{ $month->count }}</span>
+                                                        </div>
+                                                        <div class="column-label">{{ \Carbon\Carbon::parse($month->month . '-01')->format('M Y') }}</div>
                                                     </div>
                                                 @endforeach
                                             </div>
@@ -205,24 +200,25 @@
                         <!-- Recent Activity -->
                         <div class="row">
                             <div class="col-xl-12">
-                                <div class="dashboard__form__wraper">
-                                    <div class="chart-header">
-                                        <h5><i class="icofont-history"></i> Recent Email Activity</h5>
+                                <div class="stats-panel">
+                                    <div class="panel-header">
+                                        <h5>Recent Email Activity</h5>
+                                        <p class="panel-subtitle">Latest campaign activities and updates</p>
                                     </div>
                                     
                                     @if($recentActivity->isEmpty())
-                                        <div class="no-activity">
-                                            <i class="icofont-history" style="font-size: 48px; color: #ccc;"></i>
-                                            <p>No recent email activity</p>
+                                        <div class="empty-state">
+                                            <i class="icofont-history"></i>
+                                            <p>No recent activity</p>
                                             <a href="{{ route('admin.communication.create') }}" class="btn btn-primary">
                                                 Create Your First Email
                                             </a>
                                         </div>
                                     @else
-                                        <div class="activity-timeline">
+                                        <div class="activity-list">
                                             @foreach($recentActivity as $campaign)
-                                                <div class="timeline-item">
-                                                    <div class="timeline-marker status-{{ $campaign->status }}">
+                                                <div class="activity-item">
+                                                    <div class="activity-status status-{{ $campaign->status }}">
                                                         @switch($campaign->status)
                                                             @case('draft')
                                                                 <i class="icofont-edit"></i>
@@ -241,26 +237,26 @@
                                                                 @break
                                                         @endswitch
                                                     </div>
-                                                    <div class="timeline-content">
-                                                        <div class="timeline-header">
-                                                             <h6><a href="{{ route('admin.communication.show', $campaign) }}">{{ Str::limit($campaign->subject, 40) }}</a></h6>
-                                                            <span class="timeline-date">{{ $campaign->created_at->diffForHumans() }}</span>
+                                                    <div class="activity-content">
+                                                        <div class="activity-main">
+                                                            <h6><a href="{{ route('admin.communication.show', $campaign) }}">{{ Str::limit($campaign->subject, 40) }}</a></h6>
+                                                            <p>{{ Str::limit($campaign->subject, 80) }}</p>
                                                         </div>
-                                                        <p class="timeline-description">
-                                                            {{ Str::limit($campaign->subject, 80) }}
-                                                        </p>
-                                                        <div class="timeline-meta">
-                                                            <span class="meta-item">
-                                                                <i class="icofont-users"></i> {{ $campaign->total_recipients }} recipients
-                                                            </span>
-                                                            <span class="meta-item">
-                                                                <i class="icofont-user"></i> by {{ $campaign->creator->first_name }} {{ $campaign->creator->last_name }}
-                                                            </span>
-                                                            @if($campaign->attachments && count($campaign->attachments) > 0)
+                                                        <div class="activity-meta">
+                                                            <div class="meta-group">
                                                                 <span class="meta-item">
-                                                                    <i class="icofont-attachment"></i> {{ count($campaign->attachments) }} attachment{{ count($campaign->attachments) > 1 ? 's' : '' }}
+                                                                    <i class="icofont-users"></i> {{ $campaign->total_recipients }}
                                                                 </span>
-                                                            @endif
+                                                                <span class="meta-item">
+                                                                    <i class="icofont-user"></i> {{ $campaign->creator->first_name }} {{ $campaign->creator->last_name }}
+                                                                </span>
+                                                                @if($campaign->attachments && count($campaign->attachments) > 0)
+                                                                    <span class="meta-item">
+                                                                        <i class="icofont-attachment"></i> {{ count($campaign->attachments) }}
+                                                                    </span>
+                                                                @endif
+                                                            </div>
+                                                            <span class="activity-time">{{ $campaign->created_at->diffForHumans() }}</span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -278,79 +274,129 @@
 </div>
 
 <style>
-.stats-card {
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    transition: transform 0.3s ease;
-}
-
-.stats-card:hover {
-    transform: translateY(-5px);
-}
-
-.stats-card.total {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.stats-card.sent {
-    background: linear-gradient(135deg, #57F287 0%, #00D04F 100%);
-    color: white;
-}
-
-.stats-card.emails {
-    background: linear-gradient(135deg, #5865F2 0%, #3B82F6 100%);
-    color: white;
-}
-
-.stats-card.users {
-    background: linear-gradient(135deg, #EB459E 0%, #D946EF 100%);
-    color: white;
-}
-
-.chart-header {
-    margin-bottom: 30px;
-    padding-bottom: 15px;
-    border-bottom: 2px solid #e9ecef;
-}
-
-.chart-header h5 {
-    color: #495057;
-    margin: 0;
-}
-
-.status-breakdown {
-    margin-bottom: 30px;
-}
-
-.status-item {
-    margin-bottom: 25px;
-}
-
-.status-info {
+/* Modern Statistics Page Styles */
+.metric-card {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    transition: all 0.3s ease;
+    height: 100%;
     display: flex;
     align-items: center;
-    margin-bottom: 8px;
+    gap: 20px;
 }
 
-.status-icon {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+.metric-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.metric-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 15px;
     color: white;
-    font-size: 18px;
+    font-size: 24px;
+    flex-shrink: 0;
 }
 
-.status-icon.draft { background-color: #6c757d; }
-.status-icon.scheduled { background-color: #ffc107; }
-.status-icon.sent { background-color: #28a745; }
+.metric-content {
+    flex: 1;
+}
 
-.status-details {
+.metric-number {
+    font-size: 32px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+    line-height: 1;
+}
+
+.metric-label {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+    font-weight: 500;
+}
+
+.stats-panel {
+    background: #ffffff;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid #f1f5f9;
+    height: 100%;
+}
+
+.panel-header {
+    margin-bottom: 32px;
+    text-align: center;
+}
+
+.panel-header h5 {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1e293b;
+    margin: 0 0 8px 0;
+}
+
+.panel-subtitle {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0;
+}
+
+.status-grid {
+    display: grid;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.status-card {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid #e2e8f0;
+}
+
+.status-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.status-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.status-icon.draft {
+    background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+}
+
+.status-icon.scheduled {
+    background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+}
+
+.status-icon.sent {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+.status-info {
     flex: 1;
     display: flex;
     justify-content: space-between;
@@ -359,235 +405,299 @@
 
 .status-name {
     font-weight: 600;
-    color: #495057;
+    color: #374151;
+    font-size: 16px;
 }
 
 .status-count {
-    font-weight: bold;
-    font-size: 18px;
-    color: #495057;
+    font-weight: 700;
+    font-size: 24px;
+    color: #1e293b;
 }
 
-.status-bar {
+.status-progress {
+    margin-top: 16px;
+}
+
+.progress-bar {
     height: 8px;
-    background-color: #e9ecef;
+    background: #e2e8f0;
     border-radius: 4px;
     overflow: hidden;
 }
 
-.status-progress {
+.progress-fill {
     height: 100%;
     border-radius: 4px;
-    transition: width 0.3s ease;
+    transition: width 0.8s ease;
 }
 
-.summary-stats {
+.progress-fill.draft-fill { background: linear-gradient(90deg, #64748b 0%, #475569 100%); }
+.progress-fill.scheduled-fill { background: linear-gradient(90deg, #f59e0b 0%, #d97706 100%); }
+.progress-fill.sent-fill { background: linear-gradient(90deg, #10b981 0%, #059669 100%); }
+
+.performance-metrics {
+    background: #f8fafc;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+}
+
+.metric-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
-    padding: 20px;
-    background: #f8f9fa;
-    border-radius: 8px;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
 }
 
-.summary-item {
+.metric-item {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.summary-label {
-    font-weight: 600;
-    color: #6c757d;
+.metric-label {
+    font-weight: 500;
+    color: #64748b;
+    font-size: 14px;
 }
 
-.summary-value {
-    font-weight: bold;
-    font-size: 18px;
-    color: #495057;
+.metric-value {
+    font-weight: 700;
+    font-size: 20px;
+    color: #1e293b;
 }
 
-.monthly-chart {
-    height: 250px;
+.metric-value.success {
+    color: #059669;
+}
+
+.activity-chart {
+    height: 200px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.chart-bars {
+.chart-container {
     display: flex;
     align-items: end;
-    justify-content: center;
-    gap: 15px;
-    height: 200px;
+    justify-content: space-around;
+    gap: 16px;
+    height: 160px;
     width: 100%;
 }
 
-.chart-bar {
+.chart-column {
     display: flex;
     flex-direction: column;
     align-items: center;
     flex: 1;
-    max-width: 60px;
+    max-width: 50px;
 }
 
-.bar {
+.column-bar {
     width: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    border-radius: 4px 4px 0 0;
+    background: linear-gradient(180deg, #3b82f6 0%, #1d4ed8 100%);
+    border-radius: 6px 6px 0 0;
     transition: all 0.3s ease;
     cursor: pointer;
-    min-height: 5px;
+    min-height: 8px;
+    position: relative;
 }
 
-.bar:hover {
+.column-bar:hover {
     opacity: 0.8;
     transform: scale(1.05);
 }
 
-.bar-label {
-    font-size: 11px;
-    color: #6c757d;
-    margin-top: 8px;
-    transform: rotate(-45deg);
+.bar-tooltip {
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e293b;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.3s ease;
     white-space: nowrap;
 }
 
-.bar-value {
-    font-weight: bold;
-    font-size: 12px;
-    color: #495057;
-    margin-bottom: 5px;
+.column-bar:hover .bar-tooltip {
+    opacity: 1;
 }
 
-.no-data, .no-activity {
+.column-label {
+    font-size: 12px;
+    color: #64748b;
+    margin-top: 12px;
+    font-weight: 500;
+    text-align: center;
+}
+
+.empty-state {
     text-align: center;
     padding: 60px 20px;
-    color: #6c757d;
+    color: #94a3b8;
 }
 
-.activity-timeline {
-    position: relative;
+.empty-state i {
+    font-size: 48px;
+    margin-bottom: 16px;
+    opacity: 0.5;
 }
 
-.activity-timeline::before {
-    content: '';
-    position: absolute;
-    left: 25px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #e9ecef;
+.empty-state p {
+    font-size: 16px;
+    margin-bottom: 20px;
+    color: #64748b;
 }
 
-.timeline-item {
-    position: relative;
-    margin-bottom: 30px;
+.activity-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.activity-item {
     display: flex;
     align-items: flex-start;
+    gap: 20px;
+    padding: 20px;
+    background: #f8fafc;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
 }
 
-.timeline-marker {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
+.activity-item:hover {
+    background: #f1f5f9;
+    transform: translateX(4px);
+}
+
+.activity-status {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-right: 20px;
     color: white;
     font-size: 20px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    z-index: 1;
+    flex-shrink: 0;
 }
 
-.timeline-marker.status-draft { background-color: #6c757d; }
-.timeline-marker.status-scheduled { background-color: #ffc107; }
-.timeline-marker.status-sending { background-color: #17a2b8; }
-.timeline-marker.status-sent { background-color: #28a745; }
-.timeline-marker.status-failed { background-color: #dc3545; }
+.activity-status.status-draft { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+.activity-status.status-scheduled { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.activity-status.status-sending { background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); }
+.activity-status.status-sent { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.activity-status.status-failed { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
 
-.timeline-content {
+.activity-content {
     flex: 1;
-    background: #f8f9fa;
-    padding: 20px;
-    border-radius: 8px;
-    border-left: 4px solid #e9ecef;
+    min-width: 0;
 }
 
-.timeline-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 10px;
+.activity-main h6 {
+    margin: 0 0 8px 0;
+    font-size: 16px;
+    font-weight: 600;
 }
 
-.timeline-header h6 {
-    margin: 0;
-}
-
-.timeline-header h6 a {
-    color: #495057;
+.activity-main h6 a {
+    color: #1e293b;
     text-decoration: none;
 }
 
-.timeline-header h6 a:hover {
-    color: #007bff;
+.activity-main h6 a:hover {
+    color: #3b82f6;
 }
 
-.timeline-date {
-    font-size: 12px;
-    color: #6c757d;
-}
-
-.timeline-description {
-    margin-bottom: 15px;
-    color: #6c757d;
+.activity-main p {
+    margin: 0 0 16px 0;
+    color: #64748b;
+    font-size: 14px;
     line-height: 1.5;
 }
 
-.timeline-meta {
+.activity-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.meta-group {
     display: flex;
     gap: 20px;
     flex-wrap: wrap;
 }
 
 .meta-item {
-    font-size: 12px;
-    color: #6c757d;
+    font-size: 13px;
+    color: #64748b;
     display: flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    font-weight: 500;
 }
 
+.activity-time {
+    font-size: 12px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+/* Responsive Design */
 @media (max-width: 768px) {
-    .chart-bars {
-        gap: 8px;
+    .metric-card {
+        padding: 20px;
+        gap: 16px;
     }
     
-    .bar-label {
-        font-size: 10px;
+    .metric-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
     }
     
-    .timeline-item {
+    .metric-number {
+        font-size: 28px;
+    }
+    
+    .stats-panel {
+        padding: 24px;
+    }
+    
+    .metric-row {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    
+    .chart-container {
+        gap: 12px;
+    }
+    
+    .activity-item {
         flex-direction: column;
         text-align: center;
+        gap: 16px;
     }
     
-    .timeline-marker {
-        margin: 0 auto 15px;
+    .activity-status {
+        margin: 0 auto;
     }
     
-    .timeline-content {
-        border-left: none;
-        border-top: 4px solid #e9ecef;
+    .activity-meta {
+        flex-direction: column;
+        align-items: center;
     }
     
-    .activity-timeline::before {
-        display: none;
-    }
-    
-    .timeline-meta {
+    .meta-group {
         justify-content: center;
     }
 }
@@ -595,45 +705,36 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Animate counters
-    const counters = document.querySelectorAll('.counter');
-    const speed = 200;
-
-    counters.forEach(counter => {
-        const updateCount = () => {
-            const target = +counter.innerText;
-            const count = +counter.dataset.count || 0;
-            const increment = target / speed;
-
-            if (count < target) {
-                counter.dataset.count = Math.ceil(count + increment);
-                counter.innerText = counter.dataset.count;
-                setTimeout(updateCount, 1);
-            } else {
-                counter.innerText = target;
-            }
-        };
-        updateCount();
-    });
-
     // Animate progress bars
-    const progressBars = document.querySelectorAll('.status-progress');
+    const progressBars = document.querySelectorAll('.progress-fill');
     progressBars.forEach(bar => {
         const width = bar.style.width;
         bar.style.width = '0%';
         setTimeout(() => {
             bar.style.width = width;
-        }, 500);
+        }, 300);
     });
 
     // Animate chart bars
-    const chartBars = document.querySelectorAll('.bar');
+    const chartBars = document.querySelectorAll('.column-bar');
     chartBars.forEach((bar, index) => {
         const height = bar.style.height;
         bar.style.height = '0%';
         setTimeout(() => {
             bar.style.height = height;
         }, 100 * (index + 1));
+    });
+
+    // Animate metric cards
+    const metricCards = document.querySelectorAll('.metric-card');
+    metricCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 100 * index);
     });
 });
 </script>
