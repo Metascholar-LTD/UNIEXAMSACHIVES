@@ -123,9 +123,8 @@
                                             </div>
                                         @endif
 
-                                        <form action="{{ route('dashboard.profile.update') }}" method="POST" enctype="multipart/form-data" id="profileForm">
+                                        <form action="{{ route('dashboard.user.info') }}" method="POST" enctype="multipart/form-data" id="profileForm">
                                             @csrf
-                                            @method('PUT')
                                             
                                             <div class="row">
                                                 <div class="col-md-6 mb-3">

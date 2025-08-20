@@ -80,7 +80,6 @@ Route::middleware(['auth'])->group(function () {
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');
-    Route::put('/dashboard/profile/update',[HomeController::class, 'updateUserInfo'])->name('dashboard.profile.update');
 
     #settings
     Route::get('/dashboard/settings',[HomeController::class, 'settings'])->name('dashboard.settings');
