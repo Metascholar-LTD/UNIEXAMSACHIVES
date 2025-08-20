@@ -77,7 +77,7 @@
                                                                 <i class="icofont-underline"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="strikeThrough" title="Strikethrough">
-                                                                <i class="icofont-minus"></i>
+                                                                <i class="fas fa-strikethrough"></i>
                                                             </button>
                                                         </div>
                                                         
@@ -94,7 +94,7 @@
                                                                 <i class="icofont-align-right"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="justifyFull" title="Justify">
-                                                                <i class="icofont-align-left"></i>
+                                                                <i class="fas fa-align-justify"></i>
                                                             </button>
                                                         </div>
                                                         
@@ -102,16 +102,16 @@
                                                         
                                                         <div class="toolbar-group">
                                                             <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">
-                                                                <i class="icofont-list"></i>
+                                                                <i class="fas fa-list-ul"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">
-                                                                <i class="icofont-list"></i>
+                                                                <i class="fas fa-list-ol"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="outdent" title="Decrease Indent">
-                                                                <i class="icofont-arrow-left"></i>
+                                                                <i class="fas fa-outdent"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="indent" title="Increase Indent">
-                                                                <i class="icofont-arrow-right"></i>
+                                                                <i class="fas fa-indent"></i>
                                                             </button>
                                                         </div>
                                                         
@@ -128,7 +128,7 @@
                                                                 <i class="icofont-table"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="insertHorizontalRule" title="Insert Line">
-                                                                <i class="icofont-minus"></i>
+                                                                <i class="fas fa-minus"></i>
                                                             </button>
                                                         </div>
                                                         
