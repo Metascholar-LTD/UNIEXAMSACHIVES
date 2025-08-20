@@ -12111,6 +12111,12 @@ Breadcrumb Area
 }
 
 /* Sidebar enhancements */
+.logout-btn {
+  transition: color 0.2s ease;
+}
+.logout-btn:hover {
+  color: var(--primaryColor) !important;
+}
 .dashboard__inner .dashboard__nav ul {
   margin: 0;
   padding: 0;
