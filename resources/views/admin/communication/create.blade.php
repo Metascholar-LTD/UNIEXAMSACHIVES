@@ -77,7 +77,7 @@
                                                                 <i class="icofont-underline"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="strikeThrough" title="Strikethrough">
-                                                                <i class="icofont-strikethrough"></i>
+                                                                <i class="icofont-minus"></i>
                                                             </button>
                                                         </div>
                                                         
@@ -94,7 +94,7 @@
                                                                 <i class="icofont-align-right"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="justifyFull" title="Justify">
-                                                                <i class="icofont-align-justify"></i>
+                                                                <i class="icofont-align-left"></i>
                                                             </button>
                                                         </div>
                                                         
@@ -105,13 +105,13 @@
                                                                 <i class="icofont-list"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">
-                                                                <i class="icofont-numbered-list"></i>
+                                                                <i class="icofont-list"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="outdent" title="Decrease Indent">
-                                                                <i class="icofont-indent-left"></i>
+                                                                <i class="icofont-arrow-left"></i>
                                                             </button>
                                                             <button type="button" class="toolbar-btn" data-command="indent" title="Increase Indent">
-                                                                <i class="icofont-indent-right"></i>
+                                                                <i class="icofont-arrow-right"></i>
                                                             </button>
                                                         </div>
                                                         
