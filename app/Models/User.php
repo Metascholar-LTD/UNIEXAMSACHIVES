@@ -56,4 +56,15 @@ class User extends Authenticatable
                     ->withPivot('is_read')
                     ->withTimestamps();
     }
+
+    /**
+     * Get the profile picture URL
+     */
+    public function getProfilePictureUrlAttribute()
+    {
+        if ($this->profile_picture) {
+            return asset('profile_pictures/' . $this->profile_picture);
+        }
+        return asset('profile_pictures/default-profile.png'); // Default profile picture
+    }
 }

@@ -5,11 +5,7 @@
             <div class="uda-greeting">
                 <div class="uda-avatar-wrap">
                     <span class="uda-avatar-inner">
-                        @if (auth()->user()->profile_picture)
-                            <img class="uda-avatar" loading="lazy" src="{{ Storage::url(auth()->user()->profile_picture) }}" alt="Profile Picture" onerror="this.src='/img/dashbord/profile.png'">
-                        @else
-                            <img class="uda-avatar" loading="lazy" src="/img/dashbord/profile.png" alt="Profile Picture">
-                        @endif
+                        <img class="uda-avatar" loading="lazy" src="{{ auth()->user()->profile_picture_url }}" alt="Profile Picture">
                     </span>
                     <a href="{{ route('dashboard.settings') }}" class="uda-avatar-edit" title="Update profile picture" aria-label="Update profile picture">
                         <i class="icofont-plus"></i>

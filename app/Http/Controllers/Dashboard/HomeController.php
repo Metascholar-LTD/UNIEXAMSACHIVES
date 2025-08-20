@@ -178,16 +178,22 @@ class HomeController extends Controller
                 // Delete old profile picture if exists
                 if ($user->profile_picture) {
                     try {
-                        Storage::disk('public')->delete($user->profile_picture);
+                        $oldPath = public_path('profile_pictures/' . basename($user->profile_picture));
+                        if (file_exists($oldPath)) {
+                            unlink($oldPath);
+                        }
                     } catch (\Exception $e) {
                         // Log error but continue
                         \Log::warning('Failed to delete old profile picture: ' . $e->getMessage());
                     }
                 }
 
-                // Store new profile picture
-                $path = $file->store('profile_pictures', 'public');
-                $user->profile_picture = $path;
+                // Generate unique filename
+                $filename = uniqid() . '_' . time() . '.' . $file->getClientOriginalExtension();
+                
+                // Store new profile picture in public/profile_pictures directory
+                $file->move(public_path('profile_pictures'), $filename);
+                $user->profile_picture = $filename;
             }
 
             // Save user

@@ -108,12 +108,10 @@
                                                                 <!-- Current Profile Picture Display -->
                                                                 @if($data->profile_picture)
                                                                     <div class="current-profile-pic mb-3">
-                                                                        <img src="{{ Storage::url($data->profile_picture) }}" 
+                                                                        <img src="{{ asset('profile_pictures/' . $data->profile_picture) }}" 
                                                                              alt="Current Profile Picture" 
-                                                                             style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #e6e0ff;"
-                                                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                                                                             style="width: 100px; height: 100px; object-fit: cover; border-radius: 50%; border: 3px solid #e6e0ff;">
                                                                         <p class="text-muted mt-2">Current Profile Picture</p>
-                                                                        <p class="text-muted mt-2" style="display: none;">Profile picture not found</p>
                                                                     </div>
                                                                 @endif
                                                                 

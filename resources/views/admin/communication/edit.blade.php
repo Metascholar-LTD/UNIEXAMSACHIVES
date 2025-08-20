@@ -159,7 +159,7 @@
                                                         <div class="user-item" data-user-id="{{ $user->id }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
                                                             <div class="user-avatar">
                                                                 @if($user->profile_picture)
-                                                                    <img src="{{ asset('storage/' . $user->profile_picture) }}" alt="{{ $user->first_name }}" class="avatar-img">
+                                                                    <img src="{{ asset('profile_pictures/' . $user->profile_picture) }}" alt="{{ $user->first_name }}" class="avatar-img">
                                                                 @else
                                                                     <div class="avatar-placeholder">
                                                                         {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
