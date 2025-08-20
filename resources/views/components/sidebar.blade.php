@@ -1,7 +1,23 @@
 <div class="col-xl-3 col-lg-3 col-md-12">
     <div class="dashboard__inner sticky-top">
-        <div class="dashboard__nav__title">
-            <h6>Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}</h6>
+        <div class="sidebar-section-header welcome-header">
+            <div class="section-header-content">
+                <div class="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    <h6 class="section-title">Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}</h6>
+                    <span class="section-subtitle">Dashboard Overview</span>
+                </div>
+                <div class="section-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </div>
+            </div>
         </div>
         <div class="dashboard__nav">
             <ul>
@@ -342,7 +358,7 @@
                 </div>
                 <div class="section-text">
                     <h6 class="section-title">USER MANAGEMENT</h6>
-                    <span class="section-subtitle">4 features</span>
+                    <!--<span class="section-subtitle">4 features</span>-->
                 </div>
                 <div class="section-arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">

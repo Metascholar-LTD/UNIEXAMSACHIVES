@@ -11552,6 +11552,29 @@ Breadcrumb Area
   height: 16px;
 }
 
+/* Welcome header special styling */
+.welcome-header {
+  background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+  box-shadow: 0 4px 15px rgba(5, 150, 105, 0.3);
+  margin-bottom: 30px;
+}
+
+.welcome-header:hover {
+  box-shadow: 0 6px 20px rgba(5, 150, 105, 0.4);
+}
+
+.welcome-header .section-title {
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.welcome-header .section-subtitle {
+  font-size: 13px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.9);
+}
+
 /* Responsive adjustments for sidebar headers */
 @media (max-width: 767px) {
   .sidebar-section-header {
@@ -11576,6 +11599,15 @@ Breadcrumb Area
   .section-arrow {
     width: 20px;
     height: 20px;
+  }
+  
+  .welcome-header .section-title {
+    font-size: 14px;
+    letter-spacing: 0.8px;
+  }
+  
+  .welcome-header .section-subtitle {
+    font-size: 12px;
   }
 }
 
