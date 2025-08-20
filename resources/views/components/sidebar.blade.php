@@ -6,7 +6,7 @@
         <div class="dashboard__nav">
             <ul>
                 <li>
-                    <a class="active" href="{{route('dashboard')}}">
+                    <a class="{{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{route('dashboard')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -17,7 +17,7 @@
                         Dashboard</a>
                 </li>
                 <li>
-                    <a href="{{route('dashboard.profile')}}">
+                    <a class="{{ request()->routeIs('dashboard.profile') ? 'active' : '' }}" href="{{route('dashboard.profile')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -30,7 +30,7 @@
                 @auth
                     @if(auth()->user()->is_admin)
                         <li>
-                            <a href="{{route('dashboard.message')}}">
+                            <a class="{{ request()->routeIs('dashboard.message') ? 'active' : '' }}" href="{{route('dashboard.message')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -45,7 +45,7 @@
                 @auth
                     @unless(auth()->user()->is_admin)
                         <li>
-                            <a href="{{route('dashboard.message.create')}}">
+                            <a class="{{ request()->routeIs('dashboard.message.create') ? 'active' : '' }}" href="{{route('dashboard.message.create')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -59,7 +59,7 @@
                 @endauth
 
                 <li>
-                    <a href="{{route('dashboard.document')}}">
+                    <a class="{{ request()->routeIs('dashboard.document') ? 'active' : '' }}" href="{{route('dashboard.document')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -80,7 +80,7 @@
                 @auth
                 @if(auth()->user()->is_admin)
                 <li>
-                    <a href="{{route('dashboard.pending.exams')}}">
+                    <a class="{{ request()->routeIs('dashboard.pending.exams') ? 'active' : '' }}" href="{{route('dashboard.pending.exams')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -90,7 +90,7 @@
                         Pending Exams</a><span class="dashboard__label">{{$pendingCount}}</span>
                 </li>
                 <li>
-                    <a href="{{route('dashboard.approve.exams')}}">
+                    <a class="{{ request()->routeIs('dashboard.approve.exams') ? 'active' : '' }}" href="{{route('dashboard.approve.exams')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -100,7 +100,7 @@
                         Approved Exams </a><span class="dashboard__label">{{$approvedCount}}</span>
                 </li>
                     <li>
-                        <a href="{{route('dashboard.upload.document')}}">
+                        <a class="{{ request()->routeIs('dashboard.upload.document') ? 'active' : '' }}" href="{{route('dashboard.upload.document')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -114,7 +114,7 @@
                 @auth
                     @unless(auth()->user()->is_admin)
                     <li>
-                        <a href="{{route('dashboard.all.pending.exams')}}">
+                        <a class="{{ request()->routeIs('dashboard.all.pending.exams') ? 'active' : '' }}" href="{{route('dashboard.all.pending.exams')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -126,7 +126,7 @@
 
                     </li>
                     <li>
-                        <a href="{{route('dashboard.all.approve.exams')}}">
+                        <a class="{{ request()->routeIs('dashboard.all.approve.exams') ? 'active' : '' }}" href="{{route('dashboard.all.approve.exams')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -138,7 +138,7 @@
 
                     </li>
                         <li>
-                            <a href="{{route('dashboard.all.upload.document')}}">
+                            <a class="{{ request()->routeIs('dashboard.all.upload.document') ? 'active' : '' }}" href="{{route('dashboard.all.upload.document')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -164,7 +164,7 @@
                 @auth
                 @if(auth()->user()->is_admin)
                 <li>
-                    <a href="{{route('dashboard.pending.files')}}">
+                    <a class="{{ request()->routeIs('dashboard.pending.files') ? 'active' : '' }}" href="{{route('dashboard.pending.files')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -174,7 +174,7 @@
                         Pending Files</a><span class="dashboard__label">{{$pendingFilesCount}}</span>
                 </li>
                 <li>
-                    <a href="{{route('dashboard.approve.files')}}">
+                    <a class="{{ request()->routeIs('dashboard.approve.files') ? 'active' : '' }}" href="{{route('dashboard.approve.files')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -184,7 +184,7 @@
                         Files Approved</a><span class="dashboard__label">{{$approvedFilesCount}}</span>
                 </li>
                     <li>
-                        <a href="{{route('dashboard.upload.file')}}">
+                        <a class="{{ request()->routeIs('dashboard.upload.file') ? 'active' : '' }}" href="{{route('dashboard.upload.file')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -198,7 +198,7 @@
                 @auth
                     @unless(auth()->user()->is_admin)
                     <li>
-                        <a href="{{route('dashboard.all.pending.files')}}">
+                        <a class="{{ request()->routeIs('dashboard.all.pending.files') ? 'active' : '' }}" href="{{route('dashboard.all.pending.files')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -210,7 +210,7 @@
 
                     </li>
                     <li>
-                        <a href="{{route('dashboard.all.approve.files')}}">
+                        <a class="{{ request()->routeIs('dashboard.all.approve.files') ? 'active' : '' }}" href="{{route('dashboard.all.approve.files')}}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                 stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -222,7 +222,7 @@
 
                     </li>
                         <li>
-                            <a href="{{route('dashboard.all.upload.file')}}">
+                            <a class="{{ request()->routeIs('dashboard.all.upload.file') ? 'active' : '' }}" href="{{route('dashboard.all.upload.file')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -248,7 +248,7 @@
                 <div class="dashboard__nav">
                     <ul>
                         <li>
-                            <a href="{{route('admin.communication.index')}}">
+                            <a class="{{ request()->routeIs('admin.communication.index') ? 'active' : '' }}" href="{{route('admin.communication.index')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -259,7 +259,7 @@
                                 Emails</a>
                         </li>
                         <li>
-                            <a href="{{route('admin.communication.create')}}">
+                            <a class="{{ request()->routeIs('admin.communication.create') ? 'active' : '' }}" href="{{route('admin.communication.create')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -270,7 +270,7 @@
                                 Compose Email</a>
                         </li>
                         <li>
-                            <a href="{{route('admin.communication.statistics')}}">
+                            <a class="{{ request()->routeIs('admin.communication.statistics') ? 'active' : '' }}" href="{{route('admin.communication.statistics')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -296,7 +296,7 @@
                 @auth
                     @unless(auth()->user()->is_admin)
                         <li>
-                            <a href="{{route('dashboard.users')}}">
+                            <a class="{{ request()->routeIs('dashboard.users') ? 'active' : '' }}" href="{{route('dashboard.users')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -307,7 +307,7 @@
                                 Manage Users</a>
                         </li>
                         <li>
-                            <a href="#" id="triggerLogoModal">
+                            <a class="{{ request()->routeIs('dashboard.details.store') ? 'active' : '' }}" href="#" id="triggerLogoModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -318,7 +318,7 @@
                                 Set Logo / Title</a>
                         </li>
                         <li>
-                            <a href="{{route('departments.index')}}">
+                            <a class="{{ request()->routeIs('departments.index') ? 'active' : '' }}" href="{{route('departments.index')}}">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -329,7 +329,7 @@
                                 Department/Faculty</a>
                         </li>
                         <li>
-                            <a href="#" id="triggerAcademicModal">
+                            <a class="{{ request()->routeIs('dashboard.academic.store') ? 'active' : '' }}" href="#" id="triggerAcademicModal">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                     viewBox="0 0 24 24" fill="none" stroke="currentColor"
                                     stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -342,7 +342,7 @@
                     @endunless
                 @endauth
                 <li>
-                    <a href="{{route('dashboard.settings')}}">
+                    <a class="{{ request()->routeIs('dashboard.settings') ? 'active' : '' }}" href="{{route('dashboard.settings')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
