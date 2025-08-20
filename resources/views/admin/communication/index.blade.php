@@ -45,84 +45,73 @@
                         @endif
 
                         <!-- Statistics Cards -->
-                        <div class="row mb-4">
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter communication-stats">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-email" style="font-size: 40px; color: #5865F2;"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $totalCampaigns }}</span>
-                                            </div>
-                                            <p>Total Emails</p>
-                                        </div>
+                        <div class="row mb-5">
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-email"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $totalCampaigns }}</h3>
+                                        <p class="metric-label">Total Emails</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter communication-stats">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-check-circled" style="font-size: 40px; color: #57F287;"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $sentCampaigns }}</span>
-                                            </div>
-                                            <p>Sent Emails</p>
-                                        </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-check-circled"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $sentCampaigns }}</h3>
+                                        <p class="metric-label">Sent Emails</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter communication-stats">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-clock-time" style="font-size: 40px; color: #FEE75C;"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $pendingCampaigns }}</span>
-                                            </div>
-                                            <p>Pending Emails</p>
-                                        </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-clock-time"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $pendingCampaigns }}</h3>
+                                        <p class="metric-label">Pending Emails</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-lg-6 col-md-6 col-12">
-                                <div class="dashboard__single__counter communication-stats">
-                                    <div class="counterarea__text__wraper">
-                                        <div class="counter__img">
-                                            <i class="icofont-users-alt-3" style="font-size: 40px; color: #EB459E;"></i>
-                                        </div>
-                                        <div class="counter__content__wraper">
-                                            <div class="counter__number">
-                                                <span class="counter">{{ $totalUsers }}</span>
-                                            </div>
-                                            <p>Active Users</p>
-                                        </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
+                                <div class="metric-card">
+                                    <div class="metric-icon">
+                                        <i class="icofont-users-alt-3"></i>
+                                    </div>
+                                    <div class="metric-content">
+                                        <h3 class="metric-number">{{ $totalUsers }}</h3>
+                                        <p class="metric-label">Active Users</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Emails Table -->
-                        <div class="dashboard__table__wrapper">
-                            <div class="dashboard__table__top">
-                                <h4>Emails</h4>
-                                <div class="dashboard__table__actions">
-                                    <form method="GET" class="dashboard__search__form">
-                                        <input type="text" name="search" placeholder="Search emails..." 
-                                               value="{{ request('search') }}" class="form-control">
-                                        <button type="submit"><i class="icofont-search-1"></i></button>
-                                    </form>
-                                </div>
+                        <div class="stats-panel">
+                            <div class="panel-header">
+                                <h5>Email Campaigns</h5>
+                                <p class="panel-subtitle">Manage and monitor your email communications</p>
                             </div>
 
-                            <div class="table-responsive">
-                                <table class="table table-striped email-table">
+                            <div class="table-controls">
+                                <form method="GET" class="search-form">
+                                    <div class="search-input-wrapper">
+                                        <i class="icofont-search-1 search-icon"></i>
+                                        <input type="text" name="search" placeholder="Search emails..." 
+                                               value="{{ request('search') }}" class="search-input">
+                                        <button type="submit" class="search-button">Search</button>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="table-container">
+                                <table class="email-table">
                                     <thead>
                                         <tr>
                                             <th>Subject</th>
@@ -135,17 +124,17 @@
                                     </thead>
                                     <tbody>
                                         @forelse($campaigns as $campaign)
-                                        <tr>
+                                        <tr class="email-row">
                                             <td>
                                                 <div class="email-title">
                                                     <strong>{{ Str::limit($campaign->subject, 40) }}</strong>
                                                     @if($campaign->attachments && count($campaign->attachments) > 0)
-                                                        <i class="icofont-attachment" title="Has attachments"></i>
+                                                        <i class="icofont-attachment attachment-icon" title="Has attachments"></i>
                                                     @endif
                                                 </div>
                                             </td>
                                             <td>
-                                                <span class="badge badge-info">{{ $campaign->total_recipients }} users</span>
+                                                <span class="recipient-badge">{{ $campaign->total_recipients }} users</span>
                                             </td>
                                             <td>
                                                 <span class="email-status status-{{ $campaign->status }}">
@@ -170,43 +159,34 @@
                                             </td>
                                             <td>
                                                 @if($campaign->status === 'sent')
-                                                    <div class="progress-bar-wrapper">
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                                                    <div class="progress-wrapper">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-fill sent-fill" style="width: 100%"></div>
                                                         </div>
-                                                        <small>{{ $campaign->sent_count }}/{{ $campaign->total_recipients }}</small>
+                                                        <small class="progress-text">{{ $campaign->sent_count }}/{{ $campaign->total_recipients }}</small>
                                                     </div>
                                                 @elseif($campaign->status === 'sending')
-                                                    <div class="progress-bar-wrapper">
-                                                        <div class="progress">
-                                                            <div class="progress-bar bg-warning" style="width: {{ $campaign->progress_percentage }}%"></div>
+                                                    <div class="progress-wrapper">
+                                                        <div class="progress-bar">
+                                                            <div class="progress-fill sending-fill" style="width: {{ $campaign->progress_percentage }}%"></div>
                                                         </div>
-                                                        <small>{{ $campaign->sent_count }}/{{ $campaign->total_recipients }}</small>
+                                                        <small class="progress-text">{{ $campaign->sent_count }}/{{ $campaign->total_recipients }}</small>
                                                     </div>
                                                 @else
-                                                    <span class="text-muted">-</span>
+                                                    <span class="no-progress">-</span>
                                                 @endif
                                             </td>
-                                            <td>{{ $campaign->created_at->format('M j, Y') }}</td>
+                                            <td class="created-date">{{ $campaign->created_at->format('M j, Y') }}</td>
                                             <td>
-                                                <div class="email-actions">
+                                                <div class="action-buttons">
                                                     <a href="{{ route('admin.communication.show', $campaign) }}" 
-                                                       class="btn btn-sm btn-info" title="View Details">
+                                                       class="action-btn view-btn" title="View Details">
                                                         <i class="icofont-eye"></i>
                                                     </a>
-                                                    <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
-                                                          style="display: inline-block;" 
-                                                          onsubmit="return confirm('Are you sure you want to delete this email?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="btn btn-sm btn-danger" title="Delete">
-                                                            <i class="icofont-trash"></i>
-                                                        </button>
-                                                    </form>
                                                     
                                                     @if($campaign->status === 'draft')
                                                         <a href="{{ route('admin.communication.edit', $campaign) }}" 
-                                                           class="btn btn-sm btn-warning" title="Edit">
+                                                           class="action-btn edit-btn" title="Edit">
                                                             <i class="icofont-edit"></i>
                                                         </a>
                                                     @endif
@@ -216,19 +196,29 @@
                                                               style="display: inline-block;" 
                                                               onsubmit="return confirm('Are you sure you want to send this email?')">
                                                             @csrf
-                                                            <button type="submit" class="btn btn-sm btn-success" title="Send Now">
+                                                            <button type="submit" class="action-btn send-btn" title="Send Now">
                                                                 <i class="icofont-send-mail"></i>
                                                             </button>
                                                         </form>
                                                     @endif
+
+                                                    <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
+                                                          style="display: inline-block;" 
+                                                          onsubmit="return confirm('Are you sure you want to delete this email?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="action-btn delete-btn" title="Delete">
+                                                            <i class="icofont-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
                                         @empty
                                         <tr>
-                                            <td colspan="7" class="text-center py-4">
+                                            <td colspan="6" class="text-center py-5">
                                                 <div class="empty-state">
-                                                    <i class="icofont-inbox" style="font-size: 48px; color: #ccc;"></i>
+                                                    <i class="icofont-inbox"></i>
                                                     <h5>No Emails Found</h5>
                                                     <p>Start by composing your first email to communicate with users.</p>
                                                     <a href="{{ route('admin.communication.create') }}" class="btn btn-primary">
@@ -243,7 +233,7 @@
                             </div>
 
                             @if($campaigns->hasPages())
-                                <div class="dashboard__pagination">
+                                <div class="pagination-wrapper">
                                     {{ $campaigns->links() }}
                                 </div>
                             @endif
@@ -256,99 +246,505 @@
 </div>
 
 <style>
-.communication-stats .dashboard__single__counter {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 15px;
-    border: none;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+/* Modern Statistics Page Styles */
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.metric-card {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  transition: all 0.3s ease;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.metric-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+.metric-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.metric-content {
+  flex: 1;
+}
+
+.metric-number {
+  font-size: 36px;
+  font-weight: 800;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  line-height: 1;
+  letter-spacing: -0.025em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.metric-label {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.stats-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  height: 100%;
+}
+
+.panel-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.panel-header h5 {
+  font-size: 22px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.panel-subtitle {
+  font-size: 15px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+/* Enhanced Dashboard Section Title */
+.dashboard__section__title h4 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 26px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin: 0;
+}
+
+/* Enhanced Button Styling */
+.default__button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.default__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Table Controls */
+.table-controls {
+  margin-bottom: 24px;
+}
+
+.search-form {
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 4px;
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.search-icon {
+  color: #64748b;
+  margin-left: 12px;
+  font-size: 16px;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: #1e293b;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #94a3b8;
+}
+
+.search-button {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.search-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+/* Table Styling */
+.table-container {
+  overflow-x: auto;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.email-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
 }
 
 .email-table th {
-    background-color: #f8f9fa;
-    border-bottom: 2px solid #dee2e6;
-    font-weight: 600;
-    color: #495057;
+  background: #f8fafc;
+  padding: 16px 20px;
+  text-align: left;
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 14px;
+  letter-spacing: 0.02em;
+  border-bottom: 2px solid #e2e8f0;
+  white-space: nowrap;
 }
 
-.email-status {
-    padding: 5px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+.email-table td {
+  padding: 16px 20px;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
 }
 
-.status-draft { background: #e9ecef; color: #6c757d; }
-.status-scheduled { background: #fff3cd; color: #856404; }
-.status-sending { background: #cce5ff; color: #0066cc; }
-.status-sent { background: #d4edda; color: #155724; }
-.status-failed { background: #f8d7da; color: #721c24; }
-
-.progress-bar-wrapper {
-    min-width: 120px;
+.email-table tbody tr {
+  transition: all 0.3s ease;
 }
 
-.progress {
-    height: 8px;
-    border-radius: 4px;
-    background-color: #e9ecef;
+.email-table tbody tr:hover {
+  background: #f8fafc;
+  transform: translateX(4px);
 }
 
-.email-actions .btn {
-    margin: 0 2px;
-    padding: 5px 8px;
-}
-
+/* Email Title */
 .email-title {
-    display: flex;
-    align-items: center;
-    gap: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  color: #1e293b;
 }
 
+.attachment-icon {
+  color: #64748b;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+/* Recipient Badge */
+.recipient-badge {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+/* Email Status */
+.email-status {
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: capitalize;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.status-draft { 
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%); 
+  color: white; 
+}
+
+.status-scheduled { 
+  background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); 
+  color: white; 
+}
+
+.status-sending { 
+  background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%); 
+  color: white; 
+}
+
+.status-sent { 
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%); 
+  color: white; 
+}
+
+.status-failed { 
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); 
+  color: white; 
+}
+
+/* Progress Bar */
+.progress-wrapper {
+  min-width: 140px;
+}
+
+.progress-bar {
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+
+.progress-fill {
+  height: 100%;
+  border-radius: 4px;
+  transition: width 0.8s ease;
+}
+
+.progress-fill.sent-fill { 
+  background: linear-gradient(90deg, #10b981 0%, #059669 100%); 
+}
+
+.progress-fill.sending-fill { 
+  background: linear-gradient(90deg, #0ea5e9 0%, #0284c7 100%); 
+}
+
+.progress-text {
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.no-progress {
+  color: #94a3b8;
+  font-style: italic;
+}
+
+/* Created Date */
+.created-date {
+  color: #64748b;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.view-btn { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+.edit-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.send-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.delete-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+
+/* Empty State */
 .empty-state {
-    padding: 40px;
-    text-align: center;
-    color: #6c757d;
+  text-align: center;
+  padding: 60px 20px;
+  color: #94a3b8;
 }
 
-.dashboard__table__top {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+.empty-state i {
+  font-size: 56px;
+  margin-bottom: 20px;
+  opacity: 0.4;
+  color: #94a3b8;
 }
 
-.dashboard__search__form {
-    position: relative;
-    display: flex;
-    align-items: center;
+.empty-state h5 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #64748b;
+  margin-bottom: 12px;
 }
 
-.dashboard__search__form input {
-    padding-right: 40px;
-    border-radius: 20px;
-    border: 1px solid #ddd;
+.empty-state p {
+  font-size: 16px;
+  margin-bottom: 20px;
+  color: #64748b;
+  font-weight: 500;
+  letter-spacing: 0.01em;
 }
 
-.dashboard__search__form button {
-    position: absolute;
-    right: 10px;
-    background: none;
-    border: none;
-    color: #6c757d;
+.empty-state .btn {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  border-radius: 12px;
+  padding: 12px 28px;
+  font-size: 15px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.empty-state .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Pagination */
+.pagination-wrapper {
+  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .metric-card {
+    padding: 20px;
+    gap: 16px;
+  }
+  
+  .metric-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 20px;
+  }
+  
+  .metric-number {
+    font-size: 28px;
+  }
+  
+  .stats-panel {
+    padding: 24px;
+  }
+  
+  .email-table th,
+  .email-table td {
+    padding: 12px 16px;
+  }
+  
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .action-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .search-form {
+    max-width: 100%;
+  }
 }
 </style>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    // Animate metric cards
+    const metricCards = document.querySelectorAll('.metric-card');
+    metricCards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, 100 * index);
+    });
+
+    // Animate table rows
+    const tableRows = document.querySelectorAll('.email-row');
+    tableRows.forEach((row, index) => {
+        row.style.opacity = '0';
+        row.style.transform = 'translateX(-20px)';
+        setTimeout(() => {
+            row.style.transition = 'all 0.4s ease';
+            row.style.opacity = '1';
+            row.style.transform = 'translateX(0)';
+        }, 200 + (index * 50));
+    });
+
     // Auto-dismiss alerts after 5 seconds
     setTimeout(function() {
-        $('.alert').fadeOut('slow');
+        const alerts = document.querySelectorAll('.alert');
+        alerts.forEach(alert => {
+            alert.style.transition = 'opacity 0.5s ease';
+            alert.style.opacity = '0';
+            setTimeout(() => alert.remove(), 500);
+        });
     }, 5000);
 
-        // Refresh page every 30 seconds for sending emails
+    // Refresh page every 30 seconds for sending emails
     const hasSendingEmails = document.querySelector('.status-sending');
-        if (hasSendingEmails) {
+    if (hasSendingEmails) {
         setTimeout(function() {
             location.reload();
         }, 30000);
