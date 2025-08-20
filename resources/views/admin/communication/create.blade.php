@@ -41,82 +41,132 @@
                             
                             <div class="row">
                                 <div class="col-xl-8">
-                                    <div class="dashboard__form__wraper">
-                                        
-
-                                        <div class="dashboard__form__input">
-                                            <label for="subject">Email Subject <span class="required">*</span></label>
-                                            <input type="text" id="subject" name="subject" 
-                                                   placeholder="Enter email subject" 
-                                                   value="{{ old('subject') }}" required>
-                                            <small class="form-text text-muted">This will be the email subject line users see</small>
+                                    <div class="compose-panel">
+                                        <div class="panel-header">
+                                            <h5><i class="icofont-edit"></i> Compose Your Email</h5>
+                                            <p class="panel-subtitle">Create engaging content for your audience</p>
                                         </div>
 
-                                        <div class="dashboard__form__input">
-                                            <label for="message">Email Message <span class="required">*</span></label>
-                                            <textarea id="message" name="message" rows="12" 
-                                                      placeholder="Enter your email message..." required>{{ old('message') }}</textarea>
-                                            <small class="form-text text-muted">HTML formatting is supported</small>
-                                        </div>
+                                        <div class="form-section">
+                                            <div class="form-group">
+                                                <label for="subject" class="form-label">
+                                                    <i class="icofont-email"></i> Email Subject
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <input type="text" id="subject" name="subject" 
+                                                       placeholder="Enter a compelling subject line..." 
+                                                       value="{{ old('subject') }}" required class="form-input">
+                                                <small class="form-help">This will be the email subject line users see in their inbox</small>
+                                            </div>
 
-                                        <div class="dashboard__form__input">
-                                            <label for="attachments">Attachments</label>
-                                            <div class="file-upload-area">
-                                                <input type="file" id="attachments" name="attachments[]" 
-                                                       multiple accept=".pdf,.doc,.docx,.txt,.jpg,.png,.gif,.zip"
-                                                       class="file-input">
-                                                <div class="file-upload-display">
-                                                    <div class="file-upload-icon">
-                                                        <i class="icofont-attachment"></i>
-                                                    </div>
-                                                    <div class="file-upload-text">
-                                                        <strong>Click to upload files</strong> or drag and drop
-                                                        <br><small>Supported: PDF, DOC, DOCX, TXT, JPG, PNG, GIF, ZIP (Max: 10MB each)</small>
+                                            <div class="form-group">
+                                                <label for="message" class="form-label">
+                                                    <i class="icofont-chat"></i> Email Message
+                                                    <span class="required">*</span>
+                                                </label>
+                                                <div class="message-editor">
+                                                    <textarea id="message" name="message" rows="12" 
+                                                              placeholder="Write your message here... HTML formatting is supported" 
+                                                              required class="form-textarea">{{ old('message') }}</textarea>
+                                                    <div class="editor-toolbar">
+                                                        <button type="button" class="toolbar-btn" data-format="bold">
+                                                            <i class="icofont-bold"></i>
+                                                        </button>
+                                                        <button type="button" class="toolbar-btn" data-format="italic">
+                                                            <i class="icofont-italic"></i>
+                                                        </button>
+                                                        <button type="button" class="toolbar-btn" data-format="underline">
+                                                            <i class="icofont-underline"></i>
+                                                        </button>
+                                                        <button type="button" class="toolbar-btn" data-format="link">
+                                                            <i class="icofont-link"></i>
+                                                        </button>
                                                     </div>
                                                 </div>
+                                                <small class="form-help">Use the toolbar above for basic formatting</small>
                                             </div>
-                                            <div id="file-list" class="file-list mt-3"></div>
+
+                                            <div class="form-group">
+                                                <label for="attachments" class="form-label">
+                                                    <i class="icofont-attachment"></i> Attachments
+                                                </label>
+                                                <div class="file-upload-area">
+                                                    <input type="file" id="attachments" name="attachments[]" 
+                                                           multiple accept=".pdf,.doc,.docx,.txt,.jpg,.png,.gif,.zip"
+                                                           class="file-input">
+                                                    <div class="file-upload-display">
+                                                        <div class="file-upload-icon">
+                                                            <i class="icofont-cloud-upload"></i>
+                                                        </div>
+                                                        <div class="file-upload-text">
+                                                            <strong>Click to upload files</strong> or drag and drop here
+                                                            <br><small>Supported: PDF, DOC, DOCX, TXT, JPG, PNG, GIF, ZIP (Max: 10MB each)</small>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div id="file-list" class="file-list"></div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="col-xl-4">
-                                    <div class="dashboard__form__wraper">
-                                        <h5><i class="icofont-users"></i> Recipients</h5>
-                                        
-                                        <div class="recipient-options">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="recipient_type" 
-                                                       id="all_users" value="all" 
-                                                       {{ old('recipient_type', 'all') === 'all' ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="all_users">
-                                                    <strong>All Registered Users</strong>
-                                                    <br><small class="text-muted">Send to all approved users ({{ $users->count() }} users)</small>
-                                                </label>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="recipient_type" 
-                                                       id="selected_users" value="selected"
-                                                       {{ old('recipient_type') === 'selected' ? 'checked' : '' }}>
-                                                <label class="form-check-label" for="selected_users">
-                                                    <strong>Selected Users</strong>
-                                                    <br><small class="text-muted">Choose specific users to send to</small>
-                                                </label>
-                                            </div>
+                                    <div class="compose-panel">
+                                        <div class="panel-header">
+                                            <h5><i class="icofont-users"></i> Recipients & Settings</h5>
+                                            <p class="panel-subtitle">Configure your email delivery options</p>
                                         </div>
+                                        
+                                        <div class="form-section">
+                                            <div class="form-group">
+                                                <label class="form-label">Recipient Selection</label>
+                                                <div class="recipient-options">
+                                                    <div class="option-card">
+                                                        <input class="option-radio" type="radio" name="recipient_type" 
+                                                               id="all_users" value="all" 
+                                                               {{ old('recipient_type', 'all') === 'all' ? 'checked' : '' }}>
+                                                        <label class="option-label" for="all_users">
+                                                            <div class="option-icon">
+                                                                <i class="icofont-users-alt-3"></i>
+                                                            </div>
+                                                            <div class="option-content">
+                                                                <strong>All Registered Users</strong>
+                                                                <span class="option-desc">Send to all approved users ({{ $users->count() }} users)</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
 
-                                        <div id="user-selector" class="user-selector mt-3" style="display: none;">
+                                                    <div class="option-card">
+                                                        <input class="option-radio" type="radio" name="recipient_type" 
+                                                               id="selected_users" value="selected"
+                                                               {{ old('recipient_type') === 'selected' ? 'checked' : '' }}>
+                                                        <label class="option-label" for="selected_users">
+                                                            <div class="option-icon">
+                                                                <i class="icofont-user-alt-4"></i>
+                                                            </div>
+                                                            <div class="option-content">
+                                                                <strong>Selected Users</strong>
+                                                                <span class="option-desc">Choose specific users to send to</span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        <div id="user-selector" class="user-selector" style="display: none;">
                                             <div class="user-selector-header">
-                                                <label for="user-search">Search & Select Users:</label>
                                                 <div class="search-container">
-                                                    <input type="text" id="user-search" 
-                                                           placeholder="Search by name or email..." 
-                                                           class="form-control search-input">
-                                                    <i class="icofont-search search-icon"></i>
+                                                    <div class="search-input-wrapper">
+                                                        <i class="icofont-search search-icon"></i>
+                                                        <input type="text" id="user-search" 
+                                                               placeholder="Search by name or email..." 
+                                                               class="search-input">
+                                                    </div>
                                                 </div>
                                                 <div class="user-stats">
-                                                    <span class="selected-count">0</span> of <span class="total-count">{{ $users->count() }}</span> users selected
+                                                    <div class="stats-info">
+                                                        <span class="selected-count">0</span> of <span class="total-count">{{ $users->count() }}</span> users selected
+                                                    </div>
                                                     <div class="progress-bar-container">
                                                         <div class="progress-bar" id="selection-progress"></div>
                                                     </div>
@@ -169,27 +219,36 @@
                                             </div>
                                         </div>
 
-                                        <hr>
+                                        <div class="form-group">
+                                            <label class="form-label">Sending Options</label>
+                                            <div class="sending-options">
+                                                <div class="option-card">
+                                                    <input class="option-radio" type="radio" name="send_option" 
+                                                           id="send_now" value="now" checked>
+                                                    <label class="option-label" for="send_now">
+                                                        <div class="option-icon">
+                                                            <i class="icofont-send-mail"></i>
+                                                        </div>
+                                                        <div class="option-content">
+                                                            <strong>Send Immediately</strong>
+                                                            <span class="option-desc">Email will be sent right away</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
 
-                                        <h5><i class="icofont-clock-time"></i> Sending Options</h5>
-                                        
-                                        <div class="sending-options">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="send_option" 
-                                                       id="send_now" value="now" checked>
-                                                <label class="form-check-label" for="send_now">
-                                                    <strong>Send Immediately</strong>
-                                                    <br><small class="text-muted">Email will be sent right away</small>
-                                                </label>
-                                            </div>
-
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="send_option" 
-                                                       id="schedule_send" value="schedule">
-                                                <label class="form-check-label" for="schedule_send">
-                                                    <strong>Schedule for Later</strong>
-                                                    <br><small class="text-muted">Choose when to send the email</small>
-                                                </label>
+                                                <div class="option-card">
+                                                    <input class="option-radio" type="radio" name="send_option" 
+                                                           id="schedule_send" value="schedule">
+                                                    <label class="option-label" for="schedule_send">
+                                                        <div class="option-icon">
+                                                            <i class="icofont-clock-time"></i>
+                                                        </div>
+                                                        <div class="option-content">
+                                                            <strong>Schedule for Later</strong>
+                                                            <span class="option-desc">Choose when to send the email</span>
+                                                        </div>
+                                                    </label>
+                                                </div>
                                             </div>
                                         </div>
 
@@ -201,21 +260,28 @@
 
                                         <hr>
 
-                                        <div class="form-actions">
-                                            <button type="submit" name="action" value="send" class="btn btn-success btn-block">
-                                                <i class="icofont-send-mail"></i> Send Email
-                                            </button>
-                                            <button type="submit" name="action" value="draft" class="btn btn-secondary btn-block">
-                                                <i class="icofont-save"></i> Save as Draft
-                                            </button>
+                                        <div class="form-group">
+                                            <label class="form-label">Actions</label>
+                                            <div class="form-actions">
+                                                <button type="submit" name="action" value="send" class="action-btn send-btn">
+                                                    <i class="icofont-send-mail"></i> Send Email
+                                                </button>
+                                                <button type="submit" name="action" value="draft" class="action-btn draft-btn">
+                                                    <i class="icofont-save"></i> Save as Draft
+                                                </button>
+                                            </div>
                                         </div>
 
-                                        <div class="email-preview mt-3">
-                                            <h6><i class="icofont-eye"></i> Preview</h6>
+                                        <div class="form-group">
+                                            <label class="form-label">
+                                                <i class="icofont-eye"></i> Email Preview
+                                            </label>
                                             <div class="preview-card">
-                                                <div class="preview-subject" id="preview-subject">Subject will appear here</div>
+                                                <div class="preview-header">
+                                                    <div class="preview-subject" id="preview-subject">Subject will appear here</div>
+                                                    <div class="preview-recipients" id="preview-recipients">Recipients: All users</div>
+                                                </div>
                                                 <div class="preview-message" id="preview-message">Message preview will appear here</div>
-                                                <div class="preview-recipients" id="preview-recipients">Recipients: All users</div>
                                             </div>
                                         </div>
                                     </div>
@@ -230,100 +296,380 @@
 </div>
 
 <style>
-.required { color: #e74c3c; }
-
-.recipient-options .form-check {
-    margin-bottom: 15px;
-    padding: 15px;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    transition: all 0.3s ease;
+/* Modern Compose Email Styles */
+* {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
-.recipient-options .form-check:hover {
-    border-color: #007bff;
-    background-color: #f8f9fa;
+.required { 
+  color: #ef4444; 
+  font-weight: 600;
 }
 
-.recipient-options .form-check-input:checked + .form-check-label {
-    color: #007bff;
+/* Enhanced Dashboard Section Title */
+.dashboard__section__title h4 {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 26px;
+  font-weight: 800;
+  color: #1e293b;
+  letter-spacing: -0.03em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+  margin: 0;
 }
 
+/* Enhanced Button Styling */
+.default__button {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  border-radius: 12px;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.default__button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Compose Panel */
+.compose-panel {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+  height: 100%;
+  margin-bottom: 24px;
+}
+
+.panel-header {
+  margin-bottom: 32px;
+  text-align: center;
+}
+
+.panel-header h5 {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.panel-subtitle {
+  font-size: 14px;
+  color: #64748b;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  opacity: 0.85;
+}
+
+/* Form Sections */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-label {
+  font-size: 15px;
+  font-weight: 600;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  letter-spacing: 0.01em;
+}
+
+.form-label i {
+  color: #3b82f6;
+  font-size: 16px;
+}
+
+.form-help {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Form Inputs */
+.form-input {
+  padding: 16px 20px;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #1e293b;
+  background: #ffffff;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-input::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Message Editor */
+.message-editor {
+  position: relative;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.message-editor:focus-within {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+.form-textarea {
+  width: 100%;
+  border: none;
+  padding: 20px;
+  font-size: 15px;
+  color: #1e293b;
+  background: #ffffff;
+  resize: vertical;
+  min-height: 200px;
+  font-family: inherit;
+  line-height: 1.6;
+}
+
+.form-textarea:focus {
+  outline: none;
+}
+
+.form-textarea::placeholder {
+  color: #94a3b8;
+  font-weight: 400;
+}
+
+/* Editor Toolbar */
+.editor-toolbar {
+  display: flex;
+  gap: 4px;
+  padding: 12px 20px;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+}
+
+.toolbar-btn {
+  width: 36px;
+  height: 36px;
+  border: none;
+  border-radius: 8px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #e2e8f0;
+}
+
+.toolbar-btn:hover {
+  background: #3b82f6;
+  color: white;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.toolbar-btn.active {
+  background: #3b82f6;
+  color: white;
+  border-color: #3b82f6;
+}
+
+/* Recipient Options */
+.recipient-options {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.option-card {
+  position: relative;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.option-card:hover {
+  border-color: #3b82f6;
+  background: #f8fafc;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
+}
+
+.option-radio {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.option-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.option-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.option-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.option-content strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 4px;
+  letter-spacing: 0.01em;
+}
+
+.option-desc {
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.option-radio:checked + .option-label .option-card {
+  border-color: #3b82f6;
+  background: #f0f9ff;
+}
+
+.option-radio:checked + .option-label .option-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* User Selector */
 .user-selector {
-    background: #ffffff;
-    border: 1px solid #e9ecef;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-top: 16px;
 }
 
 .user-selector-header {
-    padding: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-}
-
-.user-selector-header label {
-    color: white;
-    font-weight: 600;
-    margin-bottom: 15px;
-    display: block;
+  padding: 24px;
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+  color: white;
 }
 
 .search-container {
-    position: relative;
-    margin-bottom: 15px;
+  margin-bottom: 20px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 12px;
+  padding: 4px;
+  transition: all 0.3s ease;
+}
+
+.search-input-wrapper:focus-within {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
 }
 
 .search-input {
-    padding: 12px 40px 12px 15px;
-    border: none;
-    border-radius: 25px;
-    background: rgba(255,255,255,0.9);
-    font-size: 14px;
-    transition: all 0.3s ease;
+  flex: 1;
+  border: none;
+  background: transparent;
+  padding: 12px 16px;
+  font-size: 14px;
+  color: white;
+  outline: none;
+  font-weight: 500;
 }
 
-.search-input:focus {
-    background: white;
-    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
-    outline: none;
+.search-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .search-icon {
-    position: absolute;
-    right: 15px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6c757d;
-    font-size: 16px;
+  color: rgba(255, 255, 255, 0.8);
+  margin-right: 12px;
+  font-size: 16px;
 }
 
 .user-stats {
-    text-align: center;
-    font-size: 14px;
-    opacity: 0.9;
+  text-align: center;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.stats-info {
+  margin-bottom: 12px;
+  font-weight: 500;
 }
 
 .selected-count {
-    font-weight: bold;
-    color: #28a745;
+  font-weight: 700;
+  color: #10b981;
 }
 
 .progress-bar-container {
-    margin-top: 10px;
-    background: rgba(255,255,255,0.2);
-    border-radius: 10px;
-    height: 6px;
-    overflow: hidden;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  height: 8px;
+  overflow: hidden;
 }
 
 .progress-bar {
-    height: 100%;
-    background: linear-gradient(90deg, #28a745, #20c997);
-    width: 0%;
-    transition: width 0.3s ease;
-    border-radius: 10px;
+  height: 100%;
+  background: linear-gradient(90deg, #10b981, #059669);
+  width: 0%;
+  transition: width 0.8s ease;
+  border-radius: 10px;
 }
 
 .user-list-container {
@@ -554,40 +900,46 @@
     border: 1px solid #dee2e6;
 }
 
+/* File Upload */
 .file-upload-area {
-    position: relative;
-    border: 2px dashed #ddd;
-    border-radius: 8px;
-    padding: 30px;
-    text-align: center;
-    transition: all 0.3s ease;
-    cursor: pointer;
+  position: relative;
+  border: 2px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 40px 30px;
+  text-align: center;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  background: #f8fafc;
 }
 
 .file-upload-area:hover {
-    border-color: #007bff;
-    background-color: #f8f9fa;
+  border-color: #3b82f6;
+  background: #f0f9ff;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .file-upload-area.dragover {
-    border-color: #007bff;
-    background-color: #e3f2fd;
+  border-color: #3b82f6;
+  background: #dbeafe;
+  transform: scale(1.02);
 }
 
 .file-input {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    cursor: pointer;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  cursor: pointer;
 }
 
 .file-upload-icon {
-    font-size: 48px;
-    color: #6c757d;
-    margin-bottom: 10px;
+  font-size: 56px;
+  color: #3b82f6;
+  margin-bottom: 16px;
+  opacity: 0.8;
 }
 
 .file-list {
@@ -644,27 +996,99 @@
     font-weight: bold;
 }
 
-.form-actions button {
-    margin-bottom: 10px;
+/* Form Actions */
+.form-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 16px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.02em;
+  text-decoration: none;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.send-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.draft-btn {
+  background: linear-gradient(135deg, #64748b 0%, #475569 100%);
+  color: white;
+}
+
+/* Preview Card */
+.preview-card {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  font-size: 14px;
+}
+
+.preview-header {
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.preview-subject {
+  font-weight: 700;
+  margin-bottom: 8px;
+  color: #1e293b;
+  font-size: 16px;
+  letter-spacing: 0.01em;
+}
+
+.preview-recipients {
+  font-size: 13px;
+  color: #10b981;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.preview-message {
+  color: #64748b;
+  line-height: 1.6;
+  max-height: 120px;
+  overflow-y: auto;
+  font-size: 13px;
 }
 
 /* Custom scrollbar for user list */
 .user-list-container::-webkit-scrollbar {
-    width: 6px;
+  width: 6px;
 }
 
 .user-list-container::-webkit-scrollbar-track {
-    background: #f1f1f1;
-    border-radius: 3px;
+  background: #f1f5f9;
+  border-radius: 3px;
 }
 
 .user-list-container::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
-    border-radius: 3px;
+  background: #cbd5e1;
+  border-radius: 3px;
 }
 
 .user-list-container::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+  background: #94a3b8;
 }
 
 /* Animation for user items */
@@ -683,29 +1107,124 @@
     }
 }
 
-/* Responsive design */
+/* Responsive Design */
 @media (max-width: 768px) {
-    .user-selector-header {
-        padding: 15px;
-    }
-    
-    .user-item {
-        padding: 12px 15px;
-    }
-    
-    .avatar-img, .avatar-placeholder {
-        width: 35px;
-        height: 35px;
-        font-size: 14px;
-    }
-    
-    .user-name {
-        font-size: 13px;
-    }
-    
-    .user-email {
-        font-size: 11px;
-    }
+  .compose-panel {
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+  
+  .panel-header h5 {
+    font-size: 18px;
+  }
+  
+  .form-input,
+  .form-textarea {
+    padding: 14px 16px;
+    font-size: 14px;
+  }
+  
+  .message-editor {
+    min-height: 180px;
+  }
+  
+  .editor-toolbar {
+    padding: 10px 16px;
+  }
+  
+  .toolbar-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+  }
+  
+  .option-label {
+    padding: 16px;
+    gap: 12px;
+  }
+  
+  .option-icon {
+    width: 40px;
+    height: 40px;
+    font-size: 18px;
+  }
+  
+  .user-selector-header {
+    padding: 20px;
+  }
+  
+  .search-input-wrapper {
+    padding: 2px;
+  }
+  
+  .search-input {
+    padding: 10px 14px;
+    font-size: 13px;
+  }
+  
+  .user-item {
+    padding: 12px 16px;
+  }
+  
+  .avatar-img, .avatar-placeholder {
+    width: 40px;
+    height: 40px;
+    font-size: 14px;
+  }
+  
+  .user-name {
+    font-size: 14px;
+  }
+  
+  .user-email {
+    font-size: 12px;
+  }
+  
+  .action-btn {
+    padding: 14px 20px;
+    font-size: 14px;
+  }
+  
+  .file-upload-area {
+    padding: 30px 20px;
+  }
+  
+  .file-upload-icon {
+    font-size: 48px;
+  }
+}
+
+@media (max-width: 576px) {
+  .compose-panel {
+    padding: 20px;
+  }
+  
+  .panel-header {
+    margin-bottom: 24px;
+  }
+  
+  .form-section {
+    gap: 20px;
+  }
+  
+  .option-label {
+    flex-direction: column;
+    text-align: center;
+    gap: 12px;
+  }
+  
+  .user-selector-header {
+    padding: 16px;
+  }
+  
+  .user-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .user-actions .btn {
+    width: 100%;
+  }
 }
 </style>
 
