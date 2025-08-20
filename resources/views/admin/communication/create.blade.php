@@ -65,25 +65,107 @@
                                                     <span class="required">*</span>
                                                 </label>
                                                 <div class="message-editor">
-                                                    <textarea id="message" name="message" rows="12" 
-                                                              placeholder="Write your message here... HTML formatting is supported" 
-                                                              required class="form-textarea">{{ old('message') }}</textarea>
                                                     <div class="editor-toolbar">
-                                                        <button type="button" class="toolbar-btn" data-format="bold">
-                                                            <i class="icofont-bold"></i>
-                                                        </button>
-                                                        <button type="button" class="toolbar-btn" data-format="italic">
-                                                            <i class="icofont-italic"></i>
-                                                        </button>
-                                                        <button type="button" class="toolbar-btn" data-format="underline">
-                                                            <i class="icofont-underline"></i>
-                                                        </button>
-                                                        <button type="button" class="toolbar-btn" data-format="link">
-                                                            <i class="icofont-link"></i>
-                                                        </button>
+                                                        <div class="toolbar-group">
+                                                            <button type="button" class="toolbar-btn" data-command="bold" title="Bold (Ctrl+B)">
+                                                                <i class="icofont-bold"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="italic" title="Italic (Ctrl+I)">
+                                                                <i class="icofont-italic"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="underline" title="Underline (Ctrl+U)">
+                                                                <i class="icofont-underline"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="strikeThrough" title="Strikethrough">
+                                                                <i class="icofont-strikethrough"></i>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="toolbar-divider"></div>
+                                                        
+                                                        <div class="toolbar-group">
+                                                            <button type="button" class="toolbar-btn" data-command="justifyLeft" title="Align Left">
+                                                                <i class="icofont-align-left"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="justifyCenter" title="Align Center">
+                                                                <i class="icofont-align-center"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="justifyRight" title="Align Right">
+                                                                <i class="icofont-align-right"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="justifyFull" title="Justify">
+                                                                <i class="icofont-align-justify"></i>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="toolbar-divider"></div>
+                                                        
+                                                        <div class="toolbar-group">
+                                                            <button type="button" class="toolbar-btn" data-command="insertUnorderedList" title="Bullet List">
+                                                                <i class="icofont-list"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="insertOrderedList" title="Numbered List">
+                                                                <i class="icofont-numbered-list"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="outdent" title="Decrease Indent">
+                                                                <i class="icofont-indent-left"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="indent" title="Increase Indent">
+                                                                <i class="icofont-indent-right"></i>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="toolbar-divider"></div>
+                                                        
+                                                        <div class="toolbar-group">
+                                                            <button type="button" class="toolbar-btn" data-command="createLink" title="Insert Link">
+                                                                <i class="icofont-link"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="insertImage" title="Insert Image">
+                                                                <i class="icofont-image"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="insertTable" title="Insert Table">
+                                                                <i class="icofont-table"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="insertHorizontalRule" title="Insert Line">
+                                                                <i class="icofont-minus"></i>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="toolbar-divider"></div>
+                                                        
+                                                        <div class="toolbar-group">
+                                                            <button type="button" class="toolbar-btn" data-command="undo" title="Undo (Ctrl+Z)">
+                                                                <i class="icofont-undo"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="redo" title="Redo (Ctrl+Y)">
+                                                                <i class="icofont-redo"></i>
+                                                            </button>
+                                                            <button type="button" class="toolbar-btn" data-command="removeFormat" title="Clear Formatting">
+                                                                <i class="icofont-eraser"></i>
+                                                            </button>
+                                                        </div>
+                                                        
+                                                        <div class="toolbar-divider"></div>
+                                                        
+                                                        <div class="toolbar-group">
+                                                            <select class="toolbar-select" id="fontSize" title="Font Size">
+                                                                <option value="1">Small</option>
+                                                                <option value="3" selected>Normal</option>
+                                                                <option value="5">Large</option>
+                                                                <option value="7">Extra Large</option>
+                                                            </select>
+                                                            <input type="color" class="toolbar-color" id="textColor" title="Text Color" value="#000000">
+                                                        </div>
                                                     </div>
+                                                    
+                                                    <div class="editor-content" id="editor-content" contenteditable="true" data-placeholder="Write your message here... HTML formatting is supported">
+                                                        {{ old('message') }}
+                                                    </div>
+                                                    
+                                                    <textarea id="message" name="message" style="display: none;">{{ old('message') }}</textarea>
                                                 </div>
-                                                <small class="form-help">Use the toolbar above for basic formatting</small>
+                                                <small class="form-help">Use the toolbar above for rich text formatting. Your message will be sent as HTML.</small>
                                             </div>
 
                                             <div class="form-group">
@@ -467,10 +549,25 @@
 /* Editor Toolbar */
 .editor-toolbar {
   display: flex;
-  gap: 4px;
-  padding: 12px 20px;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 20px;
   background: #f8fafc;
-  border-top: 1px solid #e2e8f0;
+  border-bottom: 1px solid #e2e8f0;
+  flex-wrap: wrap;
+}
+
+.toolbar-group {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+
+.toolbar-divider {
+  width: 1px;
+  height: 24px;
+  background: #e2e8f0;
+  margin: 0 4px;
 }
 
 .toolbar-btn {
@@ -487,6 +584,7 @@
   align-items: center;
   justify-content: center;
   border: 1px solid #e2e8f0;
+  position: relative;
 }
 
 .toolbar-btn:hover {
@@ -494,12 +592,173 @@
   color: white;
   transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+  border-color: #3b82f6;
 }
 
 .toolbar-btn.active {
   background: #3b82f6;
   color: white;
   border-color: #3b82f6;
+  box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.toolbar-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(59, 130, 246, 0.2);
+}
+
+.toolbar-select {
+  padding: 6px 8px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #64748b;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 80px;
+}
+
+.toolbar-select:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+}
+
+.toolbar-color {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: #ffffff;
+}
+
+.toolbar-color:hover {
+  border-color: #3b82f6;
+  transform: scale(1.05);
+}
+
+.toolbar-color::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.toolbar-color::-webkit-color-swatch {
+  border: none;
+  border-radius: 4px;
+}
+
+/* Editor Content Area */
+.editor-content {
+  min-height: 200px;
+  padding: 20px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: #1e293b;
+  background: #ffffff;
+  font-family: inherit;
+  line-height: 1.6;
+  overflow-y: auto;
+  position: relative;
+}
+
+.editor-content:empty:before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+  font-style: italic;
+  pointer-events: none;
+}
+
+.editor-content:focus {
+  outline: none;
+}
+
+.editor-content:focus:empty:before {
+  display: none;
+}
+
+/* Rich Text Content Styles */
+.editor-content h1,
+.editor-content h2,
+.editor-content h3,
+.editor-content h4,
+.editor-content h5,
+.editor-content h6 {
+  margin: 16px 0 8px 0;
+  color: #1e293b;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.editor-content h1 { font-size: 24px; }
+.editor-content h2 { font-size: 20px; }
+.editor-content h3 { font-size: 18px; }
+.editor-content h4 { font-size: 16px; }
+.editor-content h5 { font-size: 14px; }
+.editor-content h6 { font-size: 13px; }
+
+.editor-content p {
+  margin: 0 0 12px 0;
+  line-height: 1.6;
+}
+
+.editor-content ul,
+.editor-content ol {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.editor-content li {
+  margin: 4px 0;
+  line-height: 1.5;
+}
+
+.editor-content blockquote {
+  margin: 16px 0;
+  padding: 12px 20px;
+  border-left: 4px solid #3b82f6;
+  background: #f8fafc;
+  font-style: italic;
+  color: #64748b;
+}
+
+.editor-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+}
+
+.editor-content table td,
+.editor-content table th {
+  border: 1px solid #e2e8f0;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.editor-content table th {
+  background: #f8fafc;
+  font-weight: 600;
+  color: #374151;
+}
+
+.editor-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 8px 0;
+}
+
+.editor-content a {
+  color: #3b82f6;
+  text-decoration: underline;
+  transition: color 0.3s ease;
+}
+
+.editor-content a:hover {
+  color: #1d4ed8;
 }
 
 /* Recipient Options */
@@ -1130,12 +1389,33 @@
   
   .editor-toolbar {
     padding: 10px 16px;
+    gap: 6px;
+  }
+  
+  .toolbar-group {
+    gap: 2px;
   }
   
   .toolbar-btn {
     width: 32px;
     height: 32px;
     font-size: 12px;
+  }
+  
+  .toolbar-divider {
+    height: 20px;
+    margin: 0 2px;
+  }
+  
+  .toolbar-select {
+    min-width: 70px;
+    font-size: 11px;
+    padding: 4px 6px;
+  }
+  
+  .toolbar-color {
+    width: 28px;
+    height: 28px;
   }
   
   .option-label {
@@ -1451,10 +1731,162 @@ document.addEventListener('DOMContentLoaded', function() {
         return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
     }
     
+    // Rich Text Editor Functionality
+    const editorContent = document.getElementById('editor-content');
+    const messageTextarea = document.getElementById('message');
+    const toolbarButtons = document.querySelectorAll('.toolbar-btn');
+    
+    // Initialize editor content
+    if (editorContent.innerHTML.trim() === '') {
+        editorContent.innerHTML = '';
+    }
+    
+    // Handle toolbar button clicks
+    toolbarButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            const command = this.getAttribute('data-command');
+            
+            if (command) {
+                executeCommand(command);
+                updateTextareaContent();
+                updatePreview();
+            }
+        });
+    });
+    
+    // Execute formatting commands
+    function executeCommand(command) {
+        switch(command) {
+            case 'createLink':
+                const url = prompt('Enter URL:', 'https://');
+                if (url) {
+                    document.execCommand('createLink', false, url);
+                }
+                break;
+            case 'insertImage':
+                const imageUrl = prompt('Enter image URL:', 'https://');
+                if (imageUrl) {
+                    document.execCommand('insertImage', false, imageUrl);
+                }
+                break;
+            case 'insertTable':
+                const rows = prompt('Enter number of rows:', '3');
+                const cols = prompt('Enter number of columns:', '3');
+                if (rows && cols) {
+                    insertTable(parseInt(rows), parseInt(cols));
+                }
+                break;
+            case 'insertHorizontalRule':
+                document.execCommand('insertHorizontalRule', false);
+                break;
+            default:
+                document.execCommand(command, false, null);
+                break;
+        }
+        
+        // Update button states
+        updateButtonStates();
+    }
+    
+    // Insert table function
+    function insertTable(rows, cols) {
+        let tableHTML = '<table border="1" style="border-collapse: collapse; width: 100%;">';
+        
+        for (let i = 0; i < rows; i++) {
+            tableHTML += '<tr>';
+            for (let j = 0; j < cols; j++) {
+                if (i === 0) {
+                    tableHTML += '<th style="padding: 8px; border: 1px solid #ccc; background: #f8f9fa;">Header ' + (j + 1) + '</th>';
+                } else {
+                    tableHTML += '<td style="padding: 8px; border: 1px solid #ccc;">Cell ' + (i + 1) + '-' + (j + 1) + '</td>';
+                }
+            }
+            tableHTML += '</tr>';
+        }
+        
+        tableHTML += '</table>';
+        document.execCommand('insertHTML', false, tableHTML);
+    }
+    
+    // Update button states based on current selection
+    function updateButtonStates() {
+        toolbarButtons.forEach(button => {
+            const command = button.getAttribute('data-command');
+            if (['bold', 'italic', 'underline', 'strikeThrough'].includes(command)) {
+                if (document.queryCommandState(command)) {
+                    button.classList.add('active');
+                } else {
+                    button.classList.remove('active');
+                }
+            }
+        });
+    }
+    
+    // Update textarea content for form submission
+    function updateTextareaContent() {
+        messageTextarea.value = editorContent.innerHTML;
+    }
+    
+    // Handle editor content changes
+    editorContent.addEventListener('input', function() {
+        updateTextareaContent();
+        updatePreview();
+    });
+    
+    editorContent.addEventListener('keyup', function() {
+        updateButtonStates();
+    });
+    
+    // Handle keyboard shortcuts
+    editorContent.addEventListener('keydown', function(e) {
+        if (e.ctrlKey || e.metaKey) {
+            switch(e.key.toLowerCase()) {
+                case 'b':
+                    e.preventDefault();
+                    executeCommand('bold');
+                    break;
+                case 'i':
+                    e.preventDefault();
+                    executeCommand('italic');
+                    break;
+                case 'u':
+                    e.preventDefault();
+                    executeCommand('underline');
+                    break;
+                case 'z':
+                    if (e.shiftKey) {
+                        e.preventDefault();
+                        executeCommand('redo');
+                    } else {
+                        e.preventDefault();
+                        executeCommand('undo');
+                    }
+                    break;
+            }
+        }
+    });
+    
+    // Font size and color controls
+    const fontSizeSelect = document.getElementById('fontSize');
+    const textColorInput = document.getElementById('textColor');
+    
+    fontSizeSelect.addEventListener('change', function() {
+        document.execCommand('fontSize', false, this.value);
+        updateTextareaContent();
+        updatePreview();
+    });
+    
+    textColorInput.addEventListener('change', function() {
+        document.execCommand('foreColor', false, this.value);
+        updateTextareaContent();
+        updatePreview();
+    });
+    
     // Preview functionality
     function updatePreview() {
         const subject = subjectInput.value || 'Subject will appear here';
-        const message = messageInput.value || 'Message preview will appear here';
+        const message = messageTextarea.value || 'Message preview will appear here';
         
         previewSubject.textContent = subject;
         previewMessage.innerHTML = message.substring(0, 200) + (message.length > 200 ? '...' : '');
@@ -1469,7 +1901,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     subjectInput.addEventListener('input', updatePreview);
-    messageInput.addEventListener('input', updatePreview);
+    editorContent.addEventListener('input', updatePreview);
     
     // Initialize
     if (document.getElementById('selected_users').checked) {
@@ -1488,6 +1920,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Form submission
     document.getElementById('emailForm').addEventListener('submit', function(e) {
+        // Ensure the textarea has the latest content
+        updateTextareaContent();
+        
         const action = e.submitter.value;
         
         // Set the hidden input for send_immediately
