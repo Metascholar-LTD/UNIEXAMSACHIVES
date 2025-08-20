@@ -71,9 +71,25 @@
 
             </ul>
         </div>
+        
         {{-- Exams --}}
-        <div class="dashboard__nav__title mt-40">
-            <h6>EXAMS CLASS PORTFOLIO </h6>
+        <div class="sidebar-section-header">
+            <div class="section-header-content">
+                <div class="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    <h6 class="section-title">EXAMS CLASS PORTFOLIO</h6>
+                    <span class="section-subtitle">3 categories</span>
+                </div>
+                <div class="section-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </div>
+            </div>
         </div>
         <div class="dashboard__nav">
             <ul>
@@ -156,8 +172,23 @@
         </div>
 
         {{-- File --}}
-        <div class="dashboard__nav__title mt-40">
-            <h6>FILES CLASS PORTFOLIO</h6>
+        <div class="sidebar-section-header">
+            <div class="section-header-content">
+                <div class="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    <h6 class="section-title">FILES CLASS PORTFOLIO</h6>
+                    <span class="section-subtitle">3 categories</span>
+                </div>
+                <div class="section-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </div>
+            </div>
         </div>
         <div class="dashboard__nav">
             <ul>
@@ -242,8 +273,23 @@
         {{-- Advanced Communication System (Users Only) --}}
         @auth
             @unless(auth()->user()->is_admin)
-                <div class="dashboard__nav__title mt-40">
-                    <h6>ADVANCED COMMUNICATION SYSTEM</h6>
+                <div class="sidebar-section-header">
+                    <div class="section-header-content">
+                        <div class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
+                            </svg>
+                        </div>
+                        <div class="section-text">
+                            <h6 class="section-title">ADVANCED COMMUNICATION SYSTEM</h6>
+                            <span class="section-subtitle">3 features</span>
+                        </div>
+                        <div class="section-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
                 <div class="dashboard__nav">
                     <ul>
@@ -287,8 +333,23 @@
         @endauth
 
         {{-- Users --}}
-        <div class="dashboard__nav__title mt-40">
-            <h6>user</h6>
+        <div class="sidebar-section-header">
+            <div class="section-header-content">
+                <div class="section-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
+                    </svg>
+                </div>
+                <div class="section-text">
+                    <h6 class="section-title">USER MANAGEMENT</h6>
+                    <span class="section-subtitle">4 features</span>
+                </div>
+                <div class="section-arrow">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                        <polyline points="6,9 12,15 18,9"></polyline>
+                    </svg>
+                </div>
+            </div>
         </div>
 
         <div class="dashboard__nav">
@@ -485,3 +546,40 @@
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all sidebar section headers
+    const sectionHeaders = document.querySelectorAll('.sidebar-section-header');
+    
+    sectionHeaders.forEach(header => {
+        header.addEventListener('click', function() {
+            // Find the next navigation section
+            const nextNav = this.nextElementSibling;
+            
+            if (nextNav && nextNav.classList.contains('dashboard__nav')) {
+                // Toggle visibility
+                if (nextNav.style.display === 'none') {
+                    nextNav.style.display = 'block';
+                    this.classList.remove('collapsed');
+                } else {
+                    nextNav.style.display = 'none';
+                    this.classList.add('collapsed');
+                }
+            }
+        });
+        
+        // Add initial state - all sections expanded by default
+        const nextNav = header.nextElementSibling;
+        if (nextNav && nextNav.classList.contains('dashboard__nav')) {
+            nextNav.style.display = 'block';
+        }
+    });
+    
+    // Add smooth animations
+    const navSections = document.querySelectorAll('.dashboard__nav');
+    navSections.forEach(nav => {
+        nav.style.transition = 'all 0.3s ease-in-out';
+    });
+});
+</script>

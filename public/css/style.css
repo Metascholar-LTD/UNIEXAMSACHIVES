@@ -11119,6 +11119,11 @@ Breadcrumb Area
   width: 100%;
   position: relative;
 }
+
+.dashboard__nav {
+  transition: all 0.3s ease-in-out;
+  overflow: hidden;
+}
 .dashboard__nav ul li a {
   font-size: 16px;
 }
@@ -11447,6 +11452,131 @@ Breadcrumb Area
 }
 .dashboard .counterarea__text__wraper {
   margin-bottom: 0;
+}
+
+/* Advanced Sidebar Section Headers */
+.sidebar-section-header {
+  margin: 40px 0 20px 0;
+  background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.sidebar-section-header:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 58, 138, 0.4);
+}
+
+.section-header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.section-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.section-icon svg {
+  color: #ffffff;
+  stroke-width: 2.5;
+}
+
+.section-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #ffffff;
+  margin: 0 0 4px 0;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.section-subtitle {
+  font-size: 12px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.8);
+  margin: 0;
+  line-height: 1.2;
+  display: block;
+}
+
+.section-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: rgba(255, 255, 255, 0.7);
+  flex-shrink: 0;
+  transition: transform 0.3s ease;
+}
+
+.sidebar-section-header:hover .section-arrow {
+  transform: rotate(180deg);
+}
+
+.sidebar-section-header.collapsed .section-arrow {
+  transform: rotate(0deg);
+}
+
+.sidebar-section-header.collapsed {
+  background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+}
+
+.sidebar-section-header.collapsed:hover {
+  background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
+}
+
+.section-arrow svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* Responsive adjustments for sidebar headers */
+@media (max-width: 767px) {
+  .sidebar-section-header {
+    margin: 30px 0 15px 0;
+    padding: 14px;
+  }
+  
+  .section-title {
+    font-size: 13px;
+    letter-spacing: 0.6px;
+  }
+  
+  .section-subtitle {
+    font-size: 11px;
+  }
+  
+  .section-icon {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .section-arrow {
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .become__instructor__heading {
