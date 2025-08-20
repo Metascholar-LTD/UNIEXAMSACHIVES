@@ -317,7 +317,7 @@
 .metric-number {
   font-size: 36px;
   font-weight: 800;
-  color: #0f172a;
+  color: #1e293b;
   margin: 0 0 8px 0;
   line-height: 1;
   letter-spacing: -0.025em;
@@ -326,7 +326,7 @@
 
 .metric-label {
   font-size: 15px;
-  color: #475569;
+  color: #64748b;
   margin: 0;
   font-weight: 600;
   text-transform: uppercase;
@@ -351,7 +351,7 @@
 .panel-header h5 {
   font-size: 22px;
   font-weight: 700;
-  color: #0f172a;
+  color: #1e293b;
   margin: 0 0 8px 0;
   letter-spacing: -0.02em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
@@ -419,7 +419,7 @@
 
 .status-name {
   font-weight: 700;
-  color: #1e293b;
+  color: #334155;
   font-size: 16px;
   letter-spacing: 0.01em;
   text-transform: capitalize;
@@ -428,7 +428,7 @@
 .status-count {
   font-weight: 800;
   font-size: 26px;
-  color: #0f172a;
+  color: #1e293b;
   letter-spacing: -0.02em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -485,7 +485,7 @@
 .metric-value {
   font-weight: 800;
   font-size: 22px;
-  color: #0f172a;
+  color: #1e293b;
   letter-spacing: -0.015em;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
@@ -538,7 +538,7 @@
   top: -30px;
   left: 50%;
   transform: translateX(-50%);
-  background: #0f172a;
+  background: #1e293b;
   color: white;
   padding: 6px 10px;
   border-radius: 8px;
@@ -558,7 +558,7 @@
 
 .column-label {
   font-size: 13px;
-  color: #475569;
+  color: #64748b;
   margin-top: 12px;
   font-weight: 600;
   text-align: center;
@@ -653,7 +653,7 @@
   font-size: 17px;
   font-weight: 700;
   letter-spacing: -0.01em;
-  color: #0f172a;
+  color: #1e293b;
 }
 
 .activity-main h6 a {
@@ -713,7 +713,7 @@
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 26px;
   font-weight: 800;
-  color: #0f172a;
+  color: #1e293b;
   letter-spacing: -0.03em;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
   margin: 0;
