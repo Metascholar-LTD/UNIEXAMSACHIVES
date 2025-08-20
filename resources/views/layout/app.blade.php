@@ -71,7 +71,7 @@
    <script src="{{asset('js/jquery.counterup.min.js')}}"></script>
    <script src="{{asset('js/plugins.js')}}"></script>
    <script src="{{asset('js/swiper-bundle.min.js')}}"></script>
-   <script src="{{asset('cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js')}}"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.1/chart.min.js"></script>
    <script src="{{asset('js/main.js')}}"></script>
 
    <script>

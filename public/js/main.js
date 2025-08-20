@@ -510,7 +510,8 @@ var swiper = new Swiper(".ai__slider", {
 
 // Dark to light mode js
 const lightToDarkButton = document.getElementById("light--to-dark-button");
-lightToDarkButton?.addEventListener("click", function () {
+if (lightToDarkButton) {
+  lightToDarkButton.addEventListener("click", function () {
     if (localStorage.getItem("theme-color")) {
       if (localStorage.getItem("theme-color") === "light") {
         document.documentElement.classList.add("is_dark");
@@ -532,7 +533,7 @@ lightToDarkButton?.addEventListener("click", function () {
         lightToDarkButton?.classList.add("dark--mode");
       }
     }
-});
+  });
 
 
 
@@ -725,6 +726,12 @@ var swiper = new Swiper(".modal__gallery", {
       }
     };
   }
+}
 
-  lineChart()
-  pieChart()
+  // Only call chart functions if elements exist
+  if (document.getElementById('lineChart')) {
+    lineChart()
+  }
+  if (document.getElementById('pieChart')) {
+    pieChart()
+  }
