@@ -12097,8 +12097,9 @@ Breadcrumb Area
 
 .dashboard__label {
   position: absolute;
-  top: 20px;
-  right: 10px;
+  top: 50%;
+  right: 12px;
+  transform: translateY(-50%);
   font-size: 10px;
   line-height: 14px;
   font-weight: 500;
@@ -12107,6 +12108,86 @@ Breadcrumb Area
   padding: 0px 9px;
   border-radius: 15px;
   background-color: var(--primaryColor);
+}
+
+/* Sidebar enhancements */
+.dashboard__inner .dashboard__nav ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.dashboard__inner .dashboard__nav ul li {
+  border: 1px solid var(--borderColor);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--whiteColor);
+  transition: box-shadow 0.2s ease, transform 0.15s ease, border-color 0.2s ease;
+  position: relative;
+  border-bottom: 0;
+}
+.dashboard__inner .dashboard__nav ul li:hover {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+  transform: translateY(-1px);
+  border-color: rgba(95, 45, 237, 0.15);
+}
+.dashboard__inner .dashboard__nav ul li a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  color: var(--contentColor);
+  text-decoration: none;
+}
+.dashboard__inner .dashboard__nav ul li a svg {
+  width: 18px;
+  height: 18px;
+  color: inherit;
+}
+.dashboard__inner .dashboard__nav ul li a.active {
+  color: var(--primaryColor);
+  font-weight: 600;
+}
+.dashboard__inner .dashboard__nav ul li a.active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--primaryColor);
+}
+
+/* Section titles become collapsible, with caret */
+.dashboard__inner .dashboard__nav__title {
+  margin-top: 22px;
+}
+.dashboard__inner .dashboard__nav__title.collapsible { cursor: pointer; }
+.dashboard__inner .dashboard__nav__title.collapsible h6 {
+  border-radius: 8px;
+  padding-right: 28px;
+  position: relative;
+}
+.dashboard__inner .dashboard__nav__title.collapsible h6::after {
+  content: "▾";
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%) rotate(0deg);
+  transition: transform 0.2s ease;
+  color: var(--contentColor);
+}
+.dashboard__inner .dashboard__nav__title.collapsible.collapsed h6::after {
+  transform: translateY(-50%) rotate(-90deg);
+}
+.dashboard__inner .dashboard__nav.is-collapsed { display: none; }
+
+@media (max-width: 991.98px) {
+  .dashboard__inner { padding: 16px; }
+  .dashboard__inner .dashboard__nav ul li { padding: 9px 10px; }
 }
 
 .grid__course__status {

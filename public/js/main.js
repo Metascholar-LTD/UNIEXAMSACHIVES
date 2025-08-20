@@ -360,6 +360,22 @@
         }
 
 
+        // Collapsible dashboard sections (sidebar)
+        var dashboardTitles = $('.dashboard__inner .dashboard__nav__title');
+        dashboardTitles.each(function() {
+            var $title = $(this);
+            var $nextNav = $title.next('.dashboard__nav');
+            if ($nextNav.length) {
+                $title.addClass('collapsible');
+                // Default: expanded
+                $title.on('click', function() {
+                    $title.toggleClass('collapsed');
+                    $nextNav.toggleClass('is-collapsed');
+                });
+            }
+        });
+
+
         /* Tilter Activation */
         if ($('[data-tilt]').length) {
 
