@@ -128,7 +128,7 @@
                                                                 </div>
                                                                 
                                                                 <small class="form-text text-muted">
-                                                                    Supported formats: JPEG, PNG, JPG, GIF. Max size: 2MB
+                                                                    Supported formats: JPEG, PNG, JPG, GIF. Max size: 5MB
                                                                 </small>
                                                             </div>
                                                         </div>
@@ -371,11 +371,11 @@ document.addEventListener('DOMContentLoaded', function() {
     form.addEventListener('submit', function(e) {
         if (fileInput.files.length > 0) {
             const file = fileInput.files[0];
-            const maxSize = 2 * 1024 * 1024; // 2MB
+            const maxSize = 5 * 1024 * 1024; // 5MB
             
             if (file.size > maxSize) {
                 e.preventDefault();
-                alert('Profile picture size must be less than 2MB');
+                alert('Profile picture size must be less than 5MB');
                 return false;
             }
             

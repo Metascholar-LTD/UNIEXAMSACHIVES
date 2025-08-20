@@ -150,11 +150,11 @@ class HomeController extends Controller
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users,email,' . Auth::id(),
-            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // 2MB max
+            'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
         ], [
             'profile_picture.image' => 'The profile picture must be an image file.',
             'profile_picture.mimes' => 'The profile picture must be a JPEG, PNG, JPG, or GIF file.',
-            'profile_picture.max' => 'The profile picture must not be larger than 2MB.',
+            'profile_picture.max' => 'The profile picture must not be larger than 5MB.',
         ]);
 
         try {
