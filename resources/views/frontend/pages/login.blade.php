@@ -52,7 +52,7 @@
             </div>
 
             <!-- Login Form -->
-            <div class="tab-content active" id="login-tab">
+            <div class="auth-form-panel active" id="login-panel">
                 <div class="form-container">
                     <div class="form-header">
                         <h2 class="form-title">Welcome Back</h2>
@@ -111,7 +111,7 @@
             </div>
 
             <!-- Register Form -->
-            <div class="tab-content" id="register-tab">
+            <div class="auth-form-panel" id="register-panel">
                 <div class="form-container">
                     <div class="form-header">
                         <h2 class="form-title">Create Account</h2>
@@ -174,62 +174,40 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing tabs...');
-    
-    // Debug: Check initial state
-    const loginTab = document.getElementById('login-tab');
-    const registerTab = document.getElementById('register-tab');
-    console.log('Login tab initial classes:', loginTab.className);
-    console.log('Register tab initial classes:', registerTab.className);
+    console.log('DOM loaded, initializing auth tabs...');
     
     // Tab switching functionality
     const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
+    const formPanels = document.querySelectorAll('.auth-form-panel');
     
     console.log('Found tab buttons:', tabBtns.length);
-    console.log('Found tab contents:', tabContents.length);
+    console.log('Found form panels:', formPanels.length);
     
-    // Debug: Log all button data-tab attributes
-    tabBtns.forEach((btn, i) => {
-        console.log(`Button ${i} data-tab:`, btn.getAttribute('data-tab'));
-        console.log(`Button ${i} classes:`, btn.className);
-    });
-    
-    // Debug: Log all tab content IDs and classes
-    tabContents.forEach((content, i) => {
-        console.log(`Content ${i} ID:`, content.id);
-        console.log(`Content ${i} classes:`, content.className);
-    });
-
-    tabBtns.forEach((btn, index) => {
-        console.log(`Button ${index}:`, btn.getAttribute('data-tab'));
+    tabBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
             const targetTab = btn.getAttribute('data-tab');
             console.log('Clicked tab:', targetTab);
             
-            // Remove active class from all buttons and contents
+            // Remove active class from all buttons and panels
             tabBtns.forEach(b => b.classList.remove('active'));
-            tabContents.forEach(c => c.classList.remove('active'));
+            formPanels.forEach(p => p.classList.remove('active'));
             
-            // Add active class to clicked button and corresponding content
+            // Add active class to clicked button and corresponding panel
             btn.classList.add('active');
-            console.log('Button active class added to:', btn.getAttribute('data-tab'));
             
-            const targetContent = document.getElementById(targetTab + '-tab');
-            console.log('Target content element:', targetContent);
-            console.log('Looking for ID:', targetTab + '-tab');
+            const targetPanel = document.getElementById(targetTab + '-panel');
+            console.log('Target panel:', targetPanel);
             
-            if (targetContent) {
-                targetContent.classList.add('active');
+            if (targetPanel) {
+                targetPanel.classList.add('active');
                 console.log('Tab switched successfully to:', targetTab);
-                console.log('Target content classes after switch:', targetContent.className);
             } else {
-                console.error('Could not find content for tab:', targetTab);
+                console.error('Could not find panel for tab:', targetTab);
             }
         });
     });
 
-    // Input focus effects - Simplified without floating labels
+    // Input focus effects
     const inputs = document.querySelectorAll('.animated-input');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
@@ -255,7 +233,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    console.log('Tabs initialized successfully');
+    console.log('Auth tabs initialized successfully');
 });
 
 // Password toggle functionality

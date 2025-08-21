@@ -336,6 +336,8 @@
   background: white;
   box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
   transform: translateY(-1px);
+  position: relative;
+  z-index: 3;
 }
 
 .auth-tabs .tab-indicator {
@@ -354,33 +356,29 @@
   width: 70%;
 }
 
-/* Override Bootstrap's conflicting tab rules */
-.auth-tabs .tab-content {
-  display: none !important;
+/* Auth Form Panels - New system to avoid Bootstrap conflicts */
+.auth-tabs .auth-form-panel {
+  display: none;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.auth-tabs .tab-content.active {
-  display: block !important;
+.auth-tabs .auth-form-panel.active {
+  display: block;
+  opacity: 1;
+  transform: translateY(0);
   animation: fadeInUp 0.4s ease-out forwards;
 }
 
-/* Ensure Bootstrap doesn't override our tab styles */
-.auth-tabs .tab-content > .tab-pane {
-  display: block !important;
+/* Ensure smooth transitions between panels */
+.auth-tabs .auth-form-panel {
+  position: relative;
+  z-index: 1;
 }
 
-.auth-tabs .tab-content > .active {
-  display: block !important;
-}
-
-/* Additional specificity to override Bootstrap */
-.auth-tabs .tab-content.tab-content.active {
-  display: block !important;
-}
-
-/* Force override any Bootstrap tab styles */
-.auth-tabs .tab-content[class*="tab-content"].active {
-  display: block !important;
+.auth-tabs .auth-form-panel.active {
+  z-index: 2;
 }
 
 @keyframes fadeInUp {
@@ -400,6 +398,8 @@
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(226, 232, 240, 0.6);
+  position: relative;
+  z-index: 1;
 }
 
 .form-header {
