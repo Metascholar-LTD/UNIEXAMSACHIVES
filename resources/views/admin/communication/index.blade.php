@@ -390,7 +390,7 @@
   overflow: hidden;
   transition-duration: 0.3s;
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
-  background-color: #6b46c1;
+  background-color: #1a4a9b;
   text-decoration: none;
   flex-shrink: 0;
 }
@@ -447,19 +447,19 @@
 
 /* Button variants */
 .compose-btn {
-  background-color: #8b5cf6;
+  background-color: #1a4a9b;
 }
 
 .compose-btn:hover {
-  background-color: #7c3aed;
+  background-color: #1a4a9b;
 }
 
 .back-btn {
-  background-color: #6b46c1;
+  background-color: #1a4a9b;
 }
 
 .back-btn:hover {
-  background-color: #5b35a0;
+  background-color: #1a4a9b;
 }
 
 .edit-btn {
