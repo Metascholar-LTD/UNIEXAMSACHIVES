@@ -173,8 +173,9 @@
 
 @push('scripts')
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing auth tabs...');
+// Ensure DOM is fully ready
+setTimeout(function() {
+    console.log('DOM ready, initializing auth tabs...');
     
     // Tab switching functionality
     const tabBtns = document.querySelectorAll('.tab-btn');
@@ -182,6 +183,15 @@ document.addEventListener('DOMContentLoaded', function() {
     
     console.log('Found tab buttons:', tabBtns.length);
     console.log('Found form panels:', formPanels.length);
+    
+    // Debug: Check initial state
+    console.log('Initial state:');
+    tabBtns.forEach((btn, i) => {
+        console.log(`Button ${i}:`, btn.getAttribute('data-tab'), 'Active:', btn.classList.contains('active'));
+    });
+    formPanels.forEach((panel, i) => {
+        console.log(`Panel ${i}:`, panel.id, 'Active:', panel.classList.contains('active'), 'Display:', window.getComputedStyle(panel).display);
+    });
     
     tabBtns.forEach((btn) => {
         btn.addEventListener('click', () => {
@@ -201,6 +211,8 @@ document.addEventListener('DOMContentLoaded', function() {
             if (targetPanel) {
                 targetPanel.classList.add('active');
                 console.log('Tab switched successfully to:', targetTab);
+                console.log('Panel classes after switch:', targetPanel.className);
+                console.log('Panel display after switch:', window.getComputedStyle(targetPanel).display);
             } else {
                 console.error('Could not find panel for tab:', targetTab);
             }
@@ -234,6 +246,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     
     console.log('Auth tabs initialized successfully');
+    
+    // Manual test function
+    window.testTabSwitch = function(tabName) {
+        console.log('Manual test: switching to', tabName);
+        const targetPanel = document.getElementById(tabName + '-panel');
+        if (targetPanel) {
+            // Remove active from all
+            formPanels.forEach(p => p.classList.remove('active'));
+            tabBtns.forEach(b => b.classList.remove('active'));
+            
+            // Add active to target
+            targetPanel.classList.add('active');
+            const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
+            if (targetBtn) targetBtn.classList.add('active');
+            
+            console.log('Manual switch complete. Panel display:', window.getComputedStyle(targetPanel).display);
+        }
+    };
 });
 
 // Password toggle functionality
