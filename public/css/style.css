@@ -355,21 +355,12 @@
 }
 
 .tab-content {
-  visibility: hidden;
-  opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.3s ease;
-  position: absolute;
-  width: 100%;
-  top: 0;
-  left: 0;
+  display: none !important;
 }
 
 .tab-content.active {
-  visibility: visible;
-  opacity: 1;
-  transform: translateY(0);
-  position: relative;
+  display: block !important;
+  animation: fadeInUp 0.4s ease-out forwards;
 }
 
 @keyframes fadeInUp {

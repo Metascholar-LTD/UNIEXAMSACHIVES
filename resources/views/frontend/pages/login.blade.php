@@ -176,12 +176,30 @@
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM loaded, initializing tabs...');
     
+    // Debug: Check initial state
+    const loginTab = document.getElementById('login-tab');
+    const registerTab = document.getElementById('register-tab');
+    console.log('Login tab initial classes:', loginTab.className);
+    console.log('Register tab initial classes:', registerTab.className);
+    
     // Tab switching functionality
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
     
     console.log('Found tab buttons:', tabBtns.length);
     console.log('Found tab contents:', tabContents.length);
+    
+    // Debug: Log all button data-tab attributes
+    tabBtns.forEach((btn, i) => {
+        console.log(`Button ${i} data-tab:`, btn.getAttribute('data-tab'));
+        console.log(`Button ${i} classes:`, btn.className);
+    });
+    
+    // Debug: Log all tab content IDs and classes
+    tabContents.forEach((content, i) => {
+        console.log(`Content ${i} ID:`, content.id);
+        console.log(`Content ${i} classes:`, content.className);
+    });
 
     tabBtns.forEach((btn, index) => {
         console.log(`Button ${index}:`, btn.getAttribute('data-tab'));
@@ -195,12 +213,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add active class to clicked button and corresponding content
             btn.classList.add('active');
+            console.log('Button active class added to:', btn.getAttribute('data-tab'));
+            
             const targetContent = document.getElementById(targetTab + '-tab');
-            console.log('Target content:', targetContent);
+            console.log('Target content element:', targetContent);
+            console.log('Looking for ID:', targetTab + '-tab');
             
             if (targetContent) {
                 targetContent.classList.add('active');
                 console.log('Tab switched successfully to:', targetTab);
+                console.log('Target content classes after switch:', targetContent.className);
             } else {
                 console.error('Could not find content for tab:', targetTab);
             }
