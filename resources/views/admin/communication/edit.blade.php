@@ -258,6 +258,12 @@
 
 <style>
 /* Responsive Button Styling */
+.dashboard__section__actions {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+}
+
 .responsive-btn {
   display: flex;
   align-items: center;
@@ -273,10 +279,11 @@
   box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
   background-color: #6b46c1;
   text-decoration: none;
+  flex-shrink: 0;
 }
 
 .responsive-btn:hover {
-  width: 125px;
+  width: 140px;
   border-radius: 40px;
   transition-duration: 0.3s;
   text-decoration: none;
@@ -288,34 +295,36 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .responsive-btn .svgIcon {
   width: 17px;
+  flex-shrink: 0;
 }
 
 .responsive-btn .text {
   position: absolute;
-  right: 0%;
-  width: 0%;
+  left: 50px;
+  width: 80px;
   opacity: 0;
   color: white;
-  font-size: 1.2em;
+  font-size: 14px;
   font-weight: 600;
   transition-duration: 0.3s;
+  white-space: nowrap;
+  text-align: left;
 }
 
 .responsive-btn:hover .svgWrapper {
-  width: 30%;
+  width: 45px;
   transition-duration: 0.3s;
-  padding-left: 20px;
+  padding-left: 0;
 }
 
 .responsive-btn:hover .text {
   opacity: 1;
-  width: 70%;
   transition-duration: 0.3s;
-  padding-right: 10px;
 }
 
 .responsive-btn:active {
@@ -817,6 +826,34 @@
 
 /* Responsive design */
 @media (max-width: 768px) {
+    .dashboard__section__actions {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    
+    .responsive-btn {
+        width: 100%;
+        height: 50px;
+        border-radius: 25px;
+        justify-content: center;
+    }
+    
+    .responsive-btn:hover {
+        width: 100%;
+    }
+    
+    .responsive-btn .text {
+        position: static;
+        opacity: 1;
+        width: auto;
+        margin-left: 15px;
+    }
+    
+    .responsive-btn .svgWrapper {
+        width: auto;
+    }
+    
     .user-selector-header {
         padding: 15px;
     }
