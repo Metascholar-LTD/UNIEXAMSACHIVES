@@ -6,13 +6,19 @@
     .crest-image {
         width: 100%;
         height: 100%;
-        object-fit: contain;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.1);
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         transition: transform 0.3s ease;
+        padding: 2px;
     }
     
     .crest-image:hover {
         transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.2);
     }
     
     /* Ensure the orbit animation works properly with the image */
