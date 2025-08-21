@@ -301,7 +301,7 @@
   position: relative;
 }
 
-.tab-buttons {
+.auth-tabs .tab-buttons {
   display: flex;
   background: rgba(248, 250, 252, 0.8);
   border-radius: 16px;
@@ -311,7 +311,7 @@
   border: 1px solid rgba(226, 232, 240, 0.6);
 }
 
-.tab-btn {
+.auth-tabs .tab-btn {
   flex: 1;
   padding: 16px 32px;
   border: none;
@@ -326,19 +326,19 @@
   letter-spacing: 0.025em;
 }
 
-.tab-btn:hover {
+.auth-tabs .tab-btn:hover {
   color: #3b82f6;
   background: rgba(59, 130, 246, 0.05);
 }
 
-.tab-btn.active {
+.auth-tabs .tab-btn.active {
   color: #1e40af;
   background: white;
   box-shadow: 0 4px 20px rgba(59, 130, 246, 0.15);
   transform: translateY(-1px);
 }
 
-.tab-indicator {
+.auth-tabs .tab-indicator {
   position: absolute;
   bottom: -2px;
   left: 50%;
@@ -350,17 +350,37 @@
   transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.tab-btn.active .tab-indicator {
+.auth-tabs .tab-btn.active .tab-indicator {
   width: 70%;
 }
 
-.tab-content {
+/* Override Bootstrap's conflicting tab rules */
+.auth-tabs .tab-content {
   display: none !important;
 }
 
-.tab-content.active {
+.auth-tabs .tab-content.active {
   display: block !important;
   animation: fadeInUp 0.4s ease-out forwards;
+}
+
+/* Ensure Bootstrap doesn't override our tab styles */
+.auth-tabs .tab-content > .tab-pane {
+  display: block !important;
+}
+
+.auth-tabs .tab-content > .active {
+  display: block !important;
+}
+
+/* Additional specificity to override Bootstrap */
+.auth-tabs .tab-content.tab-content.active {
+  display: block !important;
+}
+
+/* Force override any Bootstrap tab styles */
+.auth-tabs .tab-content[class*="tab-content"].active {
+  display: block !important;
 }
 
 @keyframes fadeInUp {
@@ -681,7 +701,7 @@
     margin-bottom: 1.5rem;
   }
   
-  .tab-btn {
+  .auth-tabs .tab-btn {
     padding: 10px 16px;
     font-size: 0.9rem;
   }
