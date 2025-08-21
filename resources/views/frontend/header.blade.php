@@ -12,29 +12,41 @@
                         @endif
                     @else
                         @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                            <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
+                            @if (!request()->routeIs('frontend.login') && !request()->routeIs('login'))
+                                <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
+                            @else
+                                <img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo">
+                            @endif
                         @else
-                            <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
+                            @if (!request()->routeIs('frontend.login') && !request()->routeIs('login'))
+                                <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
+                            @else
+                                <img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo">
+                            @endif
                         @endif
                     @endif
                 </div>
 
                 <!-- Center: Title Pill -->
-                <div class="uda-nav-center">
-                    @php
-                        $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Archive System';
-                    @endphp
-                    <div class="uda-title-pill">{{ $udaTitle }}</div>
-                </div>
+                @if (!request()->routeIs('frontend.login') && !request()->routeIs('login'))
+                    <div class="uda-nav-center">
+                        @php
+                            $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Archive System';
+                        @endphp
+                        <div class="uda-title-pill">{{ $udaTitle }}</div>
+                    </div>
+                @endif
 
                 <!-- Right: Auth Buttons -->
-                <div class="uda-nav-right">
-                    @if (Auth::check())
-                        <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
-                    @else
-                        <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
-                    @endif
-                </div>
+                @if (!request()->routeIs('frontend.login') && !request()->routeIs('login'))
+                    <div class="uda-nav-right">
+                        @if (Auth::check())
+                            <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
+                        @else
+                            <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
+                        @endif
+                    </div>
+                @endif
             </div>
         </div>
 
@@ -53,10 +65,17 @@
 
                     @else
                         @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                            <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo"></a>
+                            @if (!request()->routeIs('frontend.login') && !request()->routeIs('login'))
+                                <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo"></a>
+                            @else
+                                <img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo">
+                            @endif
                         @else
-                            <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo"></a>
-
+                            @if (!request()->routeIs('frontend.login') && !request()->routeIs('login'))
+                                <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo"></a>
+                            @else
+                                <img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo">
+                            @endif
                         @endif
                     @endif
                     </div>

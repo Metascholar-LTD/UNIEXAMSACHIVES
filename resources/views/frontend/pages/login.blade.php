@@ -25,6 +25,24 @@
     .orbit-icon-1 {
         transform: rotate(0deg) translateX(150px) rotate(0deg);
     }
+    
+    /* Clean header styling for auth page */
+    .headerarea__2 {
+        background: rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(10px);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    
+    /* Center the logo on auth page */
+    .uda-nav-left {
+        justify-content: center;
+        width: 100%;
+    }
+    
+    .uda-nav-left img {
+        max-height: 60px;
+        width: auto;
+    }
 </style>
 @endpush
 
