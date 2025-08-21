@@ -19,6 +19,11 @@
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
                             <h4>Advanced Communication System</h4>
+                            <div class="dashboard__section__actions">
+                                <a href="{{route('admin.communication.create')}}" class="default__button">
+                                    <i class="icofont-plus"></i> Compose Email
+                                </a>
+                            </div>
                         </div>
 
                         @if(session('success'))
