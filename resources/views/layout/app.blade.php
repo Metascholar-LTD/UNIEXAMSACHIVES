@@ -98,6 +98,9 @@
         });
     });
     </script>
+   
+   {{-- Stack for page-specific scripts --}}
+   @stack('scripts')
 {{-- filtering --}}
 <script>
     $(document).ready(function() {
@@ -205,22 +208,32 @@
     });
 </script>
 <script>
-    document.getElementById('triggerLogoModal').addEventListener('click', function (event) {
-        event.preventDefault();
-        $('#myLogoModal').modal('show');
-    });
+    // Add null checks for admin-only elements
+    const triggerLogoModal = document.getElementById('triggerLogoModal');
+    if (triggerLogoModal) {
+        triggerLogoModal.addEventListener('click', function (event) {
+            event.preventDefault();
+            $('#myLogoModal').modal('show');
+        });
+    }
 </script>
 <script>
-    document.getElementById('triggerDepartmentModal').addEventListener('click', function (event) {
-        event.preventDefault();
-        $('#myDepartmentModal').modal('show');
-    });
+    const triggerDepartmentModal = document.getElementById('triggerDepartmentModal');
+    if (triggerDepartmentModal) {
+        triggerDepartmentModal.addEventListener('click', function (event) {
+            event.preventDefault();
+            $('#myDepartmentModal').modal('show');
+        });
+    }
 </script>
 <script>
-    document.getElementById('triggerAcademicModal').addEventListener('click', function (event) {
-        event.preventDefault();
-        $('#myAcademicModal').modal('show');
-    });
+    const triggerAcademicModal = document.getElementById('triggerAcademicModal');
+    if (triggerAcademicModal) {
+        triggerAcademicModal.addEventListener('click', function (event) {
+            event.preventDefault();
+            $('#myAcademicModal').modal('show');
+        });
+    }
 </script>
 </body>
 </html>
