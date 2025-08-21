@@ -751,3 +751,177 @@ var swiper = new Swiper(".modal__gallery", {
   if (document.getElementById('pieChart')) {
     pieChart()
   }
+
+  // Interactive Action Buttons Functionality
+  function initInteractiveButtons() {
+    const buttons = document.querySelectorAll('.interactive-btn');
+    
+    if (buttons.length === 0) return;
+
+    buttons.forEach(button => {
+      button.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const action = this.getAttribute('data-action');
+        const buttonText = this.querySelector('span').textContent;
+        
+        // Add click animation
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 150);
+
+        // Handle different actions
+        switch(action) {
+          case 'courses':
+            showNotification('🎓 ' + buttonText, 'info');
+            // You can add navigation logic here
+            // window.location.href = '/courses';
+            break;
+          case 'instructors':
+            showNotification('👨‍🏫 ' + buttonText, 'success');
+            // window.location.href = '/instructors';
+            break;
+          case 'free-courses':
+            showNotification('🆓 ' + buttonText, 'warning');
+            // window.location.href = '/free-courses';
+            break;
+          case 'certificates':
+            showNotification('🏆 ' + buttonText, 'info');
+            // window.location.href = '/certificates';
+            break;
+          case 'support':
+            showNotification('💬 ' + buttonText, 'warning');
+            // window.location.href = '/support';
+            break;
+          default:
+            showNotification('✨ ' + buttonText, 'success');
+        }
+
+        // Add ripple effect
+        createRippleEffect(this, e);
+      });
+
+      // Add hover sound effect (optional)
+      button.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px) scale(1.05)';
+      });
+
+      button.addEventListener('mouseleave', function() {
+        this.style.transform = '';
+      });
+    });
+  }
+
+  // Create ripple effect on button click
+  function createRippleEffect(button, event) {
+    const ripple = document.createElement('span');
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    const x = event.clientX - rect.left - size / 2;
+    const y = event.clientY - rect.top - size / 2;
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = x + 'px';
+    ripple.style.top = y + 'px';
+    ripple.classList.add('ripple');
+    
+    button.appendChild(ripple);
+    
+    setTimeout(() => {
+      ripple.remove();
+    }, 600);
+  }
+
+  // Show notification
+  function showNotification(message, type = 'info') {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = `notification notification-${type}`;
+    notification.innerHTML = `
+      <div class="notification-content">
+        <span class="notification-message">${message}</span>
+        <button class="notification-close">&times;</button>
+      </div>
+    `;
+    
+    // Add styles
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: ${type === 'success' ? '#10b981' : type === 'warning' ? '#f59e0b' : '#3b82f6'};
+      color: white;
+      padding: 16px 20px;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      z-index: 9999;
+      transform: translateX(400px);
+      transition: transform 0.3s ease;
+      max-width: 300px;
+    `;
+    
+    // Add to page
+    document.body.appendChild(notification);
+    
+    // Animate in
+    setTimeout(() => {
+      notification.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Auto remove after 3 seconds
+    setTimeout(() => {
+      notification.style.transform = 'translateX(400px)';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    }, 3000);
+    
+    // Close button functionality
+    const closeBtn = notification.querySelector('.notification-close');
+    closeBtn.addEventListener('click', () => {
+      notification.style.transform = 'translateX(400px)';
+      setTimeout(() => {
+        if (notification.parentNode) {
+          notification.parentNode.removeChild(notification);
+        }
+      }, 300);
+    });
+  }
+
+  // Initialize interactive buttons when DOM is ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initInteractiveButtons);
+  } else {
+    initInteractiveButtons();
+  }
+
+  // Add ripple effect styles
+  const style = document.createElement('style');
+  style.textContent = `
+    .interactive-btn {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.6);
+      transform: scale(0);
+      animation: ripple-animation 0.6s linear;
+      pointer-events: none;
+    }
+    
+    @keyframes ripple-animation {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+
+});
