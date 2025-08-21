@@ -303,5 +303,124 @@ document.addEventListener('click', function(e) {
         }
     }
 });
+
+// Language switcher functionality
+document.addEventListener('DOMContentLoaded', function() {
+    // Initialize both desktop and mobile language switchers
+    initializeLanguageSwitcher('languageToggle', 'languageDropdown');
+    initializeLanguageSwitcher('mobileLanguageToggle', 'mobileLanguageDropdown');
+    
+    // Load saved language preference
+    loadSavedLanguage();
+});
+
+function initializeLanguageSwitcher(toggleId, dropdownId) {
+    const languageToggle = document.getElementById(toggleId);
+    const languageDropdown = document.getElementById(dropdownId);
+    
+    if (languageToggle && languageDropdown) {
+        // Toggle dropdown on button click
+        languageToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            languageDropdown.classList.toggle('show');
+        });
+        
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!languageToggle.contains(e.target) && !languageDropdown.contains(e.target)) {
+                languageDropdown.classList.remove('show');
+            }
+        });
+        
+        // Handle language selection
+        const languageOptions = languageDropdown.querySelectorAll('.language-option');
+        languageOptions.forEach(option => {
+            option.addEventListener('click', function(e) {
+                e.preventDefault();
+                const selectedLang = this.getAttribute('data-lang');
+                
+                // Update button to show selected language
+                const flag = this.querySelector('.flag').textContent;
+                const langName = this.querySelector('.lang-name').textContent;
+                
+                // You can implement actual language switching logic here
+                console.log('Language selected:', selectedLang, langName);
+                
+                // Update both desktop and mobile buttons
+                updateLanguageButtons(flag, langName);
+                
+                // Close all dropdowns
+                document.querySelectorAll('.language-dropdown').forEach(dropdown => {
+                    dropdown.classList.remove('show');
+                });
+                
+                // Store selected language in localStorage
+                localStorage.setItem('selectedLanguage', selectedLang);
+                
+                // Show success message (optional)
+                showLanguageChangeMessage(langName);
+            });
+        });
+    }
+}
+
+function updateLanguageButtons(flag, langName) {
+    // Update all language toggle buttons
+    const allLanguageToggles = document.querySelectorAll('.language-btn');
+    allLanguageToggles.forEach(toggle => {
+        toggle.innerHTML = `<span class="flag">${flag}</span>`;
+        toggle.title = `Current: ${langName}`;
+    });
+}
+
+function loadSavedLanguage() {
+    const savedLang = localStorage.getItem('selectedLanguage');
+    if (savedLang) {
+        // Find the corresponding language option
+        const languageOption = document.querySelector(`[data-lang="${savedLang}"]`);
+        if (languageOption) {
+            const flag = languageOption.querySelector('.flag').textContent;
+            const langName = languageOption.querySelector('.lang-name').textContent;
+            updateLanguageButtons(flag, langName);
+        }
+    }
+}
+
+// Function to show language change message
+function showLanguageChangeMessage(langName) {
+    // Create a temporary success message
+    const messageDiv = document.createElement('div');
+    messageDiv.className = 'alert alert-success language-change-message';
+    messageDiv.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        z-index: 9999;
+        padding: 12px 20px;
+        border-radius: 6px;
+        background: #28a745;
+        color: white;
+        font-size: 14px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        transform: translateX(100%);
+        transition: transform 0.3s ease;
+    `;
+    messageDiv.textContent = `Language changed to ${langName}`;
+    
+    document.body.appendChild(messageDiv);
+    
+    // Animate in
+    setTimeout(() => {
+        messageDiv.style.transform = 'translateX(0)';
+    }, 100);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        messageDiv.style.transform = 'translateX(100%)';
+        setTimeout(() => {
+            document.body.removeChild(messageDiv);
+        }, 300);
+    }, 3000);
+}
 </script>
 @endpush
