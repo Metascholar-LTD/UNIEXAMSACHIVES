@@ -283,7 +283,7 @@
 }
 
 .responsive-btn:hover {
-  width: 140px;
+  width: 160px;
   border-radius: 40px;
   transition-duration: 0.3s;
   text-decoration: none;
@@ -306,7 +306,7 @@
 .responsive-btn .text {
   position: absolute;
   left: 50px;
-  width: 80px;
+  width: 100px;
   opacity: 0;
   color: white;
   font-size: 14px;
@@ -314,6 +314,7 @@
   transition-duration: 0.3s;
   white-space: nowrap;
   text-align: left;
+  padding-right: 10px;
 }
 
 .responsive-btn:hover .svgWrapper {
