@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap");
+
 /* University Digital Archive navbar */
 .uda-navbar {
   display: grid;
@@ -896,7 +898,6 @@
 	|___ End Style Sheet Indexing
 
 ***************************************************************/
-@import url("https://fonts.googleapis.com/css2?family=Hind:wght@300;400;500;600;700&amp;family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap");
 :root {
   --bodyColor: #222222;
   --bodyBg: #fbfbfb;
