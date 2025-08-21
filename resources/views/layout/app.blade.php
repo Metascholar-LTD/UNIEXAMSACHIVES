@@ -25,9 +25,6 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <!-- DataTables CSS -->
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.css">
-    
-    {{-- Stack for page-specific styles --}}
-    @stack('styles')
 
     <script>
         // On page load or when changing themes, best to add inline in `head` to avoid FOUC
