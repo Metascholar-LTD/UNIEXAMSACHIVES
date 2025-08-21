@@ -371,6 +371,14 @@ function updateLanguageButtons(flag, langName) {
         toggle.innerHTML = `<span class="flag">${flag}</span>`;
         toggle.title = `Current: ${langName}`;
     });
+    
+    // Return to globe icon after 3 seconds
+    setTimeout(() => {
+        allLanguageToggles.forEach(toggle => {
+            toggle.innerHTML = `<i class="icofont-globe"></i>`;
+            toggle.title = `Change Language (Current: ${langName})`;
+        });
+    }, 3000);
 }
 
 function loadSavedLanguage() {
@@ -381,7 +389,13 @@ function loadSavedLanguage() {
         if (languageOption) {
             const flag = languageOption.querySelector('.flag').textContent;
             const langName = languageOption.querySelector('.lang-name').textContent;
-            updateLanguageButtons(flag, langName);
+            
+            // Update buttons but don't auto-return to globe on page load
+            const allLanguageToggles = document.querySelectorAll('.language-btn');
+            allLanguageToggles.forEach(toggle => {
+                toggle.innerHTML = `<span class="flag">${flag}</span>`;
+                toggle.title = `Current: ${langName}`;
+            });
         }
     }
 }
