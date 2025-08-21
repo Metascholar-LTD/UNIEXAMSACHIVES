@@ -32,9 +32,7 @@
                     @if (Auth::check())
                         <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
                     @else
-                        @if (!request()->routeIs('frontend.login') && !request()->routeIs('register'))
-                            <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
-                        @endif
+                        <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
                     @endif
                 </div>
             </div>
