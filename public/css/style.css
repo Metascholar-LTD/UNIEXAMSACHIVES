@@ -13843,8 +13843,8 @@ Dark Mode
 
 .language-btn {
   background: transparent;
-  border: 2px solid var(--primaryColor);
-  color: var(--primaryColor);
+  border: 2px solid #000000;
+  color: #000000;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -13863,7 +13863,7 @@ Dark Mode
 }
 
 .language-btn:hover {
-  background: var(--primaryColor);
+  background: #000000;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -13936,13 +13936,13 @@ Dark Mode
 
 /* Dark mode support */
 .is_dark .language-btn {
-  border-color: var(--whiteColor);
-  color: var(--whiteColor);
+  border-color: #ffffff;
+  color: #ffffff;
 }
 
 .is_dark .language-btn:hover {
-  background: var(--whiteColor);
-  color: var(--blackColor);
+  background: #ffffff;
+  color: #000000;
 }
 
 .is_dark .language-dropdown {
