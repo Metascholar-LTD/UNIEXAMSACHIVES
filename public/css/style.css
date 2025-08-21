@@ -298,6 +298,7 @@
 .auth-tabs {
   width: 100%;
   max-width: 450px;
+  position: relative;
 }
 
 .tab-buttons {
@@ -354,17 +355,21 @@
 }
 
 .tab-content {
-  display: none;
-  animation: fadeInUp 0.5s ease;
+  visibility: hidden;
   opacity: 0;
   transform: translateY(20px);
   transition: all 0.3s ease;
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
 }
 
 .tab-content.active {
-  display: block;
+  visibility: visible;
   opacity: 1;
   transform: translateY(0);
+  position: relative;
 }
 
 @keyframes fadeInUp {
