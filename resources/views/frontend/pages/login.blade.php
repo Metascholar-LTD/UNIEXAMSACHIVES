@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Input focus effects
+    // Input focus effects - Simplified without floating labels
     const inputs = document.querySelectorAll('.animated-input');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
@@ -209,15 +209,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         
         input.addEventListener('blur', function() {
-            if (!this.value) {
-                this.parentElement.classList.remove('focused');
-            }
+            this.parentElement.classList.remove('focused');
         });
-        
-        // Check if input has value on load
-        if (input.value) {
-            input.parentElement.classList.add('focused');
-        }
     });
 
     // Form submission animations
