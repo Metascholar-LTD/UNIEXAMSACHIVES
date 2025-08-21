@@ -13843,8 +13843,8 @@ Dark Mode
 
 .language-btn {
   background: transparent;
-  border: 2px solid #000000;
-  color: #000000;
+  border: 2px solid #1a2436;
+  color: #1a2436;
   border-radius: 50%;
   width: 40px;
   height: 40px;
@@ -13863,7 +13863,7 @@ Dark Mode
 }
 
 .language-btn:hover {
-  background: #000000;
+  background: #1a2436;
   color: white;
   transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
