@@ -175,233 +175,88 @@
 <script>
 // Function to initialize tabs
 function initializeAuthTabs() {
-    console.log('Initializing auth tabs...');
-    
     // Tab switching functionality
     const tabBtns = document.querySelectorAll('.tab-btn');
     const formPanels = document.querySelectorAll('.auth-form-panel');
     
-    console.log('Found tab buttons:', tabBtns.length);
-    console.log('Found form panels:', formPanels.length);
-    
     // Check if elements exist before proceeding
-    if (tabBtns.length === 0) {
-        console.error('No tab buttons found! Check if .tab-btn elements exist.');
-        console.log('Available elements with similar classes:', document.querySelectorAll('[class*="tab"]'));
+    if (tabBtns.length === 0 || formPanels.length === 0) {
         return;
     }
-    
-    if (formPanels.length === 0) {
-        console.error('No form panels found! Check if .auth-form-panel elements exist.');
-        console.log('Available elements with similar classes:', document.querySelectorAll('[class*="panel"]'));
-        return;
-    }
-    
-    // Debug: Check initial state
-    console.log('Initial state:');
-    tabBtns.forEach((btn, i) => {
-        console.log(`Button ${i}:`, btn.getAttribute('data-tab'), 'Active:', btn.classList.contains('active'));
-    });
-    formPanels.forEach((panel, i) => {
-        console.log(`Panel ${i}:`, panel.id, 'Active:', panel.classList.contains('active'), 'Display:', window.getComputedStyle(panel).display);
-    });
     
     // Add click event listeners to tab buttons
     tabBtns.forEach((btn) => {
-        if (btn) { // Additional null check
+        if (btn) {
             btn.addEventListener('click', () => {
-                try {
-                    const targetTab = btn.getAttribute('data-tab');
-                    console.log('Clicked tab:', targetTab);
-                    
-                    if (!targetTab) {
-                        console.error('No data-tab attribute found on button');
-                        return;
-                    }
-                    
-                    // Remove active class from all buttons and panels
-                    tabBtns.forEach(b => b.classList.remove('active'));
-                    formPanels.forEach(p => p.classList.remove('active'));
-                    
-                    // Add active class to clicked button and corresponding panel
-                    btn.classList.add('active');
-                    
-                    const targetPanel = document.getElementById(targetTab + '-panel');
-                    console.log('Target panel:', targetPanel);
-                    
-                    if (targetPanel) {
-                        targetPanel.classList.add('active');
-                        console.log('Tab switched successfully to:', targetTab);
-                        console.log('Panel classes after switch:', targetPanel.className);
-                        console.log('Panel display after switch:', window.getComputedStyle(targetPanel).display);
-                    } else {
-                        console.error('Could not find panel for tab:', targetTab);
-                        console.log('Available panels:', Array.from(formPanels).map(p => p.id));
-                    }
-                } catch (error) {
-                    console.error('Error in tab click handler:', error);
+                const targetTab = btn.getAttribute('data-tab');
+                
+                if (!targetTab) return;
+                
+                // Remove active class from all buttons and panels
+                tabBtns.forEach(b => b.classList.remove('active'));
+                formPanels.forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked button and corresponding panel
+                btn.classList.add('active');
+                
+                const targetPanel = document.getElementById(targetTab + '-panel');
+                if (targetPanel) {
+                    targetPanel.classList.add('active');
                 }
             });
         }
     });
 
-    // Input focus effects - with null checks
+    // Input focus effects
     const inputs = document.querySelectorAll('.animated-input');
-    console.log('Found animated inputs:', inputs.length);
-    if (inputs.length > 0) {
-        inputs.forEach((input, index) => {
-            if (input && input.parentElement) {
-                try {
-                    input.addEventListener('focus', function() {
-                        this.parentElement.classList.add('focused');
-                    });
-                    
-                    input.addEventListener('blur', function() {
-                        this.parentElement.classList.remove('focused');
-                    });
-                    console.log(`Input ${index} event listeners added successfully`);
-                } catch (error) {
-                    console.error(`Error adding event listeners to input ${index}:`, error);
-                }
-            } else {
-                console.warn(`Input ${index} or its parent element not found:`, input);
-            }
-        });
-    }
+    inputs.forEach(input => {
+        if (input && input.parentElement) {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        }
+    });
 
-    // Form submission animations - with null checks
+    // Form submission animations
     const forms = document.querySelectorAll('.animated-form');
-    console.log('Found animated forms:', forms.length);
-    if (forms.length > 0) {
-        forms.forEach((form, index) => {
-            if (form) {
-                try {
-                    form.addEventListener('submit', function(e) {
-                        const submitBtn = this.querySelector('.submit-btn');
-                        if (submitBtn) {
-                            submitBtn.classList.add('loading');
-                            
-                            // Remove loading class after form submission
-                            setTimeout(() => {
-                                submitBtn.classList.remove('loading');
-                            }, 2000);
-                        }
-                    });
-                    console.log(`Form ${index} event listener added successfully`);
-                } catch (error) {
-                    console.error(`Error adding event listener to form ${index}:`, error);
+    forms.forEach(form => {
+        if (form) {
+            form.addEventListener('submit', function(e) {
+                const submitBtn = this.querySelector('.submit-btn');
+                if (submitBtn) {
+                    submitBtn.classList.add('loading');
+                    
+                    // Remove loading class after form submission
+                    setTimeout(() => {
+                        submitBtn.classList.remove('loading');
+                    }, 2000);
                 }
-            } else {
-                console.warn(`Form ${index} not found`);
-            }
-        });
-    }
-    
-    console.log('Auth tabs initialized successfully');
-    
-    // Manual test function
-    window.testTabSwitch = function(tabName) {
-        console.log('Manual test: switching to', tabName);
-        const targetPanel = document.getElementById(tabName + '-panel');
-        if (targetPanel) {
-            // Remove active from all
-            formPanels.forEach(p => p.classList.remove('active'));
-            tabBtns.forEach(b => b.classList.remove('active'));
-            
-            // Add active to target
-            targetPanel.classList.add('active');
-            const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
-            if (targetBtn) targetBtn.classList.add('active');
-            
-            console.log('Manual switch complete. Panel display:', window.getComputedStyle(targetPanel).display);
+            });
         }
-    };
+    });
     
-    // Debug function to check DOM structure
-    window.debugDOM = function() {
-        console.log('=== DOM Debug Info ===');
-        console.log('Document ready state:', document.readyState);
-        console.log('Body children count:', document.body.children.length);
-        
-        const authTabs = document.querySelector('.auth-tabs');
-        console.log('Auth tabs container:', authTabs);
-        
-        if (authTabs) {
-            console.log('Auth tabs children:', authTabs.children);
-            console.log('Tab buttons in auth-tabs:', authTabs.querySelectorAll('.tab-btn').length);
-            console.log('Form panels in auth-tabs:', authTabs.querySelectorAll('.auth-form-panel').length);
-        }
-        
-        // Check specific elements
-        console.log('Tab buttons by class:', document.querySelectorAll('.tab-btn').length);
-        console.log('Form panels by class:', document.querySelectorAll('.auth-form-panel').length);
-        console.log('Login panel by ID:', document.getElementById('login-panel'));
-        console.log('Register panel by ID:', document.getElementById('register-panel'));
-    };
-    
-    // Run debug function
-    debugDOM();
-    
-    // Additional debugging for specific elements
-    console.log('=== Element Debug ===');
-    console.log('Tab buttons found:', document.querySelectorAll('.tab-btn').length);
-    console.log('Form panels found:', document.querySelectorAll('.auth-form-panel').length);
-    console.log('Login panel:', document.getElementById('login-panel'));
-    console.log('Register panel:', document.getElementById('register-panel'));
-    console.log('Auth tabs container:', document.querySelector('.auth-tabs'));
-    
-    // Check if CSS is loaded
-    const computedStyle = window.getComputedStyle(document.body);
-    console.log('Body computed styles loaded:', computedStyle.fontFamily !== '');
 }
 
-// Try multiple approaches to ensure DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOMContentLoaded fired');
-    initializeAuthTabs();
-});
-
-// Fallback with setTimeout
-setTimeout(function() {
-    console.log('setTimeout fallback fired');
-    if (document.readyState === 'loading') {
-        console.log('Document still loading, waiting...');
-        setTimeout(initializeAuthTabs, 500);
-    } else {
-        initializeAuthTabs();
-    }
-}, 100);
-
-// Additional fallback for edge cases
-window.addEventListener('load', function() {
-    console.log('Window load event fired');
-    // Check if tabs were already initialized
-    if (!document.querySelector('.tab-btn.active')) {
-        console.log('Tabs not initialized yet, trying again...');
-        initializeAuthTabs();
-    }
-});
+// Initialize when DOM is ready
+document.addEventListener('DOMContentLoaded', initializeAuthTabs);
 
 // Password toggle functionality
 function togglePassword(inputId) {
     const input = document.getElementById(inputId);
-    if (!input) {
-        console.error('Password input not found:', inputId);
-        return;
-    }
-    
     const toggle = input.parentElement?.querySelector('.password-toggle i');
-    if (!toggle) {
-        console.error('Password toggle button not found for input:', inputId);
-        return;
-    }
     
-    if (input.type === 'password') {
-        input.type = 'text';
-        toggle.className = 'icofont-eye-blocked';
-    } else {
-        input.type = 'password';
-        toggle.className = 'icofont-eye';
+    if (input && toggle) {
+        if (input.type === 'password') {
+            input.type = 'text';
+            toggle.className = 'icofont-eye-blocked';
+        } else {
+            input.type = 'password';
+            toggle.className = 'icofont-eye';
+        }
     }
 }
 

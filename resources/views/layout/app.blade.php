@@ -208,7 +208,6 @@
     });
 </script>
 <script>
-    // Add null checks for admin-only elements
     const triggerLogoModal = document.getElementById('triggerLogoModal');
     if (triggerLogoModal) {
         triggerLogoModal.addEventListener('click', function (event) {
