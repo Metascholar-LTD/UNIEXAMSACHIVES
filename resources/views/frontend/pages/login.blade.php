@@ -1,5 +1,41 @@
 @extends('layout.app')
 
+@push('styles')
+<style>
+    /* Custom styling for the university crest in orbit */
+    .orbit-icon-6 {
+        animation: orbit-rotate 20s linear infinite;
+        animation-delay: -16.67s; /* 6th position timing */
+    }
+    
+    .crest-image {
+        width: 40px;
+        height: 40px;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        transition: transform 0.3s ease;
+    }
+    
+    .crest-image:hover {
+        transform: scale(1.1);
+    }
+    
+    /* Ensure the orbit path accommodates 6 icons */
+    .orbit-path {
+        width: 300px;
+        height: 300px;
+    }
+    
+    /* Adjust orbit icon positions for 6 icons */
+    .orbit-icon-1 { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+    .orbit-icon-2 { transform: rotate(60deg) translateX(150px) rotate(-60deg); }
+    .orbit-icon-3 { transform: rotate(120deg) translateX(150px) rotate(-120deg); }
+    .orbit-icon-4 { transform: rotate(180deg) translateX(150px) rotate(-180deg); }
+    .orbit-icon-5 { transform: rotate(240deg) translateX(150px) rotate(-240deg); }
+    .orbit-icon-6 { transform: rotate(300deg) translateX(150px) rotate(-300deg); }
+</style>
+@endpush
+
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
@@ -32,6 +68,9 @@
                 </div>
                 <div class="orbit-icon orbit-icon-5">
                     <i class="icofont-search-1"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-6">
+                    <img src="{{ asset('img/crest.png') }}" alt="University Crest" class="crest-image">
                 </div>
             </div>
         </div>
