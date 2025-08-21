@@ -3,140 +3,264 @@
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
-<div class="loginarea sp_top_100 sp_bottom_100">
-    <div class="container">
-        <div class="row">
-            <div class="col-xl-8 col-md-8 offset-md-2" data-aos="fade-up">
-                <ul class="nav  tab__button__wrap text-center" id="myTab" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button class="single__tab__link active" data-bs-toggle="tab" data-bs-target="#projects__one" type="button">LogIn</button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__two" type="button">SignUp</button>
-                    </li>
-                </ul>
+
+<div class="modern-auth-container">
+    <!-- Left Side - Animated Background -->
+    <div class="auth-left-side">
+        <div class="ripple-background">
+            <div class="ripple-circle ripple-1"></div>
+            <div class="ripple-circle ripple-2"></div>
+            <div class="ripple-circle ripple-3"></div>
+            <div class="ripple-circle ripple-4"></div>
+        </div>
+        
+        <div class="tech-orbit-display">
+            <h1 class="orbit-title">University Digital Archive</h1>
+            <div class="orbit-container">
+                <div class="orbit-path"></div>
+                <div class="orbit-icon orbit-icon-1">
+                    <i class="icofont-graduation-cap"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-2">
+                    <i class="icofont-book"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-3">
+                    <i class="icofont-library"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-4">
+                    <i class="icofont-document"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-5">
+                    <i class="icofont-search-1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Right Side - Auth Forms -->
+    <div class="auth-right-side">
+        <div class="auth-tabs">
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="login">
+                    <span class="tab-text">Sign In</span>
+                    <div class="tab-indicator"></div>
+                </button>
+                <button class="tab-btn" data-tab="register">
+                    <span class="tab-text">Sign Up</span>
+                    <div class="tab-indicator"></div>
+                </button>
             </div>
 
-
-            <div class="tab-content tab__content__wrapper" id="myTabContent" data-aos="fade-up">
-
-                <div class="tab-pane fade active show" id="projects__one" role="tabpanel" aria-labelledby="projects__one">
-                    <div class="col-xl-8 col-md-8 offset-md-2">
-                        <div class="loginarea__wraper">
-                            <div class="login__heading">
-                                <h5 class="login__title">LogIn</h5>
-                                <p class="login__description">Log into your account</p>
-                            </div>
-
-                            @if ($errors->any())
-                            <div class="alert alert-danger">
-                                <ul>
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
-                                    @endforeach
-                                </ul>
-                            </div>
-                            @endif
-                            @if(session('error'))
-                            <div class="alert alert-danger">
-                                {{ session('error') }}
-                            </div>
-                            @endif
-
-                            <form action="{{route('login')}}" method="POST">
-                                @csrf
-                                <div class="login__form">
-                                    <label class="form__label">Email</label>
-                                    <input class="common__login__input" type="text" name="email" placeholder="Your username or email" required>
-
-                                </div>
-                                <div class="login__form">
-                                    <label class="form__label">Password</label>
-                                    <input class="common__login__input" type="password" name="password" placeholder="Password" required>
-
-                                </div>
-                                <div class="login__form d-flex justify-content-between flex-wrap gap-2">
-                                    <div class="form__check">
-                                        <input id="forgot" type="checkbox" >
-                                        <label for="forgot"> Remember me</label>
-                                    </div>
-                                    {{-- <div class="text-end login__form__link">
-                                        <a href="#">Forgot your password?</a>
-                                    </div> --}}
-                                </div>
-                                <div class="login__button">
-                                    <button type="submit" class="default__button">Login</button>
-                                </div>
-                            </form>
-
-                        </div>
-                    </div>
-                </div>
-
-                <div class="tab-pane fade" id="projects__two" role="tabpanel" aria-labelledby="projects__two">
-                    <div class="col-xl-8 offset-md-2">
-                        <div class="loginarea__wraper">
-                            <div class="login__heading">
-                                <h5 class="login__title">SignUp</h5>
-                                <p class="login__description">Fill in your credentials to create an account</p>
-                            </div>
-
-                            @if ($errors->any())
-                                <div class="alert alert-danger">
-                                    <ul>
-                                        @foreach ($errors->all() as $error)
-                                            <li>{{ $error }}</li>
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-
-                            <form method="POST" action="{{ route('register') }}">
-                                @csrf
-                                <div class="login__form">
-                                    <label class="form__label">First Name</label>
-                                    <input class="common__login__input" type="text" name="first_name" placeholder="Your first name" required>
-                                </div>
-                                <div class="login__form">
-                                    <label class="form__label">Last Name</label>
-                                    <input class="common__login__input" type="text" name="last_name" placeholder="Your last name" required>
-                                </div>
-                                <div class="login__form">
-                                    <label class="form__label">Email</label>
-                                    <input class="common__login__input" type="email" name="email" placeholder="Your email" required>
-                                </div>
-                                <div class="login__form">
-                                    <label class="form__label">Password</label>
-                                    <input class="common__login__input" type="password" name="password" placeholder="Password" required>
-                                </div>
-                                <div class="login__button">
-                                    <button type="submit" class="default__button">Register</button>
-                                </div>
-                            </form>
-
-
-
-
-                        </div>
+            <!-- Login Form -->
+            <div class="tab-content active" id="login-tab">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Welcome Back</h2>
+                        <p class="form-subtitle">Sign in to your account</p>
                     </div>
 
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    <form action="{{route('login')}}" method="POST" class="animated-form">
+                        @csrf
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" name="email" id="login-email" class="animated-input" placeholder="Enter your email" required>
+                                <label for="login-email" class="input-label">Email</label>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="password" name="password" id="login-password" class="animated-input" placeholder="Enter your password" required>
+                                <label for="login-password" class="input-label">Password</label>
+                                <div class="input-border"></div>
+                                <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
+                                    <i class="icofont-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="remember">
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <span>Sign In</span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </form>
                 </div>
-
-
-
             </div>
 
+            <!-- Register Form -->
+            <div class="tab-content" id="register-tab">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Create Account</h2>
+                        <p class="form-subtitle">Join our digital archive community</p>
+                    </div>
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form method="POST" action="{{ route('register') }}" class="animated-form">
+                        @csrf
+                        <div class="form-row">
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <input type="text" name="first_name" id="register-firstname" class="animated-input" placeholder="First name" required>
+                                    <label for="register-firstname" class="input-label">First Name</label>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-container">
+                                    <input type="text" name="last_name" id="register-lastname" class="animated-input" placeholder="Last name" required>
+                                    <label for="register-lastname" class="input-label">Last Name</label>
+                                    <div class="input-border"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" name="email" id="register-email" class="animated-input" placeholder="Enter your email" required>
+                                <label for="register-email" class="input-label">Email</label>
+                                <div class="input-border"></div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a password" required>
+                                <label for="register-password" class="input-label">Password</label>
+                                <div class="input-border"></div>
+                                <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
+                                    <i class="icofont-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <span>Create Account</span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
         </div>
-
-        <div class=" login__shape__img educationarea__shape_image">
-            <img loading="lazy"  class="hero__shape hero__shape__1" src="img/education/hero_shape2.png" alt="Shape">
-            <img loading="lazy"  class="hero__shape hero__shape__2" src="img/education/hero_shape3.png" alt="Shape">
-            <img loading="lazy"  class="hero__shape hero__shape__3" src="img/education/hero_shape4.png" alt="Shape">
-            <img loading="lazy"  class="hero__shape hero__shape__4" src="img/education/hero_shape5.png" alt="Shape">
-        </div>
-
-
     </div>
 </div>
 
 @endsection
+
+@push('scripts')
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Tab switching functionality
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const targetTab = btn.getAttribute('data-tab');
+            
+            // Remove active class from all buttons and contents
+            tabBtns.forEach(b => b.classList.remove('active'));
+            tabContents.forEach(c => c.classList.remove('active'));
+            
+            // Add active class to clicked button and corresponding content
+            btn.classList.add('active');
+            document.getElementById(targetTab + '-tab').classList.add('active');
+        });
+    });
+
+    // Input focus effects
+    const inputs = document.querySelectorAll('.animated-input');
+    inputs.forEach(input => {
+        input.addEventListener('focus', function() {
+            this.parentElement.classList.add('focused');
+        });
+        
+        input.addEventListener('blur', function() {
+            if (!this.value) {
+                this.parentElement.classList.remove('focused');
+            }
+        });
+        
+        // Check if input has value on load
+        if (input.value) {
+            input.parentElement.classList.add('focused');
+        }
+    });
+
+    // Form submission animations
+    const forms = document.querySelectorAll('.animated-form');
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.submit-btn');
+            submitBtn.classList.add('loading');
+            
+            // Remove loading class after form submission
+            setTimeout(() => {
+                submitBtn.classList.remove('loading');
+            }, 2000);
+        });
+    });
+});
+
+// Password toggle functionality
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const toggle = input.parentElement.querySelector('.password-toggle i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        toggle.className = 'icofont-eye-blocked';
+    } else {
+        input.type = 'password';
+        toggle.className = 'icofont-eye';
+    }
+}
+
+// Add ripple effect to buttons
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('submit-btn')) {
+        const ripple = e.target.querySelector('.btn-ripple');
+        ripple.style.left = (e.offsetX - ripple.offsetWidth / 2) + 'px';
+        ripple.style.top = (e.offsetY - ripple.offsetHeight / 2) + 'px';
+        ripple.classList.add('active');
+        
+        setTimeout(() => {
+            ripple.classList.remove('active');
+        }, 600);
+    }
+});
+</script>
+@endpush
