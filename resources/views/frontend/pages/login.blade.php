@@ -79,16 +79,15 @@
                         <div class="form-group">
                             <div class="input-container">
                                 <input type="email" name="email" id="login-email" class="animated-input" placeholder="Enter your email" required>
-                                <label for="login-email" class="input-label">Email</label>
-                                <div class="input-border"></div>
+                                <button type="button" class="password-toggle" onclick="togglePassword('login-password')" style="display: none;">
+                                    <i class="icofont-eye"></i>
+                                </button>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-container">
                                 <input type="password" name="password" id="login-password" class="animated-input" placeholder="Enter your password" required>
-                                <label for="login-password" class="input-label">Password</label>
-                                <div class="input-border"></div>
                                 <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
                                     <i class="icofont-eye"></i>
                                 </button>
@@ -135,15 +134,11 @@
                             <div class="form-group">
                                 <div class="input-container">
                                     <input type="text" name="first_name" id="register-firstname" class="animated-input" placeholder="First name" required>
-                                    <label for="register-firstname" class="input-label">First Name</label>
-                                    <div class="input-border"></div>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <div class="input-container">
                                     <input type="text" name="last_name" id="register-lastname" class="animated-input" placeholder="Last name" required>
-                                    <label for="register-lastname" class="input-label">Last Name</label>
-                                    <div class="input-border"></div>
                                 </div>
                             </div>
                         </div>
@@ -151,16 +146,12 @@
                         <div class="form-group">
                             <div class="input-container">
                                 <input type="email" name="email" id="register-email" class="animated-input" placeholder="Enter your email" required>
-                                <label for="register-email" class="input-label">Email</label>
-                                <div class="input-border"></div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-container">
                                 <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a password" required>
-                                <label for="register-password" class="input-label">Password</label>
-                                <div class="input-border"></div>
                                 <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
                                     <i class="icofont-eye"></i>
                                 </button>
@@ -183,13 +174,20 @@
 @push('scripts')
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing tabs...');
+    
     // Tab switching functionality
     const tabBtns = document.querySelectorAll('.tab-btn');
     const tabContents = document.querySelectorAll('.tab-content');
+    
+    console.log('Found tab buttons:', tabBtns.length);
+    console.log('Found tab contents:', tabContents.length);
 
-    tabBtns.forEach(btn => {
+    tabBtns.forEach((btn, index) => {
+        console.log(`Button ${index}:`, btn.getAttribute('data-tab'));
         btn.addEventListener('click', () => {
             const targetTab = btn.getAttribute('data-tab');
+            console.log('Clicked tab:', targetTab);
             
             // Remove active class from all buttons and contents
             tabBtns.forEach(b => b.classList.remove('active'));
@@ -197,7 +195,15 @@ document.addEventListener('DOMContentLoaded', function() {
             
             // Add active class to clicked button and corresponding content
             btn.classList.add('active');
-            document.getElementById(targetTab + '-tab').classList.add('active');
+            const targetContent = document.getElementById(targetTab + '-tab');
+            console.log('Target content:', targetContent);
+            
+            if (targetContent) {
+                targetContent.classList.add('active');
+                console.log('Tab switched successfully to:', targetTab);
+            } else {
+                console.error('Could not find content for tab:', targetTab);
+            }
         });
     });
 
@@ -226,6 +232,8 @@ document.addEventListener('DOMContentLoaded', function() {
             }, 2000);
         });
     });
+    
+    console.log('Tabs initialized successfully');
 });
 
 // Password toggle functionality
