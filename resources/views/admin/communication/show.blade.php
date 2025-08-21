@@ -101,7 +101,7 @@
                                             <div class="detail-item">
                                                 <strong>Message:</strong>
                                                 <div class="message-content">
-                                                    {!! nl2br(e($campaign->message)) !!}
+                                                    {!! $campaign->message !!}
                                                 </div>
                                             </div>
                                         </div>
@@ -358,8 +358,11 @@
     padding: 15px;
     border-radius: 5px;
     border-left: 4px solid #007bff;
-    white-space: pre-wrap;
 }
+.message-content p { margin: 0 0 12px 0; }
+.message-content ul { margin: 12px 0; padding-left: 20px; }
+.message-content ol { margin: 12px 0; padding-left: 20px; }
+.message-content h1, .message-content h2, .message-content h3 { margin: 16px 0 8px 0; }
 
 .attachments-list {
     display: grid;

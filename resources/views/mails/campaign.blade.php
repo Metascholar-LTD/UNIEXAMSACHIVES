@@ -48,31 +48,16 @@
             margin: 20px 0;
             border-radius: 5px;
         }
+        .message p { margin: 0 0 12px 0; }
+        .message ul { margin: 12px 0; padding-left: 20px; }
+        .message ol { margin: 12px 0; padding-left: 20px; }
+        .message h1, .message h2, .message h3 { margin: 16px 0 8px 0; }
         .footer {
             text-align: center;
             margin-top: 30px;
             padding-top: 20px;
             border-top: 1px solid #dee2e6;
             color: #6c757d;
-            font-size: 14px;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #007bff;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
-        }
-        .button:hover {
-            background-color: #0056b3;
-        }
-        .user-info {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
-            margin: 20px 0;
             font-size: 14px;
         }
         .attachments {
@@ -94,17 +79,9 @@
             margin-right: 10px;
             color: #6c757d;
         }
-        .attachment-details {
-            flex: 1;
-        }
-        .attachment-name {
-            font-weight: 600;
-            color: #495057;
-        }
-        .attachment-size {
-            font-size: 12px;
-            color: #6c757d;
-        }
+        .attachment-details { flex: 1; }
+        .attachment-name { font-weight: 600; color: #495057; }
+        .attachment-size { font-size: 12px; color: #6c757d; }
     </style>
 </head>
 <body>
@@ -120,7 +97,7 @@
             <p>You have received an important message from the University Exams Archive System.</p>
             
             <div class="message">
-                {!! nl2br(e($message)) !!}
+                {!! $message !!}
             </div>
             
             @if($campaign->attachments && count($campaign->attachments) > 0)
@@ -148,18 +125,7 @@
                 </div>
             @endif
             
-            <div class="user-info">
-                <strong>Campaign Details:</strong><br>
-                Sent to: {{ $user->email }}<br>
-                Sent on: {{ now()->format('F j, Y \a\t g:i A') }}<br>
-                Campaign ID: #{{ $campaign->id }}
-            </div>
-            
             <p>If you have any questions about this message, please contact our support team.</p>
-            
-            <div style="text-align: center;">
-                <a href="{{ url('/') }}" class="button">Visit Our Website</a>
-            </div>
         </div>
         
         <div class="footer">

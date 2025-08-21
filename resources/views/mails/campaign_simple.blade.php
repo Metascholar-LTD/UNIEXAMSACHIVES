@@ -47,8 +47,11 @@
             border-left: 4px solid #007bff;
             margin: 20px 0;
             border-radius: 5px;
-            white-space: pre-line;
         }
+        .message p { margin: 0 0 12px 0; }
+        .message ul { margin: 12px 0; padding-left: 20px; }
+        .message ol { margin: 12px 0; padding-left: 20px; }
+        .message h1, .message h2, .message h3 { margin: 16px 0 8px 0; }
         .footer {
             text-align: center;
             margin-top: 30px;
@@ -78,7 +81,7 @@
             
             <p>You have received an important message from the University Exams Archive System.</p>
             
-            <div class="message">{{ $message }}</div>
+            <div class="message">{!! $message !!}</div>
             
             @if($campaign->attachments && count($campaign->attachments) > 0)
                 <div class="attachments">
