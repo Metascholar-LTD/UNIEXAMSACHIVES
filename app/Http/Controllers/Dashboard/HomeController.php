@@ -266,6 +266,6 @@ class HomeController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect('/');
+        return redirect()->route('frontend.login');
     }
 }

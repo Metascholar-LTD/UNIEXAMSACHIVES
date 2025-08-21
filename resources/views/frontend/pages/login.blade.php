@@ -29,7 +29,7 @@
 @endpush
 
 @section('content')
-@include('frontend.header')
+@include('frontend.auth_header')
 @include('frontend.theme_shadow')
 
 <div class="modern-auth-container">
