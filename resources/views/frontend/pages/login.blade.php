@@ -1,5 +1,27 @@
 @extends('layout.app')
 
+@push('styles')
+<style>
+    /* Custom styling for the university crest in orbit */
+    .crest-image {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        transition: transform 0.3s ease;
+    }
+    
+    .crest-image:hover {
+        transform: scale(1.1);
+    }
+    
+    /* Ensure the orbit animation works properly with the image */
+    .orbit-icon-1 {
+        transform: rotate(0deg) translateX(150px) rotate(0deg);
+    }
+</style>
+@endpush
+
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
@@ -19,7 +41,7 @@
             <div class="orbit-container">
                 <div class="orbit-path"></div>
                 <div class="orbit-icon orbit-icon-1">
-                    <i class="icofont-graduation-cap"></i>
+                    <img src="{{ asset('img/crest.ico') }}" alt="University Crest" class="crest-image">
                 </div>
                 <div class="orbit-icon orbit-icon-2">
                     <i class="icofont-book"></i>
