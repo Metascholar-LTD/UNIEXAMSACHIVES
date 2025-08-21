@@ -70,7 +70,7 @@
                     <i class="icofont-search-1"></i>
                 </div>
                 <div class="orbit-icon orbit-icon-6">
-                    <img src="{{ asset('img/crest.png') }}" alt="University Crest" class="crest-image">
+                    <img src="{{ asset('img/crest.jpg') }}" alt="University Crest" class="crest-image">
                 </div>
             </div>
         </div>
