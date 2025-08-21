@@ -20,12 +20,60 @@
                         <div class="dashboard__section__title">
                             <h4>Email Details</h4>
                             <div class="dashboard__section__actions">
-                                <a href="{{route('admin.communication.index')}}" class="default__button">
-                                    <i class="icofont-arrow-left"></i> Back to Emails
+                                <a href="{{route('admin.communication.index')}}" class="responsive-btn back-btn">
+                                    <div class="svgWrapper">
+                                        <svg
+                                            xmlns="http://www.w3.org/2000/svg"
+                                            fill="none"
+                                            viewBox="0 0 42 42"
+                                            class="svgIcon"
+                                        >
+                                            <path
+                                                stroke-width="5"
+                                                stroke="#fff"
+                                                d="M9.14073 2.5H32.8593C33.3608 2.5 33.8291 2.75065 34.1073 3.16795L39.0801 10.6271C39.3539 11.0378 39.5 11.5203 39.5 12.0139V21V37C39.5 38.3807 38.3807 39.5 37 39.5H5C3.61929 39.5 2.5 38.3807 2.5 37V21V12.0139C2.5 11.5203 2.6461 11.0378 2.91987 10.6271L7.89266 3.16795C8.17086 2.75065 8.63921 2.5 9.14073 2.5Z"
+                                            ></path>
+                                            <rect
+                                                stroke-width="3"
+                                                stroke="#fff"
+                                                rx="2"
+                                                height="4"
+                                                width="11"
+                                                y="18.5"
+                                                x="15.5"
+                                            ></rect>
+                                            <path stroke-width="5" stroke="#fff" d="M1 12L41 12"></path>
+                                        </svg>
+                                        <div class="text">Back to Emails</div>
+                                    </div>
                                 </a>
                                 @if($campaign->status === 'draft')
-                                    <a href="{{ route('admin.communication.edit', $campaign) }}" class="default__button">
-                                        <i class="icofont-edit"></i> Edit Email
+                                    <a href="{{ route('admin.communication.edit', $campaign) }}" class="responsive-btn edit-btn">
+                                        <div class="svgWrapper">
+                                            <svg
+                                                xmlns="http://www.w3.org/2000/svg"
+                                                fill="none"
+                                                viewBox="0 0 42 42"
+                                                class="svgIcon"
+                                            >
+                                                <path
+                                                    stroke-width="5"
+                                                    stroke="#fff"
+                                                    d="M9.14073 2.5H32.8593C33.3608 2.5 33.8291 2.75065 34.1073 3.16795L39.0801 10.6271C39.3539 11.0378 39.5 11.5203 39.5 12.0139V21V37C39.5 38.3807 38.3807 39.5 37 39.5H5C3.61929 39.5 2.5 38.3807 2.5 37V21V12.0139C2.5 11.5203 2.6461 11.0378 2.91987 10.6271L7.89266 3.16795C8.17086 2.75065 8.63921 2.5 9.14073 2.5Z"
+                                                ></path>
+                                                <rect
+                                                    stroke-width="3"
+                                                    stroke="#fff"
+                                                    rx="2"
+                                                    height="4"
+                                                    width="11"
+                                                    y="18.5"
+                                                    x="15.5"
+                                                ></rect>
+                                                <path stroke-width="5" stroke="#fff" d="M1 12L41 12"></path>
+                                            </svg>
+                                            <div class="text">Edit Email</div>
+                                        </div>
                                     </a>
                                 @endif
                             </div>
@@ -299,6 +347,96 @@
 </div>
 
 <style>
+/* Responsive Button Styling */
+.responsive-btn {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition-duration: 0.3s;
+  box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+  background-color: #6b46c1;
+  text-decoration: none;
+}
+
+.responsive-btn:hover {
+  width: 125px;
+  border-radius: 40px;
+  transition-duration: 0.3s;
+  text-decoration: none;
+}
+
+.responsive-btn .svgWrapper {
+  width: 100%;
+  transition-duration: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.responsive-btn .svgIcon {
+  width: 17px;
+}
+
+.responsive-btn .text {
+  position: absolute;
+  right: 0%;
+  width: 0%;
+  opacity: 0;
+  color: white;
+  font-size: 1.2em;
+  font-weight: 600;
+  transition-duration: 0.3s;
+}
+
+.responsive-btn:hover .svgWrapper {
+  width: 30%;
+  transition-duration: 0.3s;
+  padding-left: 20px;
+}
+
+.responsive-btn:hover .text {
+  opacity: 1;
+  width: 70%;
+  transition-duration: 0.3s;
+  padding-right: 10px;
+}
+
+.responsive-btn:active {
+  transform: translate(2px, 2px);
+}
+
+/* Button variants */
+.compose-btn {
+  background-color: #8b5cf6;
+}
+
+.compose-btn:hover {
+  background-color: #7c3aed;
+}
+
+.back-btn {
+  background-color: #6b46c1;
+}
+
+.back-btn:hover {
+  background-color: #5b35a0;
+}
+
+.edit-btn {
+  background-color: #f59e0b;
+}
+
+.edit-btn:hover {
+  background-color: #d97706;
+}
+
 .email-header {
     padding: 20px;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
