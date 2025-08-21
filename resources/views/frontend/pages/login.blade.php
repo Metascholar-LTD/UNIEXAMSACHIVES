@@ -4,13 +4,20 @@
 <style>
     /* Custom styling for the university crest in orbit */
     .orbit-icon-6 {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: -20px;
+        margin-top: -20px;
         animation: orbit-rotate 20s linear infinite;
         animation-delay: -16.67s; /* 6th position timing */
     }
     
     .crest-image {
-        width: 40px;
-        height: 40px;
+        width: 100%;
+        height: 100%;
         object-fit: contain;
         filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
         transition: transform 0.3s ease;
@@ -20,19 +27,54 @@
         transform: scale(1.1);
     }
     
-    /* Ensure the orbit path accommodates 6 icons */
-    .orbit-path {
+    /* Override existing orbit positioning to ensure 6 icons work properly */
+    .orbit-container {
+        position: relative;
         width: 300px;
         height: 300px;
     }
     
-    /* Adjust orbit icon positions for 6 icons */
+    .orbit-path {
+        width: 300px;
+        height: 300px;
+        border: 2px dashed rgba(255,255,255,0.3);
+        border-radius: 50%;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+    
+    /* Force proper positioning for all orbit icons */
+    .orbit-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 40px;
+        height: 40px;
+        margin-left: -20px;
+        margin-top: -20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 20px;
+        text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    /* Position each icon around the orbit */
     .orbit-icon-1 { transform: rotate(0deg) translateX(150px) rotate(0deg); }
     .orbit-icon-2 { transform: rotate(60deg) translateX(150px) rotate(-60deg); }
     .orbit-icon-3 { transform: rotate(120deg) translateX(150px) rotate(-120deg); }
     .orbit-icon-4 { transform: rotate(180deg) translateX(150px) rotate(-180deg); }
     .orbit-icon-5 { transform: rotate(240deg) translateX(150px) rotate(-240deg); }
     .orbit-icon-6 { transform: rotate(300deg) translateX(150px) rotate(-300deg); }
+    
+    /* Ensure the orbit animation works */
+    @keyframes orbit-rotate {
+        from { transform: rotate(0deg) translateX(150px) rotate(0deg); }
+        to { transform: rotate(360deg) translateX(150px) rotate(-360deg); }
+    }
 </style>
 @endpush
 
