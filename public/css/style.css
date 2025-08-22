@@ -473,23 +473,115 @@
   background: #f1f5f9;
 }
 
-/* Select dropdown styling */
+/* Professional Select Dropdown Styling */
 select.animated-input {
   cursor: pointer;
   background-color: white;
-  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 6l5 5 5-5 2 1-7 7-7-7 2-1z" fill="%23666"/></svg>');
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg>');
   background-repeat: no-repeat;
-  background-position: right 12px center;
+  background-position: right 16px center;
   background-size: 16px;
-  padding-right: 50px;
+  padding-right: 48px;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+  border-radius: 12px;
+  font-weight: 500;
+  color: #1f2937;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 select.animated-input:hover {
-  background-color: #f1f5f9;
+  background-color: #f8fafc;
+  border-color: #94a3b8;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 select.animated-input:focus {
   background-color: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  transform: translateY(-1px);
+}
+
+select.animated-input option {
+  background-color: white;
+  color: #1f2937;
+  font-weight: 500;
+  padding: 12px 16px;
+  border: none;
+  cursor: pointer;
+}
+
+select.animated-input option:hover {
+  background-color: #f1f5f9;
+}
+
+select.animated-input option:checked {
+  background-color: #3b82f6;
+  color: white;
+}
+
+/* Custom dropdown arrow animation */
+select.animated-input:focus {
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg>');
+}
+
+/* Enhanced dropdown styling for better cross-browser compatibility */
+select.animated-input::-ms-expand {
+  display: none;
+}
+
+/* Custom placeholder styling */
+select.animated-input option[value=""] {
+  color: #9ca3af;
+  font-style: italic;
+}
+
+/* Smooth transitions for all states */
+select.animated-input,
+select.animated-input option {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Focus ring for accessibility */
+select.animated-input:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Dropdown open state styling */
+select.animated-input:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Enhanced option styling for modern browsers */
+select.animated-input option {
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* Custom scrollbar for dropdown (webkit browsers) */
+select.animated-input::-webkit-scrollbar {
+  width: 8px;
+}
+
+select.animated-input::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 4px;
+}
+
+select.animated-input::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 4px;
+}
+
+select.animated-input::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
 }
 
 .input-container.focused .animated-input {

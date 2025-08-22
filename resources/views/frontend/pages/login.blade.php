@@ -180,7 +180,7 @@
                         <div class="form-group">
                             <div class="input-container">
                                 <select name="department_id" id="register-department" class="animated-input">
-                                    <option value="">Select Department/Faculty/Unit</option>
+                                    <option value="" disabled selected>Choose your Department/Faculty/Unit</option>
                                     @foreach($departments as $department)
                                         <option value="{{ $department->id }}">{{ $department->name }}</option>
                                     @endforeach
