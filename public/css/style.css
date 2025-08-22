@@ -13297,6 +13297,327 @@ Footer Area
 .footerarea__copyright__wrapper .footerarea__copyright__list {
   text-align: right;
 }
+
+/*------------------------------
+New Modern Footer Styles
+-------------------------------*/
+.footer-area {
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+  color: #ffffff;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-area::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="10" cy="60" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="90" cy="40" r="0.5" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+}
+
+.footer-main {
+  padding: 60px 0 40px;
+  position: relative;
+  z-index: 1;
+}
+
+.footer-widget {
+  margin-bottom: 30px;
+}
+
+.footer-logo-img {
+  filter: brightness(0) invert(1);
+  transition: all 0.3s ease;
+}
+
+.footer-logo-img:hover {
+  filter: brightness(1) invert(0);
+  transform: scale(1.05);
+}
+
+.footer-title {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  position: relative;
+  padding-bottom: 10px;
+}
+
+.footer-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 30px;
+  height: 2px;
+  background: var(--primaryColor);
+  border-radius: 1px;
+}
+
+.footer-description {
+  color: #b8c5d6;
+  font-size: 14px;
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 12px;
+}
+
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border-radius: 50%;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-link:hover {
+  background: var(--primaryColor);
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(95, 45, 237, 0.3);
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  color: #b8c5d6;
+  text-decoration: none;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  position: relative;
+  padding-left: 0;
+}
+
+.footer-links a::before {
+  content: '→';
+  position: absolute;
+  left: -15px;
+  opacity: 0;
+  transition: all 0.3s ease;
+  color: var(--primaryColor);
+}
+
+.footer-links a:hover {
+  color: #ffffff;
+  padding-left: 15px;
+}
+
+.footer-links a:hover::before {
+  opacity: 1;
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: #b8c5d6;
+  font-size: 14px;
+}
+
+.contact-item i {
+  color: var(--primaryColor);
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+}
+
+.footer-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  margin: 0;
+}
+
+.footer-bottom {
+  padding: 25px 0;
+  position: relative;
+  z-index: 1;
+}
+
+.copyright-text p {
+  color: #b8c5d6;
+  font-size: 14px;
+  margin: 0;
+}
+
+.footer-bottom-links {
+  display: flex;
+  gap: 20px;
+  justify-content: flex-end;
+}
+
+.footer-bottom-links a {
+  color: #b8c5d6;
+  text-decoration: none;
+  font-size: 13px;
+  transition: color 0.3s ease;
+}
+
+.footer-bottom-links a:hover {
+  color: var(--primaryColor);
+}
+
+/* Developer Credits Section */
+.developer-credits {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  padding: 20px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.credits-text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #8b9bb4;
+  font-size: 13px;
+}
+
+.company-link {
+  color: var(--primaryColor);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.3s ease;
+}
+
+.company-link:hover {
+  color: var(--primaryColor);
+  text-decoration: underline;
+  opacity: 0.8;
+}
+
+.partner-links {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+
+.partner-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #8b9bb4;
+  text-decoration: none;
+  font-size: 12px;
+  padding: 6px 10px;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.partner-link:hover {
+  color: #ffffff;
+  background: rgba(95, 45, 237, 0.1);
+  border-color: rgba(95, 45, 237, 0.3);
+  transform: translateY(-1px);
+}
+
+.partner-link i {
+  font-size: 14px;
+  color: var(--primaryColor);
+}
+
+/* Responsive Design */
+@media (max-width: 991.98px) {
+  .footer-main {
+    padding: 40px 0 30px;
+  }
+  
+  .footer-bottom-links {
+    justify-content: flex-start;
+    margin-top: 15px;
+  }
+  
+  .partner-links {
+    justify-content: flex-start;
+    margin-top: 15px;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .footer-main {
+    padding: 30px 0 20px;
+  }
+  
+  .footer-widget {
+    text-align: center;
+    margin-bottom: 25px;
+  }
+  
+  .footer-social {
+    justify-content: center;
+  }
+  
+  .footer-title::after {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+  
+  .footer-bottom {
+    text-align: center;
+  }
+  
+  .footer-bottom-links {
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .developer-credits {
+    text-align: center;
+  }
+  
+  .partner-links {
+    justify-content: center;
+    margin-top: 15px;
+  }
+  
+  .credits-text {
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .partner-links {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .partner-link {
+    min-width: 200px;
+    justify-content: center;
+  }
+}
 @media (max-width: 767px) {
   .footerarea__copyright__wrapper .footerarea__copyright__list {
     text-align: center;
