@@ -473,6 +473,25 @@
   background: #f1f5f9;
 }
 
+/* Select dropdown styling */
+select.animated-input {
+  cursor: pointer;
+  background-color: white;
+  background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="20" height="20" xmlns="http://www.w3.org/2000/svg"><path d="M5 6l5 5 5-5 2 1-7 7-7-7 2-1z" fill="%23666"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 50px;
+}
+
+select.animated-input:hover {
+  background-color: #f1f5f9;
+}
+
+select.animated-input:focus {
+  background-color: white;
+}
+
 .input-container.focused .animated-input {
   border-color: #3b82f6;
   background: white;

@@ -179,6 +179,17 @@
 
                         <div class="form-group">
                             <div class="input-container">
+                                <select name="department_id" id="register-department" class="animated-input">
+                                    <option value="">Select Department/Faculty/Unit</option>
+                                    @foreach($departments as $department)
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
                                 <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a password" required>
                                 <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
                                     <i class="icofont-eye"></i>

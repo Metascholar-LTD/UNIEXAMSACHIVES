@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Department;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Visit;
@@ -20,7 +21,9 @@ class PagesController extends Controller
         $currentDate = Carbon::now()->toDateString();
         $ipAddress = $request->ip();
         Visit::firstOrCreate(['visited_at' => $currentDate,  'ip_address' => $ipAddress]);
-        return view('frontend.pages.login');
+        
+        $departments = Department::orderBy('name')->get();
+        return view('frontend.pages.login', compact('departments'));
     }
 
     public function about(){
@@ -40,7 +43,8 @@ class PagesController extends Controller
     }
 
     public function login(){
-        return view('frontend.pages.login');
+        $departments = Department::orderBy('name')->get();
+        return view('frontend.pages.login', compact('departments'));
     }
 
     public function register(Request $request)
@@ -50,6 +54,7 @@ class PagesController extends Controller
             'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'department_id' => 'nullable|exists:departments,id',
         ]);
 
         User::create([
@@ -58,6 +63,7 @@ class PagesController extends Controller
             'email' => $validatedData['email'],
             'is_admin' => 1,
             'password' => Hash::make($validatedData['password']),
+            'department_id' => $validatedData['department_id'],
         ]);
 
         #send mail to user

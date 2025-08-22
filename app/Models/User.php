@@ -25,6 +25,7 @@ class User extends Authenticatable
         'is_admin',
         'is_approve',
         'profile_picture',
+        'department_id',
     ];
 
     /**
@@ -66,5 +67,13 @@ class User extends Authenticatable
             return asset('profile_pictures/' . $this->profile_picture);
         }
         return asset('profile_pictures/default-profile.png'); // Default profile picture
+    }
+
+    /**
+     * Get the department that the user belongs to
+     */
+    public function department()
+    {
+        return $this->belongsTo(Department::class);
     }
 }
