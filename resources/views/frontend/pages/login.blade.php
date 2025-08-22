@@ -412,41 +412,45 @@ function loadSavedLanguage() {
     }
 }
 
-// Function to show language change message
+// Function to show language change message using modern notification system
 function showLanguageChangeMessage(langName) {
-    // Create a temporary success message
-    const messageDiv = document.createElement('div');
-    messageDiv.className = 'alert alert-success language-change-message';
-    messageDiv.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        z-index: 9999;
-        padding: 12px 20px;
-        border-radius: 6px;
-        background: #28a745;
-        color: white;
-        font-size: 14px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        transform: translateX(100%);
-        transition: transform 0.3s ease;
-    `;
-    messageDiv.textContent = `Language changed to ${langName}`;
-    
-    document.body.appendChild(messageDiv);
-    
-    // Animate in
-    setTimeout(() => {
-        messageDiv.style.transform = 'translateX(0)';
-    }, 100);
-    
-    // Remove after 3 seconds
-    setTimeout(() => {
-        messageDiv.style.transform = 'translateX(100%)';
+    // Use the modern notification system if available
+    if (typeof showNotification === 'function') {
+        showNotification('success', 'Language Changed!', `Language changed to ${langName}`);
+    } else {
+        // Fallback to simple message
+        const messageDiv = document.createElement('div');
+        messageDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+            padding: 12px 20px;
+            border-radius: 6px;
+            background: #28a745;
+            color: white;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+        `;
+        messageDiv.textContent = `Language changed to ${langName}`;
+        
+        document.body.appendChild(messageDiv);
+        
+        // Animate in
         setTimeout(() => {
-            document.body.removeChild(messageDiv);
-        }, 300);
-    }, 3000);
+            messageDiv.style.transform = 'translateX(0)';
+        }, 100);
+        
+        // Remove after 3 seconds
+        setTimeout(() => {
+            messageDiv.style.transform = 'translateX(100%)';
+            setTimeout(() => {
+                document.body.removeChild(messageDiv);
+            }, 300);
+        }, 3000);
+    }
 }
 </script>
 @endpush

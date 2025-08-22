@@ -93,21 +93,5 @@
         </div>
     </div>
 
-    @if (session('success'))
-    <div class="container desktop__menu__wrapper mt-3" id="successAlert">
-        <div class="row">
-            <div class="col-xl-12 col-lg-12 col-md-12">
-                <div class="alert alert-success">
-                    <p class="text-center">{{ session('success') }}</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <script>
-        setTimeout(function() {
-            document.getElementById('successAlert').style.display = 'none';
-        }, 5000);
-    </script>
-    @endif
 </header>

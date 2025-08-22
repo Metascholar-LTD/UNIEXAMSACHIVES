@@ -47,28 +47,7 @@
                                     aria-labelledby="projects__one">
                                     <div class="row">
                                         <div class="col-xl-12">
-                                            <!-- Success/Error Messages -->
-                                            @if(session('success'))
-                                                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                                                    {{ session('success') }}
-                                                    <button type="button" class="close" data-dismiss="alert">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                            @endif
 
-                                            @if($errors->any())
-                                                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                                                    <ul class="mb-0">
-                                                        @foreach($errors->all() as $error)
-                                                            <li>{{ $error }}</li>
-                                                        @endforeach
-                                                    </ul>
-                                                    <button type="button" class="close" data-dismiss="alert">
-                                                        <span aria-hidden="true">&times;</span>
-                                                    </button>
-                                                </div>
-                                            @endif
 
                                             <form action="{{route('dashboard.user.info')}}" method="post" enctype="multipart/form-data">
                                                 @csrf

@@ -1046,24 +1046,7 @@ select.animated-input::-webkit-scrollbar-thumb:hover {
   height: 300px;
 }
 
-/* Alert Styles */
-.alert {
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-}
 
-.alert-danger {
-  background: #fee;
-  color: #c53030;
-  border: 1px solid #fed7d7;
-}
-
-.alert ul {
-  margin: 0;
-  padding-left: 1.5rem;
-}
 
 /* Responsive Design */
 @media (max-width: 1024px) {
