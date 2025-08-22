@@ -13001,7 +13001,18 @@ Breadcrumb Area
 Footer Area
 -------------------------------*/
 .footerarea {
-  background: var(--darkblack);
+  background: linear-gradient(135deg, var(--darkblack) 0%, #1a1a2e 100%);
+  position: relative;
+}
+
+.footerarea::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--primaryColor), transparent);
 }
 .footerarea__newsletter__wraper {
   padding-bottom: 45px;
@@ -13151,12 +13162,28 @@ Footer Area
   font-weight: 700;
   color: var(--whiteColor);
   font-family: var(--headingFont);
+  position: relative;
+  padding-bottom: 15px;
+}
+
+.footerarea__wrapper .footerarea__inner .footerarea__heading h3::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 40px;
+  height: 3px;
+  background: var(--primaryColor);
+  border-radius: 2px;
 }
 .footerarea__wrapper .footerarea__inner .footerarea__content {
   margin-bottom: 30px;
 }
 .footerarea__wrapper .footerarea__inner .footerarea__content p {
   color: var(--darkgray);
+  line-height: 1.6;
+  font-size: 15px;
+  margin-bottom: 0;
 }
 @media (min-width: 992px) and (max-width: 1365px) {
   .footerarea__wrapper .footerarea__inner .footerarea__content p {
@@ -13250,6 +13277,8 @@ Footer Area
 .footerarea__copyright__wrapper {
   padding-top: 40px;
   padding-bottom: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(0, 0, 0, 0.2);
 }
 @media (min-width: 768px) and (max-width: 991px) {
   .footerarea__copyright__wrapper {
@@ -13328,6 +13357,136 @@ Footer Area
   background: var(--darkgray);
   bottom: 5px;
   right: 9px;
+}
+
+/* Professional Footer Enhancements */
+.footerarea__contact {
+  margin-top: 25px;
+}
+
+.footerarea__contact .contact__item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+  transition: all 0.3s ease;
+}
+
+.footerarea__contact .contact__item:hover {
+  transform: translateX(5px);
+}
+
+.footerarea__contact .contact__icon {
+  width: 40px;
+  height: 40px;
+  background: var(--primaryColor);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(95, 45, 237, 0.3);
+}
+
+.footerarea__contact .contact__icon i {
+  color: var(--whiteColor);
+  font-size: 18px;
+}
+
+.footerarea__contact .contact__content span {
+  color: var(--darkgray);
+  font-size: 14px;
+  line-height: 1.4;
+  display: block;
+}
+
+/* Developer Info Styling */
+.footerarea__developer__info {
+  text-align: right;
+}
+
+.footerarea__developer__info p {
+  color: var(--darkgray);
+  margin-bottom: 0;
+  font-size: 14px;
+}
+
+.footerarea__developer__info .developer__link {
+  color: var(--primaryColor);
+  text-decoration: none;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.footerarea__developer__info .developer__link:hover {
+  color: var(--whiteColor);
+}
+
+.footerarea__developer__info .developer__link::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 2px;
+  bottom: -2px;
+  left: 0;
+  background: var(--primaryColor);
+  transition: width 0.3s ease;
+}
+
+.footerarea__developer__info .developer__link:hover::after {
+  width: 100%;
+}
+
+/* Enhanced Footer Links */
+.footerarea__list ul li a {
+  position: relative;
+  padding-left: 0;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 5px 0;
+}
+
+.footerarea__list ul li a:hover {
+  padding-left: 8px;
+  color: var(--primaryColor);
+  transform: translateX(5px);
+}
+
+.footerarea__list ul li {
+  margin-bottom: 8px;
+}
+
+/* Footer Section Spacing */
+.footerarea__wrapper {
+  padding-top: 80px;
+  padding-bottom: 60px;
+}
+
+/* Responsive Footer */
+@media (max-width: 767px) {
+  .footerarea__developer__info {
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  .footerarea__contact .contact__item {
+    margin-bottom: 12px;
+  }
+  
+  .footerarea__contact .contact__icon {
+    width: 35px;
+    height: 35px;
+    margin-right: 12px;
+  }
+  
+  .footerarea__contact .contact__icon i {
+    font-size: 16px;
+  }
+  
+  .footerarea__contact .contact__content span {
+    font-size: 13px;
+  }
 }
 
 .footerarea__text h3 {
