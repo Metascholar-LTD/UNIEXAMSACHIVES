@@ -19,6 +19,10 @@ Route::get('/', [PagesController::class, 'index'])->name('frontend.home');
 Route::get('/login-form',[PagesController::class, 'login'])->name('frontend.login');
 Route::post('/register',[PagesController::class, 'register'])->name('register');
 Route::post('/login',[PagesController::class, 'loginUser'])->name('login');
+Route::post('/clear-session-messages', function() {
+    session()->forget(['success', 'error', 'warning', 'info']);
+    return response()->json(['success' => true]);
+})->name('clear.session.messages');
 
 #protected routes
 Route::middleware(['auth'])->group(function () {

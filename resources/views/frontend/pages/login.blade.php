@@ -31,6 +31,7 @@
 @section('content')
 @include('frontend.auth_header')
 @include('frontend.theme_shadow')
+@include('components.modern-notifications')
 
 <div class="modern-auth-container">
     <!-- Left Side - Animated Background -->

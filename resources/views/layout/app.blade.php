@@ -48,6 +48,9 @@
 
     {{-- dark/light skin --}}
     @include('components.dark_light')
+    
+    {{-- modern notifications --}}
+    @include('components.modern-notifications')
 
     <main class="main_wrapper overflow-hidden">
         @yield('content')
