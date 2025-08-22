@@ -40,13 +40,18 @@ class ExamsController extends Controller
             'special_instruction' => 'string|nullable',
         ]);
 
-        $exam_document_path = $request->file('exam_document')->store('public/exam_documents');
-        $validatedData['exam_document'] = $exam_document_path;
+        // Store exam document in new public storage
+        $examFile = $request->file('exam_document');
+        $examFileName = time() . '_' . $examFile->getClientOriginalName();
+        $examFile->move(public_path('exams/documents'), $examFileName);
+        $validatedData['exam_document'] = 'exams/documents/' . $examFileName;
         $validatedData['document_id'] = random_int(1000000000, 9999999999);
 
         if ($request->hasFile('answer_key')) {
-            $answer_key_path = $request->file('answer_key')->store('public/answer_keys');
-            $validatedData['answer_key'] = $answer_key_path;
+            $answerFile = $request->file('answer_key');
+            $answerFileName = time() . '_' . $answerFile->getClientOriginalName();
+            $answerFile->move(public_path('exams/answer_keys'), $answerFileName);
+            $validatedData['answer_key'] = 'exams/answer_keys/' . $answerFileName;
         }
 
         $validatedData['user_id'] = Auth::user()->id;
@@ -87,12 +92,15 @@ class ExamsController extends Controller
         // Handle exam document update
         if ($request->hasFile('exam_document')) {
             // Delete old exam document if it exists
-            if ($exam->exam_document && Storage::exists($exam->exam_document)) {
-                Storage::delete($exam->exam_document);
+            if ($exam->exam_document && file_exists(public_path($exam->exam_document))) {
+                unlink(public_path($exam->exam_document));
             }
             
-            $exam_document_path = $request->file('exam_document')->store('public/exam_documents');
-            $validatedData['exam_document'] = $exam_document_path;
+            // Store new exam document
+            $examFile = $request->file('exam_document');
+            $examFileName = time() . '_' . $examFile->getClientOriginalName();
+            $examFile->move(public_path('exams/documents'), $examFileName);
+            $validatedData['exam_document'] = 'exams/documents/' . $examFileName;
         } else {
             // Keep existing exam document if no new file is uploaded
             $validatedData['exam_document'] = $exam->exam_document;
@@ -101,12 +109,15 @@ class ExamsController extends Controller
         // Handle answer key update
         if ($request->hasFile('answer_key')) {
             // Delete old answer key if it exists
-            if ($exam->answer_key && Storage::exists($exam->answer_key)) {
-                Storage::delete($exam->answer_key);
+            if ($exam->answer_key && file_exists(public_path($exam->answer_key))) {
+                unlink(public_path($exam->answer_key));
             }
             
-            $answer_key_path = $request->file('answer_key')->store('public/answer_keys');
-            $validatedData['answer_key'] = $answer_key_path;
+            // Store new answer key
+            $answerFile = $request->file('answer_key');
+            $answerFileName = time() . '_' . $answerFile->getClientOriginalName();
+            $answerFile->move(public_path('exams/answer_keys'), $answerFileName);
+            $validatedData['answer_key'] = 'exams/answer_keys/' . $answerFileName;
         } else {
             // Keep existing answer key if no new file is uploaded
             $validatedData['answer_key'] = $exam->answer_key;
@@ -122,6 +133,58 @@ class ExamsController extends Controller
         $exam->update(['is_approve' => true]);
 
         return redirect()->route('dashboard.all.upload.document')->with('success', 'Document approved successfully');
+    }
+
+    public function downloadExam(Exam $exam)
+    {
+        // Check if user has permission to download this exam
+        if (!auth()->user()->is_admin && $exam->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Check if file exists in new storage
+        $filePath = public_path($exam->exam_document);
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        // Get file info
+        $extension = pathinfo($exam->exam_document, PATHINFO_EXTENSION);
+        
+        // Create a proper filename for download
+        $downloadName = $exam->course_title . '_' . $exam->course_code . '.' . $extension;
+        $downloadName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $downloadName); // Sanitize filename
+
+        // Return the file as a download response
+        return response()->download($filePath, $downloadName);
+    }
+
+    public function downloadAnswerKey(Exam $exam)
+    {
+        // Check if user has permission to download this exam
+        if (!auth()->user()->is_admin && $exam->user_id !== auth()->id()) {
+            abort(403, 'Unauthorized access');
+        }
+
+        // Check if answer key exists in new storage
+        if (!$exam->answer_key) {
+            abort(404, 'Answer key not found');
+        }
+        
+        $filePath = public_path($exam->answer_key);
+        if (!file_exists($filePath)) {
+            abort(404, 'Answer key file not found');
+        }
+
+        // Get file info
+        $extension = pathinfo($exam->answer_key, PATHINFO_EXTENSION);
+        
+        // Create a proper filename for download
+        $downloadName = $exam->course_title . '_' . $exam->course_code . '_AnswerKey.' . $extension;
+        $downloadName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $downloadName); // Sanitize filename
+
+        // Return the file as a download response
+        return response()->download($filePath, $downloadName);
     }
 
     public function destroy(Exam $exam)

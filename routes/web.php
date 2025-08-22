@@ -81,6 +81,10 @@ Route::middleware(['auth'])->group(function () {
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');
+    
+    # File Downloads
+    Route::get('/download/exam/{exam}', [App\Http\Controllers\Dashboard\ExamsController::class, 'downloadExam'])->name('download.exam');
+    Route::get('/download/answer-key/{exam}', [App\Http\Controllers\Dashboard\ExamsController::class, 'downloadAnswerKey'])->name('download.answer.key');
 
     #settings
     Route::get('/dashboard/settings',[HomeController::class, 'settings'])->name('dashboard.settings');

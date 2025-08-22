@@ -343,21 +343,21 @@
                                                     </div>
                                                     
                                                     <div class="exam-actions">
-                                                        <button class="clean-btn download-btn" onclick="downloadExam('{{ Storage::url($item->exam_document) }}', '{{ $item->course_title }}')" title="Download">
+                                                        <a href="{{ asset($item->exam_document) }}" download class="clean-btn download-btn" title="Download">
                                                             <i class="icofont-download"></i>
-                                                        </button>
+                                                        </a>
                                                         @if($item->answer_key)
-                                                            <button class="clean-btn key-btn" onclick="downloadAnswerKey('{{ Storage::url($item->answer_key) }}', '{{ $item->course_title }} - Answer Key')" title="Answer Key">
+                                                            <a href="{{ asset($item->answer_key) }}" download class="clean-btn key-btn" title="Answer Key">
                                                                 <i class="icofont-key"></i>
-                                                            </button>
+                                                            </a>
                                                         @endif
                                                         <div class="status-indicator">
                                                             @if($item->is_approve)
                                                                 <i class="icofont-check-circled" title="Approved"></i>
                                                             @else
                                                                 <i class="icofont-clock-time" title="Pending"></i>
-                                                            @endif
-                                                        </div>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 @endforeach
@@ -386,47 +386,8 @@
 </div>
 
 <script>
-// Proper download functions for actual files
-function downloadExam(url, filename) {
-    // Create a proper download link
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.target = '_blank';
-    
-    // Set proper headers for file download
-    link.setAttribute('download', filename);
-    
-    // Append to body, click, and remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Show success message
-    showSuccessMessage('Download started: ' + filename);
-}
-
-function downloadAnswerKey(url, filename) {
-    // Create a proper download link
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = filename;
-    link.target = '_blank';
-    
-    // Set proper headers for file download
-    link.setAttribute('download', filename);
-    
-    // Append to body, click, and remove
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    
-    // Show success message
-    showSuccessMessage('Answer key download started: ' + filename);
-}
-
-// Simple success message function
-function showSuccessMessage(message) {
+// Simple success message function for downloads
+function showDownloadSuccess(message) {
     // Create a simple success notification
     const notification = document.createElement('div');
     notification.style.cssText = `
@@ -475,6 +436,19 @@ function showSuccessMessage(message) {
     `;
     document.head.appendChild(slideOutStyle);
 }
+
+// Add click event listeners to download buttons
+document.addEventListener('DOMContentLoaded', function() {
+    const downloadButtons = document.querySelectorAll('.download-btn, .key-btn');
+    
+    downloadButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const isAnswerKey = this.classList.contains('key-btn');
+            const message = isAnswerKey ? 'Answer key download started!' : 'Exam download started!';
+            showDownloadSuccess(message);
+        });
+    });
+});
 </script>
 
 @endsection

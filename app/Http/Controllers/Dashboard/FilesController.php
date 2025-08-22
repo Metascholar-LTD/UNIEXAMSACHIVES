@@ -25,8 +25,10 @@ class FilesController extends Controller
         ]);
 
         if ($request->hasFile('document_file')) {
-            $file_path = $request->file('document_file')->store('public/files');
-            $validatedData['document_file'] = $file_path;
+            $file = $request->file('document_file');
+            $fileName = time() . '_' . $file->getClientOriginalName();
+            $file->move(public_path('exams/files'), $fileName);
+            $validatedData['document_file'] = 'exams/files/' . $fileName;
         }
         $validatedData['user_id'] = Auth::user()->id;
         $validatedData['document_id'] = random_int(1000000000, 9999999999);
@@ -61,13 +63,15 @@ class FilesController extends Controller
         // Handle file update if new file is uploaded
         if ($request->hasFile('document_file')) {
             // Delete old file if it exists
-            if ($file->document_file && Storage::exists($file->document_file)) {
-                Storage::delete($file->document_file);
+            if ($file->document_file && file_exists(public_path($file->document_file))) {
+                unlink(public_path($file->document_file));
             }
             
             // Store new file
-            $file_path = $request->file('document_file')->store('public/files');
-            $validatedData['document_file'] = $file_path;
+            $newFile = $request->file('document_file');
+            $fileName = time() . '_' . $newFile->getClientOriginalName();
+            $newFile->move(public_path('exams/files'), $fileName);
+            $validatedData['document_file'] = 'exams/files/' . $fileName;
         } else {
             // Keep existing file if no new file uploaded
             $validatedData['document_file'] = $file->document_file;
