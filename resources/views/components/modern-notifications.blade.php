@@ -116,19 +116,8 @@
             notification.classList.add('notification-hiding');
             setTimeout(() => {
                 notification.remove();
-                // Remove from session if it's the last notification
-                if (document.querySelectorAll('.modern-notification').length === 0) {
-                    // Clear session messages
-                    fetch('{{ route("clear.session.messages") }}', {
-                        method: 'POST',
-                        headers: {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                            'Content-Type': 'application/json',
-                        }
-                    }).catch(() => {
-                        // Silently fail if there's an error
-                    });
-                }
+                // Note: Session messages will be cleared on next page load
+                // This prevents the route error and simplifies the system
             }, 300);
         }
 
