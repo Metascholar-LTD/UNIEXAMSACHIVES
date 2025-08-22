@@ -125,6 +125,8 @@
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             'Content-Type': 'application/json',
                         }
+                    }).catch(() => {
+                        // Silently fail if there's an error
                     });
                 }
             }, 300);

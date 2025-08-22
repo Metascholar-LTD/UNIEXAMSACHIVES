@@ -9,6 +9,7 @@
     <title>{{$systemDetail[0]->title ?? 'University Exams Archive System'}}</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <link rel="shortcut icon" type="image/x-icon" href="{{asset('img/fav.jpeg')}}">
     <!-- Place favicon.ico in the root directory -->
