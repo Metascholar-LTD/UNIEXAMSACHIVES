@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Email Details</h4>
+                            <h4>Memo Details</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.index')}}" class="responsive-btn back-btn">
                                     <div class="svgWrapper">
@@ -34,7 +34,7 @@
                                                 d="M19 12H5m7-7-7 7 7 7"
                                             ></path>
                                         </svg>
-                                        <div class="text">Back to Emails</div>
+                                        <div class="text">Back to Memos</div>
                                     </div>
                                 </a>
                                 @if($campaign->status === 'draft')
@@ -57,7 +57,7 @@
                                                     d="m18.5 2.5 3 3L12 15l-4 1 1-4 9.5-9.5z"
                                                 ></path>
                                             </svg>
-                                            <div class="text">Edit Email</div>
+                                            <div class="text">Edit Memo</div>
                                         </div>
                                     </a>
                                 @endif
@@ -67,7 +67,7 @@
 
 
                         <div class="row">
-                            <!-- Email Information -->
+                            <!-- Memo Information -->
                             <div class="col-xl-8">
                                 <div class="dashboard__form__wraper">
                                     <div class="email-header">
@@ -119,7 +119,7 @@
 
                                     <div class="email-details">
                                         <div class="detail-section">
-                                            <h5><i class="icofont-info-circle"></i> Email Information</h5>
+                                            <h5><i class="icofont-info-circle"></i> Memo Information</h5>
                                             <div class="detail-item">
                                                 <strong>Subject:</strong>
                                                 <p>{{ $campaign->subject }}</p>
@@ -226,7 +226,7 @@
                             <!-- Email Statistics -->
                             <div class="col-xl-4">
                                 <div class="dashboard__form__wraper">
-                                    <h5><i class="icofont-chart-bar-graph"></i> Email Statistics</h5>
+                                                                                <h5><i class="icofont-chart-bar-graph"></i> Memo Statistics</h5>
                                     
                                     <div class="stats-grid">
                                         <div class="stat-item">
@@ -292,10 +292,10 @@
                                     @if(in_array($campaign->status, ['draft', 'scheduled']))
                                         <div class="email-actions">
                                             <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to send this email now?')">
+                                                  onsubmit="return confirm('Are you sure you want to send this memo now?')">
                                                 @csrf
                                                 <button type="submit" class="btn btn-success btn-block">
-                                                    <i class="icofont-send-mail"></i> Send Email Now
+                                                    <i class="icofont-send-mail"></i> Send Memo Now
                                                 </button>
                                             </form>
                                         </div>
@@ -305,11 +305,11 @@
                                         <div class="danger-zone mt-4">
                                             <h6 class="text-danger">Danger Zone</h6>
                                             <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
-                                                  onsubmit="return confirm('Are you sure you want to delete this email? This action cannot be undone.')">
+                                                  onsubmit="return confirm('Are you sure you want to delete this memo? This action cannot be undone.')">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-danger btn-sm">
-                                                    <i class="icofont-trash"></i> Delete Email
+                                                    <i class="icofont-trash"></i> Delete Memo
                                                 </button>
                                             </form>
                                         </div>
@@ -643,7 +643,7 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // Auto-refresh for sending emails
+            // Auto-refresh for sending memos
     @if($campaign->status === 'sending')
         setInterval(function() {
             location.reload();

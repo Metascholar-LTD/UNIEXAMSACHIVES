@@ -34,7 +34,7 @@
                                                 d="M19 12H5m7-7-7 7 7 7"
                                             ></path>
                                         </svg>
-                                        <div class="text">Back to Emails</div>
+                                        <div class="text">Back to Memos</div>
                                     </div>
                                 </a>
                                 <a href="{{route('admin.communication.create')}}" class="responsive-btn compose-btn">
@@ -51,7 +51,7 @@
                                                 d="M12 5v14m-7-7h14"
                                             ></path>
                                         </svg>
-                                        <div class="text">Compose Email</div>
+                                        <div class="text">Compose Memo</div>
                                     </div>
                                 </a>
                             </div>
@@ -66,7 +66,7 @@
                                     </div>
                                     <div class="metric-content">
                                         <h3 class="metric-number">{{ $stats['total_campaigns'] }}</h3>
-                                        <p class="metric-label">Total Emails</p>
+                                        <p class="metric-label">Total Memos</p>
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +78,7 @@
                                     </div>
                                     <div class="metric-content">
                                         <h3 class="metric-number">{{ $stats['sent_campaigns'] }}</h3>
-                                        <p class="metric-label">Sent Emails</p>
+                                        <p class="metric-label">Sent Memos</p>
                                     </div>
                                 </div>
                             </div>
@@ -90,7 +90,7 @@
                                     </div>
                                     <div class="metric-content">
                                         <h3 class="metric-number">{{ $stats['total_emails_sent'] }}</h3>
-                                        <p class="metric-label">Emails Delivered</p>
+                                        <p class="metric-label">Memos Delivered</p>
                                     </div>
                                 </div>
                             </div>
@@ -109,11 +109,11 @@
                         </div>
 
                         <div class="row">
-                            <!-- Email Status Overview -->
+                            <!-- Memo Status Overview -->
                             <div class="col-xl-8 col-lg-12 mb-4">
                                 <div class="stats-panel">
                                     <div class="panel-header">
-                                        <h5>Email Status Overview</h5>
+                                        <h5>Memo Status Overview</h5>
                                         <p class="panel-subtitle">Current campaign distribution and performance metrics</p>
                                     </div>
                                     
@@ -195,7 +195,7 @@
                                 <div class="stats-panel">
                                     <div class="panel-header">
                                         <h5>Monthly Activity</h5>
-                                        <p class="panel-subtitle">Email activity trends over time</p>
+                                        <p class="panel-subtitle">Memo activity trends over time</p>
                                     </div>
                                     
                                     <div class="activity-chart">
@@ -230,7 +230,7 @@
                             <div class="col-xl-12">
                                 <div class="stats-panel">
                                     <div class="panel-header">
-                                        <h5>Recent Email Activity</h5>
+                                        <h5>Recent Memo Activity</h5>
                                         <p class="panel-subtitle">Latest campaign activities and updates</p>
                                     </div>
                                     
@@ -239,7 +239,7 @@
                                             <i class="icofont-history"></i>
                                             <p>No recent activity</p>
                                             <a href="{{ route('admin.communication.create') }}" class="btn btn-primary">
-                                                Create Your First Email
+                                                Create Your First Memo
                                             </a>
                                         </div>
                                     @else

@@ -34,7 +34,7 @@
                                                 d="M12 5v14m-7-7h14"
                                             ></path>
                                         </svg>
-                                        <div class="text">Compose Email</div>
+                                        <div class="text">Compose Memo</div>
                                     </div>
                                 </a>
                             </div>
@@ -51,7 +51,7 @@
                                     </div>
                                     <div class="metric-content">
                                         <h3 class="metric-number">{{ $totalCampaigns }}</h3>
-                                        <p class="metric-label">Total Emails</p>
+                                        <p class="metric-label">Total Memos</p>
                                     </div>
                                 </div>
                             </div>
@@ -62,7 +62,7 @@
                                     </div>
                                     <div class="metric-content">
                                         <h3 class="metric-number">{{ $sentCampaigns }}</h3>
-                                        <p class="metric-label">Sent Emails</p>
+                                        <p class="metric-label">Sent Memos</p>
                                     </div>
                                 </div>
                             </div>
@@ -73,7 +73,7 @@
                                     </div>
                                     <div class="metric-content">
                                         <h3 class="metric-number">{{ $pendingCampaigns }}</h3>
-                                        <p class="metric-label">Pending Emails</p>
+                                        <p class="metric-label">Pending Memos</p>
                                     </div>
                                 </div>
                             </div>
@@ -90,18 +90,18 @@
                             </div>
                         </div>
 
-                        <!-- Emails Table -->
+                        <!-- Memos Table -->
                         <div class="stats-panel">
                             <div class="panel-header">
-                                <h5>Email Campaigns</h5>
-                                <p class="panel-subtitle">Manage and monitor your email communications</p>
+                                <h5>Memo Campaigns</h5>
+                                <p class="panel-subtitle">Manage and monitor your memo communications</p>
                             </div>
 
                             <div class="table-controls">
                                 <form method="GET" class="search-form">
                                     <div class="search-input-wrapper">
                                         <i class="icofont-search-1 search-icon"></i>
-                                        <input type="text" name="search" placeholder="Search emails..." 
+                                        <input type="text" name="search" placeholder="Search memos..." 
                                                value="{{ request('search') }}" class="search-input">
                                         <button type="submit" class="search-button">Search</button>
                                     </div>
@@ -192,7 +192,7 @@
                                                     @if(in_array($campaign->status, ['draft', 'scheduled']))
                                                         <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
                                                               style="display: inline-block;" 
-                                                              onsubmit="return confirm('Are you sure you want to send this email?')">
+                                                              onsubmit="return confirm('Are you sure you want to send this memo?')">
                                                             @csrf
                                                             <button type="submit" class="action-btn send-btn" title="Send Now">
                                                                 <i class="icofont-send-mail"></i>
@@ -202,7 +202,7 @@
 
                                                     <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
                                                           style="display: inline-block;" 
-                                                          onsubmit="return confirm('Are you sure you want to delete this email?')">
+                                                          onsubmit="return confirm('Are you sure you want to delete this memo?')">
                                                         @csrf
                                                         @method('DELETE')
                                                         <button type="submit" class="action-btn delete-btn" title="Delete">
@@ -217,8 +217,8 @@
                                             <td colspan="6" class="text-center py-5">
                                                 <div class="empty-state">
                                                     <i class="icofont-inbox"></i>
-                                                    <h5>No Emails Found</h5>
-                                                    <p>Start by composing your first email to communicate with users.</p>
+                                                                                    <h5>No Memos Found</h5>
+                                <p>Start by composing your first memo to communicate with users.</p>
                                                 </div>
                                             </td>
                                         </tr>
@@ -848,7 +848,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }, 5000);
 
-    // Refresh page every 30 seconds for sending emails
+            // Refresh page every 30 seconds for sending memos
     const hasSendingEmails = document.querySelector('.status-sending');
     if (hasSendingEmails) {
         setTimeout(function() {

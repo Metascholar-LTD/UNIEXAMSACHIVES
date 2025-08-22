@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Compose Email</h4>
+                            <h4>Compose Memo</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.index')}}" class="responsive-btn back-btn">
                                     <div class="svgWrapper">
@@ -34,7 +34,7 @@
                                                 d="M19 12H5m7-7-7 7 7 7"
                                             ></path>
                                         </svg>
-                                        <div class="text">Back to Emails</div>
+                                        <div class="text">Back to Memos</div>
                                     </div>
                                 </a>
                             </div>
@@ -57,25 +57,25 @@
                                 <div class="col-xl-8">
                                     <div class="compose-panel">
                                         <div class="panel-header">
-                                            <h5><i class="icofont-edit"></i> Compose Your Email</h5>
+                                            <h5><i class="icofont-edit"></i> Compose Your Memo</h5>
                                             <p class="panel-subtitle">Create engaging content for your audience</p>
                                         </div>
 
                                         <div class="form-section">
                                             <div class="form-group">
                                                 <label for="subject" class="form-label">
-                                                    <i class="icofont-email"></i> Email Subject
+                                                    <i class="icofont-email"></i> Memo Subject
                                                     <span class="required">*</span>
                                                 </label>
                                                 <input type="text" id="subject" name="subject" 
                                                        placeholder="Enter a compelling subject line..." 
                                                        value="{{ old('subject') }}" required class="form-input">
-                                                <small class="form-help">This will be the email subject line users see in their inbox</small>
+                                                <small class="form-help">This will be the memo subject line users see in their inbox</small>
                                             </div>
 
                                             <div class="form-group">
                                                 <label for="message" class="form-label">
-                                                    <i class="icofont-chat"></i> Email Message
+                                                    <i class="icofont-chat"></i> Memo Message
                                                     <span class="required">*</span>
                                                 </label>
                                                 <div class="message-editor">
@@ -210,7 +210,7 @@
                                     <div class="compose-panel">
                                         <div class="panel-header">
                                             <h5><i class="icofont-users"></i> Recipients & Settings</h5>
-                                            <p class="panel-subtitle">Configure your email delivery options</p>
+                                            <p class="panel-subtitle">Configure your memo delivery options</p>
                                         </div>
                                         
                                         <div class="form-section">
@@ -327,7 +327,7 @@
                                                         </div>
                                                         <div class="option-content">
                                                             <strong>Send Immediately</strong>
-                                                            <span class="option-desc">Email will be sent right away</span>
+                                                            <span class="option-desc">Memo will be sent right away</span>
                                                         </div>
                                                     </label>
                                                 </div>
@@ -341,7 +341,7 @@
                                                         </div>
                                                         <div class="option-content">
                                                             <strong>Schedule for Later</strong>
-                                                            <span class="option-desc">Choose when to send the email</span>
+                                                            <span class="option-desc">Choose when to send the memo</span>
                                                         </div>
                                                     </label>
                                                 </div>
@@ -360,7 +360,7 @@
                                             <label class="form-label">Actions</label>
                                             <div class="form-actions">
                                                 <button type="submit" name="action" value="send" class="action-btn send-btn">
-                                                    <i class="icofont-send-mail"></i> Send Email
+                                                    <i class="icofont-send-mail"></i> Send Memo
                                                 </button>
                                                 <button type="submit" name="action" value="draft" class="action-btn draft-btn">
                                                     <i class="icofont-save"></i> Save as Draft
@@ -370,7 +370,7 @@
 
                                         <div class="form-group">
                                             <label class="form-label">
-                                                <i class="icofont-eye"></i> Email Preview
+                                                <i class="icofont-eye"></i> Memo Preview
                                             </label>
                                             <div class="preview-card">
                                                 <div class="preview-header">
@@ -392,7 +392,7 @@
 </div>
 
 <style>
-/* Modern Compose Email Styles */
+    /* Modern Compose Memo Styles */
 * {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }

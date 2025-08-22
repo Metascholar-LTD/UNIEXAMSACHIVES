@@ -85,7 +85,7 @@
             
             @if($campaign->attachments && count($campaign->attachments) > 0)
                 <div class="attachments">
-                    <strong>📎 This email includes {{ count($campaign->attachments) }} attachment(s)</strong>
+                                                    <strong>📎 This memo includes {{ count($campaign->attachments) }} attachment(s)</strong>
                 </div>
             @endif
             
@@ -94,7 +94,7 @@
         
         <div class="footer">
             <p>This is an automated message from the University Exams Archive System.</p>
-            <p>Please do not reply to this email.</p>
+                                        <p>Please do not reply to this memo.</p>
             <p>&copy; {{ date('Y') }} University Exams Archive System. All rights reserved.</p>
         </div>
     </div>

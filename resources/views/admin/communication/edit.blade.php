@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Edit Email</h4>
+                            <h4>Edit Memo</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.show', $campaign)}}" class="responsive-btn back-btn">
                                     <div class="svgWrapper">
@@ -60,17 +60,17 @@
                                         
 
                                         <div class="dashboard__form__input">
-                                            <label for="subject">Email Subject <span class="required">*</span></label>
+                                            <label for="subject">Memo Subject <span class="required">*</span></label>
                                             <input type="text" id="subject" name="subject" 
-                                                   placeholder="Enter email subject" 
+                                                   placeholder="Enter memo subject" 
                                                    value="{{ old('subject', $campaign->subject) }}" required>
-                                            <small class="form-text text-muted">This will be the email subject line users see</small>
+                                            <small class="form-text text-muted">This will be the memo subject line users see</small>
                                         </div>
 
                                         <div class="dashboard__form__input">
-                                            <label for="message">Email Message <span class="required">*</span></label>
+                                            <label for="message">Memo Message <span class="required">*</span></label>
                                             <textarea id="message" name="message" rows="12" 
-                                                      placeholder="Enter your email message..." required>{{ old('message', $campaign->message) }}</textarea>
+                                                      placeholder="Enter your memo message..." required>{{ old('message', $campaign->message) }}</textarea>
                                             <small class="form-text text-muted">HTML formatting is supported</small>
                                         </div>
 
@@ -217,7 +217,7 @@
 
                                         <div class="form-actions">
                                             <button type="submit" class="btn btn-primary btn-block">
-                                                <i class="icofont-save"></i> Update Email
+                                                <i class="icofont-save"></i> Update Memo
                                             </button>
                                             <a href="{{ route('admin.communication.show', $campaign) }}" 
                                                class="btn btn-secondary btn-block">
@@ -226,7 +226,7 @@
                                         </div>
 
                                         <div class="email-preview mt-3">
-                                            <h6><i class="icofont-eye"></i> Preview</h6>
+                                            <h6><i class="icofont-eye"></i> Memo Preview</h6>
                                             <div class="preview-card">
                                                 <div class="preview-subject" id="preview-subject">{{ $campaign->subject }}</div>
                                                 <div class="preview-message" id="preview-message">{{ Str::limit($campaign->message, 200) }}</div>

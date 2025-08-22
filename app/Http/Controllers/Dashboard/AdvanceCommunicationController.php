@@ -216,7 +216,7 @@ class AdvanceCommunicationController extends Controller
 
 
         return redirect()->route('admin.communication.index')
-                        ->with('success', "Email campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}");
+                        ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}");
     }
 
     public function show(EmailCampaign $campaign)
@@ -233,7 +233,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft') {
-            return redirect()->back()->with('error', 'Only draft emails can be edited.');
+            return redirect()->back()->with('error', 'Only draft memos can be edited.');
         }
 
         $users = User::where('is_approve', true)
@@ -249,7 +249,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft') {
-            return redirect()->back()->with('error', 'Only draft emails can be updated.');
+            return redirect()->back()->with('error', 'Only draft memos can be updated.');
         }
 
         $validator = Validator::make($request->all(), [
@@ -307,7 +307,7 @@ class AdvanceCommunicationController extends Controller
         }
 
         return redirect()->route('admin.communication.show', $campaign)
-                        ->with('success', 'Email updated successfully!');
+                        ->with('success', 'Memo updated successfully!');
     }
 
     public function destroy(EmailCampaign $campaign)
@@ -324,7 +324,7 @@ class AdvanceCommunicationController extends Controller
         $campaign->delete();
 
         return redirect()->route('admin.communication.index')
-                        ->with('success', 'Email deleted successfully!');
+                        ->with('success', 'Memo deleted successfully!');
     }
 
     public function send(EmailCampaign $campaign)
@@ -332,7 +332,7 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
-            return redirect()->back()->with('error', 'Email cannot be sent in current status.');
+            return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
         }
 
         $campaign->update([
@@ -342,7 +342,7 @@ class AdvanceCommunicationController extends Controller
 
         SendCampaignEmail::dispatch($campaign);
 
-        return redirect()->back()->with('success', 'Email is being sent!');
+        return redirect()->back()->with('success', 'Memo is being sent!');
     }
 
     public function removeAttachment(EmailCampaign $campaign, $attachmentIndex)
