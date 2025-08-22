@@ -14024,8 +14024,8 @@ Enhanced Footer Styles
 /* Partners Section Styles */
 .footerarea__partners__wrapper {
   padding: 60px 0 40px;
-  border-bottom: 1px solid var(--darkcolor);
-  background: linear-gradient(135deg, rgba(95, 45, 237, 0.05) 0%, rgba(95, 45, 237, 0.02) 100%);
+  border-bottom: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
 }
 
 .partners__heading {
@@ -14035,13 +14035,13 @@ Enhanced Footer Styles
 .partners__heading h3 {
   font-size: 28px;
   font-weight: 700;
-  color: var(--whiteColor);
+  color: #1f2937;
   margin-bottom: 15px;
   font-family: var(--headingFont);
 }
 
 .partners__heading p {
-  color: var(--darkgray);
+  color: #6b7280;
   font-size: 16px;
   margin-bottom: 0;
   max-width: 600px;
@@ -14054,14 +14054,14 @@ Enhanced Footer Styles
 }
 
 .partner__card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
   padding: 30px 20px;
   text-align: center;
   transition: all 0.3s ease;
   height: 100%;
-  backdrop-filter: blur(10px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -14073,7 +14073,7 @@ Enhanced Footer Styles
   left: 0;
   right: 0;
   height: 3px;
-  background: linear-gradient(90deg, var(--primaryColor), var(--secondaryColor));
+  background: linear-gradient(90deg, #3b82f6, #1d4ed8);
   transform: scaleX(0);
   transition: transform 0.3s ease;
 }
@@ -14084,15 +14084,15 @@ Enhanced Footer Styles
 
 .partner__card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
-  border-color: rgba(95, 45, 237, 0.3);
-  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  border-color: #3b82f6;
+  background: #ffffff;
 }
 
 .partner__logo {
   width: 80px;
   height: 80px;
-  background: linear-gradient(135deg, var(--primaryColor), var(--secondaryColor));
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -14103,7 +14103,7 @@ Enhanced Footer Styles
 
 .partner__card:hover .partner__logo {
   transform: scale(1.1);
-  box-shadow: 0 10px 25px rgba(95, 45, 237, 0.4);
+  box-shadow: 0 10px 25px rgba(59, 130, 246, 0.3);
 }
 
 .partner__logo i {
@@ -14114,13 +14114,13 @@ Enhanced Footer Styles
 .partner__card h4 {
   font-size: 18px;
   font-weight: 600;
-  color: var(--whiteColor);
+  color: #1f2937;
   margin-bottom: 12px;
   font-family: var(--headingFont);
 }
 
 .partner__card p {
-  color: var(--darkgray);
+  color: #6b7280;
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 20px;
@@ -14131,23 +14131,23 @@ Enhanced Footer Styles
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  color: var(--primaryColor);
+  color: #3b82f6;
   text-decoration: none;
   font-weight: 500;
   font-size: 14px;
   padding: 8px 16px;
-  border: 1px solid rgba(95, 45, 237, 0.3);
+  border: 1px solid #dbeafe;
   border-radius: 20px;
   transition: all 0.3s ease;
-  background: rgba(95, 45, 237, 0.1);
+  background: #eff6ff;
 }
 
 .partner__link:hover {
-  background: var(--primaryColor);
-  color: var(--whiteColor);
-  border-color: var(--primaryColor);
+  background: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(95, 45, 237, 0.3);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
 }
 
 .partner__link i {
@@ -14178,7 +14178,7 @@ Enhanced Footer Styles
 .contact__icon {
   width: 40px;
   height: 40px;
-  background: var(--primaryColor);
+  background: #3b82f6;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -14189,7 +14189,7 @@ Enhanced Footer Styles
 }
 
 .contact__item:hover .contact__icon {
-  background: var(--secondaryColor);
+  background: #1d4ed8;
   transform: scale(1.1);
 }
 
@@ -14199,7 +14199,7 @@ Enhanced Footer Styles
 }
 
 .contact__content p {
-  color: var(--darkgray);
+  color: #6b7280;
   margin: 0;
   line-height: 1.5;
   font-size: 14px;
@@ -14207,12 +14207,12 @@ Enhanced Footer Styles
 
 /* Enhanced Copyright Section */
 .footerarea__copyright__wrapper__2 {
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  background: #f8fafc;
+  border-top: 1px solid #e5e7eb;
 }
 
 .developer__link {
-  color: var(--primaryColor) !important;
+  color: #3b82f6 !important;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
@@ -14220,8 +14220,8 @@ Enhanced Footer Styles
 }
 
 .developer__link:hover {
-  color: var(--secondaryColor) !important;
-  border-bottom-color: var(--secondaryColor);
+  color: #1d4ed8 !important;
+  border-bottom-color: #1d4ed8;
 }
 
 /* Responsive Design Enhancements */
@@ -14399,37 +14399,42 @@ Enhanced Footer Styles
 
 /* Dark Mode Support for New Footer Elements */
 .is_dark .footerarea__partners__wrapper {
-  background: linear-gradient(135deg, rgba(95, 45, 237, 0.1) 0%, rgba(95, 45, 237, 0.05) 100%);
+  background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
 }
 
 .is_dark .partner__card {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15);
+  background: #334155;
+  border-color: #475569;
 }
 
 .is_dark .partner__card:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(95, 45, 237, 0.4);
+  background: #475569;
+  border-color: #3b82f6;
 }
 
 .is_dark .partners__heading h3 {
-  color: var(--blackColor);
+  color: #f8fafc;
 }
 
 .is_dark .partners__heading p {
-  color: var(--blackColor);
+  color: #cbd5e1;
 }
 
 .is_dark .partner__card h4 {
-  color: var(--blackColor);
+  color: #f8fafc;
 }
 
 .is_dark .partner__card p {
-  color: var(--blackColor);
+  color: #cbd5e1;
 }
 
 .is_dark .contact__content p {
-  color: var(--blackColor);
+  color: #cbd5e1;
+}
+
+.is_dark .footerarea__copyright__wrapper__2 {
+  background: #1e293b;
+  border-top-color: #475569;
 }
 
 /* Animation Enhancements */
@@ -14465,7 +14470,7 @@ Enhanced Footer Styles
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.2), transparent);
   transition: left 0.5s ease;
 }
 
@@ -14475,5 +14480,5 @@ Enhanced Footer Styles
 
 .footerarea__icon ul li a:hover {
   transform: translateY(-3px);
-  box-shadow: 0 8px 20px rgba(95, 45, 237, 0.3);
+  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.3);
 }
