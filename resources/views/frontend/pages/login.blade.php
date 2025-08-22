@@ -45,7 +45,7 @@
         
         <div class="tech-orbit-display">
             <h1 class="orbit-title">University Digital Archive</h1>
-            <h2 class="orbit-subtitle">Registry Communication System</h2>
+            <h2 class="orbit-subtitle" id="typewriter-subtitle"></h2>
             <div class="orbit-container">
                 <div class="orbit-path"></div>
                 <div class="orbit-icon orbit-icon-1">
@@ -453,5 +453,50 @@ function showLanguageChangeMessage(langName) {
         }, 3000);
     }
 }
+
+// Typewriter Effect for Subtitle
+function typewriterEffect() {
+    const subtitle = document.getElementById('typewriter-subtitle');
+    const text = 'Registry Communication System';
+    let currentIndex = 0;
+    let isTyping = true;
+    
+    function type() {
+        if (isTyping && currentIndex < text.length) {
+            subtitle.textContent = text.slice(0, currentIndex + 1);
+            currentIndex++;
+            setTimeout(type, 100); // Typing speed
+        } else if (isTyping && currentIndex >= text.length) {
+            // Finished typing, wait 5 seconds
+            setTimeout(() => {
+                isTyping = false;
+                currentIndex = text.length;
+                erase();
+            }, 5000);
+        }
+    }
+    
+    function erase() {
+        if (!isTyping && currentIndex > 0) {
+            subtitle.textContent = text.slice(0, currentIndex - 1);
+            currentIndex--;
+            setTimeout(erase, 50); // Erasing speed (faster than typing)
+        } else if (!isTyping && currentIndex <= 0) {
+            // Finished erasing, start typing again
+            isTyping = true;
+            currentIndex = 0;
+            setTimeout(type, 500); // Small pause before restarting
+        }
+    }
+    
+    // Start the typewriter effect
+    type();
+}
+
+// Initialize typewriter effect when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Start typewriter effect after a short delay
+    setTimeout(typewriterEffect, 1000);
+});
 </script>
 @endpush
