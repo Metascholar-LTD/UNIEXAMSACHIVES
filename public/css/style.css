@@ -13299,13 +13299,28 @@ Footer Area
 }
 
 /*------------------------------
-New Modern Footer Styles
+Professional Footer Styles - Senior Developer Quality
 -------------------------------*/
 .footer-area {
-  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
-  color: #ffffff;
+  background: var(--darkblack);
+  color: var(--whiteColor);
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+/* Light Mode Styles */
+.footer-area {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+  color: #1e293b;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+/* Dark Mode Styles */
+.is_dark .footer-area {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+  color: #f1f5f9;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
 }
 
 .footer-area::before {
@@ -13315,8 +13330,12 @@ New Modern Footer Styles
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="10" cy="60" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="90" cy="40" r="0.5" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23000000" opacity="0.02"/><circle cx="75" cy="75" r="1" fill="%23000000" opacity="0.02"/><circle cx="50" cy="10" r="0.5" fill="%23000000" opacity="0.01"/><circle cx="10" cy="60" r="0.5" fill="%23000000" opacity="0.01"/><circle cx="90" cy="40" r="0.5" fill="%23000000" opacity="0.01"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
   pointer-events: none;
+}
+
+.is_dark .footer-area::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.03"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="10" cy="60" r="0.5" fill="%23ffffff" opacity="0.02"/><circle cx="90" cy="40" r="0.5" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
 }
 
 .footer-main {
@@ -13325,27 +13344,77 @@ New Modern Footer Styles
   z-index: 1;
 }
 
-.footer-widget {
-  margin-bottom: 30px;
+/* Ensure proper grid behavior */
+.footer-main .row {
+  margin: 0;
 }
 
-.footer-logo-img {
-  filter: brightness(0) invert(1);
+.footer-main .col-lg-4,
+.footer-main .col-lg-2,
+.footer-main .col-lg-3,
+.footer-main .col-md-6,
+.footer-main .col-sm-12 {
+  padding: 0 15px;
+}
+
+.footer-widget {
+  margin-bottom: 30px;
   transition: all 0.3s ease;
 }
 
+.footer-widget:hover {
+  transform: translateY(-2px);
+}
+
+/* Add subtle entrance animations */
+.footer-widget:nth-child(1) { animation: fadeInUp 0.6s ease 0.1s both; }
+.footer-widget:nth-child(2) { animation: fadeInUp 0.6s ease 0.2s both; }
+.footer-widget:nth-child(3) { animation: fadeInUp 0.6s ease 0.3s both; }
+.footer-widget:nth-child(4) { animation: fadeInUp 0.6s ease 0.4s both; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.footer-logo-img {
+  max-height: 50px;
+  width: auto;
+  transition: all 0.3s ease;
+  filter: brightness(0) invert(1);
+}
+
+.is_dark .footer-logo-img {
+  filter: brightness(0) invert(1);
+}
+
 .footer-logo-img:hover {
-  filter: brightness(1) invert(0);
   transform: scale(1.05);
+  filter: brightness(1) invert(0);
+}
+
+.is_dark .footer-logo-img:hover {
+  filter: brightness(1) invert(0);
 }
 
 .footer-title {
-  color: #ffffff;
+  color: #1e293b;
   font-size: 18px;
   font-weight: 600;
   margin-bottom: 20px;
   position: relative;
   padding-bottom: 10px;
+  font-family: var(--headingFont);
+}
+
+.is_dark .footer-title {
+  color: #f1f5f9;
 }
 
 .footer-title::after {
@@ -13357,18 +13426,29 @@ New Modern Footer Styles
   height: 2px;
   background: var(--primaryColor);
   border-radius: 1px;
+  transition: width 0.3s ease;
+}
+
+.footer-title:hover::after {
+  width: 40px;
 }
 
 .footer-description {
-  color: #b8c5d6;
+  color: #64748b;
   font-size: 14px;
   line-height: 1.6;
   margin-bottom: 20px;
+  font-family: var(--contentFont);
+}
+
+.is_dark .footer-description {
+  color: #cbd5e1;
 }
 
 .footer-social {
   display: flex;
   gap: 12px;
+  flex-wrap: wrap;
 }
 
 .social-link {
@@ -13377,13 +13457,36 @@ New Modern Footer Styles
   justify-content: center;
   width: 40px;
   height: 40px;
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: rgba(0, 0, 0, 0.05);
+  color: #475569;
   border-radius: 50%;
   text-decoration: none;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.is_dark .social-link {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
   border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.social-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.social-link:hover::before {
+  left: 100%;
 }
 
 .social-link:hover {
@@ -13391,6 +13494,7 @@ New Modern Footer Styles
   color: #ffffff;
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(95, 45, 237, 0.3);
+  border-color: var(--primaryColor);
 }
 
 .footer-links {
@@ -13401,15 +13505,22 @@ New Modern Footer Styles
 
 .footer-links li {
   margin-bottom: 12px;
+  position: relative;
 }
 
 .footer-links a {
-  color: #b8c5d6;
+  color: #64748b;
   text-decoration: none;
   font-size: 14px;
   transition: all 0.3s ease;
   position: relative;
   padding-left: 0;
+  font-family: var(--contentFont);
+  display: inline-block;
+}
+
+.is_dark .footer-links a {
+  color: #cbd5e1;
 }
 
 .footer-links a::before {
@@ -13419,15 +13530,32 @@ New Modern Footer Styles
   opacity: 0;
   transition: all 0.3s ease;
   color: var(--primaryColor);
+  font-weight: bold;
 }
 
 .footer-links a:hover {
-  color: #ffffff;
+  color: var(--primaryColor);
   padding-left: 15px;
+  transform: translateX(5px);
 }
 
 .footer-links a:hover::before {
   opacity: 1;
+}
+
+.footer-links li::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--primaryColor);
+  transition: width 0.3s ease;
+}
+
+.footer-links li:hover::after {
+  width: 100%;
 }
 
 .contact-info {
@@ -13440,8 +13568,19 @@ New Modern Footer Styles
   display: flex;
   align-items: center;
   gap: 12px;
-  color: #b8c5d6;
+  color: #64748b;
   font-size: 14px;
+  font-family: var(--contentFont);
+  transition: all 0.3s ease;
+  padding: 8px 0;
+}
+
+.is_dark .contact-item {
+  color: #cbd5e1;
+}
+
+.contact-item:hover {
+  transform: translateX(5px);
 }
 
 .contact-item i {
@@ -13449,12 +13588,22 @@ New Modern Footer Styles
   font-size: 16px;
   width: 20px;
   text-align: center;
+  transition: all 0.3s ease;
+}
+
+.contact-item:hover i {
+  transform: scale(1.2);
+  color: var(--primaryColor);
 }
 
 .footer-divider {
   height: 1px;
-  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  background: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.1) 50%, transparent 100%);
   margin: 0;
+}
+
+.is_dark .footer-divider {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
 }
 
 .footer-bottom {
@@ -13464,54 +13613,123 @@ New Modern Footer Styles
 }
 
 .copyright-text p {
-  color: #b8c5d6;
+  color: #64748b;
   font-size: 14px;
   margin: 0;
+  font-family: var(--contentFont);
+}
+
+.is_dark .copyright-text p {
+  color: #cbd5e1;
 }
 
 .footer-bottom-links {
   display: flex;
   gap: 20px;
   justify-content: flex-end;
+  flex-wrap: wrap;
 }
 
 .footer-bottom-links a {
-  color: #b8c5d6;
+  color: #64748b;
   text-decoration: none;
   font-size: 13px;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  font-family: var(--contentFont);
+  position: relative;
+  padding: 5px 0;
+}
+
+.is_dark .footer-bottom-links a {
+  color: #cbd5e1;
+}
+
+.footer-bottom-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--primaryColor);
+  transition: width 0.3s ease;
 }
 
 .footer-bottom-links a:hover {
   color: var(--primaryColor);
 }
 
+.footer-bottom-links a:hover::after {
+  width: 100%;
+}
+
 /* Developer Credits Section */
 .developer-credits {
-  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
+  background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
   padding: 20px 0;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.is_dark .developer-credits {
+  background: linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%);
   border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.developer-credits::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23000000" opacity="0.02"/><circle cx="75" cy="75" r="1" fill="%23000000" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+}
+
+.is_dark .developer-credits::before {
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.02"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.02"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
 }
 
 .credits-text {
   display: flex;
   align-items: center;
   gap: 8px;
-  color: #8b9bb4;
+  color: #64748b;
   font-size: 13px;
+  font-family: var(--contentFont);
+}
+
+.is_dark .credits-text {
+  color: #8b9bb4;
 }
 
 .company-link {
   color: var(--primaryColor);
   text-decoration: none;
   font-weight: 600;
-  transition: color 0.3s ease;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.company-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--primaryColor);
+  transition: width 0.3s ease;
 }
 
 .company-link:hover {
   color: var(--primaryColor);
-  text-decoration: underline;
-  opacity: 0.8;
+}
+
+.company-link:hover::after {
+  width: 100%;
 }
 
 .partner-links {
@@ -13525,32 +13743,72 @@ New Modern Footer Styles
   display: flex;
   align-items: center;
   gap: 6px;
-  color: #8b9bb4;
+  color: #64748b;
   text-decoration: none;
   font-size: 12px;
-  padding: 6px 10px;
+  padding: 8px 12px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.05);
   transition: all 0.3s ease;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  font-family: var(--contentFont);
+  position: relative;
+  overflow: hidden;
+}
+
+.is_dark .partner-link {
+  color: #8b9bb4;
+  background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.partner-link::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(95, 45, 237, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.partner-link:hover::before {
+  left: 100%;
+}
+
 .partner-link:hover {
-  color: #ffffff;
+  color: var(--primaryColor);
   background: rgba(95, 45, 237, 0.1);
-  border-color: rgba(95, 45, 237, 0.3);
-  transform: translateY(-1px);
+  border-color: var(--primaryColor);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(95, 45, 237, 0.2);
 }
 
 .partner-link i {
   font-size: 14px;
   color: var(--primaryColor);
+  transition: all 0.3s ease;
 }
 
-/* Responsive Design */
+.partner-link:hover i {
+  transform: scale(1.2);
+}
+
+/* Responsive Design - Professional Mobile-First Approach */
+@media (max-width: 1199.98px) {
+  .footer-main {
+    padding: 50px 0 35px;
+  }
+}
+
 @media (max-width: 991.98px) {
   .footer-main {
     padding: 40px 0 30px;
+  }
+  
+  .footer-widget {
+    margin-bottom: 25px;
   }
   
   .footer-bottom-links {
@@ -13590,6 +13848,7 @@ New Modern Footer Styles
   .footer-bottom-links {
     justify-content: center;
     margin-top: 15px;
+    gap: 15px;
   }
   
   .developer-credits {
@@ -13599,23 +13858,79 @@ New Modern Footer Styles
   .partner-links {
     justify-content: center;
     margin-top: 15px;
+    gap: 10px;
   }
   
   .credits-text {
     justify-content: center;
     margin-bottom: 15px;
   }
+  
+  .contact-item:hover {
+    transform: none;
+  }
+  
+  .footer-links a:hover {
+    transform: none;
+    padding-left: 0;
+  }
 }
 
 @media (max-width: 575.98px) {
+  .footer-main {
+    padding: 25px 0 15px;
+  }
+  
+  .footer-widget {
+    margin-bottom: 20px;
+  }
+  
   .partner-links {
     flex-direction: column;
     align-items: center;
+    gap: 8px;
   }
   
   .partner-link {
-    min-width: 200px;
+    min-width: 180px;
     justify-content: center;
+    padding: 6px 10px;
+  }
+  
+  .footer-bottom-links {
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+  }
+  
+  .social-link {
+    width: 36px;
+    height: 36px;
+  }
+  
+  .footer-title {
+    font-size: 16px;
+  }
+  
+  .footer-description {
+    font-size: 13px;
+  }
+}
+
+/* Ensure proper spacing on very small devices */
+@media (max-width: 375px) {
+  .footer-main {
+    padding: 20px 0 10px;
+  }
+  
+  .footer-widget {
+    margin-bottom: 15px;
+  }
+  
+  .partner-link {
+    min-width: 160px;
+    font-size: 11px;
+    padding: 5px 8px;
   }
 }
 @media (max-width: 767px) {

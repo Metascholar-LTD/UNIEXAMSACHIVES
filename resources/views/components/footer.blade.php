@@ -4,10 +4,10 @@
         <div class="footer-main">
             <div class="row g-4">
                 <!-- Company Info -->
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6 col-sm-12">
                     <div class="footer-widget">
                         <div class="footer-logo mb-3">
-                            <img src="{{ asset('img/cug_logo_new.jpeg') }}" alt="CUG Logo" class="footer-logo-img" style="max-height: 50px;">
+                            <img src="{{ asset('img/cug_logo_new.jpeg') }}" alt="CUG Logo" class="footer-logo-img">
                         </div>
                         <p class="footer-description">
                             Empowering academic excellence through innovative digital solutions and comprehensive exam management systems.
@@ -30,7 +30,7 @@
                 </div>
 
                 <!-- Quick Links -->
-                <div class="col-lg-2 col-md-6">
+                <div class="col-lg-2 col-md-6 col-sm-12">
                     <div class="footer-widget">
                         <h5 class="footer-title">Quick Links</h5>
                         <ul class="footer-links">
@@ -43,7 +43,7 @@
                 </div>
 
                 <!-- Services -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="footer-widget">
                         <h5 class="footer-title">Our Services</h5>
                         <ul class="footer-links">
@@ -56,7 +56,7 @@
                 </div>
 
                 <!-- Contact Info -->
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg-3 col-md-6 col-sm-12">
                     <div class="footer-widget">
                         <h5 class="footer-title">Contact Info</h5>
                         <div class="contact-info">
@@ -84,13 +84,13 @@
         <!-- Footer Bottom -->
         <div class="footer-bottom">
             <div class="row align-items-center">
-                <div class="col-md-6">
+                <div class="col-md-6 col-sm-12">
                     <div class="copyright-text">
                         <p>&copy; {{ date('Y') }} Catholic University of Ghana. All Rights Reserved.</p>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="footer-bottom-links text-md-end">
+                <div class="col-md-6 col-sm-12">
+                    <div class="footer-bottom-links text-md-end text-sm-start">
                         <a href="#">Privacy Policy</a>
                         <a href="#">Terms of Service</a>
                         <a href="#">Cookie Policy</a>
@@ -105,14 +105,14 @@
 <div class="developer-credits">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-md-6">
+            <div class="col-md-6 col-sm-12">
                 <div class="credits-text">
                     <span>Developed and Powered by</span>
                     <a href="mailto:support@academicdigital.space" class="company-link">Metascholar Consult LTD</a>
                 </div>
             </div>
-            <div class="col-md-6">
-                <div class="partner-links text-md-end">
+            <div class="col-md-6 col-sm-12">
+                <div class="partner-links text-md-end text-sm-start">
                     <a href="https://scholarindexing.com/" target="_blank" rel="noopener noreferrer" class="partner-link">
                         <i class="fas fa-graduation-cap"></i>
                         <span>Scholar Indexing Society</span>
