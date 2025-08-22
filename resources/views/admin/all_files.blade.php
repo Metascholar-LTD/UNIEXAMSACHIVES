@@ -69,11 +69,11 @@
                                                         <td>
                                                             <div class="d-flex">
                                                                 @if(pathinfo($file->document_file, PATHINFO_EXTENSION) === 'pdf')
-                                                                <span><a href="{{ Storage::url($file->document_file) }}" target="_blank">
+                                                                <span><a href="{{ asset($file->document_file) }}" target="_blank">
                                                                         <i class="fas fa-eye"></i> 
                                                                     </a></span>
                                                                 @endif
-                                                                <span><a href="{{ Storage::url($file->document_file) }}" download><i class="fas fa-download"></i> </a></span>&nbsp;&nbsp;
+                                                                <span><a href="{{ asset($file->document_file) }}" download><i class="fas fa-download"></i> </a></span>&nbsp;&nbsp;
                                                                 @if (!$file->is_approve)
                                                                     <form action="{{ route('file.approve', $file->id) }}" method="post">
                                                                         @csrf

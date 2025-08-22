@@ -81,19 +81,21 @@
                                                         </td>
                                                         <td>
                                                             @if(pathinfo($exam->exam_document, PATHINFO_EXTENSION) === 'pdf')
-                                                                <a href="{{ Storage::url($exam->exam_document) }}" target="_blank">
+                                                                <a href="{{ asset($exam->exam_document) }}" target="_blank">
                                                                     <i class="fas fa-eye"></i> 
                                                                 </a>
                                                             @endif
-                                                            <span><a href="{{ Storage::url($exam->exam_document) }}" download><i class="fas fa-download"></i> </a></span>&nbsp;&nbsp;
+                                                            <span><a href="{{ asset($exam->exam_document) }}" download><i class="fas fa-download"></i> </a></span>&nbsp;&nbsp;
                                                         </td>
                                                         <td>
-                                                            @if(pathinfo($exam->answer_key, PATHINFO_EXTENSION) === 'pdf')
-                                                                <a href="{{ Storage::url($exam->answer_key) }}" target="_blank">
+                                                            @if($exam->answer_key && pathinfo($exam->answer_key, PATHINFO_EXTENSION) === 'pdf')
+                                                                <a href="{{ asset($exam->answer_key) }}" target="_blank">
                                                                     <i class="fas fa-eye"></i> 
                                                                 </a>
                                                             @endif
-                                                            <span><a href="{{ Storage::url($exam->answer_key) }}" download><i class="fas fa-download"></i> </a></span>&nbsp;&nbsp;
+                                                            @if($exam->answer_key)
+                                                                <span><a href="{{ asset($exam->answer_key) }}" download><i class="fas fa-download"></i> </a></span>&nbsp;&nbsp;
+                                                            @endif
 
                                                         </td>
                                                         <td>

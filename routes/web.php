@@ -85,6 +85,18 @@ Route::middleware(['auth'])->group(function () {
     # File Downloads
     Route::get('/download/exam/{exam}', [App\Http\Controllers\Dashboard\ExamsController::class, 'downloadExam'])->name('download.exam');
     Route::get('/download/answer-key/{exam}', [App\Http\Controllers\Dashboard\ExamsController::class, 'downloadAnswerKey'])->name('download.answer.key');
+    
+    # Legacy Storage URL Redirects (for old files)
+    Route::get('/storage/{path}', function($path) {
+        // Try to find the file in the new storage system
+        $newPath = 'exams/documents/' . basename($path);
+        if (file_exists(public_path($newPath))) {
+            return redirect(asset($newPath));
+        }
+        
+        // If not found, show a helpful error message
+        abort(404, 'File not found. This file may have been moved to the new storage system.');
+    })->where('path', '.*');
 
     #settings
     Route::get('/dashboard/settings',[HomeController::class, 'settings'])->name('dashboard.settings');

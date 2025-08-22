@@ -243,7 +243,7 @@
                                                         <label for="exam_document">Exam Document (Format: .pdf, .docx)</label>
                                                         <input type="file" name="exam_document" accept=".pdf,.docx">
                                                         @if ($exam->exam_document)
-                                                            <p class="text-success">Current File: <a class="text-success" href="{{ Storage::url($exam->exam_document) }}" target="_blank">View Document</a></p>
+                                                            <p class="text-success">Current File: <a class="text-success" href="{{ asset($exam->exam_document) }}" target="_blank">View Document</a></p>
                                                         @endif
                                                     </div>
                                                 </div>

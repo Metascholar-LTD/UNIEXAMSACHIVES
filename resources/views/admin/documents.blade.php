@@ -199,7 +199,7 @@
                                         @if ($exam instanceof \App\Models\Exam)
                                         <div class="gridarea__wraper gridarea__wraper__2">
                                             <div class="gridarea__img">
-                                                <a href="{{ Storage::url($exam->exam_document) }}" download>
+                                                <a href="{{ asset($exam->exam_document) }}" download>
                                                     @php
                                                         $extension = pathinfo($exam->exam_document, PATHINFO_EXTENSION);
 
@@ -235,8 +235,10 @@
                                                     <h3><a href="#">{{$exam->course_title}}</a></h3>
                                                 </div>
                                                 <div class="gridarea__price">
-                                                    <span style="font-size: 14px"> <a href="{{ Storage::url($exam->exam_document) }}" download><i class="fas fa-download"></i> Paper </a></span>
-                                                    <span style="font-size: 14px"> <a href="{{ Storage::url($exam->answer_key) }}" download><i class="fas fa-download"></i> Answer Key</a></span>
+                                                    <span style="font-size: 14px"> <a href="{{ asset($exam->exam_document) }}" download><i class="fas fa-download"></i> Paper </a></span>
+                                                    @if($exam->answer_key)
+                                                        <span style="font-size: 14px"> <a href="{{ asset($exam->answer_key) }}" download><i class="fas fa-download"></i> Answer Key</a></span>
+                                                    @endif
 
                                                 </div>
                                                 <div class="gridarea__bottom">
