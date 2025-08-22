@@ -525,6 +525,12 @@ select.animated-input option:checked {
   color: white;
 }
 
+/* Remove blue highlighting for placeholder option when selected */
+select.animated-input option[value=""]:checked {
+  background-color: transparent;
+  color: #9ca3af;
+}
+
 /* Custom dropdown arrow animation */
 select.animated-input:focus {
   background-image: url('data:image/svg+xml;charset=US-ASCII,<svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%233b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6,9 12,15 18,9"></polyline></svg>');
@@ -538,7 +544,7 @@ select.animated-input::-ms-expand {
 /* Custom placeholder styling */
 select.animated-input option[value=""] {
   color: #9ca3af;
-  font-style: italic;
+  font-weight: 600;
 }
 
 /* Smooth transitions for all states */
