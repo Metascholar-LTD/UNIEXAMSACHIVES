@@ -45,6 +45,7 @@
         
         <div class="tech-orbit-display">
             <h1 class="orbit-title">University Digital Archive</h1>
+            <h2 class="orbit-subtitle">Registry Communication System</h2>
             <div class="orbit-container">
                 <div class="orbit-path"></div>
                 <div class="orbit-icon orbit-icon-1">
