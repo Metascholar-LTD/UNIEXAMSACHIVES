@@ -386,23 +386,94 @@
 </div>
 
 <script>
-// Simple download functions
+// Proper download functions for actual files
 function downloadExam(url, filename) {
+    // Create a proper download link
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
+    link.target = '_blank';
+    
+    // Set proper headers for file download
+    link.setAttribute('download', filename);
+    
+    // Append to body, click, and remove
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Show success message
+    showSuccessMessage('Download started: ' + filename);
 }
 
 function downloadAnswerKey(url, filename) {
+    // Create a proper download link
     const link = document.createElement('a');
     link.href = url;
     link.download = filename;
+    link.target = '_blank';
+    
+    // Set proper headers for file download
+    link.setAttribute('download', filename);
+    
+    // Append to body, click, and remove
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    
+    // Show success message
+    showSuccessMessage('Answer key download started: ' + filename);
+}
+
+// Simple success message function
+function showSuccessMessage(message) {
+    // Create a simple success notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #10b981;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 500;
+        z-index: 9999;
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        animation: slideIn 0.3s ease;
+    `;
+    notification.textContent = message;
+    
+    // Add animation CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+    `;
+    document.head.appendChild(style);
+    
+    document.body.appendChild(notification);
+    
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => {
+            document.body.removeChild(notification);
+        }, 300);
+    }, 3000);
+    
+    // Add slideOut animation
+    const slideOutStyle = document.createElement('style');
+    slideOutStyle.textContent = `
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(slideOutStyle);
 }
 </script>
 
