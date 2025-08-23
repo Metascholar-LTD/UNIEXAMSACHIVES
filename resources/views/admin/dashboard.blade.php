@@ -71,7 +71,7 @@
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 1.25rem;
+        gap: 1rem;
         min-width: 0;
     }
 
@@ -181,6 +181,7 @@
         min-width: 120px;
         justify-content: center;
         flex-shrink: 0;
+        margin-right: 0.25rem;
     }
 
     .action-btn {
@@ -228,6 +229,7 @@
         display: flex;
         justify-content: center;
         flex-shrink: 0;
+        margin-left: 0.25rem;
     }
 
     .status-badge {
