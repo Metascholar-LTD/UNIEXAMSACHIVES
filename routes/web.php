@@ -12,11 +12,10 @@ use App\Http\Controllers\Frontend\PagesController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [PagesController::class, 'index'])->name('frontend.home');
-Route::get('/about', [PagesController::class, 'about'])->name('frontend.about');
+// Route::get('/about', [PagesController::class, 'about'])->name('frontend.about');
 // Route::get('/news', [PagesController::class, 'news'])->name('frontend.news');
 // Route::get('/leadership', [PagesController::class, 'leadership'])->name('frontend.leadership');
-Route::get('/faqs', [PagesController::class, 'faqs'])->name('frontend.faqs');
-Route::get('/contact', [PagesController::class, 'contact'])->name('frontend.contact');
+// Route::get('/faqs', [PagesController::class, 'faqs'])->name('frontend.faqs');
 Route::get('/login-form',[PagesController::class, 'login'])->name('frontend.login');
 Route::post('/register',[PagesController::class, 'register'])->name('register');
 Route::post('/login',[PagesController::class, 'loginUser'])->name('login');
