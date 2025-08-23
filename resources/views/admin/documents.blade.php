@@ -470,8 +470,8 @@
 <div class="documents-hero">
     <div class="container">
         <div class="documents-hero-content">
-            <h1 class="hero-title">University Document Archive</h1>
-            <p class="hero-subtitle">Explore our comprehensive collection of academic resources and examination materials</p>
+            <h1 class="hero-title">All Documents</h1>
+            <p class="hero-subtitle">Explore the comprehensive collection of academic resources and examination materials</p>
             
             <div class="hero-stats">
                 <div class="stat-item">
