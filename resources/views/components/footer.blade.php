@@ -9,10 +9,10 @@
                         </div>
                         <div class="footerarea__list">
                             <ul>
-                                <li><a href="{{ route('frontend.home') }}">Home</a></li>
-                                <li><a href="{{ route('frontend.about') }}">About</a></li>
-                                <li><a href="{{ route('frontend.contact') }}">Contact</a></li>
-                                <li><a href="{{ route('frontend.faqs') }}">FAQs</a></li>
+                                <li><a href="/">Home</a></li>
+                                <li><a href="/about">About</a></li>
+                                <li><a href="/contact">Contact</a></li>
+                                <li><a href="/faqs">FAQs</a></li>
                             </ul>
                         </div>
                     </div>
