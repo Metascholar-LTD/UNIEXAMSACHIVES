@@ -324,16 +324,45 @@
     }
 
     .pdf-card .document-card-header {
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        position: relative;
+    }
+
+    .pdf-card .document-icon {
         background: white;
-        border: 2px solid #e9ecef;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+    }
+
+    .pdf-card .document-icon:hover {
+        transform: scale(1.05);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     }
 
     .pdf-card .document-icon i {
         color: #dc3545;
+        font-size: 1.8rem;
     }
 
     .list-view .pdf-card .document-icon i {
         color: #dc3545;
+    }
+
+    .list-view .pdf-card .document-icon {
+        background: white;
+        border-radius: 50%;
+        width: 45px;
+        height: 45px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
     }
 
     .doc-card .document-card-header,
