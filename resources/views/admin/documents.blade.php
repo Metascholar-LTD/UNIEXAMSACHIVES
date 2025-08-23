@@ -322,6 +322,12 @@
         text-align: center;
     }
 
+    /* Date and calendar icons keep original color */
+    .meta-item .fa-calendar-alt,
+    .meta-item .fa-clock {
+        color: #6c757d;
+    }
+
     .document-actions {
         display: flex;
         gap: 0.5rem;
