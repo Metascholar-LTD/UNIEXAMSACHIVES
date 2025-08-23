@@ -54,11 +54,11 @@
                                                                 <a href="https://metascholarturnitinmoodle.com/" target="_blank" rel="noopener" class="partner-card">
                                     <div class="partner-icon turnitin-icon">
                                         <img src="https://i.ibb.co/hFhtsYtG/tn.png" alt="Metascholar Turnitin Logo" class="partner-logo">
-                                    </div>
+                        </div>
                                     <div class="partner-info">
                                         <span class="partner-name">Metascholar Turnitin</span>
                                         <span class="partner-desc">Plagiarism Detection</span>
-                                    </div>
+                        </div>
                                     <i class="icofont-external-link external-icon"></i>
                                 </a>
                                 
@@ -288,7 +288,7 @@
 .turnitin-icon {
     background: transparent !important;
     padding: 2px;
-    border: 2px solid #007bff;
+    border: 2px solid #495057;
     border-radius: 8px;
     overflow: hidden;
 }
@@ -559,7 +559,7 @@
 .is_dark .metascholar-icon,
 .is_dark .scholar-indexing-icon,
 .is_dark .turnitin-icon {
-    border-color: #4299e1;
+    border-color: #a0aec0;
 }
 
 /* Responsive Design */
