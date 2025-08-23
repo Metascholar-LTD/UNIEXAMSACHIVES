@@ -6,6 +6,9 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
 <style>
     /* Modern Documents Page Styles */
     * {
@@ -239,23 +242,40 @@
 
     .document-type-badge {
         position: absolute;
-        top: 15px;
-        right: 15px;
-        background: rgba(255, 255, 255, 0.9);
+        top: 12px;
+        right: 12px;
+        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(10px);
-        padding: 5px 12px;
-        border-radius: 15px;
-        font-size: 0.8rem;
-        font-weight: 600;
-        color: #495057;
+        padding: 3px 6px;
+        border-radius: 8px;
+        font-size: 0.6rem;
+        font-weight: 500;
+        color: #6c757d;
+        border: 1px solid rgba(255, 255, 255, 0.4);
+        opacity: 0.8;
     }
 
     .pdf-card .document-card-header {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     }
 
-    .word-card .document-card-header {
-        background: linear-gradient(135deg, #4834d4 0%, #686de0 100%);
+    .doc-card .document-card-header,
+    .docx-card .document-card-header {
+        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    }
+
+    .xls-card .document-card-header,
+    .xlsx-card .document-card-header {
+        background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+    }
+
+    .ppt-card .document-card-header,
+    .pptx-card .document-card-header {
+        background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
+    }
+
+    .document-card-header {
+        background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
     }
 
     .document-card-body {
@@ -437,9 +457,10 @@
         padding: 2px 8px;
         border-radius: 12px;
         font-size: 0.7rem;
-        background: rgba(0, 123, 255, 0.1);
-        color: #007bff;
-        border: 1px solid rgba(0, 123, 255, 0.2);
+        background: rgba(108, 117, 125, 0.1);
+        color: #6c757d;
+        border: 1px solid rgba(108, 117, 125, 0.2);
+        display: none; /* Hide in list view to reduce clutter */
     }
 
     .list-view .document-card-body {
@@ -723,9 +744,15 @@
                                         <div class="document-header-info">
                                             <div class="document-icon">
                                                 @if (strtolower($extension) == 'pdf')
-                                                    <i class="icofont-file-pdf"></i>
+                                                    <i class="fas fa-file-pdf"></i>
+                                                @elseif (in_array(strtolower($extension), ['doc', 'docx']))
+                                                    <i class="fas fa-file-word"></i>
+                                                @elseif (in_array(strtolower($extension), ['xls', 'xlsx']))
+                                                    <i class="fas fa-file-excel"></i>
+                                                @elseif (in_array(strtolower($extension), ['ppt', 'pptx']))
+                                                    <i class="fas fa-file-powerpoint"></i>
                                                 @else
-                                                    <i class="icofont-file-word"></i>
+                                                    <i class="fas fa-file-alt"></i>
                                                 @endif
                                             </div>
                                             <div class="document-type-badge">{{ strtoupper($extension) }}</div>
@@ -761,12 +788,12 @@
                                         
                                         <div class="document-actions">
                                             <a href="{{ asset($exam->exam_document) }}" download class="action-btn primary">
-                                                <i class="icofont-download"></i>
-                                                Paper
+                                                <i class="fas fa-download"></i>
+                                                Exam Paper
                                             </a>
                                             @if($exam->answer_key)
                                                 <a href="{{ asset($exam->answer_key) }}" download class="action-btn secondary">
-                                                    <i class="icofont-download"></i>
+                                                    <i class="fas fa-key"></i>
                                                     Answer Key
                                                 </a>
                                             @endif
@@ -783,9 +810,15 @@
                                         <div class="document-header-info">
                                             <div class="document-icon">
                                                 @if (strtolower($extension) == 'pdf')
-                                                    <i class="icofont-file-pdf"></i>
+                                                    <i class="fas fa-file-pdf"></i>
+                                                @elseif (in_array(strtolower($extension), ['doc', 'docx']))
+                                                    <i class="fas fa-file-word"></i>
+                                                @elseif (in_array(strtolower($extension), ['xls', 'xlsx']))
+                                                    <i class="fas fa-file-excel"></i>
+                                                @elseif (in_array(strtolower($extension), ['ppt', 'pptx']))
+                                                    <i class="fas fa-file-powerpoint"></i>
                                                 @else
-                                                    <i class="icofont-file-word"></i>
+                                                    <i class="fas fa-file-alt"></i>
                                                 @endif
                                             </div>
                                             <div class="document-type-badge">{{ strtoupper($extension) }}</div>
@@ -821,8 +854,8 @@
                                         
                                         <div class="document-actions">
                                             <a href="{{ Storage::url($exam->document_file) }}" download class="action-btn primary">
-                                                <i class="icofont-download"></i>
-                                                Download File
+                                                <i class="fas fa-download"></i>
+                                                Download
                                             </a>
                                         </div>
                                     </div>
