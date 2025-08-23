@@ -1,8 +1,16 @@
 @extends('layout.app')
 
 @push('styles')
+<!-- Inter Font -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
 <style>
     /* Modern Documents Page Styles */
+    * {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    }
     .documents-hero {
         background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
         padding: 80px 0 60px;
@@ -371,23 +379,67 @@
         color: #dee2e6;
     }
 
-    /* List View Styles */
-    .list-view .document-card {
-        border-radius: 12px;
-        margin-bottom: 1rem;
+    /* Enhanced List View Styles */
+    .list-view .row {
+        display: block;
     }
 
-    .list-view .document-card-header {
-        height: 80px;
-        width: 80px;
-        border-radius: 12px;
-        margin: 1rem;
-        flex-shrink: 0;
+    .list-view .document-item {
+        width: 100%;
+        margin-bottom: 1rem;
     }
 
     .list-view .document-card {
         display: flex;
         align-items: center;
+        border-radius: 12px;
+        margin-bottom: 1rem;
+        padding: 1rem;
+        min-height: 100px;
+        background: white;
+        border: 1px solid #f1f3f4;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .list-view .document-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .list-view .document-card-header {
+        height: 60px;
+        width: 60px;
+        border-radius: 12px;
+        margin-right: 1rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .list-view .document-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .list-view .document-icon i {
+        font-size: 1.5rem;
+    }
+
+    .list-view .document-type-badge {
+        position: static;
+        margin-left: 0.5rem;
+        padding: 2px 8px;
+        border-radius: 12px;
+        font-size: 0.7rem;
+        background: rgba(0, 123, 255, 0.1);
+        color: #007bff;
+        border: 1px solid rgba(0, 123, 255, 0.2);
     }
 
     .list-view .document-card-body {
@@ -395,16 +447,92 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding: 1rem 1.5rem 1rem 0;
+        padding: 0;
     }
 
-    .list-view .document-info {
+    .list-view .document-main-info {
         flex: 1;
+        min-width: 0;
+    }
+
+    .list-view .document-title {
+        font-size: 1rem;
+        font-weight: 600;
+        margin-bottom: 0.5rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 300px;
+    }
+
+    .list-view .document-meta {
+        display: flex;
+        gap: 1.5rem;
+        margin-bottom: 0;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .list-view .document-meta .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        white-space: nowrap;
+    }
+
+    .list-view .document-instructor-section {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+        min-width: 150px;
+        margin-right: 1rem;
+    }
+
+    .list-view .instructor-info {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+
+    .list-view .instructor-avatar {
+        width: 30px;
+        height: 30px;
+        font-size: 0.8rem;
+    }
+
+    .list-view .instructor-name {
+        font-size: 0.85rem;
+        font-weight: 500;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
     }
 
     .list-view .document-actions {
+        display: flex;
+        gap: 0.5rem;
         margin-top: 0;
         flex-shrink: 0;
+    }
+
+    .list-view .action-btn {
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        border-radius: 6px;
+        white-space: nowrap;
+        min-width: auto;
+    }
+
+    .list-view .action-btn i {
+        font-size: 0.9rem;
+    }
+
+    /* List view header info section */
+    .list-view .document-header-info {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
     }
 
     /* Responsive Design */
@@ -443,20 +571,53 @@
         .list-view .document-card {
             flex-direction: column;
             text-align: center;
+            padding: 1rem;
         }
 
         .list-view .document-card-header {
-            margin: 1rem auto 0;
+            margin: 0 auto 1rem;
         }
 
         .list-view .document-card-body {
             flex-direction: column;
-            padding: 1rem;
+            align-items: center;
+            padding: 0;
+            width: 100%;
+        }
+
+        .list-view .document-main-info {
+            text-align: center;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .list-view .document-title {
+            max-width: 100%;
+            white-space: normal;
+            text-align: center;
+        }
+
+        .list-view .document-meta {
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .list-view .document-instructor-section {
+            justify-content: center;
+            margin: 1rem 0;
+            min-width: auto;
         }
 
         .list-view .document-actions {
             margin-top: 1rem;
             width: 100%;
+            justify-content: center;
+        }
+
+        .list-view .action-btn {
+            flex: 1;
+            max-width: 150px;
         }
     }
 </style>
@@ -474,16 +635,34 @@
             <p class="hero-subtitle">Explore the comprehensive collection of academic resources and examination materials</p>
             
             <div class="hero-stats">
+                @php
+                    $totalExams = 0;
+                    $totalFiles = 0;
+                    $totalDocuments = 0;
+                    
+                    if (count($exams) > 0) {
+                        foreach ($exams as $result) {
+                            foreach ($result as $exam) {
+                                if ($exam instanceof \App\Models\Exam) {
+                                    $totalExams++;
+                                } else {
+                                    $totalFiles++;
+                                }
+                                $totalDocuments++;
+                            }
+                        }
+                    }
+                @endphp
                 <div class="stat-item">
-                    <span class="stat-number">{{ count($exams) > 0 ? count($exams[0] ?? []) + count($exams[1] ?? []) : 0 }}</span>
+                    <span class="stat-number">{{ $totalDocuments }}</span>
                     <div class="stat-label">Total Documents</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">{{ count($exams) > 0 && isset($exams[0]) ? count($exams[0]) : 0 }}</span>
+                    <span class="stat-number">{{ $totalExams }}</span>
                     <div class="stat-label">Exam Papers</div>
                 </div>
                 <div class="stat-item">
-                    <span class="stat-number">{{ count($exams) > 1 && isset($exams[1]) ? count($exams[1]) : 0 }}</span>
+                    <span class="stat-number">{{ $totalFiles }}</span>
                     <div class="stat-label">Files</div>
                 </div>
             </div>
@@ -541,29 +720,42 @@
                                 @endphp
                                 <div class="document-card {{ strtolower($extension) }}-card">
                                     <div class="document-card-header">
-                                        <div class="document-icon">
-                                            @if (strtolower($extension) == 'pdf')
-                                                <i class="icofont-file-pdf"></i>
-                                            @else
-                                                <i class="icofont-file-word"></i>
-                                            @endif
+                                        <div class="document-header-info">
+                                            <div class="document-icon">
+                                                @if (strtolower($extension) == 'pdf')
+                                                    <i class="icofont-file-pdf"></i>
+                                                @else
+                                                    <i class="icofont-file-word"></i>
+                                                @endif
+                                            </div>
+                                            <div class="document-type-badge">{{ strtoupper($extension) }}</div>
                                         </div>
-                                        <div class="document-type-badge">{{ strtoupper($extension) }}</div>
                                     </div>
                                     
                                     <div class="document-card-body">
-                                        <h4 class="document-title">
-                                            <a href="#" title="{{ $exam->course_title }}">{{ $exam->course_title }}</a>
-                                        </h4>
-                                        
-                                        <div class="document-meta">
-                                            <div class="meta-item">
-                                                <i class="icofont-book-alt"></i>
-                                                <span>{{ $exam->exam_format }}</span>
+                                        <div class="document-main-info">
+                                            <h4 class="document-title">
+                                                <a href="#" title="{{ $exam->course_title }}">{{ $exam->course_title }}</a>
+                                            </h4>
+                                            
+                                            <div class="document-meta">
+                                                <div class="meta-item">
+                                                    <i class="icofont-book-alt"></i>
+                                                    <span>{{ $exam->exam_format }}</span>
+                                                </div>
+                                                <div class="meta-item">
+                                                    <i class="icofont-clock-time"></i>
+                                                    <span>{{ $exam->duration }}</span>
+                                                </div>
                                             </div>
-                                            <div class="meta-item">
-                                                <i class="icofont-clock-time"></i>
-                                                <span>{{ $exam->duration }}</span>
+                                        </div>
+                                        
+                                        <div class="document-instructor-section">
+                                            <div class="instructor-info">
+                                                <div class="instructor-avatar">
+                                                    {{ substr($exam->instructor_name, 0, 1) }}
+                                                </div>
+                                                <div class="instructor-name">{{ $exam->instructor_name }}</div>
                                             </div>
                                         </div>
                                         
@@ -579,13 +771,6 @@
                                                 </a>
                                             @endif
                                         </div>
-                                        
-                                        <div class="instructor-info">
-                                            <div class="instructor-avatar">
-                                                {{ substr($exam->instructor_name, 0, 1) }}
-                                            </div>
-                                            <div class="instructor-name">{{ $exam->instructor_name }}</div>
-                                        </div>
                                     </div>
                                 </div>
                             @else
@@ -595,29 +780,42 @@
                                 @endphp
                                 <div class="document-card {{ strtolower($extension) }}-card">
                                     <div class="document-card-header">
-                                        <div class="document-icon">
-                                            @if (strtolower($extension) == 'pdf')
-                                                <i class="icofont-file-pdf"></i>
-                                            @else
-                                                <i class="icofont-file-word"></i>
-                                            @endif
+                                        <div class="document-header-info">
+                                            <div class="document-icon">
+                                                @if (strtolower($extension) == 'pdf')
+                                                    <i class="icofont-file-pdf"></i>
+                                                @else
+                                                    <i class="icofont-file-word"></i>
+                                                @endif
+                                            </div>
+                                            <div class="document-type-badge">{{ strtoupper($extension) }}</div>
                                         </div>
-                                        <div class="document-type-badge">{{ strtoupper($extension) }}</div>
                                     </div>
                                     
                                     <div class="document-card-body">
-                                        <h4 class="document-title">
-                                            <a href="#" title="{{ $exam->document_title }}">{{ $exam->document_title }}</a>
-                                        </h4>
-                                        
-                                        <div class="document-meta">
-                                            <div class="meta-item">
-                                                <i class="icofont-file-alt"></i>
-                                                <span>{{ $exam->file_format }}</span>
+                                        <div class="document-main-info">
+                                            <h4 class="document-title">
+                                                <a href="#" title="{{ $exam->document_title }}">{{ $exam->document_title }}</a>
+                                            </h4>
+                                            
+                                            <div class="document-meta">
+                                                <div class="meta-item">
+                                                    <i class="icofont-file-alt"></i>
+                                                    <span>{{ $exam->file_format }}</span>
+                                                </div>
+                                                <div class="meta-item">
+                                                    <i class="icofont-calendar"></i>
+                                                    <span>{{ $exam->year_deposit }}</span>
+                                                </div>
                                             </div>
-                                            <div class="meta-item">
-                                                <i class="icofont-calendar"></i>
-                                                <span>{{ $exam->year_deposit }}</span>
+                                        </div>
+                                        
+                                        <div class="document-instructor-section">
+                                            <div class="instructor-info">
+                                                <div class="instructor-avatar">
+                                                    {{ substr($exam->depositor_name, 0, 1) }}
+                                                </div>
+                                                <div class="instructor-name">{{ $exam->depositor_name }}</div>
                                             </div>
                                         </div>
                                         
@@ -626,13 +824,6 @@
                                                 <i class="icofont-download"></i>
                                                 Download File
                                             </a>
-                                        </div>
-                                        
-                                        <div class="instructor-info">
-                                            <div class="instructor-avatar">
-                                                {{ substr($exam->depositor_name, 0, 1) }}
-                                            </div>
-                                            <div class="instructor-name">{{ $exam->depositor_name }}</div>
                                         </div>
                                     </div>
                                 </div>
