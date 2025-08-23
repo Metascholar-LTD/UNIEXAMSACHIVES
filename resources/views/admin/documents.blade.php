@@ -22,9 +22,9 @@
                     <div class="breadcrumb-item current">
                         <span>Document Portfolio</span>
                     </div>
+                    </div>
                 </div>
-            </div>
-            
+
             <div class="portfolio-header-main">
                 <div class="portfolio-title-section">
                     <h1 class="portfolio-title">Academic Document Portfolio</h1>
@@ -108,11 +108,11 @@
                                 <option value="title">Title A-Z</option>
                                 <option value="course">Course Code</option>
                                 <option value="instructor">Instructor</option>
-                            </select>
+                                      </select>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Filter Tags -->
                 <div class="filter-tags-container">
                     <div class="active-filters" id="activeFilters">
@@ -167,7 +167,7 @@
                                 </label>
                             </div>
                         </div>
-                    </div>
+                </div>
 
                     <!-- Faculty Filter -->
                     <div class="filter-section">
@@ -178,11 +178,11 @@
                             </button>
                         </div>
                         <div class="filter-content" id="faculties">
-                            @if (count($faculties) > 0)
+                                @if (count($faculties) > 0)
                                 @foreach ($faculties as $faculty)
                                 <div class="filter-option">
                                     <label class="custom-checkbox">
-                                        <input type="checkbox" class="filter-checkbox faculty-checkbox" value="{{$faculty}}">
+                                            <input type="checkbox" class="filter-checkbox faculty-checkbox" value="{{$faculty}}">
                                         <span class="checkmark"></span>
                                         <span class="option-text">{{ $faculty }}</span>
                                     </label>
@@ -204,16 +204,16 @@
                             <button class="filter-expand" data-target="semesters">
                                 <i class="fas fa-chevron-down"></i>
                             </button>
-                        </div>
+                </div>
                         <div class="filter-content" id="semesters">
                             @if (count($semesters) > 0)
                                 @foreach ($semesters as $semester)
                                 <div class="filter-option">
                                     <label class="custom-checkbox">
-                                        <input type="checkbox" class="filter-checkbox semester-checkbox" value="{{ $semester }}">
+                                            <input type="checkbox" class="filter-checkbox semester-checkbox" value="{{ $semester }}">
                                         <span class="checkmark"></span>
                                         <span class="option-text">{{ $semester }}</span>
-                                    </label>
+                                        </label>
                                 </div>
                                 @endforeach
                             @else
@@ -232,16 +232,16 @@
                             <button class="filter-expand" data-target="years">
                                 <i class="fas fa-chevron-down"></i>
                             </button>
-                        </div>
+                </div>
                         <div class="filter-content" id="years">
                             @if (count($years) > 0)
                                 @foreach ($years as $year)
                                 <div class="filter-option">
                                     <label class="custom-checkbox">
-                                        <input type="checkbox" class="filter-checkbox year-checkbox" value="{{ $year }}">
+                                            <input type="checkbox" class="filter-checkbox year-checkbox" value="{{ $year }}">
                                         <span class="checkmark"></span>
                                         <span class="option-text">{{ $year }}</span>
-                                    </label>
+                                        </label>
                                 </div>
                                 @endforeach
                             @else
@@ -306,24 +306,34 @@
                 <!-- Document Grid Container -->
                 <div class="document-grid-container">
                     <div class="document-grid" id="documentGrid" data-view="grid">
-                        @if (count($exams) > 0)
-                            @foreach ($exams as $result)
+                            @if (count($exams) > 0)
+                                @foreach ($exams as $result)
                                 @foreach ($result as $document)
                                     @if ($document instanceof \App\Models\Exam)
                                         <!-- Exam Document Card -->
                                         <div class="document-card exam-card" data-type="exam" data-faculty="{{ $document->faculty ?? '' }}" data-semester="{{ $document->semester ?? '' }}" data-year="{{ date('Y', strtotime($document->created_at)) }}" data-tags="{{ $document->tags ?? '' }}">
                                             <div class="card-header">
                                                 <div class="document-type-badge exam-badge">
-                                                    <i class="fas fa-file-alt"></i>
+                                                    <i class="fas fa-graduation-cap"></i>
                                                     <span>Exam Paper</span>
                                                 </div>
                                                 <div class="document-actions">
-                                                    <button class="action-btn preview-btn" data-url="{{ asset($document->exam_document) }}" title="Preview">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                    <a href="{{ asset($document->exam_document) }}" download class="action-btn download-btn" title="Download">
+                                                    @php
+                                                        $extension = pathinfo($document->exam_document, PATHINFO_EXTENSION);
+                                                    @endphp
+                                                    @if ($extension === 'pdf')
+                                                        <button class="action-btn preview-btn" data-url="{{ asset($document->exam_document) }}" title="Preview Document">
+                                                            <i class="far fa-eye"></i>
+                                                        </button>
+                                                    @endif
+                                                    <a href="{{ asset($document->exam_document) }}" download class="action-btn download-btn" title="Download Exam Paper">
                                                         <i class="fas fa-download"></i>
                                                     </a>
+                                                    @if($document->answer_key)
+                                                        <a href="{{ asset($document->answer_key) }}" download class="action-btn answer-key-btn" title="Download Answer Key">
+                                                            <i class="fas fa-key"></i>
+                                                        </a>
+                                                    @endif
                                                 </div>
                                             </div>
                                             
@@ -349,15 +359,15 @@
                                             <div class="card-content">
                                                 <div class="document-meta">
                                                     <div class="meta-item">
-                                                        <i class="fas fa-graduation-cap"></i>
+                                                        <i class="fas fa-clipboard-list"></i>
                                                         <span>{{ $document->exam_format }}</span>
                                                     </div>
                                                     <div class="meta-item">
-                                                        <i class="fas fa-clock"></i>
+                                                        <i class="far fa-clock"></i>
                                                         <span>{{ $document->duration }}</span>
                                                     </div>
                                                     <div class="meta-item">
-                                                        <i class="fas fa-calendar"></i>
+                                                        <i class="far fa-calendar-alt"></i>
                                                         <span>{{ date('M Y', strtotime($document->exam_date)) }}</span>
                                                     </div>
                                                 </div>
@@ -374,24 +384,20 @@
                                                     <div class="faculty-info">{{ $document->faculty }}</div>
                                                 </div>
                                                 
-                                                <div class="download-options">
-                                                    <a href="{{ asset($document->exam_document) }}" download class="download-link primary">
-                                                        <i class="fas fa-file-download"></i>
-                                                        <span>Exam Paper</span>
-                                                    </a>
-                                                    @if($document->answer_key)
-                                                        <a href="{{ asset($document->answer_key) }}" download class="download-link secondary">
-                                                            <i class="fas fa-key"></i>
-                                                            <span>Answer Key</span>
-                                                        </a>
-                                                    @endif
+                                                @if($document->answer_key)
+                                                <div class="answer-key-indicator">
+                                                    <div class="indicator-badge">
+                                                        <i class="fas fa-key"></i>
+                                                        <span>Answer Key Available</span>
+                                                    </div>
                                                 </div>
+                                                @endif
                                                 
                                                 <div class="card-footer">
                                                     <div class="instructor-info">
                                                         <div class="instructor-avatar">
                                                             <i class="fas fa-user-tie"></i>
-                                                        </div>
+                                                            </div>
                                                         <div class="instructor-details">
                                                             <span class="instructor-name">{{ $document->instructor_name }}</span>
                                                             <span class="instructor-role">Instructor</span>
@@ -403,12 +409,12 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @else
+                                        @else
                                         <!-- File Document Card -->
                                         <div class="document-card file-card" data-type="file" data-year="{{ date('Y', strtotime($document->year_created)) }}">
                                             <div class="card-header">
                                                 <div class="document-type-badge file-badge">
-                                                    <i class="fas fa-folder"></i>
+                                                    <i class="fas fa-archive"></i>
                                                     <span>Academic File</span>
                                                 </div>
                                                 <div class="document-actions">
@@ -416,13 +422,13 @@
                                                         $fileExtension = pathinfo($document->document_file, PATHINFO_EXTENSION);
                                                     @endphp
                                                     @if($fileExtension === 'pdf')
-                                                        <button class="action-btn preview-btn" data-url="{{ asset($document->document_file) }}" title="Preview">
-                                                            <i class="fas fa-eye"></i>
+                                                        <button class="action-btn preview-btn" data-url="{{ asset($document->document_file) }}" title="Preview Document">
+                                                            <i class="far fa-eye"></i>
                                                         </button>
                                                     @endif
-                                                    <a href="{{ asset($document->document_file) }}" download class="action-btn download-btn" title="Download">
+                                                    <a href="{{ asset($document->document_file) }}" download class="action-btn download-btn" title="Download File">
                                                         <i class="fas fa-download"></i>
-                                                    </a>
+                                                </a>
                                                 </div>
                                             </div>
                                             
@@ -445,15 +451,15 @@
                                             <div class="card-content">
                                                 <div class="document-meta">
                                                     <div class="meta-item">
-                                                        <i class="fas fa-file"></i>
+                                                        <i class="fas fa-file-code"></i>
                                                         <span>{{ $document->file_format }}</span>
                                                     </div>
                                                     <div class="meta-item">
-                                                        <i class="fas fa-calendar-plus"></i>
+                                                        <i class="far fa-calendar-plus"></i>
                                                         <span>{{ date('M Y', strtotime($document->year_created)) }}</span>
                                                     </div>
                                                     <div class="meta-item">
-                                                        <i class="fas fa-building"></i>
+                                                        <i class="fas fa-university"></i>
                                                         <span>{{ $document->unit }}</span>
                                                     </div>
                                                 </div>
@@ -469,18 +475,18 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="download-options">
-                                                    <a href="{{ asset($document->document_file) }}" download class="download-link primary">
-                                                        <i class="fas fa-file-download"></i>
-                                                        <span>Download File</span>
-                                                    </a>
+                                                <div class="file-size-info">
+                                                    <div class="size-badge">
+                                                        <i class="fas fa-database"></i>
+                                                        <span>{{ $document->file_format }}</span>
+                                                    </div>
                                                 </div>
                                                 
                                                 <div class="card-footer">
                                                     <div class="depositor-info">
                                                         <div class="depositor-avatar">
                                                             <i class="fas fa-user"></i>
-                                                        </div>
+                                                            </div>
                                                         <div class="depositor-details">
                                                             <span class="depositor-name">{{ $document->depositor_name }}</span>
                                                             <span class="depositor-role">Depositor</span>
@@ -492,10 +498,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    @endif
+                                        @endif
                                 @endforeach
-                            @endforeach
-                        @else
+                                @endforeach
+                            @else
                             <div class="empty-state-container">
                                 <div class="empty-state">
                                     <div class="empty-icon">
@@ -509,7 +515,7 @@
                                     </button>
                                 </div>
                             </div>
-                        @endif
+                            @endif
                     </div>
                 </div>
 
@@ -543,7 +549,7 @@
             </div>
         </div>
     </div>
-</div>
+                    </div>
 
 
                     {{-- <div class="tab-pane fade" id="projects__two" role="tabpanel" aria-labelledby="projects__two">
