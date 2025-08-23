@@ -21,7 +21,7 @@ Route::post('/register', [PagesController::class, 'register'])->name('register')
 
 // Legacy redirect for old login-form URL
 Route::get('/login-form', function() {
-    return redirect()->route('frontend.login', [], 301);
+    return redirect('/login', 301);
 });
 
 // Additional Pages (uncommented for future use)

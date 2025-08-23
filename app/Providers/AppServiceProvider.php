@@ -77,7 +77,7 @@ class AppServiceProvider extends ServiceProvider
     private function configureAuthenticationRedirects(): void
     {
         // Configure Laravel's default authentication redirects
-        // This ensures that when middleware redirects unauthenticated users, they go to /login
-        URL::defaults(['login' => route('frontend.login')]);
+        // Use URL instead of route() to avoid circular dependency during boot
+        URL::defaults(['login' => '/login']);
     }
 }
