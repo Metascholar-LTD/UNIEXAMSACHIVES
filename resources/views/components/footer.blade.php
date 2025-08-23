@@ -63,8 +63,8 @@
                                 </a>
                                 
                                 <a href="https://scholarindexing.com/" target="_blank" rel="noopener" class="partner-card">
-                                    <div class="partner-icon">
-                                        <i class="icofont-search-document"></i>
+                                    <div class="partner-icon scholar-indexing-icon">
+                                        <img src="https://i.ibb.co/S1hygwB/logo.png" alt="Scholar Indexing Society Logo" class="partner-logo">
                                     </div>
                                     <div class="partner-info">
                                         <span class="partner-name">Scholar Indexing</span>
@@ -283,7 +283,8 @@
 }
 
 .ijmsir-icon,
-.metascholar-icon {
+.metascholar-icon,
+.scholar-indexing-icon {
     background: transparent !important;
     padding: 2px;
     border: 2px solid #007bff;
@@ -554,7 +555,8 @@
 }
 
 .is_dark .ijmsir-icon,
-.is_dark .metascholar-icon {
+.is_dark .metascholar-icon,
+.is_dark .scholar-indexing-icon {
     border-color: #4299e1;
 }
 
