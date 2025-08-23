@@ -284,10 +284,10 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <h1 class="hero-title">University Exams Archive</h1>
-                    <p class="hero-subtitle">Digital Registry Communication System</p>
+                    <h1 class="hero-title">Access The University Archives</h1>
+                    <p class="hero-subtitle">Enjoy seamless Registry Communication</p>
                     <p class="hero-description">
-                        Access a comprehensive digital archive of university examinations, academic resources, 
+                        A comprehensive digital archive of university examinations, academic resources, 
                         and institutional communications. Secure, organized, and always available for 
                         your educational journey.
                     </p>
