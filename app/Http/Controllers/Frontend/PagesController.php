@@ -42,6 +42,10 @@ class PagesController extends Controller
         return view('frontend.pages.faqs');
     }
 
+    public function contact(){
+        return view('frontend.pages.contact');
+    }
+
     public function login(){
         $departments = Department::orderBy('name')->get();
         return view('frontend.pages.login', compact('departments'));
