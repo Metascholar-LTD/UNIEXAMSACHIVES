@@ -16,14 +16,18 @@ use App\Services\ResendMailService;
 
 class PagesController extends Controller
 {
-    public function index(Request $request){
-        // dd('hey');
+    // New welcome/landing page method
+    public function welcome(Request $request){
         $currentDate = Carbon::now()->toDateString();
         $ipAddress = $request->ip();
         Visit::firstOrCreate(['visited_at' => $currentDate,  'ip_address' => $ipAddress]);
         
-        $departments = Department::orderBy('name')->get();
-        return view('frontend.pages.login', compact('departments'));
+        return view('frontend.pages.welcome');
+    }
+
+    // Keep the old index method for backward compatibility (if needed)
+    public function index(Request $request){
+        return $this->welcome($request);
     }
 
     public function about(){
@@ -43,6 +47,11 @@ class PagesController extends Controller
     }
 
     public function login(){
+        // Redirect authenticated users to dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+        
         $departments = Department::orderBy('name')->get();
         return view('frontend.pages.login', compact('departments'));
     }
@@ -87,7 +96,7 @@ class PagesController extends Controller
             }
         }
 
-        return redirect()->route('frontend.login')->with('success', 'Registration successful, Please wait while your account is been approve');
+        return redirect()->route('frontend.login')->with('success', 'Registration successful! Please wait while your account is being approved.');
     }
 
     public function loginUser(Request $request)

@@ -11,17 +11,27 @@ use App\Http\Controllers\Dashboard\HomeController;
 use App\Http\Controllers\Frontend\PagesController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', [PagesController::class, 'index'])->name('frontend.home');
-// Route::get('/about', [PagesController::class, 'about'])->name('frontend.about');
-// Route::get('/news', [PagesController::class, 'news'])->name('frontend.news');
-// Route::get('/leadership', [PagesController::class, 'leadership'])->name('frontend.leadership');
-// Route::get('/faqs', [PagesController::class, 'faqs'])->name('frontend.faqs');
-Route::get('/login-form',[PagesController::class, 'login'])->name('frontend.login');
-Route::post('/register',[PagesController::class, 'register'])->name('register');
-Route::post('/login',[PagesController::class, 'loginUser'])->name('login');
+// Landing Homepage - Clean professional landing page
+Route::get('/', [PagesController::class, 'welcome'])->name('frontend.welcome');
+
+// Authentication Routes - Clean URLs
+Route::get('/login', [PagesController::class, 'login'])->name('frontend.login');
+Route::post('/login', [PagesController::class, 'loginUser'])->name('login');
+Route::post('/register', [PagesController::class, 'register'])->name('register');
+
+// Legacy redirect for old login-form URL
+Route::get('/login-form', function() {
+    return redirect()->route('frontend.login', [], 301);
+});
+
+// Additional Pages (uncommented for future use)
+Route::get('/about', [PagesController::class, 'about'])->name('frontend.about');
+Route::get('/news', [PagesController::class, 'news'])->name('frontend.news');
+Route::get('/leadership', [PagesController::class, 'leadership'])->name('frontend.leadership');
+Route::get('/faqs', [PagesController::class, 'faqs'])->name('frontend.faqs');
 Route::post('/clear-session-messages', [App\Http\Controllers\NotificationController::class, 'clearSessionMessages'])->name('clear.session.messages');
 
-#protected routes
+# Authentication Required Routes
 Route::middleware(['auth'])->group(function () {
     #Dashboard - Home
     Route::get('/dashboard/home',[HomeController::class, 'dashboard'])->name('dashboard');

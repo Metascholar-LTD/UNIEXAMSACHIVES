@@ -266,6 +266,6 @@ class HomeController extends Controller
 
         $request->session()->regenerateToken();
 
-        return redirect()->route('frontend.login');
+        return redirect()->route('frontend.welcome')->with('success', 'You have been logged out successfully.');
     }
 }

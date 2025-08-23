@@ -18,6 +18,10 @@
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 
+    # Legacy URL Redirects - Redirect old login-form to new login URL
+    RewriteCond %{THE_REQUEST} \s/+login-form[\s?] [NC]
+    RewriteRule ^login-form/?$ /login [R=301,L]
+
     # Redirect Trailing Slashes If Not A Folder...
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_URI} (.+)/$

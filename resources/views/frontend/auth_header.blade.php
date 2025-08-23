@@ -5,9 +5,9 @@
                 <!-- Left: Logo Only -->
                 <div class="uda-nav-left">
                     @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                        <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
+                        <a href="{{route('frontend.welcome')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
                     @else
-                        <a href="{{route('frontend.login')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
+                        <a href="{{route('frontend.welcome')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
                     @endif
                 </div>
 
@@ -50,9 +50,9 @@
                 <div class="col-6">
                     <div class="mobile-logo">
                         @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                            <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo"></a>
+                            <a href="{{route('frontend.welcome')}}"><img loading="lazy"  src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" style="width:200px; heigth:200px;" alt="logo"></a>
                         @else
-                            <a href="{{route('frontend.login')}}"><img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo"></a>
+                            <a href="{{route('frontend.welcome')}}"><img loading="lazy"  src="{{asset('img/cug_logo_new.jpeg')}}" style="width:200px; heigth:200px;" alt="logo"></a>
                         @endif
                     </div>
                 </div>

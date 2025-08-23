@@ -112,4 +112,19 @@ return [
 
     'password_timeout' => env('AUTH_PASSWORD_TIMEOUT', 10800),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Authentication Redirects
+    |--------------------------------------------------------------------------
+    |
+    | Configure where users should be redirected based on authentication state
+    |
+    */
+    
+    'redirects' => [
+        'login' => '/login',           // Where to redirect unauthenticated users
+        'home' => '/dashboard/home',   // Where to redirect after successful login
+        'logout' => '/',               // Where to redirect after logout
+    ],
+
 ];

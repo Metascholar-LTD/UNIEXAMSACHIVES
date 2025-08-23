@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use App\Models\Message;
+use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -25,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        // Configure authentication redirects
+        $this->configureAuthenticationRedirects();
+        
         View::composer('*', function ($view) {
             if(Auth::check()){
                 if (Auth::user()->is_admin) {
@@ -65,5 +69,15 @@ class AppServiceProvider extends ServiceProvider
             }
 
         });
+    }
+
+    /**
+     * Configure authentication redirects for clean URL structure
+     */
+    private function configureAuthenticationRedirects(): void
+    {
+        // Configure Laravel's default authentication redirects
+        // This ensures that when middleware redirects unauthenticated users, they go to /login
+        URL::defaults(['login' => route('frontend.login')]);
     }
 }
