@@ -92,11 +92,12 @@
     .exam-title a {
         color: inherit;
         text-decoration: none;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        white-space: normal;
+        overflow: visible;
+        text-overflow: unset;
         display: block;
         max-width: 100%;
+        word-wrap: break-word;
     }
 
     .exam-title a:hover {
@@ -107,6 +108,14 @@
         display: flex;
         gap: 1rem;
         flex-wrap: wrap;
+        align-items: center;
+    }
+
+    .exam-meta .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        white-space: nowrap;
     }
 
     .meta-item {
@@ -169,13 +178,13 @@
     .exam-actions {
         display: flex;
         gap: 0.5rem;
-        min-width: 180px;
+        min-width: 120px;
         justify-content: center;
         flex-shrink: 0;
     }
 
     .action-btn {
-        padding: 8px 12px;
+        padding: 8px;
         border: 2px solid #e9ecef;
         border-radius: 8px;
         background: white;
@@ -188,7 +197,8 @@
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.3rem;
+        min-width: 36px;
+        height: 36px;
     }
 
     .action-btn:hover {
@@ -679,14 +689,12 @@
                                                         </div>
                                                         
                                                         <div class="exam-actions">
-                                                            <a href="{{ asset($item->exam_document) }}" download class="action-btn primary">
+                                                            <a href="{{ asset($item->exam_document) }}" download class="action-btn primary" title="Download Exam Paper">
                                                                 <i class="fas fa-download"></i>
-                                                                Exam Paper
                                                             </a>
                                                             @if($item->answer_key)
-                                                                <a href="{{ asset($item->answer_key) }}" download class="action-btn secondary">
+                                                                <a href="{{ asset($item->answer_key) }}" download class="action-btn secondary" title="Download Answer Key">
                                                                     <i class="fas fa-key"></i>
-                                                                    Answer Key
                                                                 </a>
                                                             @endif
                                                         </div>
