@@ -324,7 +324,16 @@
     }
 
     .pdf-card .document-card-header {
-        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+        background: white;
+        border: 2px solid #e9ecef;
+    }
+
+    .pdf-card .document-icon i {
+        color: #dc3545;
+    }
+
+    .list-view .pdf-card .document-icon i {
+        color: #dc3545;
     }
 
     .doc-card .document-card-header,
