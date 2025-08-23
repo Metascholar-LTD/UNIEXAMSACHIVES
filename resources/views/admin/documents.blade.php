@@ -324,7 +324,7 @@
     }
 
     .pdf-card .document-card-header {
-        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
     }
 
     .doc-card .document-card-header,
