@@ -288,7 +288,7 @@
 .turnitin-icon {
     background: transparent !important;
     padding: 2px;
-    border: 1px solid #495057;
+    border: 1px solid #007bff;
     border-radius: 8px;
     overflow: hidden;
 }
