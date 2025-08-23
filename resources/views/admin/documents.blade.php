@@ -342,18 +342,12 @@
                                                     $extension = pathinfo($document->exam_document, PATHINFO_EXTENSION);
                                                 @endphp
                                                 <div class="document-preview">
-                                                    @if ($extension == 'pdf')
-                                                        <div class="file-icon pdf-icon">
-                                                            <i class="fas fa-file-pdf"></i>
-                                                        </div>
-                                                    @else
-                                                        <div class="file-icon doc-icon">
-                                                            <i class="fas fa-file-word"></i>
-                                                        </div>
-                                                    @endif
-                                                    <div class="file-extension">{{ strtoupper($extension) }}</div>
+                                                    <div class="course-code-display">{{ $document->course_code }}</div>
+                                                    <div class="document-type-icon">
+                                                        <i class="fas fa-graduation-cap"></i>
+                                                    </div>
                                                 </div>
-                                                <div class="course-code-overlay">{{ $document->course_code }}</div>
+                                                <div class="format-badge">{{ strtoupper($extension) }}</div>
                                             </div>
                                             
                                             <div class="card-content">
@@ -434,33 +428,23 @@
                                             
                                             <div class="card-thumbnail">
                                                 <div class="document-preview">
-                                                    @if ($fileExtension == 'pdf')
-                                                        <div class="file-icon pdf-icon">
-                                                            <i class="fas fa-file-pdf"></i>
-                                                        </div>
-                                                    @else
-                                                        <div class="file-icon doc-icon">
-                                                            <i class="fas fa-file-alt"></i>
-                                                        </div>
-                                                    @endif
-                                                    <div class="file-extension">{{ strtoupper($fileExtension) }}</div>
+                                                    <div class="file-type-display">{{ $document->file_format }}</div>
+                                                    <div class="document-type-icon">
+                                                        <i class="fas fa-archive"></i>
+                                                    </div>
                                                 </div>
-                                                <div class="file-type-overlay">{{ $document->file_format }}</div>
+                                                <div class="format-badge">{{ strtoupper($fileExtension) }}</div>
                                             </div>
                                             
                                             <div class="card-content">
                                                 <div class="document-meta">
                                                     <div class="meta-item">
-                                                        <i class="fas fa-file-code"></i>
-                                                        <span>{{ $document->file_format }}</span>
+                                                        <i class="fas fa-layer-group"></i>
+                                                        <span>{{ $document->unit }}</span>
                                                     </div>
                                                     <div class="meta-item">
                                                         <i class="far fa-calendar-plus"></i>
                                                         <span>{{ date('M Y', strtotime($document->year_created)) }}</span>
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-university"></i>
-                                                        <span>{{ $document->unit }}</span>
                                                     </div>
                                                 </div>
                                                 
@@ -475,12 +459,7 @@
                                                     </div>
                                                 </div>
                                                 
-                                                <div class="file-size-info">
-                                                    <div class="size-badge">
-                                                        <i class="fas fa-database"></i>
-                                                        <span>{{ $document->file_format }}</span>
-                                                    </div>
-                                                </div>
+
                                                 
                                                 <div class="card-footer">
                                                     <div class="depositor-info">

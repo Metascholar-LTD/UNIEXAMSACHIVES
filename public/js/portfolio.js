@@ -525,11 +525,96 @@ function initializeAdvancedSorting() {
     });
 }
 
+// Preview Modal Functionality
+function initializePreviewModal() {
+    // Create modal if it doesn't exist
+    let modal = document.getElementById('documentPreviewModal');
+    if (!modal) {
+        modal = createPreviewModal();
+        document.body.appendChild(modal);
+    }
+    
+    const modalContent = modal.querySelector('#pdfViewer');
+    const closeButton = modal.querySelector('.close-modal');
+
+    // Handle preview button clicks
+    document.addEventListener('click', function(e) {
+        if (e.target.closest('.preview-btn')) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const button = e.target.closest('.preview-btn');
+            const url = button.getAttribute('data-url');
+            
+            console.log('Preview button clicked, URL:', url); // Debug log
+            
+            if (url && modal && modalContent) {
+                modalContent.src = url;
+                modal.style.display = 'flex';
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+    });
+
+    // Close modal functionality
+    if (closeButton && modal) {
+        closeButton.addEventListener('click', function() {
+            closeModal(modal, modalContent);
+        });
+
+        // Close on backdrop click
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                closeModal(modal, modalContent);
+            }
+        });
+        
+        // Close on Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal(modal, modalContent);
+            }
+        });
+    }
+}
+
+function createPreviewModal() {
+    const modal = document.createElement('div');
+    modal.id = 'documentPreviewModal';
+    modal.className = 'document-preview-modal';
+    modal.innerHTML = `
+        <div class="modal-backdrop"></div>
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>Document Preview</h3>
+                <button type="button" class="close-modal">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="modal-content">
+                <iframe id="pdfViewer" src="" frameborder="0"></iframe>
+            </div>
+        </div>
+    `;
+    return modal;
+}
+
+function closeModal(modal, modalContent) {
+    modal.style.display = 'none';
+    modal.classList.remove('active');
+    document.body.style.overflow = 'auto';
+    if (modalContent) {
+        modalContent.src = '';
+    }
+}
+
 // Initialize all mobile functionality
 document.addEventListener('DOMContentLoaded', function() {
     initializeMobileFilters();
     initializeFilterExpansion();
     initializeAdvancedSorting();
+    initializePreviewModal();
 });
 
 // Intersection Observer for animation on scroll
