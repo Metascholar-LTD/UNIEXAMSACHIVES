@@ -356,9 +356,9 @@
 
     .list-view .pdf-card .document-icon {
         background: white;
-        border-radius: 10px;
-        width: 60px;
-        height: 60px;
+        border-radius: 8px;
+        width: 45px;
+        height: 45px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -576,6 +576,10 @@
 
     .list-view .document-icon i {
         font-size: 1.5rem;
+    }
+
+    .list-view .pdf-card .document-icon i {
+        font-size: 1.3rem;
     }
 
     .list-view .document-type-badge {
