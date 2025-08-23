@@ -16,12 +16,24 @@
         display: flex;
         align-items: center;
         border-radius: 12px;
-        padding: 1rem;
+        padding: 1.25rem;
         min-height: 100px;
         background: white;
         border: 1px solid #f1f3f4;
         box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         transition: all 0.3s ease;
+        position: relative;
+    }
+
+    .recent-exam-card::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 4px;
+        background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+        border-radius: 12px 0 0 12px;
     }
 
     .recent-exam-card:hover {
@@ -59,12 +71,14 @@
         flex: 1;
         display: flex;
         align-items: center;
-        gap: 1.5rem;
+        gap: 1.25rem;
+        min-width: 0;
     }
 
     .exam-main-info {
         flex: 1;
         min-width: 0;
+        max-width: 280px;
     }
 
     .exam-title {
@@ -72,21 +86,35 @@
         font-size: 1.1rem;
         font-weight: 600;
         color: #343a40;
+        line-height: 1.3;
     }
 
     .exam-title a {
         color: inherit;
         text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        max-width: 100%;
     }
 
     .exam-title a:hover {
         color: #007bff;
     }
 
+    .course-subtitle {
+        font-size: 0.85rem;
+        color: #6c757d;
+        font-weight: 500;
+        margin-top: 0.25rem;
+    }
+
     .exam-meta {
         display: flex;
-        gap: 1rem;
+        gap: 0.75rem;
         flex-wrap: wrap;
+        margin-top: 0.5rem;
     }
 
     .meta-item {
@@ -105,10 +133,11 @@
     }
 
     .exam-instructor-section {
-        min-width: 200px;
+        min-width: 180px;
         display: flex;
         align-items: center;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     .instructor-info {
@@ -144,8 +173,9 @@
     .exam-actions {
         display: flex;
         gap: 0.5rem;
-        min-width: 200px;
+        min-width: 180px;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     .action-btn {
@@ -188,9 +218,10 @@
     }
 
     .exam-status {
-        min-width: 120px;
+        min-width: 110px;
         display: flex;
         justify-content: center;
+        flex-shrink: 0;
     }
 
     .status-badge {
@@ -220,6 +251,11 @@
         .exam-card-body {
             flex-wrap: wrap;
             gap: 1rem;
+        }
+        
+        .exam-main-info {
+            max-width: 100%;
+            min-width: 0;
         }
         
         .exam-instructor-section,
@@ -623,13 +659,10 @@
                                                     <div class="exam-card-body">
                                                         <div class="exam-main-info">
                                                             <h4 class="exam-title">
-                                                                <a href="#" title="{{ $item->course_title }}">{{ $item->course_title }}</a>
+                                                                <a href="#" title="{{ $item->course_title }} - {{ $item->course_code }}">{{ $item->course_title }}</a>
                                                             </h4>
+                                                            <div class="course-subtitle">{{ $item->course_code }}</div>
                                                             <div class="exam-meta">
-                                                                <div class="meta-item">
-                                                                    <i class="fas fa-hashtag"></i>
-                                                                    <span>{{ $item->course_code }}</span>
-                                                                </div>
                                                                 <div class="meta-item">
                                                                     <i class="fas fa-file-alt"></i>
                                                                     <span>{{ $item->exam_format }}</span>
