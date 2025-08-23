@@ -1,5 +1,292 @@
 @extends('layout.app')
 
+@push('styles')
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+    /* Recent Exams List View Styles */
+    .recent-exams-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .recent-exam-card {
+        display: flex;
+        align-items: center;
+        border-radius: 12px;
+        padding: 1rem;
+        min-height: 100px;
+        background: white;
+        border: 1px solid #f1f3f4;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+    }
+
+    .recent-exam-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .exam-card-header {
+        height: 60px;
+        width: 60px;
+        border-radius: 12px;
+        margin-right: 1rem;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    }
+
+    .exam-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .exam-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .exam-card-body {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    .exam-main-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .exam-title {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: #343a40;
+    }
+
+    .exam-title a {
+        color: inherit;
+        text-decoration: none;
+    }
+
+    .exam-title a:hover {
+        color: #007bff;
+    }
+
+    .exam-meta {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .meta-item i {
+        color: #007bff;
+        font-size: 0.9rem;
+        width: 16px;
+        text-align: center;
+    }
+
+    .exam-instructor-section {
+        min-width: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .instructor-info {
+        display: flex;
+        align-items: center;
+        gap: 0.8rem;
+    }
+
+    .instructor-avatar {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 600;
+        font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .instructor-avatar i {
+        font-size: 1rem;
+    }
+
+    .instructor-name {
+        font-size: 0.9rem;
+        font-weight: 500;
+        color: #495057;
+    }
+
+    .exam-actions {
+        display: flex;
+        gap: 0.5rem;
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    .action-btn {
+        padding: 8px 12px;
+        border: 2px solid #e9ecef;
+        border-radius: 8px;
+        background: white;
+        color: #6c757d;
+        text-decoration: none;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-align: center;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3rem;
+    }
+
+    .action-btn:hover {
+        text-decoration: none;
+    }
+
+    .action-btn.primary {
+        border-color: #007bff;
+        background: #007bff;
+        color: white;
+    }
+
+    .action-btn.primary:hover {
+        background: #0056b3;
+        border-color: #0056b3;
+        color: white;
+    }
+
+    .action-btn.secondary:hover {
+        border-color: #6c757d;
+        background: #6c757d;
+        color: white;
+    }
+
+    .exam-status {
+        min-width: 120px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .status-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 500;
+    }
+
+    .status-badge.approved {
+        background: rgba(40, 167, 69, 0.1);
+        color: #28a745;
+        border: 1px solid rgba(40, 167, 69, 0.2);
+    }
+
+    .status-badge.pending {
+        background: rgba(255, 193, 7, 0.1);
+        color: #ffc107;
+        border: 1px solid rgba(255, 193, 7, 0.2);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 1200px) {
+        .exam-card-body {
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .exam-instructor-section,
+        .exam-actions,
+        .exam-status {
+            min-width: auto;
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
+    @media (max-width: 768px) {
+        .recent-exam-card {
+            flex-direction: column;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .exam-card-header {
+            margin: 0 auto 1rem;
+        }
+
+        .exam-card-body {
+            flex-direction: column;
+            align-items: center;
+            padding: 0;
+            width: 100%;
+        }
+
+        .exam-main-info {
+            text-align: center;
+            margin-bottom: 1rem;
+            width: 100%;
+        }
+
+        .exam-title {
+            max-width: 100%;
+            white-space: normal;
+            text-align: center;
+        }
+
+        .exam-meta {
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .exam-instructor-section {
+            justify-content: center;
+            margin: 1rem 0;
+            min-width: auto;
+        }
+
+        .exam-actions {
+            margin-top: 1rem;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-btn {
+            flex: 1;
+            max-width: 150px;
+        }
+    }
+</style>
+@endpush
+
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
@@ -315,49 +602,80 @@
                                         </div>
 
                                         @if (count($recentlyUploadedExams) > 0)
-                                            <div class="clean-exams-list">
+                                            <div class="recent-exams-list">
                                                 @foreach ($recentlyUploadedExams as $item )
-                                                <div class="clean-exam-item" data-exam-id="{{ $item->id }}">
-                                                    <div class="exam-icon">
-                                                        @php
-                                                            $extension = pathinfo($item->exam_document, PATHINFO_EXTENSION);
-                                                        @endphp
-                                                        @if ($extension == 'pdf')
-                                                            <i class="icofont-file-pdf"></i>
-                                                        @else
-                                                            <i class="icofont-file-word"></i>
-                                                        @endif
+                                                <div class="recent-exam-card" data-exam-id="{{ $item->id }}">
+                                                    <div class="exam-card-header">
+                                                        <div class="exam-header-info">
+                                                            <div class="exam-icon">
+                                                                @php
+                                                                    $extension = pathinfo($item->exam_document, PATHINFO_EXTENSION);
+                                                                @endphp
+                                                                @if ($extension == 'pdf')
+                                                                    <i class="icofont-file-pdf"></i>
+                                                                @else
+                                                                    <i class="icofont-file-word"></i>
+                                                                @endif
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     
-                                                    <div class="exam-content">
-                                                        <div class="exam-title">
-                                                            <h5>{{ $item->course_title }}</h5>
-                                                            <span class="exam-code">{{ $item->course_code }}</span>
+                                                    <div class="exam-card-body">
+                                                        <div class="exam-main-info">
+                                                            <h4 class="exam-title">
+                                                                <a href="#" title="{{ $item->course_title }}">{{ $item->course_title }}</a>
+                                                            </h4>
+                                                            <div class="exam-meta">
+                                                                <div class="meta-item">
+                                                                    <i class="fas fa-hashtag"></i>
+                                                                    <span>{{ $item->course_code }}</span>
+                                                                </div>
+                                                                <div class="meta-item">
+                                                                    <i class="fas fa-file-alt"></i>
+                                                                    <span>{{ $item->exam_format }}</span>
+                                                                </div>
+                                                                <div class="meta-item">
+                                                                    <i class="fas fa-clock"></i>
+                                                                    <span>{{ $item->duration }}</span>
+                                                                </div>
+                                                            </div>
                                                         </div>
                                                         
-                                                        <div class="exam-info">
-                                                            <span><i class="icofont-teacher"></i> {{ $item->instructor_name }}</span>
-                                                            <span><i class="icofont-book-alt"></i> {{ $item->exam_format }}</span>
-                                                            <span><i class="icofont-clock-time"></i> {{ $item->duration }}</span>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="exam-actions">
-                                                        <a href="{{ asset($item->exam_document) }}" download class="clean-btn download-btn" title="Download">
-                                                            <i class="icofont-download"></i>
-                                                        </a>
-                                                        @if($item->answer_key)
-                                                            <a href="{{ asset($item->answer_key) }}" download class="clean-btn key-btn" title="Answer Key">
-                                                                <i class="icofont-key"></i>
-                                                            </a>
-                                                        @endif
-                                                        <div class="status-indicator">
-                                                            @if($item->is_approve)
-                                                                <i class="icofont-check-circled" title="Approved"></i>
-                                                            @else
-                                                                <i class="icofont-clock-time" title="Pending"></i>
+                                                        <div class="exam-instructor-section">
+                                                            <div class="instructor-info">
+                                                                <div class="instructor-avatar">
+                                                                    <i class="fas fa-user-graduate"></i>
+                                                                </div>
+                                                                <div class="instructor-name">{{ $item->instructor_name }}</div>
                                                             </div>
-                                                        @endif
+                                                        </div>
+                                                        
+                                                        <div class="exam-actions">
+                                                            <a href="{{ asset($item->exam_document) }}" download class="action-btn primary">
+                                                                <i class="fas fa-download"></i>
+                                                                Exam Paper
+                                                            </a>
+                                                            @if($item->answer_key)
+                                                                <a href="{{ asset($item->answer_key) }}" download class="action-btn secondary">
+                                                                    <i class="fas fa-key"></i>
+                                                                    Answer Key
+                                                                </a>
+                                                            @endif
+                                                        </div>
+                                                        
+                                                        <div class="exam-status">
+                                                            @if($item->is_approve)
+                                                                <span class="status-badge approved">
+                                                                    <i class="fas fa-check-circle"></i>
+                                                                    Approved
+                                                                </span>
+                                                            @else
+                                                                <span class="status-badge pending">
+                                                                    <i class="fas fa-clock"></i>
+                                                                    Pending
+                                                                </span>
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 @endforeach
