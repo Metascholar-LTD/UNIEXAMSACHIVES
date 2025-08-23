@@ -330,9 +330,9 @@
 
     .pdf-card .document-icon {
         background: white;
-        border-radius: 50%;
-        width: 50px;
-        height: 50px;
+        border-radius: 12px;
+        width: 70px;
+        height: 70px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -347,7 +347,7 @@
 
     .pdf-card .document-icon i {
         color: #dc3545;
-        font-size: 1.8rem;
+        font-size: 2.2rem;
     }
 
     .list-view .pdf-card .document-icon i {
@@ -356,9 +356,9 @@
 
     .list-view .pdf-card .document-icon {
         background: white;
-        border-radius: 50%;
-        width: 45px;
-        height: 45px;
+        border-radius: 10px;
+        width: 60px;
+        height: 60px;
         display: flex;
         align-items: center;
         justify-content: center;
