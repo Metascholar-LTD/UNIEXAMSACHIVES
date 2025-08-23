@@ -74,8 +74,8 @@
                                 </a>
                                 
                                 <a href="https://ijmsirjournal.com/" target="_blank" rel="noopener" class="partner-card">
-                                    <div class="partner-icon">
-                                        <i class="icofont-journal"></i>
+                                    <div class="partner-icon ijmsir-icon">
+                                        <img src="https://i.ibb.co/1GtfNBwH/IJMSIR.jpg" alt="IJMSIR Logo" class="partner-logo">
                                     </div>
                                     <div class="partner-info">
                                         <span class="partner-name">IJMSIR Journal</span>
@@ -280,6 +280,26 @@
 .partner-icon i {
     color: white;
     font-size: 1.1rem;
+}
+
+.ijmsir-icon {
+    background: transparent !important;
+    padding: 2px;
+    border: 2px solid #007bff;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.partner-logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 4px;
+    transition: transform 0.3s ease;
+}
+
+.partner-card:hover .partner-logo {
+    transform: scale(1.05);
 }
 
 .partner-info {
@@ -530,6 +550,10 @@
 
 .is_dark .metascholar-brand:hover {
     color: #4299e1;
+}
+
+.is_dark .ijmsir-icon {
+    border-color: #4299e1;
 }
 
 /* Responsive Design */
