@@ -41,8 +41,8 @@
                             </h5>
                             <div class="partner-grid">
                                 <a href="http://academicdigital.space/" target="_blank" rel="noopener" class="partner-card">
-                                    <div class="partner-icon">
-                                        <i class="icofont-education"></i>
+                                    <div class="partner-icon metascholar-icon">
+                                        <img src="https://i.ibb.co/3Ycf1t0k/MS.jpg" alt="Metascholar Institute Logo" class="partner-logo">
                                     </div>
                                     <div class="partner-info">
                                         <span class="partner-name">Metascholar Institute</span>
@@ -282,7 +282,8 @@
     font-size: 1.1rem;
 }
 
-.ijmsir-icon {
+.ijmsir-icon,
+.metascholar-icon {
     background: transparent !important;
     padding: 2px;
     border: 2px solid #007bff;
@@ -552,7 +553,8 @@
     color: #4299e1;
 }
 
-.is_dark .ijmsir-icon {
+.is_dark .ijmsir-icon,
+.is_dark .metascholar-icon {
     border-color: #4299e1;
 }
 
