@@ -51,14 +51,14 @@
                                     <i class="icofont-external-link external-icon"></i>
                                 </a>
                                 
-                                <a href="https://metascholarturnitinmoodle.com/" target="_blank" rel="noopener" class="partner-card">
-                                    <div class="partner-icon">
-                                        <i class="icofont-document-folder"></i>
-                        </div>
+                                                                <a href="https://metascholarturnitinmoodle.com/" target="_blank" rel="noopener" class="partner-card">
+                                    <div class="partner-icon turnitin-icon">
+                                        <img src="https://i.ibb.co/hFhtsYtG/tn.png" alt="Metascholar Turnitin Logo" class="partner-logo">
+                                    </div>
                                     <div class="partner-info">
                                         <span class="partner-name">Metascholar Turnitin</span>
                                         <span class="partner-desc">Plagiarism Detection</span>
-                        </div>
+                                    </div>
                                     <i class="icofont-external-link external-icon"></i>
                                 </a>
                                 
@@ -284,7 +284,8 @@
 
 .ijmsir-icon,
 .metascholar-icon,
-.scholar-indexing-icon {
+.scholar-indexing-icon,
+.turnitin-icon {
     background: transparent !important;
     padding: 2px;
     border: 2px solid #007bff;
@@ -556,7 +557,8 @@
 
 .is_dark .ijmsir-icon,
 .is_dark .metascholar-icon,
-.is_dark .scholar-indexing-icon {
+.is_dark .scholar-indexing-icon,
+.is_dark .turnitin-icon {
     border-color: #4299e1;
 }
 
