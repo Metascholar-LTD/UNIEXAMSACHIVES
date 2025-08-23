@@ -3,531 +3,320 @@
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
+<div class="breadcrumbarea">
 
-<!-- Modern Portfolio Header -->
-<div class="portfolio-header-section">
-    <div class="container-fluid">
-        <div class="portfolio-header-content">
-            <div class="portfolio-breadcrumb">
-                <div class="breadcrumb-wrapper">
-                    <div class="breadcrumb-item">
-                        <a href="{{route('dashboard')}}" class="breadcrumb-link">
-                            <i class="fas fa-home"></i>
-                            <span>Dashboard</span>
-                        </a>
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="breadcrumb__content__wraper" data-aos="fade-up">
+                    <div class="breadcrumb__title">
+                        <h2 class="heading">All Documents</h2>
                     </div>
-                    <div class="breadcrumb-divider">
-                        <i class="fas fa-chevron-right"></i>
-                    </div>
-                    <div class="breadcrumb-item current">
-                        <span>Document Portfolio</span>
-                    </div>
+                    <div class="breadcrumb__inner">
+                        <ul>
+                            <li><a href="{{route('dashboard')}}">Home</a></li>
+                            <li>All Documents</li>
+                        </ul>
                     </div>
                 </div>
 
-            <div class="portfolio-header-main">
-                <div class="portfolio-title-section">
-                    <h1 class="portfolio-title">Academic Document Portfolio</h1>
-                    <p class="portfolio-subtitle">Comprehensive collection of academic resources, examination papers, and research documents</p>
-                </div>
-                
-                <div class="portfolio-stats-cards">
-                    <div class="stat-card exam-stats">
-                        <div class="stat-icon">
-                            <i class="fas fa-file-alt"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ count($exams['exams']) ?? 0 }}</div>
-                            <div class="stat-label">Examination Papers</div>
-                        </div>
-                    </div>
-                    <div class="stat-card file-stats">
-                        <div class="stat-icon">
-                            <i class="fas fa-folder-open"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ count($exams['files']) ?? 0 }}</div>
-                            <div class="stat-label">Academic Files</div>
-                        </div>
-                    </div>
-                    <div class="stat-card total-stats">
-                        <div class="stat-icon">
-                            <i class="fas fa-database"></i>
-                        </div>
-                        <div class="stat-content">
-                            <div class="stat-number">{{ (count($exams['exams']) ?? 0) + (count($exams['files']) ?? 0) }}</div>
-                            <div class="stat-label">Total Documents</div>
-                        </div>
-                    </div>
-                </div>
+
+
             </div>
         </div>
     </div>
+
+    {{-- <div class="shape__icon__2">
+        <img loading="lazy"  class=" shape__icon__img shape__icon__img__1" src="img/herobanner/herobanner__1.png" alt="photo">
+        <img loading="lazy"  class=" shape__icon__img shape__icon__img__2" src="img/herobanner/herobanner__2.png" alt="photo">
+        <img loading="lazy"  class=" shape__icon__img shape__icon__img__3" src="img/herobanner/herobanner__3.png" alt="photo">
+        <img loading="lazy"  class=" shape__icon__img shape__icon__img__4" src="img/herobanner/herobanner__5.png" alt="photo">
+    </div> --}}
+
 </div>
-<!-- Modern Portfolio Content -->
-<div class="portfolio-content-section">
-    <div class="container-fluid">
-        <div class="portfolio-layout">
-            
-            <!-- Advanced Search and Filter Controls -->
-            <div class="portfolio-controls">
-                <div class="search-controls-wrapper">
-                    <!-- Search Bar -->
-                    <div class="advanced-search-bar">
-                        <form action="{{ route('exam.search') }}" method="GET" class="search-form">
-                            <div class="search-input-group">
-                                <div class="search-icon">
-                                    <i class="fas fa-search"></i>
-                                </div>
-                                <input type="text" name="query" placeholder="Search documents, courses, instructors..." class="search-input" autocomplete="off">
-                                <button type="submit" class="search-submit-btn">
-                                    <span>Search</span>
-                                </button>
-                            </div>
-                        </form>
+<div class="coursearea sp_top_100 sp_bottom_100">
+    <div class="container">
+        <div class="row">
+            <div class="col-xl-12">
+                <div class="course__text__wraper" data-aos="fade-up">
+                    <div class="course__text">
+                        <p> All Documents Uploaded </p>
                     </div>
-                    
-                    <!-- View Options -->
-                    <div class="view-controls">
-                        <div class="view-toggle-group">
-                            <button class="view-toggle active" data-view="grid" title="Grid View">
-                                <i class="fas fa-th-large"></i>
-                            </button>
-                            <button class="view-toggle" data-view="list" title="List View">
-                                <i class="fas fa-list"></i>
-                            </button>
-                            <button class="view-toggle" data-view="compact" title="Compact View">
-                                <i class="fas fa-th"></i>
-                            </button>
-                        </div>
-                        
-                        <div class="sort-controls">
-                            <select class="modern-select" id="sortSelect">
-                                <option value="newest">Newest First</option>
-                                <option value="oldest">Oldest First</option>
-                                <option value="title">Title A-Z</option>
-                                <option value="course">Course Code</option>
-                                <option value="instructor">Instructor</option>
+                    <div class="course__icon">
+                        <ul class="nav property__team__tap" id="myTab" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <a href="#" class="single__tab__link active" data-bs-toggle="tab" data-bs-target="#projects__one"><i class="icofont-layout"></i>
+                                    </a>
+                            </li>
+                            {{-- <li class="nav-item" role="presentation">
+                                <a href="#" class="single__tab__link" data-bs-toggle="tab" data-bs-target="#projects__two"><i class="icofont-listine-dots"></i>
+                                </a>
+                            </li> --}}
+
+                            {{-- <li class="short__by__new">
+                                <select class="form-select" aria-label="Default select example">
+                                        <option selected>Sort by New</option>
+                                        <option value="1">One</option>
+                                        <option value="2">Two</option>
+                                        <option value="3">Three</option>
                                       </select>
-                        </div>
+                            </li> --}}
+
+
+
+                        </ul>
                     </div>
                 </div>
 
-                <!-- Filter Tags -->
-                <div class="filter-tags-container">
-                    <div class="active-filters" id="activeFilters">
-                        <!-- Active filter tags will be populated here -->
-                    </div>
-                    <button class="clear-filters-btn" id="clearFilters" style="display: none;">
-                        <i class="fas fa-times"></i>
-                        <span>Clear All Filters</span>
-                    </button>
-                </div>
             </div>
-            <!-- Modern Sidebar Filters -->
-            <div class="portfolio-sidebar">
-                <div class="filter-sidebar">
-                    <div class="sidebar-header">
-                        <h3 class="sidebar-title">
-                            <i class="fas fa-filter"></i>
-                            <span>Filter Documents</span>
-                        </h3>
-                        <button class="mobile-filter-toggle">
-                            <i class="fas fa-times"></i>
-                        </button>
+            <div class="col-xl-3 col-lg-3 col-md-4 col-12">
+                <div class="course__sidebar__wraper" data-aos="fade-up">
+                    <div class="course__heading">
+                        <h5>Search here</h5>
                     </div>
-                    
-                    <!-- Document Type Filter -->
-                    <div class="filter-section">
-                        <div class="filter-header">
-                            <h4 class="filter-title">Document Type</h4>
-                            <button class="filter-expand" data-target="document-type">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div class="filter-content" id="document-type">
-                            <div class="filter-option">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="filter-checkbox" name="document_type" value="exam">
-                                    <span class="checkmark"></span>
-                                    <span class="option-text">
-                                        <i class="fas fa-file-alt"></i>
-                                        Examination Papers
-                                    </span>
-                                </label>
-                            </div>
-                            <div class="filter-option">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="filter-checkbox" name="document_type" value="file">
-                                    <span class="checkmark"></span>
-                                    <span class="option-text">
-                                        <i class="fas fa-folder"></i>
-                                        Academic Files
-                                    </span>
-                                </label>
+                    <form action="{{ route('exam.search') }}" method="GET">
+                        <div class="course__input">
+                            <input type="text" name="query" placeholder="Search for exams paper">
+                            <div class="search__button">
+                                <button type="submit"><i class="icofont-search-1"></i></button>
                             </div>
                         </div>
+                    </form>
                 </div>
-
-                    <!-- Faculty Filter -->
-                    <div class="filter-section">
-                        <div class="filter-header">
-                            <h4 class="filter-title">Faculties & Departments</h4>
-                            <button class="filter-expand" data-target="faculties">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
+                <div class="course__sidebar__wraper" data-aos="fade-up">
+                    <div class="categori__wraper">
+                        <div class="course__heading">
+                            <h5>Faculties/Departments</h5>
                         </div>
-                        <div class="filter-content" id="faculties">
+                        <div class="course__categories__list">
+                            <ul>
                                 @if (count($faculties) > 0)
-                                @foreach ($faculties as $faculty)
-                                <div class="filter-option">
-                                    <label class="custom-checkbox">
+                                    @foreach ($faculties as $faculty )
+                                    <li>
+                                        <label>
                                             <input type="checkbox" class="filter-checkbox faculty-checkbox" value="{{$faculty}}">
-                                        <span class="checkmark"></span>
-                                        <span class="option-text">{{ $faculty }}</span>
+                                            {{ $faculty }}
+                                        </label>
+                                    </li>
+                                    @endforeach
+                                @else
+                                <li>No Faculty</li>
+                                @endif
+
+                            </ul>
+                        </div>
+
+
+                    </div>
+                </div>
+                <div class="course__sidebar__wraper" data-aos="fade-up">
+                    <div class="course__heading">
+                        <h5>Tag</h5>
+                    </div>
+                    <div class="course__tag__list">
+                        <ul>
+                            @if (count($tags) > 0)
+                                @foreach ($tags as $tag)
+                                <li>
+                                    <label>
+                                        <input type="checkbox" class="filter-checkbox tag-checkbox" value="{{ $tag }}">
+                                        {{ $tag }}
                                     </label>
-                                </div>
+                                </li>
                                 @endforeach
                             @else
-                                <div class="empty-state">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    <span>No faculties available</span>
-                                </div>
+                            <li>No tags</li>
                             @endif
-                        </div>
+
+                        </ul>
                     </div>
 
-                    <!-- Semester Filter -->
-                    <div class="filter-section">
-                        <div class="filter-header">
-                            <h4 class="filter-title">Semesters</h4>
-                            <button class="filter-expand" data-target="semesters">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
                 </div>
-                        <div class="filter-content" id="semesters">
+
+                <div class="course__sidebar__wraper" data-aos="fade-up">
+                    <div class="course__heading">
+                        <h5>Semesters</h5>
+                    </div>
+                    <div class="course__skill__list">
+                        <ul>
                             @if (count($semesters) > 0)
                                 @foreach ($semesters as $semester)
-                                <div class="filter-option">
-                                    <label class="custom-checkbox">
+                                    <li>
+                                        <label>
                                             <input type="checkbox" class="filter-checkbox semester-checkbox" value="{{ $semester }}">
-                                        <span class="checkmark"></span>
-                                        <span class="option-text">{{ $semester }}</span>
+                                            {{ $semester }}
                                         </label>
-                                </div>
+                                    </li>
                                 @endforeach
                             @else
-                                <div class="empty-state">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    <span>No semesters available</span>
-                                </div>
+                                <li>No Semester</li>
                             @endif
-                        </div>
+
+                        </ul>
                     </div>
 
-                    <!-- Academic Year Filter -->
-                    <div class="filter-section">
-                        <div class="filter-header">
-                            <h4 class="filter-title">Academic Years</h4>
-                            <button class="filter-expand" data-target="years">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
                 </div>
-                        <div class="filter-content" id="years">
+
+                <div class="course__sidebar__wraper" data-aos="fade-up">
+                    <div class="course__heading">
+                        <h5>Years</h5>
+                    </div>
+                    <div class="course__skill__list">
+                        <ul>
                             @if (count($years) > 0)
                                 @foreach ($years as $year)
-                                <div class="filter-option">
-                                    <label class="custom-checkbox">
+                                    <li>
+                                        <label>
                                             <input type="checkbox" class="filter-checkbox year-checkbox" value="{{ $year }}">
-                                        <span class="checkmark"></span>
-                                        <span class="option-text">{{ $year }}</span>
+                                            {{ $year }}
                                         </label>
-                                </div>
+                                    </li>
                                 @endforeach
                             @else
-                                <div class="empty-state">
-                                    <i class="fas fa-exclamation-circle"></i>
-                                    <span>No years available</span>
-                                </div>
+                                <li>No Year</li>
                             @endif
-                        </div>
+
+                        </ul>
                     </div>
 
-                    <!-- Tags Filter -->
-                    @if (count($tags) > 0)
-                    <div class="filter-section">
-                        <div class="filter-header">
-                            <h4 class="filter-title">Tags</h4>
-                            <button class="filter-expand" data-target="tags">
-                                <i class="fas fa-chevron-down"></i>
-                            </button>
-                        </div>
-                        <div class="filter-content" id="tags">
-                            @foreach ($tags as $tag)
-                            <div class="filter-option">
-                                <label class="custom-checkbox">
-                                    <input type="checkbox" class="filter-checkbox tag-checkbox" value="{{ $tag }}">
-                                    <span class="checkmark"></span>
-                                    <span class="option-text">
-                                        <span class="tag-indicator"></span>
-                                        {{ $tag }}
-                                    </span>
-                                </label>
-                            </div>
-                            @endforeach
-                        </div>
-                    </div>
-                    @endif
                 </div>
+
+
             </div>
 
-            <!-- Modern Document Grid -->
-            <div class="portfolio-main-content">
-                <!-- Loading States -->
-                <div class="loading-state" id="loadingState" style="display: none;">
-                    <div class="loading-animation">
-                        <div class="loading-spinner"></div>
-                        <span>Loading documents...</span>
-                    </div>
-                </div>
+            <div class="col-xl-9 col-lg-9 col-md-8 col-12">
 
-                <!-- Results Summary -->
-                <div class="results-summary" id="resultsSummary">
-                    <div class="results-info">
-                        <span class="results-count">{{ (count($exams['exams']) ?? 0) + (count($exams['files']) ?? 0) }}</span>
-                        <span class="results-text">documents found</span>
-                    </div>
-                    <button class="mobile-filter-btn" id="mobileFilterBtn">
-                        <i class="fas fa-filter"></i>
-                        <span>Filters</span>
-                    </button>
-                </div>
+                <div class="tab-content tab__content__wrapper with__sidebar__content" id="myTabContent">
 
-                <!-- Document Grid Container -->
-                <div class="document-grid-container">
-                    <div class="document-grid" id="documentGrid" data-view="grid">
+
+                    <div class="tab-pane fade  active show" id="projects__one" role="tabpanel" aria-labelledby="projects__one">
+
+                        <div class="row" id="exam-list">
                             @if (count($exams) > 0)
                                 @foreach ($exams as $result)
-                                @foreach ($result as $document)
-                                    @if ($document instanceof \App\Models\Exam)
-                                        <!-- Exam Document Card -->
-                                        <div class="document-card exam-card" data-type="exam" data-faculty="{{ $document->faculty ?? '' }}" data-semester="{{ $document->semester ?? '' }}" data-year="{{ date('Y', strtotime($document->created_at)) }}" data-tags="{{ $document->tags ?? '' }}">
-                                            <div class="card-header">
-                                                <div class="document-type-badge exam-badge">
-                                                    <i class="fas fa-graduation-cap"></i>
-                                                    <span>Exam Paper</span>
-                                                </div>
-                                                <div class="document-actions">
+                                @foreach ($result as $exam)
+                                    <div class="col-xl-4 col-lg-6 col-md-12 col-sm-6 col-12" data-aos="fade-up">
+                                        @if ($exam instanceof \App\Models\Exam)
+                                        <div class="gridarea__wraper gridarea__wraper__2">
+                                            <div class="gridarea__img">
+                                                <a href="{{ asset($exam->exam_document) }}" download>
                                                     @php
-                                                        $extension = pathinfo($document->exam_document, PATHINFO_EXTENSION);
+                                                        $extension = pathinfo($exam->exam_document, PATHINFO_EXTENSION);
+
                                                     @endphp
-                                                    @if ($extension === 'pdf')
-                                                        <button class="action-btn preview-btn" data-url="{{ asset($document->exam_document) }}" title="Preview Document">
-                                                            <i class="far fa-eye"></i>
-                                                        </button>
+                                                    @if ($extension == 'pdf')
+                                                        <img loading="lazy"  src="/img/pdf.jpg" alt="grid">
+                                                    @else
+                                                    <img loading="lazy"  src="/img/word.png" alt="grid">
+
                                                     @endif
-                                                    <a href="{{ asset($document->exam_document) }}" download class="action-btn download-btn" title="Download Exam Paper">
-                                                        <i class="fas fa-download"></i>
-                                                    </a>
-                                                    @if($document->answer_key)
-                                                        <a href="{{ asset($document->answer_key) }}" download class="action-btn answer-key-btn" title="Download Answer Key">
-                                                            <i class="fas fa-key"></i>
-                                                        </a>
+
+                                                </a>
+                                                <div class="gridarea__small__button">
+                                                    <div class="grid__badge">{{$exam->course_code}}</div>
+                                                </div>
+                                                <div class="gridarea__small__icon">
+                                                    {{-- <a href="#"><i class="icofont-heart-alt"></i></a> --}}
+                                                </div>
+
+                                            </div>
+                                            <div class="gridarea__content">
+                                                <div class="gridarea__list">
+                                                    <ul>
+                                                        <li>
+                                                            <i class="icofont-book-alt"></i> {{$exam->exam_format}}
+                                                        </li>
+                                                        <li>
+                                                            <i class="icofont-clock-time"></i> {{$exam->duration}}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="gridarea__heading">
+                                                    <h3><a href="#">{{$exam->course_title}}</a></h3>
+                                                </div>
+                                                <div class="gridarea__price">
+                                                    <span style="font-size: 14px"> <a href="{{ asset($exam->exam_document) }}" download><i class="fas fa-download"></i> Paper </a></span>
+                                                    @if($exam->answer_key)
+                                                        <span style="font-size: 14px"> <a href="{{ asset($exam->answer_key) }}" download><i class="fas fa-download"></i> Answer Key</a></span>
                                                     @endif
+
                                                 </div>
-                                            </div>
-                                            
-                                            <div class="card-thumbnail">
-                                                @php
-                                                    $extension = pathinfo($document->exam_document, PATHINFO_EXTENSION);
-                                                @endphp
-                                                <div class="document-preview">
-                                                    <div class="course-code-display">{{ $document->course_code }}</div>
-                                                    <div class="document-type-icon">
-                                                        <i class="fas fa-graduation-cap"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="format-badge">{{ strtoupper($extension) }}</div>
-                                            </div>
-                                            
-                                            <div class="card-content">
-                                                <div class="document-meta">
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-clipboard-list"></i>
-                                                        <span>{{ $document->exam_format }}</span>
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="far fa-clock"></i>
-                                                        <span>{{ $document->duration }}</span>
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="far fa-calendar-alt"></i>
-                                                        <span>{{ date('M Y', strtotime($document->exam_date)) }}</span>
-                                                    </div>
-                                                </div>
-                                                
-                                                <h3 class="document-title">
-                                                    <a href="#" class="title-link">{{ $document->course_title }}</a>
-                                                </h3>
-                                                
-                                                <div class="document-info">
-                                                    <div class="semester-info">
-                                                        <span class="semester-label">{{ $document->semester }}</span>
-                                                        <span class="academic-year">{{ $document->academic_year }}</span>
-                                                    </div>
-                                                    <div class="faculty-info">{{ $document->faculty }}</div>
-                                                </div>
-                                                
-                                                @if($document->answer_key)
-                                                <div class="answer-key-indicator">
-                                                    <div class="indicator-badge">
-                                                        <i class="fas fa-key"></i>
-                                                        <span>Answer Key Available</span>
-                                                    </div>
-                                                </div>
-                                                @endif
-                                                
-                                                <div class="card-footer">
-                                                    <div class="instructor-info">
-                                                        <div class="instructor-avatar">
-                                                            <i class="fas fa-user-tie"></i>
+                                                <div class="gridarea__bottom">
+
+                                                    <a href="instructor-details.html">
+                                                        <div class="gridarea__small__img">
+                                                            <img loading="lazy"  src="/img/grid/grid_small_1.jpg" alt="grid">
+                                                            <div class="gridarea__small__content">
+                                                                <h6>{{$exam->instructor_name}}</h6>
                                                             </div>
-                                                        <div class="instructor-details">
-                                                            <span class="instructor-name">{{ $document->instructor_name }}</span>
-                                                            <span class="instructor-role">Instructor</span>
                                                         </div>
-                                                    </div>
-                                                    <div class="upload-date">
-                                                        <span>{{ $document->created_at->diffForHumans() }}</span>
-                                                    </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
                                         @else
-                                        <!-- File Document Card -->
-                                        <div class="document-card file-card" data-type="file" data-year="{{ date('Y', strtotime($document->year_created)) }}">
-                                            <div class="card-header">
-                                                <div class="document-type-badge file-badge">
-                                                    <i class="fas fa-archive"></i>
-                                                    <span>Academic File</span>
-                                                </div>
-                                                <div class="document-actions">
+                                        <div class="gridarea__wraper gridarea__wraper__2">
+                                            <div class="gridarea__img">
+                                                <a href="{{ Storage::url($exam->document_file) }}" download>
                                                     @php
-                                                        $fileExtension = pathinfo($document->document_file, PATHINFO_EXTENSION);
-                                                    @endphp
-                                                    @if($fileExtension === 'pdf')
-                                                        <button class="action-btn preview-btn" data-url="{{ asset($document->document_file) }}" title="Preview Document">
-                                                            <i class="far fa-eye"></i>
-                                                        </button>
-                                                    @endif
-                                                    <a href="{{ asset($document->document_file) }}" download class="action-btn download-btn" title="Download File">
-                                                        <i class="fas fa-download"></i>
-                                                </a>
-                                                </div>
-                                            </div>
-                                            
-                                            <div class="card-thumbnail">
-                                                <div class="document-preview">
-                                                    <div class="file-type-display">{{ $document->file_format }}</div>
-                                                    <div class="document-type-icon">
-                                                        <i class="fas fa-archive"></i>
-                                                    </div>
-                                                </div>
-                                                <div class="format-badge">{{ strtoupper($fileExtension) }}</div>
-                                            </div>
-                                            
-                                            <div class="card-content">
-                                                <div class="document-meta">
-                                                    <div class="meta-item">
-                                                        <i class="fas fa-layer-group"></i>
-                                                        <span>{{ $document->unit }}</span>
-                                                    </div>
-                                                    <div class="meta-item">
-                                                        <i class="far fa-calendar-plus"></i>
-                                                        <span>{{ date('M Y', strtotime($document->year_created)) }}</span>
-                                                    </div>
-                                                </div>
-                                                
-                                                <h3 class="document-title">
-                                                    <a href="#" class="title-link">{{ $document->file_title }}</a>
-                                                </h3>
-                                                
-                                                <div class="document-info">
-                                                    <div class="file-details">
-                                                        <span class="file-unit">{{ $document->unit }}</span>
-                                                        <span class="deposit-date">Deposited: {{ date('M Y', strtotime($document->year_deposit)) }}</span>
-                                                    </div>
-                                                </div>
-                                                
+                                                        $extension = pathinfo($exam->document_file, PATHINFO_EXTENSION);
 
-                                                
-                                                <div class="card-footer">
-                                                    <div class="depositor-info">
-                                                        <div class="depositor-avatar">
-                                                            <i class="fas fa-user"></i>
+                                                    @endphp
+                                                    @if ($extension == 'pdf')
+                                                        <img loading="lazy"  src="/img/pdf.jpg" alt="grid">
+                                                    @else
+                                                    <img loading="lazy"  src="/img/word.png" alt="grid">
+
+                                                    @endif
+
+                                                </a>
+                                                <div class="gridarea__small__button">
+                                                    <div class="grid__badge">File</div>
+                                                </div>
+                                                <div class="gridarea__small__icon">
+                                                    {{-- <a href="#"><i class="icofont-heart-alt"></i></a> --}}
+                                                </div>
+
+                                            </div>
+                                            <div class="gridarea__content">
+                                                <div class="gridarea__list">
+                                                    <ul>
+                                                        <li>
+                                                            <i class="icofont-book-alt"></i> {{$exam->file_format}}
+                                                        </li>
+                                                        <li>
+                                                            <i class="icofont-clock-time"></i> {{$exam->year_deposit}}
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="gridarea__heading">
+                                                    <h3><a href="#">{{$exam->file_title}}</a></h3>
+                                                </div>
+                                                <div class="gridarea__price">
+                                                    <span style="font-size: 14px"> <a href="{{ Storage::url($exam->document_file) }}" download><i class="fas fa-download"></i> File </a></span>
+                                                </div>
+                                                <div class="gridarea__bottom">
+
+                                                    <a href="instructor-details.html">
+                                                        <div class="gridarea__small__img">
+                                                            <img loading="lazy"  src="/img/grid/grid_small_1.jpg" alt="grid">
+                                                            <div class="gridarea__small__content">
+                                                                <h6>{{$exam->depositor_name}}</h6>
                                                             </div>
-                                                        <div class="depositor-details">
-                                                            <span class="depositor-name">{{ $document->depositor_name }}</span>
-                                                            <span class="depositor-role">Depositor</span>
                                                         </div>
-                                                    </div>
-                                                    <div class="upload-date">
-                                                        <span>{{ $document->created_at->diffForHumans() }}</span>
-                                                    </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>
                                         @endif
+                                    </div>
                                 @endforeach
                                 @endforeach
                             @else
-                            <div class="empty-state-container">
-                                <div class="empty-state">
-                                    <div class="empty-icon">
-                                        <i class="fas fa-folder-open"></i>
-                                    </div>
-                                    <h3 class="empty-title">No Documents Found</h3>
-                                    <p class="empty-description">There are no documents matching your current filters. Try adjusting your search criteria or browse all documents.</p>
-                                    <button class="clear-filters-btn">
-                                        <i class="fas fa-refresh"></i>
-                                        <span>Clear All Filters</span>
-                                    </button>
-                                </div>
-                            </div>
+                                <h5 class="text-center">No Exams Uploaded Yet!</h5>
                             @endif
-                    </div>
-                </div>
-
-                <!-- Advanced Pagination -->
-                <div class="pagination-container" id="paginationContainer">
-                    <div class="pagination-info">
-                        <span>Showing <strong>1-{{ min(20, (count($exams['exams']) ?? 0) + (count($exams['files']) ?? 0)) }}</strong> of <strong>{{ (count($exams['exams']) ?? 0) + (count($exams['files']) ?? 0) }}</strong> documents</span>
-                    </div>
-                    <div class="pagination-controls">
-                        <button class="pagination-btn prev-btn" disabled>
-                            <i class="fas fa-chevron-left"></i>
-                            <span>Previous</span>
-                        </button>
-                        <div class="pagination-numbers">
-                            <button class="pagination-number active">1</button>
                         </div>
-                        <button class="pagination-btn next-btn" disabled>
-                            <span>Next</span>
-                            <i class="fas fa-chevron-right"></i>
-                        </button>
-                    </div>
-                    <div class="pagination-options">
-                        <select class="items-per-page-select" id="itemsPerPage">
-                            <option value="20">20 per page</option>
-                            <option value="40">40 per page</option>
-                            <option value="60">60 per page</option>
-                            <option value="100">100 per page</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+
                     </div>
 
 
@@ -855,6 +644,3 @@
 </div>
 @endsection
 
-@push('scripts')
-<script src="{{ asset('js/portfolio.js') }}"></script>
-@endpush
