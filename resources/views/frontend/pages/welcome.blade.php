@@ -2,10 +2,10 @@
 
 @push('styles')
 <style>
-    /* Modern Landing Page Styles */
+    /* Modern Landing Page Styles - Clean Professional Theme */
     .landing-container {
         min-height: 100vh;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 50%, #dee2e6 100%);
         position: relative;
         overflow: hidden;
     }
@@ -17,8 +17,8 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
-        opacity: 0.3;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(108,117,125,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)" /></svg>');
+        opacity: 0.5;
     }
 
     .hero-section {
@@ -26,21 +26,28 @@
         z-index: 2;
         padding: 100px 0;
         text-align: center;
-        color: white;
+        color: #2c3e50;
     }
 
     .hero-title {
         font-size: 4rem;
-        font-weight: 700;
+        font-weight: 800;
         margin-bottom: 1rem;
-        text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        color: #343a40;
+        text-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
         animation: fadeInUp 1s ease-out;
+        background: linear-gradient(135deg, #343a40 0%, #6c757d 50%, #adb5bd 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
     }
 
     .hero-subtitle {
         font-size: 1.5rem;
         margin-bottom: 2rem;
-        opacity: 0.9;
+        color: #495057;
+        opacity: 1;
         animation: fadeInUp 1s ease-out 0.2s both;
     }
 
@@ -48,7 +55,8 @@
         font-size: 1.1rem;
         max-width: 600px;
         margin: 0 auto 3rem;
-        opacity: 0.8;
+        color: #6c757d;
+        opacity: 1;
         line-height: 1.6;
         animation: fadeInUp 1s ease-out 0.4s both;
     }
@@ -62,7 +70,7 @@
     }
 
     .btn-primary-modern {
-        background: linear-gradient(45deg, #FF6B6B, #FF8E53);
+        background: linear-gradient(45deg, #007bff, #0056b3);
         border: none;
         padding: 15px 40px;
         border-radius: 50px;
@@ -71,24 +79,25 @@
         font-size: 1.1rem;
         text-decoration: none;
         transition: all 0.3s ease;
-        box-shadow: 0 8px 25px rgba(255, 107, 107, 0.3);
+        box-shadow: 0 8px 25px rgba(0, 123, 255, 0.3);
         position: relative;
         overflow: hidden;
     }
 
     .btn-primary-modern:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 35px rgba(255, 107, 107, 0.4);
+        box-shadow: 0 12px 35px rgba(0, 123, 255, 0.4);
         color: white;
         text-decoration: none;
+        background: linear-gradient(45deg, #0056b3, #004085);
     }
 
     .btn-secondary-modern {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.9);
+        border: 2px solid #dee2e6;
         padding: 13px 38px;
         border-radius: 50px;
-        color: white;
+        color: #495057;
         font-weight: 600;
         font-size: 1.1rem;
         text-decoration: none;
@@ -97,18 +106,19 @@
     }
 
     .btn-secondary-modern:hover {
-        background: rgba(255, 255, 255, 0.2);
-        border-color: rgba(255, 255, 255, 0.5);
+        background: rgba(255, 255, 255, 1);
+        border-color: #adb5bd;
         transform: translateY(-2px);
-        color: white;
+        color: #343a40;
         text-decoration: none;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
     }
 
     .features-section {
         position: relative;
         z-index: 2;
         padding: 80px 0;
-        background: rgba(255, 255, 255, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(10px);
     }
 
@@ -130,7 +140,7 @@
 
     .feature-icon {
         font-size: 3rem;
-        color: #667eea;
+        color: #007bff;
         margin-bottom: 1rem;
     }
 
@@ -150,7 +160,7 @@
         position: relative;
         z-index: 2;
         padding: 60px 0;
-        background: rgba(102, 126, 234, 0.1);
+        background: rgba(248, 249, 250, 0.9);
         backdrop-filter: blur(10px);
     }
 
@@ -162,7 +172,7 @@
     .stat-number {
         font-size: 3rem;
         font-weight: 700;
-        color: #667eea;
+        color: #007bff;
         display: block;
     }
 
@@ -184,7 +194,7 @@
 
     .floating-shape {
         position: absolute;
-        background: rgba(255, 255, 255, 0.1);
+        background: rgba(0, 123, 255, 0.1);
         border-radius: 50%;
         animation: float 6s ease-in-out infinite;
     }
