@@ -310,7 +310,16 @@
     .meta-item {
         display: flex;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .meta-item i {
+        color: #007bff;
+        font-size: 0.9rem;
+        width: 16px;
+        text-align: center;
     }
 
     .document-actions {
@@ -379,6 +388,11 @@
         color: white;
         font-weight: 600;
         font-size: 0.9rem;
+        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    .instructor-avatar i {
+        font-size: 1rem;
     }
 
     .instructor-name {
@@ -396,7 +410,8 @@
     .no-documents i {
         font-size: 4rem;
         margin-bottom: 1rem;
-        color: #dee2e6;
+        color: #007bff;
+        opacity: 0.6;
     }
 
     /* Enhanced List View Styles */
@@ -766,22 +781,22 @@
                                             </h4>
                                             
                                             <div class="document-meta">
-                                                <div class="meta-item">
-                                                    <i class="icofont-book-alt"></i>
-                                                    <span>{{ $exam->exam_format }}</span>
-                                                </div>
-                                                <div class="meta-item">
-                                                    <i class="icofont-clock-time"></i>
-                                                    <span>{{ $exam->duration }}</span>
-                                                </div>
+                                                                        <div class="meta-item">
+                            <i class="fas fa-file-alt"></i>
+                            <span>{{ $exam->exam_format }}</span>
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i>
+                            <span>{{ $exam->duration }}</span>
+                        </div>
                                             </div>
                                         </div>
                                         
                                         <div class="document-instructor-section">
                                             <div class="instructor-info">
-                                                <div class="instructor-avatar">
-                                                    {{ substr($exam->instructor_name, 0, 1) }}
-                                                </div>
+                                                                                            <div class="instructor-avatar">
+                                                <i class="fas fa-user-graduate"></i>
+                                            </div>
                                                 <div class="instructor-name">{{ $exam->instructor_name }}</div>
                                             </div>
                                         </div>
@@ -833,11 +848,11 @@
                                             
                                             <div class="document-meta">
                                                 <div class="meta-item">
-                                                    <i class="icofont-file-alt"></i>
+                                                    <i class="fas fa-file-alt"></i>
                                                     <span>{{ $exam->file_format }}</span>
                                                 </div>
                                                 <div class="meta-item">
-                                                    <i class="icofont-calendar"></i>
+                                                    <i class="fas fa-calendar-alt"></i>
                                                     <span>{{ $exam->year_deposit }}</span>
                                                 </div>
                                             </div>
@@ -845,9 +860,9 @@
                                         
                                         <div class="document-instructor-section">
                                             <div class="instructor-info">
-                                                <div class="instructor-avatar">
-                                                    {{ substr($exam->depositor_name, 0, 1) }}
-                                                </div>
+                                                                                            <div class="instructor-avatar">
+                                                <i class="fas fa-user-graduate"></i>
+                                            </div>
                                                 <div class="instructor-name">{{ $exam->depositor_name }}</div>
                                             </div>
                                         </div>
@@ -867,7 +882,7 @@
             @else
                 <div class="col-12">
                     <div class="no-documents">
-                        <i class="icofont-file-document"></i>
+                        <i class="fas fa-folder-open"></i>
                         <h4>No Documents Available</h4>
                         <p>There are currently no documents in the archive. Check back later for updates.</p>
                     </div>
