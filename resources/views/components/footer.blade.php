@@ -2,7 +2,7 @@
     <div class="container-fluid px-0">
         <!-- Main Footer Content -->
         <div class="footer-content">
-            <div class="container">
+    <div class="container">
                 <div class="row g-4">
                     <!-- Quick Links Section -->
                     <div class="col-lg-4 col-md-6">
@@ -47,18 +47,18 @@
                                     <div class="partner-info">
                                         <span class="partner-name">Metascholar Institute</span>
                                         <span class="partner-desc">Academic Excellence</span>
-                                    </div>
+                </div>
                                     <i class="icofont-external-link external-icon"></i>
                                 </a>
                                 
                                 <a href="https://metascholarturnitinmoodle.com/" target="_blank" rel="noopener" class="partner-card">
-                                    <div class="partner-icon">
-                                        <i class="icofont-document-folder"></i>
-                                    </div>
+                                    <div class="partner-icon turnitin-icon">
+                                        <img src="https://i.ibb.co/S4tKSp4p/logo-tii.png" alt="Metascholar Turnitin Logo" class="partner-logo">
+                        </div>
                                     <div class="partner-info">
                                         <span class="partner-name">Metascholar Turnitin</span>
                                         <span class="partner-desc">Plagiarism Detection</span>
-                                    </div>
+                        </div>
                                     <i class="icofont-external-link external-icon"></i>
                                 </a>
                                 
@@ -76,16 +76,16 @@
                                 <a href="https://ijmsirjournal.com/" target="_blank" rel="noopener" class="partner-card">
                                     <div class="partner-icon ijmsir-icon">
                                         <img src="https://i.ibb.co/1GtfNBwH/IJMSIR.jpg" alt="IJMSIR Logo" class="partner-logo">
-                                    </div>
+                    </div>
                                     <div class="partner-info">
                                         <span class="partner-name">IJMSIR Journal</span>
                                         <span class="partner-desc">Research Publication</span>
-                                    </div>
+                </div>
                                     <i class="icofont-external-link external-icon"></i>
                                 </a>
-                            </div>
                         </div>
                     </div>
+                </div>
 
                     <!-- Support & Contact Section -->
                     <div class="col-lg-3 col-md-12">
@@ -99,14 +99,14 @@
                                     <div class="support-header">
                                         <i class="icofont-live-support"></i>
                                         <span>Get Help</span>
-                                    </div>
+                        </div>
                                     <p class="support-text">Need assistance? Our support team is here to help you.</p>
                                     <a href="mailto:support@academicdigital.space" class="support-btn">
                                         <i class="icofont-email"></i>
                                         Contact Support
                                     </a>
-                                </div>
-                            </div>
+                                        </div>
+                                        </div>
                         </div>
                     </div>
                 </div>
@@ -284,7 +284,8 @@
 
 .ijmsir-icon,
 .metascholar-icon,
-.scholar-indexing-icon {
+.scholar-indexing-icon,
+.turnitin-icon {
     background: transparent !important;
     padding: 2px;
     border: 2px solid #007bff;
@@ -556,7 +557,8 @@
 
 .is_dark .ijmsir-icon,
 .is_dark .metascholar-icon,
-.is_dark .scholar-indexing-icon {
+.is_dark .scholar-indexing-icon,
+.is_dark .turnitin-icon {
     border-color: #4299e1;
 }
 
