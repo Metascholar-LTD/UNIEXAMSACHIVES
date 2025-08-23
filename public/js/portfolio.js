@@ -215,15 +215,52 @@ function initializeViewToggle() {
             
             const view = this.dataset.view;
             if (documentGrid) {
-                documentGrid.dataset.view = view;
+                // Smooth transition effect
+                documentGrid.style.transition = 'all 0.3s ease';
+                documentGrid.style.opacity = '0.6';
+                documentGrid.style.transform = 'scale(0.98)';
                 
-                // Add animation class
-                documentGrid.style.opacity = '0.7';
                 setTimeout(() => {
+                    documentGrid.dataset.view = view;
                     documentGrid.style.opacity = '1';
+                    documentGrid.style.transform = 'scale(1)';
+                    
+                    // Update grid layout based on view
+                    updateGridLayout(view);
                 }, 150);
             }
         });
+    });
+}
+
+function updateGridLayout(view) {
+    const documentGrid = document.getElementById('documentGrid');
+    if (!documentGrid) return;
+    
+    // Remove any existing layout classes
+    documentGrid.classList.remove('grid-view-active', 'list-view-active', 'compact-view-active');
+    
+    // Add appropriate class for enhanced styling
+    switch(view) {
+        case 'grid':
+            documentGrid.classList.add('grid-view-active');
+            break;
+        case 'list':
+            documentGrid.classList.add('list-view-active');
+            break;
+        case 'compact':
+            documentGrid.classList.add('compact-view-active');
+            break;
+    }
+    
+    // Trigger reflow for better animation
+    const cards = documentGrid.querySelectorAll('.document-card');
+    cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 50}ms`;
+        card.classList.add('view-transition');
+        setTimeout(() => {
+            card.classList.remove('view-transition');
+        }, 600);
     });
 }
 

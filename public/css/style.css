@@ -660,19 +660,20 @@
 .document-grid {
   display: grid;
   gap: 1.5rem;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
 }
 
 .document-grid[data-view="list"] {
   grid-template-columns: 1fr;
+  gap: 0.75rem;
 }
 
 .document-grid[data-view="compact"] {
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 1rem;
 }
 
-/* Document Cards */
+/* Document Cards - Base Styles */
 .document-card {
   background: white;
   border: 1px solid #e2e8f0;
@@ -687,6 +688,387 @@
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   transform: translateY(-2px);
   border-color: #cbd5e1;
+}
+
+/* Grid View - Default (Optimized Size) */
+.document-grid[data-view="grid"] .document-card {
+  min-height: 320px;
+  max-height: 400px;
+}
+
+.document-grid[data-view="grid"] .card-thumbnail {
+  min-height: 100px;
+  max-height: 120px;
+  padding: 1rem;
+}
+
+.document-grid[data-view="grid"] .document-preview {
+  scale: 0.85;
+}
+
+.document-grid[data-view="grid"] .card-content {
+  padding: 0.875rem;
+}
+
+.document-grid[data-view="grid"] .document-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.document-grid[data-view="grid"] .document-title {
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.3;
+}
+
+.document-grid[data-view="grid"] .download-options {
+  display: flex;
+  gap: 0.375rem;
+  margin-bottom: 0.75rem;
+}
+
+.document-grid[data-view="grid"] .download-link {
+  padding: 0.375rem 0.625rem;
+  font-size: 0.7rem;
+  flex: 1;
+  justify-content: center;
+}
+
+/* List View - Horizontal Layout */
+.document-grid[data-view="list"] .document-card {
+  display: grid;
+  grid-template-columns: 80px 1fr auto;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.875rem 1rem;
+  min-height: 80px;
+  max-height: 100px;
+}
+
+.document-grid[data-view="list"] .card-header {
+  display: none;
+}
+
+.document-grid[data-view="list"] .card-thumbnail {
+  grid-column: 1;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 8px;
+  padding: 0.5rem;
+  min-height: 60px;
+  max-height: 60px;
+  width: 60px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.document-grid[data-view="list"] .document-preview {
+  scale: 0.7;
+}
+
+.document-grid[data-view="list"] .file-icon {
+  width: 32px;
+  height: 32px;
+  font-size: 1rem;
+}
+
+.document-grid[data-view="list"] .file-extension {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.25rem;
+}
+
+.document-grid[data-view="list"] .card-content {
+  grid-column: 2;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.document-grid[data-view="list"] .document-title {
+  font-size: 0.95rem;
+  margin: 0 0 0.25rem 0;
+  line-height: 1.2;
+}
+
+.document-grid[data-view="list"] .document-meta {
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+}
+
+.document-grid[data-view="list"] .meta-item {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.document-grid[data-view="list"] .document-info {
+  margin: 0;
+}
+
+.document-grid[data-view="list"] .semester-info {
+  display: flex;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.document-grid[data-view="list"] .semester-label {
+  font-size: 0.65rem;
+  padding: 0.125rem 0.375rem;
+}
+
+.document-grid[data-view="list"] .faculty-info {
+  font-size: 0.75rem;
+  color: #64748b;
+  margin-top: 0.125rem;
+}
+
+.document-grid[data-view="list"] .download-options {
+  margin: 0;
+  gap: 0.25rem;
+}
+
+.document-grid[data-view="list"] .download-link {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.65rem;
+  white-space: nowrap;
+}
+
+.document-grid[data-view="list"] .card-footer {
+  grid-column: 3;
+  padding: 0;
+  border: none;
+  background: transparent;
+  flex-direction: row;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.document-grid[data-view="list"] .instructor-info,
+.document-grid[data-view="list"] .depositor-info {
+  flex-direction: row;
+  gap: 0.375rem;
+}
+
+.document-grid[data-view="list"] .instructor-avatar,
+.document-grid[data-view="list"] .depositor-avatar {
+  width: 24px;
+  height: 24px;
+  font-size: 0.75rem;
+}
+
+.document-grid[data-view="list"] .instructor-name,
+.document-grid[data-view="list"] .depositor-name {
+  font-size: 0.75rem;
+}
+
+.document-grid[data-view="list"] .instructor-role,
+.document-grid[data-view="list"] .depositor-role {
+  display: none;
+}
+
+.document-grid[data-view="list"] .upload-date {
+  font-size: 0.65rem;
+  color: #94a3b8;
+}
+
+.document-grid[data-view="list"] .course-code-overlay,
+.document-grid[data-view="list"] .file-type-overlay {
+  position: static;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+}
+
+/* Compact View - Smaller, Denser Cards */
+.document-grid[data-view="compact"] .document-card {
+  min-height: 240px;
+  max-height: 280px;
+}
+
+.document-grid[data-view="compact"] .card-header {
+  padding: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .document-type-badge {
+  font-size: 0.625rem;
+  padding: 0.25rem 0.5rem;
+}
+
+.document-grid[data-view="compact"] .card-thumbnail {
+  min-height: 70px;
+  max-height: 80px;
+  padding: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .document-preview {
+  scale: 0.75;
+}
+
+.document-grid[data-view="compact"] .file-icon {
+  width: 36px;
+  height: 36px;
+  font-size: 1.125rem;
+}
+
+.document-grid[data-view="compact"] .file-extension {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+}
+
+.document-grid[data-view="compact"] .card-content {
+  padding: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .document-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem;
+  margin-bottom: 0.5rem;
+}
+
+.document-grid[data-view="compact"] .meta-item {
+  font-size: 0.7rem;
+}
+
+.document-grid[data-view="compact"] .document-title {
+  font-size: 0.85rem;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.document-grid[data-view="compact"] .document-info {
+  margin-bottom: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .semester-label {
+  font-size: 0.625rem;
+  padding: 0.125rem 0.375rem;
+}
+
+.document-grid[data-view="compact"] .faculty-info {
+  font-size: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .download-options {
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .download-link {
+  padding: 0.375rem 0.5rem;
+  font-size: 0.65rem;
+}
+
+.document-grid[data-view="compact"] .card-footer {
+  padding: 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: flex-start;
+}
+
+.document-grid[data-view="compact"] .instructor-info,
+.document-grid[data-view="compact"] .depositor-info {
+  gap: 0.375rem;
+}
+
+.document-grid[data-view="compact"] .instructor-avatar,
+.document-grid[data-view="compact"] .depositor-avatar {
+  width: 24px;
+  height: 24px;
+  font-size: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .instructor-name,
+.document-grid[data-view="compact"] .depositor-name {
+  font-size: 0.75rem;
+}
+
+.document-grid[data-view="compact"] .instructor-role,
+.document-grid[data-view="compact"] .depositor-role {
+  font-size: 0.625rem;
+}
+
+.document-grid[data-view="compact"] .upload-date {
+  font-size: 0.625rem;
+  text-align: center;
+  width: 100%;
+}
+
+/* View Transition Animations */
+.view-transition {
+  animation: fadeInUp 0.4s ease-out forwards;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.grid-view-active .document-card {
+  animation: scaleIn 0.3s ease-out;
+}
+
+.list-view-active .document-card {
+  animation: slideInLeft 0.3s ease-out;
+}
+
+.compact-view-active .document-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Enhanced Hover Effects for Different Views */
+.document-grid[data-view="list"] .document-card:hover {
+  transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+.document-grid[data-view="compact"] .document-card:hover {
+  transform: translateY(-1px) scale(1.02);
 }
 
 .card-header {
@@ -1325,6 +1707,69 @@
   
   .document-grid[data-view="compact"] {
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  }
+  
+  /* Mobile Grid View Adjustments */
+  .document-grid[data-view="grid"] .document-card {
+    min-height: 300px;
+    max-height: 360px;
+  }
+  
+  .document-grid[data-view="grid"] .card-thumbnail {
+    min-height: 90px;
+    max-height: 100px;
+  }
+  
+  .document-grid[data-view="grid"] .document-meta {
+    grid-template-columns: 1fr;
+    gap: 0.375rem;
+  }
+  
+  /* Mobile List View Adjustments */
+  .document-grid[data-view="list"] .document-card {
+    grid-template-columns: 60px 1fr;
+    padding: 0.75rem;
+    max-height: 90px;
+  }
+  
+  .document-grid[data-view="list"] .card-thumbnail {
+    width: 50px;
+    min-height: 50px;
+    max-height: 50px;
+  }
+  
+  .document-grid[data-view="list"] .card-content {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .document-grid[data-view="list"] .document-meta {
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  
+  .document-grid[data-view="list"] .card-footer {
+    grid-column: 2;
+    grid-row: 2;
+    margin-top: 0.5rem;
+    justify-content: space-between;
+    width: 100%;
+  }
+  
+  .document-grid[data-view="list"] .download-options {
+    display: flex;
+    gap: 0.25rem;
+  }
+  
+  /* Mobile Compact View Adjustments */
+  .document-grid[data-view="compact"] .document-card {
+    min-height: 220px;
+    max-height: 260px;
+  }
+  
+  .document-grid[data-view="compact"] .card-thumbnail {
+    min-height: 60px;
+    max-height: 70px;
   }
   
   .pagination-container {
