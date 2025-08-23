@@ -79,6 +79,74 @@
         margin-top: 0.5rem;
     }
 
+    /* Compact Navigation Styles */
+    .navigation-section {
+        background: white;
+        padding: 1rem 0;
+        border-bottom: 1px solid #e9ecef;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .compact-navigation {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        padding: 0.5rem 1rem;
+        background: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 8px;
+        color: #495057;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .back-btn:hover {
+        background: #e9ecef;
+        color: #343a40;
+        text-decoration: none;
+        transform: translateX(-2px);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .back-btn:active {
+        transform: translateX(-1px);
+    }
+
+    .back-btn i {
+        font-size: 0.8rem;
+    }
+
+    .breadcrumb-mini {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.85rem;
+        color: #6c757d;
+    }
+
+    .breadcrumb-item {
+        color: #6c757d;
+    }
+
+    .breadcrumb-item.active {
+        color: #007bff;
+        font-weight: 600;
+    }
+
+    .breadcrumb-mini i {
+        font-size: 0.7rem;
+        color: #adb5bd;
+    }
+
     .search-filter-section {
         background: white;
         padding: 2rem 0;
@@ -579,6 +647,16 @@
 
     /* Responsive Design */
     @media (max-width: 768px) {
+        .compact-navigation {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .back-btn {
+            align-self: flex-start;
+        }
+
         .hero-title {
             font-size: 2rem;
         }
@@ -706,6 +784,27 @@
                 <div class="stat-item">
                     <span class="stat-number">{{ $totalFiles }}</span>
                     <div class="stat-label">Files</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Compact Navigation Breadcrumb -->
+<div class="navigation-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="compact-navigation">
+                    <a href="{{ route('dashboard') }}" class="back-btn">
+                        <i class="fas fa-arrow-left"></i>
+                        <span>Back to Dashboard</span>
+                    </a>
+                    <div class="breadcrumb-mini">
+                        <span class="breadcrumb-item">Dashboard</span>
+                        <i class="fas fa-chevron-right"></i>
+                        <span class="breadcrumb-item active">Documents</span>
+                    </div>
                 </div>
             </div>
         </div>
