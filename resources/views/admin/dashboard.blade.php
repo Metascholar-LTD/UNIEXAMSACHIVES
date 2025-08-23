@@ -1,10 +1,5 @@
 @extends('layout.app')
 
-@push('styles')
-<!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-@endpush
-
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
@@ -320,94 +315,56 @@
                                         </div>
 
                                         @if (count($recentlyUploadedExams) > 0)
-                                            <div class="recent-exams-list">
+                                            <div class="clean-exams-list">
                                                 @foreach ($recentlyUploadedExams as $item )
-                                                @php
-                                                    $extension = pathinfo($item->exam_document, PATHINFO_EXTENSION);
-                                                @endphp
-                                                <div class="document-card {{ strtolower($extension) }}-card" data-exam-id="{{ $item->id }}">
-                                                    <div class="document-card-header">
-                                                        <div class="document-header-info">
-                                                            <div class="document-icon">
-                                                                @if (strtolower($extension) == 'pdf')
-                                                                    <i class="fas fa-file-pdf"></i>
-                                                                @elseif (in_array(strtolower($extension), ['doc', 'docx']))
-                                                                    <i class="fas fa-file-word"></i>
-                                                                @elseif (in_array(strtolower($extension), ['xls', 'xlsx']))
-                                                                    <i class="fas fa-file-excel"></i>
-                                                                @elseif (in_array(strtolower($extension), ['ppt', 'pptx']))
-                                                                    <i class="fas fa-file-powerpoint"></i>
-                                                                @else
-                                                                    <i class="fas fa-file-alt"></i>
-                                                                @endif
-                                                            </div>
-                                                            <div class="document-type-badge">{{ strtoupper($extension) }}</div>
+                                                <div class="clean-exam-item" data-exam-id="{{ $item->id }}">
+                                                    <div class="exam-icon">
+                                                        @php
+                                                            $extension = pathinfo($item->exam_document, PATHINFO_EXTENSION);
+                                                        @endphp
+                                                        @if ($extension == 'pdf')
+                                                            <i class="icofont-file-pdf"></i>
+                                                        @else
+                                                            <i class="icofont-file-word"></i>
+                                                        @endif
+                                                    </div>
+                                                    
+                                                    <div class="exam-content">
+                                                        <div class="exam-title">
+                                                            <h5>{{ $item->course_title }}</h5>
+                                                            <span class="exam-code">{{ $item->course_code }}</span>
+                                                        </div>
+                                                        
+                                                        <div class="exam-info">
+                                                            <span><i class="icofont-teacher"></i> {{ $item->instructor_name }}</span>
+                                                            <span><i class="icofont-book-alt"></i> {{ $item->exam_format }}</span>
+                                                            <span><i class="icofont-clock-time"></i> {{ $item->duration }}</span>
                                                         </div>
                                                     </div>
                                                     
-                                                    <div class="document-card-body">
-                                                        <div class="document-main-info">
-                                                            <h4 class="document-title">
-                                                                <a href="#" title="{{ $item->course_title }}">{{ $item->course_title }}</a>
-                                                            </h4>
-                                                            <div class="document-meta">
-                                                                <div class="meta-item">
-                                                                    <i class="fas fa-file-alt"></i>
-                                                                    <span>{{ $item->exam_format }}</span>
-                                                                </div>
-                                                                <div class="meta-item">
-                                                                    <i class="fas fa-clock"></i>
-                                                                    <span>{{ $item->duration }}</span>
-                                                                </div>
-                                                                <div class="meta-item">
-                                                                    <i class="fas fa-hashtag"></i>
-                                                                    <span>{{ $item->course_code }}</span>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="document-instructor-section">
-                                                            <div class="instructor-info">
-                                                                <div class="instructor-avatar">
-                                                                    <i class="fas fa-user-graduate"></i>
-                                                                </div>
-                                                                <div class="instructor-name">{{ $item->instructor_name }}</div>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                        <div class="document-actions">
-                                                            <a href="{{ asset($item->exam_document) }}" download class="action-btn primary">
-                                                                <i class="fas fa-download"></i>
-                                                                Exam Paper
+                                                    <div class="exam-actions">
+                                                        <a href="{{ asset($item->exam_document) }}" download class="clean-btn download-btn" title="Download">
+                                                            <i class="icofont-download"></i>
+                                                        </a>
+                                                        @if($item->answer_key)
+                                                            <a href="{{ asset($item->answer_key) }}" download class="clean-btn key-btn" title="Answer Key">
+                                                                <i class="icofont-key"></i>
                                                             </a>
-                                                            @if($item->answer_key)
-                                                                <a href="{{ asset($item->answer_key) }}" download class="action-btn secondary">
-                                                                    <i class="fas fa-key"></i>
-                                                                    Answer Key
-                                                                </a>
-                                                            @endif
-                                                        </div>
-                                                        
+                                                        @endif
                                                         <div class="status-indicator">
                                                             @if($item->is_approve)
-                                                                <span class="status-badge approved">
-                                                                    <i class="fas fa-check-circle"></i>
-                                                                    Approved
-                                                                </span>
+                                                                <i class="icofont-check-circled" title="Approved"></i>
                                                             @else
-                                                                <span class="status-badge pending">
-                                                                    <i class="fas fa-clock"></i>
-                                                                    Pending
-                                                                </span>
-                                                            @endif
-                                                        </div>
+                                                                <i class="icofont-clock-time" title="Pending"></i>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
                                                 @endforeach
                                             </div>
                                         @else
                                             <div class="clean-empty-state">
-                                                <i class="fas fa-folder-open"></i>
+                                                <i class="icofont-document"></i>
                                                 <p>No exams uploaded yet</p>
                                                 <a href="{{route('dashboard.create')}}" class="clean-upload-btn">
                                                     Upload First Exam
@@ -493,331 +450,5 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
-
-<style>
-    /* Recent Exams List View Styles - Same as Documents Page */
-    .recent-exams-list {
-        margin-top: 1rem;
-    }
-
-    .recent-exams-list .document-card {
-        display: flex;
-        align-items: center;
-        border-radius: 12px;
-        margin-bottom: 1rem;
-        padding: 1rem;
-        min-height: 100px;
-        background: white;
-        border: 1px solid #f1f3f4;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        transition: all 0.3s ease;
-    }
-
-    .recent-exams-list .document-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    }
-
-    .recent-exams-list .document-card-header {
-        height: 60px;
-        width: 60px;
-        border-radius: 12px;
-        margin-right: 1rem;
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        position: relative;
-    }
-
-    .recent-exams-list .document-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .recent-exams-list .document-icon i {
-        font-size: 1.5rem;
-        color: white;
-    }
-
-    .recent-exams-list .document-type-badge {
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: rgba(255, 255, 255, 0.95);
-        backdrop-filter: blur(10px);
-        padding: 2px 6px;
-        border-radius: 8px;
-        font-size: 0.6rem;
-        font-weight: 500;
-        color: #6c757d;
-        border: 1px solid rgba(255, 255, 255, 0.4);
-        opacity: 0.8;
-    }
-
-    .recent-exams-list .document-card-body {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 1.5rem;
-    }
-
-    .recent-exams-list .document-main-info {
-        flex: 1;
-        min-width: 0;
-    }
-
-    .recent-exams-list .document-title {
-        margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
-        font-weight: 600;
-        color: #343a40;
-        line-height: 1.3;
-    }
-
-    .recent-exams-list .document-title a {
-        color: inherit;
-        text-decoration: none;
-    }
-
-    .recent-exams-list .document-title a:hover {
-        color: #007bff;
-    }
-
-    .recent-exams-list .document-meta {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-    }
-
-    .recent-exams-list .meta-item {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        font-size: 0.85rem;
-        color: #6c757d;
-    }
-
-    .recent-exams-list .meta-item i {
-        color: #007bff;
-        font-size: 0.9rem;
-        width: 16px;
-        text-align: center;
-    }
-
-    /* Date and calendar icons keep original color */
-    .recent-exams-list .meta-item .fa-calendar-alt,
-    .recent-exams-list .meta-item .fa-clock {
-        color: #6c757d;
-    }
-
-    .recent-exams-list .document-instructor-section {
-        min-width: 150px;
-        flex-shrink: 0;
-    }
-
-    .recent-exams-list .instructor-info {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-    }
-
-    .recent-exams-list .instructor-avatar {
-        width: 35px;
-        height: 35px;
-        border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: white;
-        font-weight: 600;
-        font-size: 0.9rem;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
-    }
-
-    .recent-exams-list .instructor-avatar i {
-        font-size: 1rem;
-    }
-
-    .recent-exams-list .instructor-name {
-        font-size: 0.9rem;
-        font-weight: 500;
-        color: #495057;
-    }
-
-    .recent-exams-list .document-actions {
-        display: flex;
-        gap: 0.5rem;
-        flex-shrink: 0;
-    }
-
-    .recent-exams-list .action-btn {
-        padding: 8px 12px;
-        border: 2px solid #e9ecef;
-        border-radius: 8px;
-        background: white;
-        color: #6c757d;
-        text-decoration: none;
-        font-size: 0.85rem;
-        font-weight: 500;
-        text-align: center;
-        transition: all 0.3s ease;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.3rem;
-        white-space: nowrap;
-    }
-
-    .recent-exams-list .action-btn:hover {
-        text-decoration: none;
-    }
-
-    .recent-exams-list .action-btn.primary {
-        border-color: #007bff;
-        background: #007bff;
-        color: white;
-    }
-
-    .recent-exams-list .action-btn.primary:hover {
-        background: #0056b3;
-        border-color: #0056b3;
-        color: white;
-    }
-
-    .recent-exams-list .action-btn.secondary {
-        border-color: #6c757d;
-        background: white;
-        color: #6c757d;
-    }
-
-    .recent-exams-list .action-btn.secondary:hover {
-        border-color: #6c757d;
-        background: #6c757d;
-        color: white;
-    }
-
-    .recent-exams-list .status-indicator {
-        margin-left: 1rem;
-        flex-shrink: 0;
-    }
-
-    .recent-exams-list .status-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-        padding: 6px 12px;
-        border-radius: 20px;
-        font-size: 0.8rem;
-        font-weight: 500;
-    }
-
-    .recent-exams-list .status-badge.approved {
-        background: rgba(40, 167, 69, 0.1);
-        color: #28a745;
-        border: 1px solid rgba(40, 167, 69, 0.2);
-    }
-
-    .recent-exams-list .status-badge.pending {
-        background: rgba(255, 193, 7, 0.1);
-        color: #ffc107;
-        border: 1px solid rgba(255, 193, 7, 0.2);
-    }
-
-    /* File type colors */
-    .recent-exams-list .pdf-card .document-card-header {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-    }
-
-    /* PDF badge styling for better contrast */
-    .recent-exams-list .pdf-card .document-type-badge {
-        color: #ff6b6b;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.6);
-    }
-
-    .recent-exams-list .doc-card .document-card-header,
-    .recent-exams-list .docx-card .document-card-header {
-        background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
-    }
-
-    .recent-exams-list .xls-card .document-card-header,
-    .recent-exams-list .xlsx-card .document-card-header {
-        background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
-    }
-
-    .recent-exams-list .ppt-card .document-card-header,
-    .recent-exams-list .pptx-card .document-card-header {
-        background: linear-gradient(135deg, #e67e22 0%, #d35400 100%);
-    }
-
-    .recent-exams-list .document-card-header {
-        background: linear-gradient(135deg, #95a5a6 0%, #7f8c8d 100%);
-    }
-
-    /* Responsive adjustments */
-    @media (max-width: 768px) {
-        .recent-exams-list .document-card {
-            flex-direction: column;
-            text-align: center;
-            padding: 1rem;
-        }
-
-        .recent-exams-list .document-card-header {
-            margin: 0 auto 1rem;
-        }
-
-        .recent-exams-list .document-card-body {
-            flex-direction: column;
-            align-items: center;
-            padding: 0;
-            width: 100%;
-        }
-
-        .recent-exams-list .document-main-info {
-            text-align: center;
-            margin-bottom: 1rem;
-            width: 100%;
-        }
-
-        .recent-exams-list .document-title {
-            max-width: 100%;
-            white-space: normal;
-            text-align: center;
-        }
-
-        .recent-exams-list .document-meta {
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        .recent-exams-list .document-instructor-section {
-            justify-content: center;
-            margin: 1rem 0;
-            min-width: auto;
-        }
-
-        .recent-exams-list .document-actions {
-            margin-top: 1rem;
-            width: 100%;
-            justify-content: center;
-        }
-
-        .recent-exams-list .action-btn {
-            flex: 1;
-            max-width: 150px;
-        }
-
-        .recent-exams-list .status-indicator {
-            margin: 1rem 0 0 0;
-        }
-    }
-</style>
 
 @endsection

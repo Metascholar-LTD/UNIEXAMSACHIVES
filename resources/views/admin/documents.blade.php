@@ -324,14 +324,7 @@
     }
 
     .pdf-card .document-card-header {
-        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
-    }
-
-    /* PDF badge styling for better contrast */
-    .pdf-card .document-type-badge {
-        color: #ff6b6b;
-        background: rgba(255, 255, 255, 0.95);
-        border: 1px solid rgba(255, 255, 255, 0.6);
+        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
     }
 
     .doc-card .document-card-header,
@@ -783,19 +776,19 @@
                 <div class="stat-item">
                     <span class="stat-number">{{ $totalDocuments }}</span>
                     <div class="stat-label">Total Documents</div>
-                </div>
+                            </div>
                 <div class="stat-item">
                     <span class="stat-number">{{ $totalExams }}</span>
                     <div class="stat-label">Exam Papers</div>
-                </div>
+                                </div>
                 <div class="stat-item">
                     <span class="stat-number">{{ $totalFiles }}</span>
                     <div class="stat-label">Files</div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                </div>
+                                </div>
+                                                </div>
+                                        </div>
+                                    </div>
 
 <!-- Compact Navigation Breadcrumb -->
 <div class="navigation-section">
@@ -811,12 +804,12 @@
                         <span class="breadcrumb-item">Dashboard</span>
                         <i class="fas fa-chevron-right"></i>
                         <span class="breadcrumb-item active">Documents</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                </div>
+                                </div>
 
 <!-- Search and Filter Section -->
 <div class="search-filter-section">
@@ -826,7 +819,7 @@
             <button class="search-btn" onclick="performSearch()">
                 <i class="icofont-search-1"></i>
             </button>
-        </div>
+                            </div>
         
         <div class="filter-tabs">
             <a href="#" class="filter-tab active" data-filter="all">All Documents</a>
@@ -834,9 +827,9 @@
             <a href="#" class="filter-tab" data-filter="file">Files</a>
             <a href="#" class="filter-tab" data-filter="pdf">PDF</a>
             <a href="#" class="filter-tab" data-filter="word">Word</a>
-        </div>
-    </div>
-</div>
+                                </div>
+                                                </div>
+                                            </div>
 
 <!-- Documents Section -->
 <div class="documents-section">
@@ -850,8 +843,8 @@
                 <a href="#" class="view-toggle" data-view="list" title="List View">
                     <i class="icofont-listine-dots"></i>
                 </a>
-            </div>
-        </div>
+                                        </div>
+                                    </div>
 
         <div class="row" id="documents-container">
             @if (count($exams) > 0)
@@ -881,11 +874,11 @@
                                                 @else
                                                     <i class="fas fa-file-alt"></i>
                                                 @endif
-                                            </div>
-                                            <div class="document-type-badge">{{ strtoupper($extension) }}</div>
-                                        </div>
                                     </div>
-                                    
+                                            <div class="document-type-badge">{{ strtoupper($extension) }}</div>
+                            </div>
+                        </div>
+
                                     <div class="document-card-body">
                                         <div class="document-main-info">
                                             <h4 class="document-title">
@@ -896,22 +889,22 @@
                                                                         <div class="meta-item">
                             <i class="fas fa-file-alt"></i>
                             <span>{{ $exam->exam_format }}</span>
-                        </div>
+                                </div>
                         <div class="meta-item">
                             <i class="fas fa-clock"></i>
                             <span>{{ $exam->duration }}</span>
-                        </div>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                                </div>
                                         
                                         <div class="document-instructor-section">
                                             <div class="instructor-info">
                                                                                             <div class="instructor-avatar">
                                                 <i class="fas fa-user-graduate"></i>
-                                            </div>
+                                </div>
                                                 <div class="instructor-name">{{ $exam->instructor_name }}</div>
+                                                </div>
                                             </div>
-                                        </div>
                                         
                                         <div class="document-actions">
                                             <a href="{{ asset($exam->exam_document) }}" download class="action-btn primary">
@@ -926,7 +919,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                </div>
+                                    </div>
                             @else
                                 <!-- File Document Card -->
                                 @php
@@ -947,11 +940,11 @@
                                                 @else
                                                     <i class="fas fa-file-alt"></i>
                                                 @endif
-                                            </div>
+                                </div>
                                             <div class="document-type-badge">{{ strtoupper($extension) }}</div>
-                                        </div>
-                                    </div>
-                                    
+                            </div>
+                        </div>
+
                                     <div class="document-card-body">
                                         <div class="document-main-info">
                                             <h4 class="document-title">
@@ -962,31 +955,31 @@
                                                 <div class="meta-item">
                                                     <i class="fas fa-file-alt"></i>
                                                     <span>{{ $exam->file_format }}</span>
-                                                </div>
+                                </div>
                                                 <div class="meta-item">
                                                     <i class="fas fa-calendar-alt"></i>
                                                     <span>{{ $exam->year_deposit }}</span>
-                                                </div>
-                                            </div>
-                                        </div>
+                                </div>
+                            </div>
+                                </div>
                                         
                                         <div class="document-instructor-section">
                                             <div class="instructor-info">
                                                                                             <div class="instructor-avatar">
                                                 <i class="fas fa-user-graduate"></i>
-                                            </div>
+                                </div>
                                                 <div class="instructor-name">{{ $exam->depositor_name }}</div>
+                                                </div>
                                             </div>
-                                        </div>
                                         
                                         <div class="document-actions">
                                             <a href="{{ Storage::url($exam->document_file) }}" download class="action-btn primary">
                                                 <i class="fas fa-download"></i>
                                                 Download
                                             </a>
-                                        </div>
                                     </div>
                                 </div>
+                            </div>
                             @endif
                         </div>
                     @endforeach
@@ -997,12 +990,12 @@
                         <i class="fas fa-folder-open"></i>
                         <h4>No Documents Available</h4>
                         <p>There are currently no documents in the archive. Check back later for updates.</p>
-                    </div>
-                </div>
+                                </div>
+                                </div>
             @endif
-        </div>
-    </div>
-</div>
+                            </div>
+                                </div>
+                                </div>
 
 @include('components.footer')
 @endsection
