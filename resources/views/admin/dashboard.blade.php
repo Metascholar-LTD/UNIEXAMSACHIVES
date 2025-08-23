@@ -65,6 +65,7 @@
     .exam-main-info {
         flex: 1;
         min-width: 0;
+        max-width: 300px;
     }
 
     .exam-title {
@@ -77,10 +78,15 @@
     .exam-title a {
         color: inherit;
         text-decoration: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: block;
+        max-width: 100%;
     }
 
     .exam-title a:hover {
-        color: #007bff;
+        color: #343a40;
     }
 
     .exam-meta {
@@ -623,13 +629,9 @@
                                                     <div class="exam-card-body">
                                                         <div class="exam-main-info">
                                                             <h4 class="exam-title">
-                                                                <a href="#" title="{{ $item->course_title }}">{{ $item->course_title }}</a>
+                                                                <a href="#" title="{{ $item->course_title }} - {{ $item->course_code }}">{{ $item->course_title }} - {{ $item->course_code }}</a>
                                                             </h4>
                                                             <div class="exam-meta">
-                                                                <div class="meta-item">
-                                                                    <i class="fas fa-hashtag"></i>
-                                                                    <span>{{ $item->course_code }}</span>
-                                                                </div>
                                                                 <div class="meta-item">
                                                                     <i class="fas fa-file-alt"></i>
                                                                     <span>{{ $item->exam_format }}</span>
