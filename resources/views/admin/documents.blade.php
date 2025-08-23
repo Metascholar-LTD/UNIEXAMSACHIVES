@@ -856,7 +856,7 @@
                             
                             @if ($exam instanceof \App\Models\Exam)
                                 <!-- Exam Document Card -->
-                                @php
+                                                                @php
                                     $extension = pathinfo($exam->exam_document, PATHINFO_EXTENSION);
                                 @endphp
                                 <div class="document-card {{ strtolower($extension) }}-card">
@@ -864,7 +864,7 @@
                                         <div class="document-header-info">
                                             <div class="document-icon">
                                                 @if (strtolower($extension) == 'pdf')
-                                                    <i class="fas fa-file-pdf"></i>
+                                                    <i class="icofont-file-pdf"></i>
                                                 @elseif (in_array(strtolower($extension), ['doc', 'docx']))
                                                     <i class="fas fa-file-word"></i>
                                                 @elseif (in_array(strtolower($extension), ['xls', 'xlsx']))
@@ -874,10 +874,10 @@
                                                 @else
                                                     <i class="fas fa-file-alt"></i>
                                                 @endif
-                                    </div>
+                                            </div>
                                             <div class="document-type-badge">{{ strtoupper($extension) }}</div>
-                            </div>
-                        </div>
+                                        </div>
+                                    </div>
 
                                     <div class="document-card-body">
                                         <div class="document-main-info">
@@ -922,7 +922,7 @@
                                     </div>
                             @else
                                 <!-- File Document Card -->
-                                @php
+                                                                @php
                                     $extension = pathinfo($exam->document_file, PATHINFO_EXTENSION);
                                 @endphp
                                 <div class="document-card {{ strtolower($extension) }}-card">
@@ -930,7 +930,7 @@
                                         <div class="document-header-info">
                                             <div class="document-icon">
                                                 @if (strtolower($extension) == 'pdf')
-                                                    <i class="fas fa-file-pdf"></i>
+                                                    <i class="icofont-file-pdf"></i>
                                                 @elseif (in_array(strtolower($extension), ['doc', 'docx']))
                                                     <i class="fas fa-file-word"></i>
                                                 @elseif (in_array(strtolower($extension), ['xls', 'xlsx']))
@@ -940,10 +940,10 @@
                                                 @else
                                                     <i class="fas fa-file-alt"></i>
                                                 @endif
-                                </div>
+                                            </div>
                                             <div class="document-type-badge">{{ strtoupper($extension) }}</div>
-                            </div>
-                        </div>
+                                        </div>
+                                    </div>
 
                                     <div class="document-card-body">
                                         <div class="document-main-info">
