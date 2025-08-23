@@ -731,7 +731,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     /* File type colors */
     .recent-exams-list .pdf-card .document-card-header {
-        background: linear-gradient(135deg, #e74c3c 0%, #c0392b 100%);
+        background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+    }
+
+    /* PDF badge styling for better contrast */
+    .recent-exams-list .pdf-card .document-type-badge {
+        color: #ff6b6b;
+        background: rgba(255, 255, 255, 0.95);
+        border: 1px solid rgba(255, 255, 255, 0.6);
     }
 
     .recent-exams-list .doc-card .document-card-header,
