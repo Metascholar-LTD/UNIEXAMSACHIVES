@@ -357,8 +357,8 @@
     .list-view .pdf-card .document-icon {
         background: white;
         border-radius: 6px;
-        width: 35px;
-        height: 35px;
+        width: 30px;
+        height: 30px;
         display: flex;
         align-items: center;
         justify-content: center;
