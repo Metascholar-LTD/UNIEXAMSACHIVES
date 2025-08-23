@@ -78,7 +78,7 @@
     .exam-main-info {
         flex: 1;
         min-width: 0;
-        max-width: 280px;
+        max-width: 300px;
     }
 
     .exam-title {
@@ -103,18 +103,10 @@
         color: #007bff;
     }
 
-    .course-subtitle {
-        font-size: 0.85rem;
-        color: #6c757d;
-        font-weight: 500;
-        margin-top: 0.25rem;
-    }
-
     .exam-meta {
         display: flex;
-        gap: 0.75rem;
+        gap: 1rem;
         flex-wrap: wrap;
-        margin-top: 0.5rem;
     }
 
     .meta-item {
@@ -168,6 +160,10 @@
         font-size: 0.9rem;
         font-weight: 500;
         color: #495057;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 120px;
     }
 
     .exam-actions {
@@ -659,9 +655,8 @@
                                                     <div class="exam-card-body">
                                                         <div class="exam-main-info">
                                                             <h4 class="exam-title">
-                                                                <a href="#" title="{{ $item->course_title }} - {{ $item->course_code }}">{{ $item->course_title }}</a>
+                                                                <a href="#" title="{{ $item->course_title }} - {{ $item->course_code }}">{{ $item->course_title }} - {{ $item->course_code }}</a>
                                                             </h4>
-                                                            <div class="course-subtitle">{{ $item->course_code }}</div>
                                                             <div class="exam-meta">
                                                                 <div class="meta-item">
                                                                     <i class="fas fa-file-alt"></i>
