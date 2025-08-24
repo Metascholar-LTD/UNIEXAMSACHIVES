@@ -627,7 +627,7 @@
                                                             <a href="{{ asset($exam->answer_key) }}" target="_blank" class="action-btn view" title="View Answer Key">
                                                                 <i class="fas fa-key"></i>
                                                             </a>
-                                                        </div>
+                                                        @endif
                                                         <a href="{{ asset($exam->answer_key) }}" download class="action-btn download" title="Download Answer Key">
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
