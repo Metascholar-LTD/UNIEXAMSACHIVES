@@ -24,6 +24,12 @@ Route::get('/login', [PagesController::class, 'login'])->name('frontend.login');
 Route::post('/login', [PagesController::class, 'loginUser'])->name('login');
 Route::post('/register', [PagesController::class, 'register'])->name('register');
 
+// Password Reset Routes
+Route::get('/forgot-password', [PagesController::class, 'forgotPassword'])->name('password.request');
+Route::post('/forgot-password', [PagesController::class, 'sendResetLink'])->name('password.email');
+Route::get('/reset-password/{token}', [PagesController::class, 'resetPassword'])->name('password.reset');
+Route::post('/reset-password', [PagesController::class, 'updatePassword'])->name('password.update');
+
 // Legacy redirect for old login-form URL
 Route::get('/login-form', function() {
     return redirect('/login', 301);

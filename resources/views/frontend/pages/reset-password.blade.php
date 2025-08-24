@@ -26,76 +26,13 @@
         transform: rotate(0deg) translateX(150px) rotate(0deg);
     }
 
-    /* Admin portal notice styling */
-    .admin-portal-notice {
-        background: rgba(59, 130, 246, 0.1);
-        border: 1px solid rgba(59, 130, 246, 0.3);
-        border-radius: 12px;
-        padding: 12px 16px;
-        margin-top: 16px;
+    /* Back to login link styling */
+    .back-to-login {
         text-align: center;
+        margin-top: 1rem;
     }
 
-    .admin-portal-notice p {
-        margin: 0;
-        font-size: 0.9rem;
-        color: #1e40af;
-        font-weight: 500;
-    }
-
-    .admin-portal-link {
-        color: #3b82f6;
-        text-decoration: none;
-        font-weight: 600;
-        border-bottom: 1px solid #3b82f6;
-        transition: all 0.3s ease;
-    }
-
-    .admin-portal-link:hover {
-        color: #1e40af;
-        border-bottom-color: #1e40af;
-    }
-
-    /* Textarea styling */
-    textarea.animated-input {
-        font-family: inherit;
-        line-height: 1.5;
-        padding: 16px 20px;
-        min-height: 100px;
-        resize: vertical;
-        overflow-y: auto;
-    }
-
-    textarea.animated-input:focus {
-        min-height: 120px;
-    }
-
-    /* Request info styling */
-    .request-info {
-        margin-top: 16px;
-        padding: 12px 16px;
-        background: rgba(16, 185, 129, 0.1);
-        border: 1px solid rgba(16, 185, 129, 0.3);
-        border-radius: 12px;
-        text-align: center;
-    }
-
-    .request-info p {
-        margin: 0;
-        font-size: 0.9rem;
-        color: #065f46;
-        font-weight: 500;
-    }
-
-    /* Forgot password link styling */
-    .form-options {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 1rem 0;
-    }
-
-    .forgot-password-link {
+    .back-to-login a {
         color: #6b7280;
         text-decoration: none;
         font-size: 0.9rem;
@@ -104,7 +41,7 @@
         border-bottom: 1px solid transparent;
     }
 
-    .forgot-password-link:hover {
+    .back-to-login a:hover {
         color: #3b82f6;
         border-bottom-color: #3b82f6;
         text-decoration: none;
@@ -128,7 +65,7 @@
         </div>
         
         <div class="tech-orbit-display">
-            <h1 class="orbit-title">University Digital Archive</h1>
+            <h1 class="orbit-title">Reset Password</h1>
             <h2 class="orbit-subtitle" id="typewriter-subtitle"></h2>
             <div class="orbit-container">
                 <div class="orbit-path"></div>
@@ -136,40 +73,37 @@
                     <img src="{{ asset('img/crest.ico') }}" alt="University Crest" class="crest-image">
                 </div>
                 <div class="orbit-icon orbit-icon-2">
-                    <i class="icofont-book"></i>
+                    <i class="icofont-key"></i>
                 </div>
                 <div class="orbit-icon orbit-icon-3">
-                    <i class="icofont-library"></i>
+                    <i class="icofont-shield"></i>
                 </div>
                 <div class="orbit-icon orbit-icon-4">
-                    <i class="icofont-document"></i>
+                    <i class="icofont-lock"></i>
                 </div>
                 <div class="orbit-icon orbit-icon-5">
-                    <i class="icofont-search-1"></i>
+                    <i class="icofont-check-circled"></i>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Right Side - Auth Forms -->
+    <!-- Right Side - Reset Password Form -->
     <div class="auth-right-side">
         <div class="auth-tabs">
             <div class="tab-buttons">
-                <button class="tab-btn active" data-tab="login">
-                    <span class="tab-text">LOGIN SUPER ADMIN</span>
+                <button class="tab-btn active" data-tab="reset">
+                    <span class="tab-text">New Password</span>
                     <div class="tab-indicator"></div>
                 </button>
             </div>
 
-            <!-- Login Form -->
-            <div class="auth-form-panel active" id="login-panel">
+            <!-- Reset Password Form -->
+            <div class="auth-form-panel active" id="reset-panel">
                 <div class="form-container">
                     <div class="form-header">
-                        <h2 class="form-title">SUPER ADMIN ACCESS</h2>
-                        <p class="form-subtitle">Sign in to your super admin account</p>
-                        <div class="admin-portal-notice">
-                            <p><strong>Restricted Access:</strong> This portal is exclusively for administrative users. Regular users should use the <a href="{{ route('frontend.login') }}" class="admin-portal-link">Standard Login</a>.</p>
-                        </div>
+                        <h2 class="form-title">Reset Your Password</h2>
+                        <p class="form-subtitle">Enter your new password below to complete the reset process.</p>
                     </div>
 
                     @if ($errors->any())
@@ -194,41 +128,43 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('admin.login.user') }}" class="animated-form">
+                    <form method="POST" action="{{ route('password.update') }}" class="animated-form">
                         @csrf
+                        <input type="hidden" name="token" value="{{ $token }}">
+
                         <div class="form-group">
                             <div class="input-container">
-                                <input type="email" name="email" id="login-email" class="animated-input" placeholder="Enter your email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                                <input type="email" name="email" id="reset-email" class="animated-input" placeholder="Enter your email address" value="{{ old('email', request()->email) }}" required autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-container">
-                                <input type="password" name="password" id="login-password" class="animated-input" placeholder="Enter your password" required autocomplete="current-password">
-                                <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
+                                <input type="password" name="password" id="reset-password" class="animated-input" placeholder="Enter new password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('reset-password')">
                                     <i class="icofont-eye"></i>
                                 </button>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <div class="form-options">
-                                <label class="checkbox-container">
-                                    <input type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
-                                    <span class="checkmark"></span>
-                                    Remember me
-                                </label>
-                                <a href="{{ route('password.request') }}" class="forgot-password-link">
-                                    Forgot Password?
-                                </a>
+                            <div class="input-container">
+                                <input type="password" name="password_confirmation" id="reset-password-confirm" class="animated-input" placeholder="Confirm new password" required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('reset-password-confirm')">
+                                    <i class="icofont-eye"></i>
+                                </button>
                             </div>
                         </div>
 
                         <button type="submit" class="submit-btn">
-                            <span>Sign In</span>
+                            <span>Reset Password</span>
                             <div class="btn-ripple"></div>
                         </button>
                     </form>
+
+                    <div class="back-to-login">
+                        <a href="{{ route('frontend.login') }}">← Back to Login</a>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,35 +193,13 @@ function togglePassword(inputId) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    const tabButtons = document.querySelectorAll('.tab-btn');
-    const authPanels = document.querySelectorAll('.auth-form-panel');
-
-    // Tab switching functionality
-    tabButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            const targetTab = button.getAttribute('data-tab');
-            
-            // Update active tab button
-            tabButtons.forEach(btn => btn.classList.remove('active'));
-            button.classList.add('active');
-            
-            // Update active panel
-            authPanels.forEach(panel => {
-                panel.classList.remove('active');
-                if (panel.id === `${targetTab}-panel`) {
-                    panel.classList.add('active');
-                }
-            });
-        });
-    });
-
     // Typewriter effect for subtitle
     const typewriterElement = document.getElementById('typewriter-subtitle');
     const texts = [
-        'Registry Communication System',
-        'Advanced User Portal',
-        'Secure Access Gateway',
-        'Administrative Hub'
+        'Secure Password Update',
+        'Account Security Portal',
+        'Password Recovery Complete',
+        'Digital Access Restored'
     ];
     let textIndex = 0;
     let charIndex = 0;
@@ -320,27 +234,23 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Form validation and enhancement
-    const forms = document.querySelectorAll('.animated-form');
-    forms.forEach(form => {
+    const form = document.querySelector('.animated-form');
+    if (form) {
         form.addEventListener('submit', function(e) {
             const submitBtn = form.querySelector('.submit-btn');
             const btnText = submitBtn.querySelector('span');
             
             // Show loading state
             submitBtn.disabled = true;
-            btnText.textContent = 'Processing...';
+            btnText.textContent = 'Resetting...';
             
             // Re-enable after a delay (in case of validation errors)
             setTimeout(() => {
                 submitBtn.disabled = false;
-                if (form.action.includes('admin.login.user')) {
-                    btnText.textContent = 'Sign In';
-                } else if (form.action.includes('admin.access.request')) {
-                    btnText.textContent = 'Submit Request';
-                }
+                btnText.textContent = 'Reset Password';
             }, 3000);
         });
-    });
+    }
 
     // Input focus effects
     const inputs = document.querySelectorAll('.animated-input');
@@ -355,6 +265,23 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Password matching validation
+    const password = document.getElementById('reset-password');
+    const confirmPassword = document.getElementById('reset-password-confirm');
+    
+    function validatePasswords() {
+        if (password.value && confirmPassword.value) {
+            if (password.value !== confirmPassword.value) {
+                confirmPassword.setCustomValidity('Passwords do not match');
+            } else {
+                confirmPassword.setCustomValidity('');
+            }
+        }
+    }
+    
+    password.addEventListener('input', validatePasswords);
+    confirmPassword.addEventListener('input', validatePasswords);
 });
 </script>
 @endpush

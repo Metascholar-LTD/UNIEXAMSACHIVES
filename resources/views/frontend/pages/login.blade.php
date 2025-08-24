@@ -55,6 +55,29 @@
         color: #dc2626;
         border-bottom-color: #dc2626;
     }
+
+    /* Forgot password link styling */
+    .form-options {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1rem 0;
+    }
+
+    .forgot-password-link {
+        color: #6b7280;
+        text-decoration: none;
+        font-size: 0.9rem;
+        font-weight: 500;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid transparent;
+    }
+
+    .forgot-password-link:hover {
+        color: #3b82f6;
+        border-bottom-color: #3b82f6;
+        text-decoration: none;
+    }
 </style>
 @endpush
 
@@ -163,6 +186,9 @@
                                 <span class="checkmark"></span>
                                 Remember me
                             </label>
+                            <a href="{{ route('password.request') }}" class="forgot-password-link">
+                                Forgot Password?
+                            </a>
                         </div>
 
                         <button type="submit" class="submit-btn">
