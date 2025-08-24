@@ -31,6 +31,7 @@ class PagesController extends Controller
         // Gather real statistics from the system
         $stats = [
             'total_exams' => Exam::count(),
+            'total_files' => File::count(),
             'total_departments' => Department::count(),
             'total_users' => User::where('is_approve', true)->count(), // Only count approved users
             'total_visits' => Visit::count(), // Total site visits

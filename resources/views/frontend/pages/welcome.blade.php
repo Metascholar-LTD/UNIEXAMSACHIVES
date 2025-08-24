@@ -404,6 +404,12 @@
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="stat-item">
+                        <span class="stat-number" data-count="{{ $stats['total_files'] ?? 0 }}">0</span>
+                        <div class="stat-label">Files</div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="stat-item">
                         <span class="stat-number" data-count="{{ $stats['total_departments'] ?? 0 }}">0</span>
                         <div class="stat-label">Departments</div>
                     </div>
