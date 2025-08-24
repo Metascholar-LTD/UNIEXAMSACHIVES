@@ -16,7 +16,7 @@
     }
     
     .all-pending-exams-hero {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 50%, #f59e0b 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
         padding: 60px 0 40px;
         position: relative;
         overflow: hidden;
@@ -29,7 +29,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="all-pending-grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(245,158,11,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23all-pending-grid)" /></svg>');
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="all-pending-grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(100,116,139,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23all-pending-grid)" /></svg>');
         opacity: 0.7;
     }
 
@@ -42,9 +42,9 @@
     .hero-title {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #92400e;
+        color: #475569;
         margin-bottom: 1rem;
-        background: linear-gradient(135deg, #92400e 0%, #f59e0b 50%, #fbbf24 100%);
+        background: linear-gradient(135deg, #475569 0%, #64748b 50%, #94a3b8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -52,7 +52,7 @@
 
     .hero-subtitle {
         font-size: 1.1rem;
-        color: #92400e;
+        color: #475569;
         margin-bottom: 2rem;
     }
 
@@ -70,13 +70,13 @@
     .stat-number {
         font-size: 2.2rem;
         font-weight: 700;
-        color: #f59e0b;
+        color: #64748b;
         display: block;
     }
 
     .stat-label {
         font-size: 0.9rem;
-        color: #92400e;
+        color: #475569;
         margin-top: 0.5rem;
     }
 
@@ -106,9 +106,9 @@
 
     .search-input:focus {
         outline: none;
-        border-color: #f59e0b;
+        border-color: #64748b;
         background: white;
-        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1);
+        box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.1);
     }
 
     .search-btn {
@@ -116,7 +116,7 @@
         right: 8px;
         top: 50%;
         transform: translateY(-50%);
-        background: #f59e0b;
+        background: #64748b;
         border: none;
         padding: 8px 12px;
         border-radius: 50px;
@@ -126,7 +126,7 @@
     }
 
     .search-btn:hover {
-        background: #d97706;
+        background: #475569;
     }
 
     .filter-tabs {
@@ -151,8 +151,8 @@
 
     .filter-tab:hover,
     .filter-tab.active {
-        border-color: #f59e0b;
-        background: #f59e0b;
+        border-color: #64748b;
+        background: #64748b;
         color: white;
         text-decoration: none;
     }
@@ -196,7 +196,7 @@
         top: 0;
         bottom: 0;
         width: 5px;
-        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
         border-radius: 16px 0 0 16px;
     }
 
@@ -285,7 +285,7 @@
     }
 
     .meta-item i {
-        color: #f59e0b;
+        color: #64748b;
         font-size: 0.9rem;
         width: 16px;
         text-align: center;
@@ -309,14 +309,14 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-weight: 600;
         font-size: 1rem;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 2px 8px rgba(148, 163, 184, 0.3);
     }
 
     .instructor-avatar i {
@@ -423,9 +423,9 @@
     }
 
     .status-badge.pending {
-        background: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-        border: 1px solid rgba(245, 158, 11, 0.2);
+        background: rgba(100, 116, 139, 0.1);
+        color: #64748b;
+        border: 1px solid rgba(100, 116, 139, 0.2);
     }
 
     .no-exams {
@@ -440,7 +440,7 @@
     .no-exams i {
         font-size: 4rem;
         margin-bottom: 1rem;
-        color: #f59e0b;
+        color: #64748b;
         opacity: 0.6;
     }
 
