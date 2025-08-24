@@ -646,11 +646,11 @@
                                                 
                                                 <div class="file-actions">
                                                     @if($isPdf)
-                                                        <a href="{{ Storage::url($file->document_file) }}" target="_blank" class="action-btn view" title="View PDF">
+                                                        <a href="{{ asset($file->document_file) }}" target="_blank" class="action-btn view" title="View PDF">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
                                                     @endif
-                                                    <a href="{{ Storage::url($file->document_file) }}" download class="action-btn download" title="Download File">
+                                                    <a href="{{ asset($file->document_file) }}" download class="action-btn download" title="Download File">
                                                         <i class="fas fa-download"></i>
                                                     </a>
                                                     @if (!$file->is_approve)
