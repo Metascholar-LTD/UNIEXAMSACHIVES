@@ -624,7 +624,7 @@
                                                 <div class="request-meta">
                                                     <div class="meta-item">
                                                         <div class="meta-label">Requested On</div>
-                                                        <div class="meta-value">{{ $request->admin_access_requested_at ? $request->admin_access_requested_at->format('M d, Y') : 'N/A' }}</div>
+                                                        <div class="meta-value">{{ $request->admin_access_requested_at ? \Carbon\Carbon::parse($request->admin_access_requested_at)->format('M d, Y') : 'N/A' }}</div>
                                                     </div>
                                                     @if($request->admin_access_supervisor)
                                                     <div class="meta-item">
