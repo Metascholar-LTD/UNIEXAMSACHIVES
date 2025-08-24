@@ -357,7 +357,7 @@
                     </svg>
                 </div>
                 <div class="section-text">
-                    <h6 class="section-title">USER MANAGEMENT</h6>
+                    <h6 class="section-title">MANAGEMENT</h6>
                     <!--<span class="section-subtitle">4 features</span>-->
                 </div>
                 <div class="section-arrow">
