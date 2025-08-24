@@ -74,7 +74,7 @@
                                         <div class="notification-content">
                                             <h3 class="notification-title">🎉 Memo Delivered Successfully!</h3>
                                             <p class="notification-message" id="delivery-message">
-                                                Your memo has been delivered to all recipients successfully!
+                                                All recipients have been notified via email!
                                             </p>
                                             <div class="delivery-stats" id="delivery-stats">
                                                 <div class="stat-item">

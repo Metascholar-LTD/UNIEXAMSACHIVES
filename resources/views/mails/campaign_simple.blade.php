@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="x-apple-disable-message-reformatting">
+    <meta name="format-detection" content="telephone=no,address=no,email=no,date=no,url=no">
+    <meta name="color-scheme" content="light">
+    <meta name="supported-color-schemes" content="light">
     <title>{{ $subject }}</title>
     <style>
         body {
@@ -79,22 +84,25 @@
         <div class="content">
             <p>Dear <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>,</p>
             
-            <p>You have received an important message from the University Exams Archive System.</p>
+            <p>The University Exams Archive System has sent you an official academic communication.</p>
             
             <div class="message">{!! $message !!}</div>
             
             @if($campaign->attachments && count($campaign->attachments) > 0)
                 <div class="attachments">
-                                                    <strong>📎 This memo includes {{ count($campaign->attachments) }} attachment(s)</strong>
+                    <strong>📎 Document Attachments: {{ count($campaign->attachments) }} file(s) included</strong>
+                    <p><small>Attachments are embedded within this email for your convenience.</small></p>
                 </div>
             @endif
             
-            <p>If you have any questions about this message, please contact our support team.</p>
+            <p>For academic inquiries, please contact the University administration office during business hours.</p>
         </div>
         
         <div class="footer">
             <p>This is an automated message from the University Exams Archive System.</p>
-                                        <p>Please do not reply to this memo.</p>
+            <p>For technical support: <a href="mailto:support@academicdigital.space">support@academicdigital.space</a></p>
+            <p><small>You are receiving this email as a registered user of the University Exams Archive System. 
+               To manage your email preferences, please log into your account or contact the administrator.</small></p>
             <p>&copy; {{ date('Y') }} University Exams Archive System. All rights reserved.</p>
         </div>
     </div>

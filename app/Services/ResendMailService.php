@@ -37,8 +37,22 @@ class ResendMailService
             Mail::send([], [], function (Message $message) use ($to, $subject, $htmlContent, $from, $attachments) {
                 $message->to($to)
                         ->subject($subject)
-                        ->from($from)
+                        ->from($from, 'University Exams Archive System')
+                        ->replyTo($from, 'University Exams Archive System')
                         ->html($htmlContent);
+                
+                // Add anti-spam headers
+                $headers = $message->getHeaders();
+                $headers->addTextHeader('X-Mailer', 'University Exams Archive System v1.0');
+                $headers->addTextHeader('X-Priority', '3');
+                $headers->addTextHeader('X-MSMail-Priority', 'Normal');
+                $headers->addTextHeader('X-Auto-Response-Suppress', 'OOF, DR, RN, NRN');
+                $headers->addTextHeader('List-Unsubscribe', '<mailto:noreply@academicdigital.space?subject=unsubscribe>');
+                $headers->addTextHeader('List-Id', 'University Exams Archive System <archive@academicdigital.space>');
+                $headers->addTextHeader('Message-ID', '<' . Str::uuid() . '@academicdigital.space>');
+                $headers->addTextHeader('X-Entity-ID', 'university-exams-archive');
+                $headers->addTextHeader('X-Sender-IP', request()->ip() ?? '127.0.0.1');
+                $headers->addTextHeader('Return-Path', $from);
                 
                 // Add attachments if any
                 if (!empty($attachments)) {
