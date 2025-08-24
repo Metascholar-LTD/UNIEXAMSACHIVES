@@ -149,7 +149,7 @@
                         <h2 class="form-title">SUPER ADMIN ACCESS</h2>
                         <p class="form-subtitle">Sign in to your super admin account</p>
                         <div class="admin-portal-notice">
-                            <p><strong>Restricted Access:</strong> This portal is exclusively for administrative users. Regular users should use the <a href="{{ route('frontend.login') }}" class="admin-portal-link">standard login</a>.</p>
+                            <p><strong>Restricted Access:</strong> This portal is exclusively for administrative users. Regular users should use the <a href="{{ route('frontend.login') }}" class="admin-portal-link">Standard Login</a>.</p>
                         </div>
                     </div>
 

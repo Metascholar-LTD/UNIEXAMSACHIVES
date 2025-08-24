@@ -118,7 +118,7 @@
                         <h2 class="form-title">Welcome Back</h2>
                         <p class="form-subtitle">Sign in to your account</p>
                         <div class="admin-portal-notice">
-                            <p><strong>Note:</strong> This portal is exclusively for Regular users. Administrative users should use the <a href="{{ route('admin.login') }}" class="admin-portal-link">admin portal</a> instead.</p>
+                            <p><strong>Note:</strong> This portal is exclusively for Regular users. Administrative users should use the <a href="{{ route('admin.login') }}" class="admin-portal-link">Admin Portal</a> instead.</p>
                         </div>
                     </div>
 
