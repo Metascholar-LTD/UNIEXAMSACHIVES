@@ -216,7 +216,8 @@ class AdvanceCommunicationController extends Controller
 
 
         return redirect()->route('admin.communication.index')
-                        ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}");
+                        ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}")
+                        ->with('memo_delivered', true);
     }
 
     public function show(EmailCampaign $campaign)
