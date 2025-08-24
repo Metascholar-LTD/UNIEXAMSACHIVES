@@ -27,6 +27,11 @@ class User extends Authenticatable
         'profile_picture',
         'department_id',
         'password_changed',
+        'admin_access_requested',
+        'admin_access_reason',
+        'admin_access_supervisor',
+        'admin_access_supervisor_email',
+        'admin_access_requested_at',
     ];
 
     /**

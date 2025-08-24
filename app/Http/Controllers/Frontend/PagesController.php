@@ -88,6 +88,49 @@ class PagesController extends Controller
         return redirect()->route('dashboard')->with('success', 'Login successful');
     }
 
+    public function adminAccessRequest(Request $request)
+    {
+        $validatedData = $request->validate([
+            'email' => 'required|email|exists:users,email',
+            'password' => 'required',
+            'reason' => 'required|string|min:20|max:1000',
+            'supervisor' => 'nullable|string|max:255',
+            'supervisor_email' => 'nullable|email|max:255',
+        ]);
+
+        // Verify the user's credentials
+        $user = User::where('email', $validatedData['email'])->first();
+        
+        if (!$user || !password_verify($validatedData['password'], $user->password)) {
+            return redirect()->back()->with('error', 'Invalid email or password. Please use your existing user account credentials.');
+        }
+
+        // Check if user is already an admin
+        if ($user->is_admin) {
+            return redirect()->back()->with('error', 'You already have administrative access.');
+        }
+
+        // Check if user has already made a request
+        if ($user->admin_access_requested) {
+            return redirect()->back()->with('error', 'You have already submitted a request for administrative access. Please wait for approval.');
+        }
+
+        // Store the access request (you'll need to create a table for this)
+        // For now, we'll just mark the user as having requested access
+        $user->update([
+            'admin_access_requested' => true,
+            'admin_access_reason' => $validatedData['reason'],
+            'admin_access_supervisor' => $validatedData['supervisor'],
+            'admin_access_supervisor_email' => $validatedData['supervisor_email'],
+            'admin_access_requested_at' => now(),
+        ]);
+
+        // Send notification to administrators (you can implement this later)
+        // For now, just show success message
+        
+        return redirect()->back()->with('success', 'Your request for administrative access has been submitted successfully. You will be notified via email once a decision is made.');
+    }
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([

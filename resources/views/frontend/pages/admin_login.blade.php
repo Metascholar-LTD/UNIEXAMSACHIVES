@@ -55,6 +55,37 @@
         color: #1e40af;
         border-bottom-color: #1e40af;
     }
+
+    /* Textarea styling */
+    textarea.animated-input {
+        font-family: inherit;
+        line-height: 1.5;
+        padding: 16px 20px;
+        min-height: 100px;
+        resize: vertical;
+        overflow-y: auto;
+    }
+
+    textarea.animated-input:focus {
+        min-height: 120px;
+    }
+
+    /* Request info styling */
+    .request-info {
+        margin-top: 16px;
+        padding: 12px 16px;
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 12px;
+        text-align: center;
+    }
+
+    .request-info p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #065f46;
+        font-weight: 500;
+    }
 </style>
 @endpush
 
@@ -105,8 +136,8 @@
                     <span class="tab-text">LOGIN SUPER ADMIN</span>
                     <div class="tab-indicator"></div>
                 </button>
-                <button class="tab-btn" data-tab="register">
-                    <span class="tab-text">Sign Up</span>
+                <button class="tab-btn" data-tab="request">
+                    <span class="tab-text">Request Access</span>
                     <div class="tab-indicator"></div>
                 </button>
             </div>
@@ -177,66 +208,63 @@
                 </div>
             </div>
 
-            <!-- Register Form -->
-            <div class="auth-form-panel" id="register-panel">
+            <!-- Request Administrative Access Form -->
+            <div class="auth-form-panel" id="request-panel">
                 <div class="form-container">
                     <div class="form-header">
-                        <h2 class="form-title">Create Account</h2>
-                        <p class="form-subtitle">Join our digital archive community</p>
+                        <h2 class="form-title">Request Administrative Access</h2>
+                        <p class="form-subtitle">Request access to the advance communication system</p>
                         <div class="admin-portal-notice">
-                            <p><strong>Note:</strong> New accounts created here will have access to the administrative system.</p>
+                            <p><strong>Requirements:</strong> You must have an existing regular user account to request administrative access.</p>
                         </div>
                     </div>
 
-                    <form method="POST" action="{{ route('register') }}" class="animated-form">
+                    <form method="POST" action="{{ route('admin.access.request') }}" class="animated-form">
                         @csrf
-                        <div class="form-row">
-                            <div class="form-group">
-                                <div class="input-container">
-                                    <input type="text" name="first_name" id="register-firstname" class="animated-input" placeholder="First name" value="{{ old('first_name') }}" required autocomplete="given-name">
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class="input-container">
-                                    <input type="text" name="last_name" id="register-lastname" class="animated-input" placeholder="Last name" value="{{ old('last_name') }}" required autocomplete="family-name">
-                                </div>
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" name="email" id="request-email" class="animated-input" placeholder="Enter your existing user email" value="{{ old('email') }}" required autocomplete="email">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <div class="input-container">
-                                <input type="email" name="email" id="register-email" class="animated-input" placeholder="Enter your email" value="{{ old('email') }}" required autocomplete="email">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-container">
-                                <select name="department_id" id="register-department" class="animated-input">
-                                    <option value="" disabled selected>Choose your Department/Faculty/Unit</option>
-                                    @foreach($departments as $department)
-                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-container">
-                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a temporary password" required autocomplete="new-password">
-                                <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
+                                <input type="password" name="password" id="request-password" class="animated-input" placeholder="Enter your existing password" required autocomplete="current-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('request-password')">
                                     <i class="icofont-eye"></i>
                                 </button>
                             </div>
                         </div>
 
+                        <div class="form-group">
+                            <div class="input-container">
+                                <textarea name="reason" id="request-reason" class="animated-input" placeholder="Explain why you need administrative access (e.g., department communication needs, role requirements)" rows="4" required style="resize: vertical; min-height: 100px;"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="text" name="supervisor" id="request-supervisor" class="animated-input" placeholder="Your supervisor's name (optional)" value="{{ old('supervisor') }}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" name="supervisor_email" id="request-supervisor-email" class="animated-input" placeholder="Supervisor's email (optional)" value="{{ old('supervisor_email') }}">
+                            </div>
+                        </div>
+
                         <button type="submit" class="submit-btn">
-                            <span>Create Account</span>
+                            <span>Submit Request</span>
                             <div class="btn-ripple"></div>
                         </button>
                     </form>
 
                     <div class="form-footer">
-                        <p class="terms-text">By creating an account, you agree to our <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a></p>
+                        <p class="terms-text">Your request will be reviewed by administrators. You'll be notified via email once a decision is made.</p>
+                        <div class="request-info">
+                            <p><strong>Don't have an account?</strong> <a href="{{ route('frontend.login') }}" class="admin-portal-link">Create a regular account first</a></p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -342,7 +370,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Re-enable after a delay (in case of validation errors)
             setTimeout(() => {
                 submitBtn.disabled = false;
-                btnText.textContent = submitBtn.classList.contains('submit-btn') ? 'Sign In' : 'Create Account';
+                if (form.action.includes('admin.login.user')) {
+                    btnText.textContent = 'Sign In';
+                } else if (form.action.includes('admin.access.request')) {
+                    btnText.textContent = 'Submit Request';
+                }
             }, 3000);
         });
     });
