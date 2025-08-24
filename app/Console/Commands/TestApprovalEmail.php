@@ -14,14 +14,14 @@ class TestApprovalEmail extends Command
      *
      * @var string
      */
-    protected $signature = 'test:approval-email {email}';
+    protected $signature = 'test:approval-email {email} {--type=approval : Type of email to test (approval or password-update)}';
 
     /**
      * The console description of the console command.
      *
      * @var string
      */
-    protected $description = 'Test the approval email functionality for a specific user email';
+    protected $description = 'Test the approval or password update email functionality for a specific user email';
 
     /**
      * Execute the console command.
@@ -29,8 +29,9 @@ class TestApprovalEmail extends Command
     public function handle()
     {
         $email = $this->argument('email');
+        $emailType = $this->option('type');
         
-        $this->line("Testing approval email functionality for: {$email}");
+        $this->line("Testing {$emailType} email functionality for: {$email}");
         $this->line("========================================");
         
         // Find user
@@ -56,35 +57,48 @@ class TestApprovalEmail extends Command
         
         // Test email sending
         if (env('MAIL_MAILER') == 'resend') {
-            $this->line("\nTesting ResendMailService...");
+            $this->line("\nTesting ResendMailService for {$emailType} email...");
             
             try {
                 $resendService = new ResendMailService();
                 
-                $htmlContent = view('mails.approval', [
-                    'firstname' => $user->first_name,
-                    'email' => $user->email,
-                    'temporaryPassword' => $temporaryPassword
-                ])->render();
+                if ($emailType === 'password-update') {
+                    // Test password update email
+                    $htmlContent = view('mails.password_updated', [
+                        'firstname' => $user->first_name,
+                        'email' => $user->email
+                    ])->render();
+                    
+                    $subject = 'TEST - Password Updated Successfully - Your Account is Now Secure';
+                } else {
+                    // Test approval email
+                    $htmlContent = view('mails.approval', [
+                        'firstname' => $user->first_name,
+                        'email' => $user->email,
+                        'temporaryPassword' => $temporaryPassword
+                    ])->render();
+                    
+                    $subject = 'TEST - Account Successfully Approved - Your Login Credentials';
+                }
                 
                 $response = $resendService->sendEmail(
                     $user->email,
-                    'TEST - Account Successfully Approved - Your Login Credentials',
+                    $subject,
                     $htmlContent,
                     'cug@academicdigital.space'
                 );
                 
                 if ($response['success']) {
-                    $this->info("✅ Test email sent successfully!");
+                    $this->info("✅ Test {$emailType} email sent successfully!");
                     $this->line("Message ID: " . ($response['message_id'] ?? 'N/A'));
                 } else {
-                    $this->error("❌ Failed to send test email");
+                    $this->error("❌ Failed to send test {$emailType} email");
                     $this->line("Error: " . ($response['error'] ?? 'Unknown error'));
                     $this->line("Full response: " . json_encode($response, JSON_PRETTY_PRINT));
                 }
                 
             } catch (\Exception $e) {
-                $this->error("❌ Exception occurred while testing email:");
+                $this->error("❌ Exception occurred while testing {$emailType} email:");
                 $this->line("Error: " . $e->getMessage());
                 $this->line("File: " . $e->getFile() . ":" . $e->getLine());
             }

@@ -236,7 +236,55 @@ class HomeController extends Controller
                 'password_changed' => true
             ]);
             
-            return redirect()->back()->with('success', 'Password updated successfully! Your account is now more secure.');
+            // Send password update confirmation email
+            $emailSent = false;
+            if (env('MAIL_MAILER') == 'resend') {
+                try {
+                    $resendService = new ResendMailService();
+                    
+                    $htmlContent = view('mails.password_updated', [
+                        'firstname' => $user->first_name,
+                        'email' => $user->email
+                    ])->render();
+                    
+                    \Log::info('Attempting to send password update confirmation email', [
+                        'user_email' => $user->email,
+                        'mail_service' => 'resend'
+                    ]);
+                    
+                    $response = $resendService->sendEmail(
+                        $user->email,
+                        'Password Updated Successfully - Your Account is Now Secure',
+                        $htmlContent,
+                        'cug@academicdigital.space'
+                    );
+                    
+                    if ($response['success']) {
+                        $emailSent = true;
+                        \Log::info('Password update confirmation email sent successfully', [
+                            'user_email' => $user->email,
+                            'message_id' => $response['message_id'] ?? 'N/A'
+                        ]);
+                    } else {
+                        \Log::error('Failed to send password update confirmation email', [
+                            'user_email' => $user->email,
+                            'error' => $response['error'] ?? 'Unknown error',
+                            'response' => $response
+                        ]);
+                    }
+                } catch (\Exception $e) {
+                    \Log::error('Exception while sending password update confirmation email', [
+                        'user_email' => $user->email,
+                        'error' => $e->getMessage()
+                    ]);
+                }
+            }
+            
+            $message = $emailSent 
+                ? 'Password updated successfully! Your account is now more secure. A confirmation email has been sent.'
+                : 'Password updated successfully! Your account is now more secure.';
+                
+            return redirect()->back()->with('success', $message);
             
         } catch (\Exception $e) {
             \Log::error('Password update failed: ' . $e->getMessage());
