@@ -192,7 +192,7 @@
 
                         <div class="form-group">
                             <div class="input-container">
-                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a password" required>
+                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a temporary password" required>
                                 <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
                                     <i class="icofont-eye"></i>
                                 </button>
