@@ -215,18 +215,6 @@ class AdvanceCommunicationController extends Controller
         ]);
 
 
-        // Check if it's an AJAX request (for memo delivery notification)
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => true,
-                'message' => 'Memo Delivered Successfully!',
-                'sent_count' => $sentCount,
-                'failed_count' => $failedCount,
-                'total_recipients' => $recipientUsers->count(),
-                'redirect_url' => route('admin.communication.index')
-            ]);
-        }
-
         return redirect()->route('admin.communication.index')
                         ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}");
     }
