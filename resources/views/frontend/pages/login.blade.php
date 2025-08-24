@@ -498,31 +498,34 @@ function typewriterEffect() {
     ];
     let currentIndex = 0;
     let isTyping = true;
+    let charIndex = 0;
     
     function type() {
-        if (isTyping && currentIndex < text.length) {
-            subtitle.textContent = text.slice(0, currentIndex + 1);
-            currentIndex++;
+        const currentText = texts[currentIndex];
+        if (isTyping && charIndex < currentText.length) {
+            subtitle.textContent = currentText.slice(0, charIndex + 1);
+            charIndex++;
             setTimeout(type, 100); // Typing speed
-        } else if (isTyping && currentIndex >= text.length) {
-            // Finished typing, wait 5 seconds
+        } else if (isTyping && charIndex >= currentText.length) {
+            // Finished typing, wait 2 seconds
             setTimeout(() => {
                 isTyping = false;
-                currentIndex = text.length;
                 erase();
-            }, 5000);
+            }, 2000);
         }
     }
     
     function erase() {
-        if (!isTyping && currentIndex > 0) {
-            subtitle.textContent = text.slice(0, currentIndex - 1);
-            currentIndex--;
+        const currentText = texts[currentIndex];
+        if (!isTyping && charIndex > 0) {
+            subtitle.textContent = currentText.slice(0, charIndex - 1);
+            charIndex--;
             setTimeout(erase, 50); // Erasing speed (faster than typing)
-        } else if (!isTyping && currentIndex <= 0) {
-            // Finished erasing, start typing again
+        } else if (!isTyping && charIndex <= 0) {
+            // Finished erasing, move to next text
+            currentIndex = (currentIndex + 1) % texts.length;
             isTyping = true;
-            currentIndex = 0;
+            charIndex = 0;
             setTimeout(type, 500); // Small pause before restarting
         }
     }

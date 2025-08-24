@@ -294,7 +294,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Typewriter effect for subtitle
     const typewriterElement = document.getElementById('typewriter-subtitle');
-    const text = 'Registry Communication System';
+    const texts = [
+        'Registry Communication System',
+        'Advanced User Portal',
+        'Secure Access Gateway',
+        'Communication Hub'
+    ];
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;
