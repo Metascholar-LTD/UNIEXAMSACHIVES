@@ -174,10 +174,6 @@
                             <div class="btn-ripple"></div>
                         </button>
                     </form>
-
-                    <div class="form-footer">
-                        <a href="{{ route('frontend.login') }}" class="forgot-link">← Back to Regular Login</a>
-                    </div>
                 </div>
             </div>
 
