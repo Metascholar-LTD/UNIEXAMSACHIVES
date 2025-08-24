@@ -123,11 +123,6 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/users/{user}/approve', [HomeController::class, 'approve'])->name('users.approve');
     Route::post('/dashboard/users/{user}/disapprove', [HomeController::class, 'disapprove'])->name('users.disapprove');
     Route::delete('/dashboard/users/{user}', [HomeController::class, 'destroy'])->name('users.destroy');
-    
-    #admin access requests
-    Route::get('/dashboard/requests',[HomeController::class, 'requests'])->name('dashboard.requests');
-    Route::post('/dashboard/requests/{user}/approve-access', [HomeController::class, 'approveAccess'])->name('requests.approve');
-    Route::post('/dashboard/requests/{user}/reject-access', [HomeController::class, 'rejectAccess'])->name('requests.reject');
 
     #systems detail
     Route::post('/dashboard/system-details/store', [DetailsController::class, 'store'])->name('dashboard.details.store');

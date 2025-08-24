@@ -215,7 +215,7 @@
                         <h2 class="form-title">Request Administrative Access</h2>
                         <p class="form-subtitle">Request access to the advance communication system</p>
                         <div class="admin-portal-notice">
-                            <p><strong>Requirements:</strong> You must have an existing <strong>Regular User account</strong> to request access to the advance communication system. When approved, your account will be changed from <strong>Regular User</strong> to <strong>Administrative User</strong>.</p>
+                            <p><strong>Requirements:</strong> You must have an existing regular user account to request administrative access.</p>
                         </div>
                     </div>
 
@@ -263,8 +263,7 @@
                     <div class="form-footer">
                         <p class="terms-text">Your request will be reviewed by administrators. You'll be notified via email once a decision is made.</p>
                         <div class="request-info">
-                            <p><strong>Important:</strong> When approved, your account will be changed from <strong>Admin</strong> to <strong>Regular User</strong>, giving you access to the advance communication system.</p>
-                            <p><strong>Don't have an admin account?</strong> <a href="{{ route('frontend.login') }}" class="admin-portal-link">Create a regular account first</a></p>
+                            <p><strong>Don't have an account?</strong> <a href="{{ route('frontend.login') }}" class="admin-portal-link">Create a regular account first</a></p>
                         </div>
                     </div>
                 </div>
