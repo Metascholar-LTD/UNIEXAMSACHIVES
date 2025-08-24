@@ -111,21 +111,20 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login') }}" class="auth-form">
+                    <form method="POST" action="{{ route('login') }}" class="animated-form">
                         @csrf
                         <div class="form-group">
-                            <label for="email" class="form-label">Email Address</label>
-                            <div class="input-group">
-                                <i class="icofont-envelope input-icon"></i>
-                                <input type="email" id="email" name="email" class="form-input" value="{{ old('email') }}" required autocomplete="email" autofocus>
+                            <div class="input-container">
+                                <input type="email" name="email" id="login-email" class="animated-input" placeholder="Enter your email" value="{{ old('email') }}" required autocomplete="email" autofocus>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="password" class="form-label">Password</label>
-                            <div class="input-group">
-                                <i class="icofont-lock input-icon"></i>
-                                <input type="password" id="password" name="password" class="form-input" required autocomplete="current-password">
+                            <div class="input-container">
+                                <input type="password" name="password" id="login-password" class="animated-input" placeholder="Enter your password" required autocomplete="current-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
+                                    <i class="icofont-eye"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -138,8 +137,8 @@
                         </div>
 
                         <button type="submit" class="submit-btn">
-                            <span class="btn-text">Sign In</span>
-                            <i class="icofont-arrow-right btn-icon"></i>
+                            <span>Sign In</span>
+                            <div class="btn-ripple"></div>
                         </button>
                     </form>
 
@@ -157,60 +156,50 @@
                         <p class="form-subtitle">Join our digital archive community</p>
                     </div>
 
-                    <form method="POST" action="{{ route('register') }}" class="auth-form">
+                    <form method="POST" action="{{ route('register') }}" class="animated-form">
                         @csrf
                         <div class="form-row">
                             <div class="form-group">
-                                <label for="first_name" class="form-label">First Name</label>
-                                <div class="input-group">
-                                    <i class="icofont-user input-icon"></i>
-                                    <input type="text" id="first_name" name="first_name" class="form-input" value="{{ old('first_name') }}" required autocomplete="given-name">
+                                <div class="input-container">
+                                    <input type="text" name="first_name" id="register-firstname" class="animated-input" placeholder="First name" value="{{ old('first_name') }}" required autocomplete="given-name">
                                 </div>
                             </div>
-
                             <div class="form-group">
-                                <label for="last_name" class="form-label">Last Name</label>
-                                <div class="input-group">
-                                    <i class="icofont-user input-icon"></i>
-                                    <input type="text" id="last_name" name="last_name" class="form-input" value="{{ old('last_name') }}" required autocomplete="family-name">
+                                <div class="input-container">
+                                    <input type="text" name="last_name" id="register-lastname" class="animated-input" placeholder="Last name" value="{{ old('last_name') }}" required autocomplete="family-name">
                                 </div>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="reg_email" class="form-label">Email Address</label>
-                            <div class="input-group">
-                                <i class="icofont-envelope input-icon"></i>
-                                <input type="email" id="reg_email" name="email" class="form-input" value="{{ old('email') }}" required autocomplete="email">
+                            <div class="input-container">
+                                <input type="email" name="email" id="register-email" class="animated-input" placeholder="Enter your email" value="{{ old('email') }}" required autocomplete="email">
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="department_id" class="form-label">Department</label>
-                            <div class="input-group">
-                                <i class="icofont-building input-icon"></i>
-                                <select id="department_id" name="department_id" class="form-input">
-                                    <option value="">Select Department</option>
+                            <div class="input-container">
+                                <select name="department_id" id="register-department" class="animated-input">
+                                    <option value="" disabled selected>Choose your Department/Faculty/Unit</option>
                                     @foreach($departments as $department)
-                                        <option value="{{ $department->id }}" {{ old('department_id') == $department->id ? 'selected' : '' }}>
-                                            {{ $department->name }}
-                                        </option>
+                                        <option value="{{ $department->id }}">{{ $department->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-group">
-                            <label for="reg_password" class="form-label">Password</label>
-                            <div class="input-group">
-                                <i class="icofont-lock input-icon"></i>
-                                <input type="password" id="reg_password" name="password" class="form-input" required autocomplete="new-password">
+                            <div class="input-container">
+                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a temporary password" required autocomplete="new-password">
+                                <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
+                                    <i class="icofont-eye"></i>
+                                </button>
                             </div>
                         </div>
 
                         <button type="submit" class="submit-btn">
-                            <span class="btn-text">Create Account</span>
-                            <i class="icofont-arrow-right btn-icon"></i>
+                            <span>Create Account</span>
+                            <div class="btn-ripple"></div>
                         </button>
                     </form>
 
@@ -227,6 +216,23 @@
 
 @push('scripts')
 <script>
+// Password toggle functionality
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const toggleBtn = input.nextElementSibling;
+    const icon = toggleBtn.querySelector('i');
+    
+    if (input.type === 'password') {
+        input.type = 'text';
+        icon.classList.remove('icofont-eye');
+        icon.classList.add('icofont-eye-blocked');
+    } else {
+        input.type = 'password';
+        icon.classList.remove('icofont-eye-blocked');
+        icon.classList.add('icofont-eye');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
     const tabButtons = document.querySelectorAll('.tab-btn');
     const authPanels = document.querySelectorAll('.auth-form-panel');
@@ -291,29 +297,26 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Form validation and enhancement
-    const forms = document.querySelectorAll('.auth-form');
+    const forms = document.querySelectorAll('.animated-form');
     forms.forEach(form => {
         form.addEventListener('submit', function(e) {
             const submitBtn = form.querySelector('.submit-btn');
-            const btnText = submitBtn.querySelector('.btn-text');
-            const btnIcon = submitBtn.querySelector('.btn-icon');
+            const btnText = submitBtn.querySelector('span');
             
             // Show loading state
             submitBtn.disabled = true;
             btnText.textContent = 'Processing...';
-            btnIcon.style.display = 'none';
             
             // Re-enable after a delay (in case of validation errors)
             setTimeout(() => {
                 submitBtn.disabled = false;
                 btnText.textContent = submitBtn.classList.contains('submit-btn') ? 'Sign In' : 'Create Account';
-                btnIcon.style.display = 'inline-block';
             }, 3000);
         });
     });
 
     // Input focus effects
-    const inputs = document.querySelectorAll('.form-input');
+    const inputs = document.querySelectorAll('.animated-input');
     inputs.forEach(input => {
         input.addEventListener('focus', function() {
             this.parentElement.classList.add('focused');
