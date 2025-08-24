@@ -25,6 +25,36 @@
     .orbit-icon-1 {
         transform: rotate(0deg) translateX(150px) rotate(0deg);
     }
+
+    /* Admin portal notice styling */
+    .admin-portal-notice {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-top: 16px;
+        text-align: center;
+    }
+
+    .admin-portal-notice p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #1e40af;
+        font-weight: 500;
+    }
+
+    .admin-portal-link {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px solid #3b82f6;
+        transition: all 0.3s ease;
+    }
+
+    .admin-portal-link:hover {
+        color: #1e40af;
+        border-bottom-color: #1e40af;
+    }
 </style>
 @endpush
 
@@ -87,6 +117,9 @@
                     <div class="form-header">
                         <h2 class="form-title">SUPER ADMIN ACCESS</h2>
                         <p class="form-subtitle">Sign in to your super admin account</p>
+                        <div class="admin-portal-notice">
+                            <p><strong>Restricted Access:</strong> This portal is exclusively for advance communication system users. Regular users should use the <a href="{{ route('frontend.login') }}" class="admin-portal-link">standard login</a>.</p>
+                        </div>
                     </div>
 
                     @if ($errors->any())
@@ -111,7 +144,7 @@
                         </div>
                     @endif
 
-                    <form method="POST" action="{{ route('login') }}" class="animated-form">
+                    <form method="POST" action="{{ route('admin.login.user') }}" class="animated-form">
                         @csrf
                         <div class="form-group">
                             <div class="input-container">
@@ -154,6 +187,9 @@
                     <div class="form-header">
                         <h2 class="form-title">Create Account</h2>
                         <p class="form-subtitle">Join our digital archive community</p>
+                        <div class="admin-portal-notice">
+                            <p><strong>Note:</strong> New accounts created here will have access to the advance communication system.</p>
+                        </div>
                     </div>
 
                     <form method="POST" action="{{ route('register') }}" class="animated-form">

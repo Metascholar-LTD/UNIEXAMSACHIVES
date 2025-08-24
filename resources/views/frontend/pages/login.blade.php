@@ -25,6 +25,36 @@
     .orbit-icon-1 {
         transform: rotate(0deg) translateX(150px) rotate(0deg);
     }
+
+    /* Admin portal notice styling */
+    .admin-portal-notice {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.3);
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-top: 16px;
+        text-align: center;
+    }
+
+    .admin-portal-notice p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #991b1b;
+        font-weight: 500;
+    }
+
+    .admin-portal-link {
+        color: #ef4444;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px solid #ef4444;
+        transition: all 0.3s ease;
+    }
+
+    .admin-portal-link:hover {
+        color: #dc2626;
+        border-bottom-color: #dc2626;
+    }
 </style>
 @endpush
 
@@ -87,6 +117,9 @@
                     <div class="form-header">
                         <h2 class="form-title">Welcome Back</h2>
                         <p class="form-subtitle">Sign in to your account</p>
+                        <div class="admin-portal-notice">
+                            <p><strong>Note:</strong> Advance communication system users must use the <a href="{{ route('admin.login') }}" class="admin-portal-link">admin portal</a> instead.</p>
+                        </div>
                     </div>
 
                     @if ($errors->any())

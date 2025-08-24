@@ -16,6 +16,7 @@ Route::get('/', [PagesController::class, 'welcome'])->name('frontend.welcome');
 
 // Admin Route for Advance Communication System Users
 Route::get('/admin', [PagesController::class, 'adminLogin'])->name('admin.login');
+Route::post('/admin', [PagesController::class, 'adminLoginUser'])->name('admin.login.user');
 
 // Authentication Routes - Clean URLs
 Route::get('/login', [PagesController::class, 'login'])->name('frontend.login');

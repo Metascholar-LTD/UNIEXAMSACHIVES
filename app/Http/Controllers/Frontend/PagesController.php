@@ -66,6 +66,28 @@ class PagesController extends Controller
         return view('frontend.pages.admin_login', compact('departments'));
     }
 
+    public function adminLoginUser(Request $request)
+    {
+        $credentials = $request->only('email', 'password');
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (!$user || !password_verify($credentials['password'], $user->password)) {
+            return redirect()->back()->with('error', 'Invalid email or password');
+        }
+
+        // Only allow non-admin users (advance communication users) to login through admin route
+        if ($user->is_admin) {
+            return redirect()->back()->with('error', 'This login portal is only for advance communication system users. Please use the regular login.');
+        }
+
+        if (!$user->is_approve) {
+            return redirect()->back()->with('error', 'Your account is not yet approved.');
+        }
+
+        Auth::login($user);
+        return redirect()->route('dashboard')->with('success', 'Login successful');
+    }
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([
@@ -116,6 +138,11 @@ class PagesController extends Controller
 
         if (!$user || !password_verify($credentials['password'], $user->password)) {
             return redirect()->back()->with('error', 'Invalid email or password');
+        }
+
+        // Block advance communication users from using regular login
+        if (!$user->is_admin) {
+            return redirect()->back()->with('error', 'Advance communication system users must use the admin portal at /admin. Please use that login instead.');
         }
 
         if ($user->is_admin && !$user->is_approve) {
