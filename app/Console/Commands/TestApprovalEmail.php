@@ -51,8 +51,9 @@ class TestApprovalEmail extends Command
         $this->line("MAIL_HOST: " . env('MAIL_HOST'));
         $this->line("MAIL_FROM_ADDRESS: " . config('mail.from.address'));
         
-        // Generate temporary password for testing
-        $temporaryPassword = Str::random(10);
+        // Generate temporary password for testing (firstname + 5 random numbers)
+        $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+        $temporaryPassword = strtolower($user->first_name) . $randomNumbers;
         $this->line("\nGenerated temporary password: {$temporaryPassword}");
         
         // Test email sending

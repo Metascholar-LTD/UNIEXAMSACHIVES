@@ -103,7 +103,7 @@
             
             <p><strong>Important Security Note:</strong></p>
             <ul>
-                <li>This is a temporary password generated for your account</li>
+                <li>Your temporary password is your first name + 5 numbers (easy to remember!)</li>
                 <li>You must change your password immediately after your first login</li>
                 <li>Keep your credentials secure and don't share them with anyone</li>
             </ul>

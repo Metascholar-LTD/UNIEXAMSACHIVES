@@ -305,8 +305,9 @@ class HomeController extends Controller
     public function approve(User $user)
     {
         try {
-            // Generate a temporary password for the user
-            $temporaryPassword = Str::random(10);
+            // Generate a temporary password for the user (firstname + 5 random numbers)
+            $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+            $temporaryPassword = strtolower($user->first_name) . $randomNumbers;
             
             \Log::info('Starting user approval process', [
                 'user_id' => $user->id,
