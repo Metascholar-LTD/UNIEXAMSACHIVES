@@ -105,14 +105,14 @@ class PagesController extends Controller
             return redirect()->back()->with('error', 'Invalid email or password. Please use your existing user account credentials.');
         }
 
-        // Check if user is already an admin
-        if ($user->is_admin) {
-            return redirect()->back()->with('error', 'You already have administrative access.');
+        // Check if user is NOT an admin (normal users already have access to advance communication)
+        if (!$user->is_admin) {
+            return redirect()->back()->with('error', 'Normal users already have access to the advance communication system. This request form is for admin users requesting access to the advance communication system.');
         }
 
         // Check if user has already made a request
         if ($user->admin_access_requested) {
-            return redirect()->back()->with('error', 'You have already submitted a request for administrative access. Please wait for approval.');
+            return redirect()->back()->with('error', 'You have already submitted a request for access to the advance communication system. Please wait for approval.');
         }
 
         // Store the access request (you'll need to create a table for this)
@@ -128,7 +128,7 @@ class PagesController extends Controller
         // Send notification to administrators (you can implement this later)
         // For now, just show success message
         
-        return redirect()->back()->with('success', 'Your request for administrative access has been submitted successfully. You will be notified via email once a decision is made.');
+        return redirect()->back()->with('success', 'Your request for access to the advance communication system has been submitted successfully. You will be notified via email once a decision is made.');
     }
 
     public function register(Request $request)
