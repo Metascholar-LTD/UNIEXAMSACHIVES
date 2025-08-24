@@ -16,6 +16,7 @@ use App\Services\ResendMailService;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Str;
+use App\Mail\PasswordResetConfirmation;
 
 class PagesController extends Controller
 {
@@ -269,11 +270,69 @@ class PagesController extends Controller
                 $user->save();
 
                 event(new PasswordReset($user));
+
+                // Send password reset confirmation email
+                $this->sendPasswordResetConfirmation($user);
             }
         );
 
         return $status === Password::PASSWORD_RESET
-                    ? redirect()->route('frontend.login')->with('success', 'Password has been reset successfully!')
+                    ? redirect()->route('frontend.login')->with('success', 'Password has been reset successfully! A confirmation email has been sent to your email address.')
                     : redirect()->back()->withErrors(['email' => [__($status)]]);
+    }
+
+    /**
+     * Send password reset confirmation email
+     */
+    private function sendPasswordResetConfirmation($user)
+    {
+        try {
+            if (env('MAIL_MAILER') == 'resend') {
+                $resendService = new ResendMailService();
+                
+                $htmlContent = view('mails.password-reset-confirmation', [
+                    'user' => $user,
+                    'timestamp' => now()->format('F j, Y \a\t g:i A')
+                ])->render();
+                
+                \Log::info('Attempting to send password reset confirmation email', [
+                    'user_email' => $user->email,
+                    'user_name' => $user->first_name
+                ]);
+                
+                $response = $resendService->sendEmail(
+                    $user->email,
+                    'Password Reset Confirmation - University Digital Archive',
+                    $htmlContent,
+                    'cug@academicdigital.space'
+                );
+                
+                if ($response['success']) {
+                    \Log::info('Password reset confirmation email sent successfully', [
+                        'user_email' => $user->email,
+                        'message_id' => $response['message_id'] ?? 'N/A'
+                    ]);
+                } else {
+                    \Log::error('Failed to send password reset confirmation email', [
+                        'user_email' => $user->email,
+                        'error' => $response['error'] ?? 'Unknown error',
+                        'response' => $response
+                    ]);
+                }
+            } else {
+                // Fallback to Laravel's default mail system
+                Mail::to($user->email)->send(new PasswordResetConfirmation($user));
+                
+                \Log::info('Password reset confirmation email sent via Laravel Mail', [
+                    'user_email' => $user->email,
+                    'user_name' => $user->first_name
+                ]);
+            }
+        } catch (\Exception $e) {
+            \Log::error('Error sending password reset confirmation email', [
+                'user_email' => $user->email,
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 }
