@@ -136,10 +136,6 @@
                     <span class="tab-text">LOGIN SUPER ADMIN</span>
                     <div class="tab-indicator"></div>
                 </button>
-                <button class="tab-btn" data-tab="request">
-                    <span class="tab-text">Request Access</span>
-                    <div class="tab-indicator"></div>
-                </button>
             </div>
 
             <!-- Login Form -->
