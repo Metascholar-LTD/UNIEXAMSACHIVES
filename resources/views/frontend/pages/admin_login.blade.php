@@ -118,7 +118,7 @@
                         <h2 class="form-title">SUPER ADMIN ACCESS</h2>
                         <p class="form-subtitle">Sign in to your super admin account</p>
                         <div class="admin-portal-notice">
-                            <p><strong>Restricted Access:</strong> This portal is exclusively for advance communication system users. Regular users should use the <a href="{{ route('frontend.login') }}" class="admin-portal-link">standard login</a>.</p>
+                            <p><strong>Restricted Access:</strong> This portal is exclusively for administrative users. Regular users should use the <a href="{{ route('frontend.login') }}" class="admin-portal-link">standard login</a>.</p>
                         </div>
                     </div>
 
@@ -188,7 +188,7 @@
                         <h2 class="form-title">Create Account</h2>
                         <p class="form-subtitle">Join our digital archive community</p>
                         <div class="admin-portal-notice">
-                            <p><strong>Note:</strong> New accounts created here will have access to the advance communication system.</p>
+                            <p><strong>Note:</strong> New accounts created here will have access to the administrative system.</p>
                         </div>
                     </div>
 
@@ -298,7 +298,7 @@ document.addEventListener('DOMContentLoaded', function() {
         'Registry Communication System',
         'Advanced User Portal',
         'Secure Access Gateway',
-        'Communication Hub'
+        'Administrative Hub'
     ];
     let textIndex = 0;
     let charIndex = 0;
