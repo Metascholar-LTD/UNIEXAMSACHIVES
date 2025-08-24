@@ -304,6 +304,82 @@ class HomeController extends Controller
 
         return redirect()->route('dashboard.users')->with('success', 'User deleted successfully');
     }
+
+    public function requests()
+    {
+        $requests = User::where('admin_access_requested', true)
+                       ->whereNull('admin_access_approved_at')
+                       ->orderBy('admin_access_requested_at', 'desc')
+                       ->get();
+
+        return view('admin.requests', [
+            'requests' => $requests
+        ]);
+    }
+
+    public function approveAccess(User $user)
+    {
+        $user->update([
+            'admin_access_approved_at' => now(),
+            'admin_access_approved_by' => Auth::id()
+        ]);
+
+        // Send approval email
+        if (env('MAIL_MAILER') == 'resend') {
+            $resendService = new ResendMailService();
+            
+            $htmlContent = view('mails.access_approved', [
+                'firstname' => $user->first_name,
+                'email' => $user->email
+            ])->render();
+            
+            $response = $resendService->sendEmail(
+                $user->email,
+                'Access to Advance Communication System Approved',
+                $htmlContent,
+                'cug@academicdigital.space'
+            );
+            
+            if (!$response['success']) {
+                \Log::error('Failed to send access approval email', $response);
+            }
+        }
+
+        return redirect()->route('dashboard.requests')->with('success', 'Access request approved successfully. User has been notified via email.');
+    }
+
+    public function rejectAccess(User $user)
+    {
+        $user->update([
+            'admin_access_rejected_at' => now(),
+            'admin_access_rejected_by' => Auth::id(),
+            'admin_access_rejected_reason' => request('rejection_reason', 'No reason provided')
+        ]);
+
+        // Send rejection email
+        if (env('MAIL_MAILER') == 'resend') {
+            $resendService = new ResendMailService();
+            
+            $htmlContent = view('mails.access_rejected', [
+                'firstname' => $user->first_name,
+                'email' => $user->email,
+                'reason' => request('rejection_reason', 'No reason provided')
+            ])->render();
+            
+            $response = $resendService->sendEmail(
+                $user->email,
+                'Access to Advance Communication System - Request Status',
+                $htmlContent,
+                'cug@academicdigital.space'
+            );
+            
+            if (!$response['success']) {
+                \Log::error('Failed to send access rejection email', $response);
+            }
+        }
+
+        return redirect()->route('dashboard.requests')->with('success', 'Access request rejected successfully. User has been notified via email.');
+    }
     public function logout(Request $request)
     {
         Auth::logout();

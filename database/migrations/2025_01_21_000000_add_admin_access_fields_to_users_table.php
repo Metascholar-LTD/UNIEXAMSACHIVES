@@ -17,6 +17,11 @@ return new class extends Migration
             $table->string('admin_access_supervisor')->nullable()->after('admin_access_reason');
             $table->string('admin_access_supervisor_email')->nullable()->after('admin_access_supervisor');
             $table->timestamp('admin_access_requested_at')->nullable()->after('admin_access_supervisor_email');
+            $table->timestamp('admin_access_approved_at')->nullable()->after('admin_access_requested_at');
+            $table->unsignedBigInteger('admin_access_approved_by')->nullable()->after('admin_access_approved_at');
+            $table->timestamp('admin_access_rejected_at')->nullable()->after('admin_access_approved_by');
+            $table->unsignedBigInteger('admin_access_rejected_by')->nullable()->after('admin_access_rejected_at');
+            $table->text('admin_access_rejected_reason')->nullable()->after('admin_access_rejected_by');
         });
     }
 
@@ -31,7 +36,12 @@ return new class extends Migration
                 'admin_access_reason',
                 'admin_access_supervisor',
                 'admin_access_supervisor_email',
-                'admin_access_requested_at'
+                'admin_access_requested_at',
+                'admin_access_approved_at',
+                'admin_access_approved_by',
+                'admin_access_rejected_at',
+                'admin_access_rejected_by',
+                'admin_access_rejected_reason'
             ]);
         });
     }

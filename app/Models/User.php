@@ -32,6 +32,11 @@ class User extends Authenticatable
         'admin_access_supervisor',
         'admin_access_supervisor_email',
         'admin_access_requested_at',
+        'admin_access_approved_at',
+        'admin_access_approved_by',
+        'admin_access_rejected_at',
+        'admin_access_rejected_by',
+        'admin_access_rejected_reason',
     ];
 
     /**
