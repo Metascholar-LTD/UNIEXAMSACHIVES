@@ -395,32 +395,32 @@
     <!-- Stats Section -->
     <div class="stats-section">
         <div class="container">
-            <div class="row">
-                <div class="col-lg-3 col-md-6">
+            <div class="row justify-content-center">
+                <div class="col-lg col-md-6 col-sm-6">
                     <div class="stat-item">
                         <span class="stat-number" data-count="{{ $stats['total_exams'] ?? 0 }}">0</span>
                         <div class="stat-label">Exam Papers</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg col-md-6 col-sm-6">
                     <div class="stat-item">
                         <span class="stat-number" data-count="{{ $stats['total_files'] ?? 0 }}">0</span>
                         <div class="stat-label">Files</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg col-md-6 col-sm-6">
                     <div class="stat-item">
                         <span class="stat-number" data-count="{{ $stats['total_departments'] ?? 0 }}">0</span>
                         <div class="stat-label">Departments</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg col-md-6 col-sm-6">
                     <div class="stat-item">
                         <span class="stat-number" data-count="{{ $stats['total_users'] ?? 0 }}">0</span>
                         <div class="stat-label">Active Users</div>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-6">
+                <div class="col-lg col-md-6 col-sm-6">
                     <div class="stat-item">
                         <span class="stat-number" data-count="{{ $stats['total_visits'] ?? 0 }}">0</span>
                         <div class="stat-label">Total Visits</div>
