@@ -16,7 +16,7 @@
     }
     
     .user-uploaded-docs-hero {
-        background: linear-gradient(135deg, #e9d5ff 0%, #c084fc 50%, #9333ea 100%);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
         padding: 60px 0 40px;
         position: relative;
         overflow: hidden;
@@ -29,7 +29,7 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="user-uploaded-grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(147,51,234,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23user-uploaded-grid)" /></svg>');
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="user-uploaded-grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(100,116,139,0.1)" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23user-uploaded-grid)" /></svg>');
         opacity: 0.7;
     }
 
@@ -42,9 +42,9 @@
     .hero-title {
         font-size: 2.5rem;
         font-weight: 700;
-        color: #581c87;
+        color: #475569;
         margin-bottom: 1rem;
-        background: linear-gradient(135deg, #581c87 0%, #9333ea 50%, #a855f7 100%);
+        background: linear-gradient(135deg, #475569 0%, #64748b 50%, #94a3b8 100%);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
@@ -52,7 +52,7 @@
 
     .hero-subtitle {
         font-size: 1.1rem;
-        color: #581c87;
+        color: #475569;
         margin-bottom: 2rem;
     }
 
@@ -70,13 +70,13 @@
     .stat-number {
         font-size: 2.2rem;
         font-weight: 700;
-        color: #9333ea;
+        color: #64748b;
         display: block;
     }
 
     .stat-label {
         font-size: 0.9rem;
-        color: #581c87;
+        color: #475569;
         margin-top: 0.5rem;
     }
 
@@ -106,9 +106,9 @@
 
     .search-input:focus {
         outline: none;
-        border-color: #9333ea;
+        border-color: #64748b;
         background: white;
-        box-shadow: 0 0 0 3px rgba(147, 51, 234, 0.1);
+        box-shadow: 0 0 0 3px rgba(100, 116, 139, 0.1);
     }
 
     .search-btn {
@@ -116,7 +116,7 @@
         right: 8px;
         top: 50%;
         transform: translateY(-50%);
-        background: #9333ea;
+        background: #64748b;
         border: none;
         padding: 8px 12px;
         border-radius: 50px;
@@ -126,7 +126,7 @@
     }
 
     .search-btn:hover {
-        background: #7c3aed;
+        background: #475569;
     }
 
     .filter-tabs {
@@ -151,8 +151,8 @@
 
     .filter-tab:hover,
     .filter-tab.active {
-        border-color: #9333ea;
-        background: #9333ea;
+        border-color: #64748b;
+        background: #64748b;
         color: white;
         text-decoration: none;
     }
@@ -196,7 +196,7 @@
         top: 0;
         bottom: 0;
         width: 5px;
-        background: linear-gradient(135deg, #9333ea 0%, #7c3aed 100%);
+        background: linear-gradient(135deg, #64748b 0%, #475569 100%);
         border-radius: 16px 0 0 16px;
     }
 
@@ -285,7 +285,7 @@
     }
 
     .meta-item i {
-        color: #9333ea;
+        color: #64748b;
         font-size: 0.9rem;
         width: 16px;
         text-align: center;
@@ -309,14 +309,14 @@
         width: 40px;
         height: 40px;
         border-radius: 50%;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: linear-gradient(135deg, #94a3b8 0%, #64748b 100%);
         display: flex;
         align-items: center;
         justify-content: center;
         color: white;
         font-weight: 600;
         font-size: 1rem;
-        box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: 0 2px 8px rgba(148, 163, 184, 0.3);
     }
 
     .instructor-avatar i {
@@ -366,22 +366,22 @@
     }
 
     .action-btn.view {
-        border-color: #3b82f6;
-        color: #3b82f6;
+        border-color: #64748b;
+        color: #64748b;
     }
 
     .action-btn.view:hover {
-        background: #3b82f6;
+        background: #64748b;
         color: white;
     }
 
     .action-btn.download {
-        border-color: #10b981;
-        color: #10b981;
+        border-color: #64748b;
+        color: #64748b;
     }
 
     .action-btn.download:hover {
-        background: #10b981;
+        background: #64748b;
         color: white;
     }
 
@@ -403,15 +403,15 @@
     }
 
     .status-badge.approved {
-        background: rgba(16, 185, 129, 0.1);
-        color: #10b981;
-        border: 1px solid rgba(16, 185, 129, 0.2);
+        background: rgba(100, 116, 139, 0.1);
+        color: #64748b;
+        border: 1px solid rgba(100, 116, 139, 0.2);
     }
 
     .status-badge.pending {
-        background: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-        border: 1px solid rgba(245, 158, 11, 0.2);
+        background: rgba(100, 116, 139, 0.1);
+        color: #64748b;
+        border: 1px solid rgba(100, 116, 139, 0.2);
     }
 
     .no-exams {
@@ -426,7 +426,7 @@
     .no-exams i {
         font-size: 4rem;
         margin-bottom: 1rem;
-        color: #9333ea;
+        color: #64748b;
         opacity: 0.6;
     }
 
