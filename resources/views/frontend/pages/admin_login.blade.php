@@ -294,12 +294,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Typewriter effect for subtitle
     const typewriterElement = document.getElementById('typewriter-subtitle');
-    const texts = [
-        'Secure Digital Repository',
-        'Academic Excellence',
-        'Knowledge Preservation',
-        'Innovation Hub'
-    ];
+    const text = 'Registry Communication System';
     let textIndex = 0;
     let charIndex = 0;
     let isDeleting = false;

@@ -490,7 +490,12 @@ function showLanguageChangeMessage(langName) {
 // Typewriter Effect for Subtitle
 function typewriterEffect() {
     const subtitle = document.getElementById('typewriter-subtitle');
-    const text = 'Registry Communication System';
+    const texts = [
+        'Secure Digital Repository',
+        'Academic Excellence',
+        'Knowledge Preservation',
+        'Innovation Hub'
+    ];
     let currentIndex = 0;
     let isTyping = true;
     
