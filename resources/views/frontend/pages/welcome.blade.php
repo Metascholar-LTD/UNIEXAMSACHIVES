@@ -398,26 +398,26 @@
             <div class="row">
                 <div class="col-lg-3 col-md-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="1000">0</span>
+                        <span class="stat-number" data-count="{{ $stats['total_exams'] ?? 0 }}">0</span>
                         <div class="stat-label">Exam Papers</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="50">0</span>
+                        <span class="stat-number" data-count="{{ $stats['total_departments'] ?? 0 }}">0</span>
                         <div class="stat-label">Departments</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="500">0</span>
+                        <span class="stat-number" data-count="{{ $stats['total_users'] ?? 0 }}">0</span>
                         <div class="stat-label">Active Users</div>
                     </div>
                 </div>
                 <div class="col-lg-3 col-md-6">
                     <div class="stat-item">
-                        <span class="stat-number" data-count="24">0</span>
-                        <div class="stat-label">Hours Available</div>
+                        <span class="stat-number" data-count="{{ $stats['total_visits'] ?? 0 }}">0</span>
+                        <div class="stat-label">Total Visits</div>
                     </div>
                 </div>
             </div>

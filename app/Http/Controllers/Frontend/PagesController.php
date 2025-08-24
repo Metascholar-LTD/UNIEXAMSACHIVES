@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Exam;
+use App\Models\File;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Visit;
@@ -26,7 +28,15 @@ class PagesController extends Controller
         $ipAddress = $request->ip();
         Visit::firstOrCreate(['visited_at' => $currentDate,  'ip_address' => $ipAddress]);
         
-        return view('frontend.pages.welcome');
+        // Gather real statistics from the system
+        $stats = [
+            'total_exams' => Exam::count(),
+            'total_departments' => Department::count(),
+            'total_users' => User::where('is_approve', true)->count(), // Only count approved users
+            'total_visits' => Visit::count(), // Total site visits
+        ];
+        
+        return view('frontend.pages.welcome', compact('stats'));
     }
 
     // Keep the old index method for backward compatibility (if needed)
