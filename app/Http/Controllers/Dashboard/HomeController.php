@@ -256,39 +256,88 @@ class HomeController extends Controller
 
     public function approve(User $user)
     {
-        // Generate a temporary password for the user
-        $temporaryPassword = Str::random(10);
-        
-        // Update user with temporary password and approval status
-        $user->update([
-            'is_approve' => true,
-            'password' => Hash::make($temporaryPassword),
-            'password_changed' => false
-        ]);
-        
-        // Send approval email with credentials
-        if (env('MAIL_MAILER') == 'resend') {
-            $resendService = new ResendMailService();
+        try {
+            // Generate a temporary password for the user
+            $temporaryPassword = Str::random(10);
             
-            $htmlContent = view('mails.approval', [
-                'firstname' => $user->first_name,
-                'email' => $user->email,
-                'temporaryPassword' => $temporaryPassword
-            ])->render();
+            \Log::info('Starting user approval process', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'temporary_password' => $temporaryPassword
+            ]);
             
-            $response = $resendService->sendEmail(
-                $user->email,
-                'Account Successfully Approved - Your Login Credentials',
-                $htmlContent,
-                'cug@academicdigital.space'
-            );
+            // Update user with temporary password and approval status
+            $user->update([
+                'is_approve' => true,
+                'password' => Hash::make($temporaryPassword),
+                'password_changed' => false
+            ]);
             
-            if (!$response['success']) {
-                \Log::error('Failed to send approval email', $response);
+            \Log::info('User database updated successfully', [
+                'user_id' => $user->id,
+                'is_approve' => $user->is_approve,
+                'password_changed' => $user->password_changed
+            ]);
+            
+            // Send approval email with credentials
+            $emailSent = false;
+            if (env('MAIL_MAILER') == 'resend') {
+                $resendService = new ResendMailService();
+                
+                $htmlContent = view('mails.approval', [
+                    'firstname' => $user->first_name,
+                    'email' => $user->email,
+                    'temporaryPassword' => $temporaryPassword
+                ])->render();
+                
+                \Log::info('Attempting to send approval email', [
+                    'user_email' => $user->email,
+                    'mail_service' => 'resend'
+                ]);
+                
+                $response = $resendService->sendEmail(
+                    $user->email,
+                    'Account Successfully Approved - Your Login Credentials',
+                    $htmlContent,
+                    'cug@academicdigital.space'
+                );
+                
+                if ($response['success']) {
+                    $emailSent = true;
+                    \Log::info('Approval email sent successfully', [
+                        'user_email' => $user->email,
+                        'message_id' => $response['message_id'] ?? 'N/A'
+                    ]);
+                } else {
+                    \Log::error('Failed to send approval email', [
+                        'user_email' => $user->email,
+                        'error' => $response['error'] ?? 'Unknown error',
+                        'response' => $response
+                    ]);
+                }
+            } else {
+                \Log::warning('Mail mailer is not set to resend', [
+                    'current_mailer' => env('MAIL_MAILER'),
+                    'user_email' => $user->email
+                ]);
             }
+            
+            $message = $emailSent 
+                ? 'User approved successfully and credentials sent via email'
+                : 'User approved successfully, but email failed to send. Please check logs and notify user manually.';
+                
+            return redirect()->route('dashboard.users')->with('success', $message);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error during user approval process', [
+                'user_id' => $user->id,
+                'user_email' => $user->email,
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            
+            return redirect()->route('dashboard.users')->with('error', 'Failed to approve user. Please try again or check the logs.');
         }
-        
-        return redirect()->route('dashboard.users')->with('success', 'User approved successfully and credentials sent via email');
     }
 
     public function disapprove(User $user)
