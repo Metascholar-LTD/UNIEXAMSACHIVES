@@ -54,6 +54,7 @@
     @include('components.modern-notifications')
 
     <main class="main_wrapper overflow-hidden">
+        @include('components.password-reminder')
         @yield('content')
 
         @include('components.footer')

@@ -92,16 +92,29 @@
             
             <div class="highlight">
                 <strong>Account Status: APPROVED</strong><br>
-                Email: {{ $email }}<br>
-                You can now access all features of the system.
+                <strong>Your Login Credentials:</strong><br>
+                Email: <strong>{{ $email }}</strong><br>
+                Temporary Password: <strong>{{ $temporaryPassword }}</strong><br>
+                <br>
+                <span style="color: #856404; background-color: #fff3cd; padding: 5px; border-radius: 3px; display: inline-block;">
+                    ⚠️ Please change your password after your first login for security.
+                </span>
             </div>
+            
+            <p><strong>Important Security Note:</strong></p>
+            <ul>
+                <li>This is a temporary password generated for your account</li>
+                <li>You must change your password immediately after your first login</li>
+                <li>Keep your credentials secure and don't share them with anyone</li>
+            </ul>
             
             <p>You can now:</p>
             <ul>
-                <li>Log in to your account</li>
+                <li>Log in to your account using the credentials above</li>
                 <li>Access the dashboard</li>
                 <li>Upload and manage exam materials</li>
                 <li>Use all system features</li>
+                <li>Change your password for security</li>
             </ul>
             
             <p>Welcome to the University Exams Archive System! We're excited to have you on board.</p>

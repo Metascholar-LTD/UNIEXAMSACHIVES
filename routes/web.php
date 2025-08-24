@@ -111,6 +111,7 @@ Route::middleware(['auth'])->group(function () {
     #settings
     Route::get('/dashboard/settings',[HomeController::class, 'settings'])->name('dashboard.settings');
     Route::post('/dashboard/update-user-info',[HomeController::class,'updateUserInfo'])->name('dashboard.user.info');
+    Route::post('/dashboard/update-password',[HomeController::class,'updatePassword'])->name('dashboard.password.update');
 
     #users
     Route::get('/dashboard/users',[HomeController::class, 'users'])->name('dashboard.users');

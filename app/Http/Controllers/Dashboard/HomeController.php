@@ -18,6 +18,8 @@ use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use App\Services\ResendMailService;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Hash;
 
 class HomeController extends Controller
 {
@@ -209,6 +211,39 @@ class HomeController extends Controller
             return redirect()->back()->withErrors(['error' => 'Failed to update profile. Please try again.'])->withInput();
         }
     }
+
+    public function updatePassword(Request $request)
+    {
+        $request->validate([
+            'current_password' => 'required|string',
+            'new_password' => 'required|string|min:8|confirmed',
+        ], [
+            'new_password.confirmed' => 'The new password confirmation does not match.',
+            'new_password.min' => 'The new password must be at least 8 characters.',
+        ]);
+
+        try {
+            $user = Auth::user();
+            
+            // Verify current password
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return redirect()->back()->withErrors(['current_password' => 'The current password is incorrect.'])->withInput();
+            }
+            
+            // Update password and mark as changed
+            $user->update([
+                'password' => Hash::make($request->input('new_password')),
+                'password_changed' => true
+            ]);
+            
+            return redirect()->back()->with('success', 'Password updated successfully! Your account is now more secure.');
+            
+        } catch (\Exception $e) {
+            \Log::error('Password update failed: ' . $e->getMessage());
+            return redirect()->back()->withErrors(['error' => 'Failed to update password. Please try again.'])->withInput();
+        }
+    }
+
     public function createMessage(){
         return view('admin.create_message');
     }
@@ -221,19 +256,29 @@ class HomeController extends Controller
 
     public function approve(User $user)
     {
-        $user->update(['is_approve' => true]);
-        // Mail::to($user->email)->send(new Approval());
+        // Generate a temporary password for the user
+        $temporaryPassword = Str::random(10);
+        
+        // Update user with temporary password and approval status
+        $user->update([
+            'is_approve' => true,
+            'password' => Hash::make($temporaryPassword),
+            'password_changed' => false
+        ]);
+        
+        // Send approval email with credentials
         if (env('MAIL_MAILER') == 'resend') {
             $resendService = new ResendMailService();
             
             $htmlContent = view('mails.approval', [
                 'firstname' => $user->first_name,
-                'email' => $user->email
+                'email' => $user->email,
+                'temporaryPassword' => $temporaryPassword
             ])->render();
             
             $response = $resendService->sendEmail(
                 $user->email,
-                'Account Successfully Approved',
+                'Account Successfully Approved - Your Login Credentials',
                 $htmlContent,
                 'cug@academicdigital.space'
             );
@@ -242,7 +287,8 @@ class HomeController extends Controller
                 \Log::error('Failed to send approval email', $response);
             }
         }
-        return redirect()->route('dashboard.users')->with('success', 'User approved successfully');
+        
+        return redirect()->route('dashboard.users')->with('success', 'User approved successfully and credentials sent via email');
     }
 
     public function disapprove(User $user)

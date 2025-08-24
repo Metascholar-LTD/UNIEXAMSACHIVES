@@ -20,6 +20,43 @@
                         <div class="dashboard__section__title">
                             <h4>My Profile</h4>
                         </div>
+                        
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert" style="
+                                background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+                                border: 1px solid #28a745;
+                                border-radius: 8px;
+                                padding: 15px 20px;
+                                margin-bottom: 20px;
+                                color: #155724;
+                                font-weight: 500;
+                            ">
+                                <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        
+                        @if($errors->any())
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="
+                                background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+                                border: 1px solid #dc3545;
+                                border-radius: 8px;
+                                padding: 15px 20px;
+                                margin-bottom: 20px;
+                                color: #721c24;
+                                font-weight: 500;
+                            ">
+                                <i class="fas fa-exclamation-triangle" style="margin-right: 8px;"></i>
+                                <ul style="margin: 0; padding-left: 20px;">
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+
                         <div class="row">
                             <div class="col-xl-12 aos-init aos-animate" data-aos="fade-up">
                                 <ul class="nav  about__button__wrap dashboard__button__wrap" id="myTab"
@@ -29,19 +66,13 @@
                                             data-bs-target="#projects__one" type="button" aria-selected="true"
                                             role="tab">Profile</button>
                                     </li>
-                                    {{-- <li class="nav-item" role="presentation">
+                                    <li class="nav-item" role="presentation">
                                         <button class="single__tab__link" data-bs-toggle="tab"
                                             data-bs-target="#projects__two" type="button" aria-selected="false"
                                             role="tab" tabindex="-1">Password</button>
-                                    </li> --}}
-
-
+                                    </li>
                                 </ul>
                             </div>
-
-
-                            <div class="tab-content tab__content__wrapper aos-init aos-animate"
-                                id="myTabContent" data-aos="fade-up">
 
                                 <div class="tab-pane fade active show" id="projects__one" role="tabpanel"
                                     aria-labelledby="projects__one">
@@ -124,45 +155,53 @@
 
                                 </div>
 
-                                {{-- <div class="tab-pane fade" id="projects__two" role="tabpanel"
+                                <div class="tab-pane fade" id="projects__two" role="tabpanel"
                                     aria-labelledby="projects__two">
 
-                                    <div class="row">
-                                        <div class="col-xl-12">
-                                            <div class="dashboard__form__wraper">
-                                                <div class="dashboard__form__input">
-                                                    <label >Current Password</label>
-                                                    <input type="text" placeholder="Current password">
+                                    <form action="{{ route('dashboard.password.update') }}" method="POST">
+                                        @csrf
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <div class="dashboard__form__wraper">
+                                                    <div class="dashboard__form__input">
+                                                        <label>Current Password</label>
+                                                        <input type="password" name="current_password" placeholder="Enter your current password" required>
+                                                        @error('current_password')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="dashboard__form__wraper">
+                                                    <div class="dashboard__form__input">
+                                                        <label>New Password</label>
+                                                        <input type="password" name="new_password" placeholder="Enter new password (min 8 characters)" required>
+                                                        @error('new_password')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-xl-12">
+                                                <div class="dashboard__form__wraper">
+                                                    <div class="dashboard__form__input">
+                                                        <label>Confirm New Password</label>
+                                                        <input type="password" name="new_password_confirmation" placeholder="Confirm your new password" required>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-xl-12">
+                                                <div class="dashboard__form__button">
+                                                    <button type="submit" class="default__button">Update Password</button>
                                                 </div>
                                             </div>
                                         </div>
+                                    </form>
 
-                                        <div class="col-xl-12">
-                                            <div class="dashboard__form__wraper">
-                                                <div class="dashboard__form__input">
-                                                    <label >New Password</label>
-                                                    <input type="text" placeholder="New Password">
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-xl-12">
-                                            <div class="dashboard__form__wraper">
-                                                <div class="dashboard__form__input">
-                                                    <label >Re-Type New Password</label>
-                                                    <input type="text" placeholder="Re-Type New Password">
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-12">
-                                            <div class="dashboard__form__button">
-                                                <a class="default__button" href="#">Update Password</a>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div> --}}
+                                </div>
 
                                 {{-- <div class="tab-pane fade" id="projects__three" role="tabpanel"
                                     aria-labelledby="projects__three">

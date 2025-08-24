@@ -47,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
                         'approvedFilesCount' => $files->where('is_approve', 1)->count(),
                         'pendingFilesCount' => $files->where('is_approve', 0)->count(),
                         'systemDetail' => Detail::all(),
+                        'showPasswordReminder' => !Auth::user()->password_changed,
                     ]);
                 }else{
                     $exams = Exam::all();
@@ -59,7 +60,7 @@ class AppServiceProvider extends ServiceProvider
                         'approvedFilesCount' => $files->where('is_approve', 1)->count(),
                         'pendingFilesCount' => $files->where('is_approve', 0)->count(),
                         'systemDetail' => Detail::all(),
-
+                        'showPasswordReminder' => !Auth::user()->password_changed,
                     ]);
                 }
             }else{

@@ -86,7 +86,14 @@
                 Status: Pending Approval
             </div>
             
-            <p>Your account is currently pending approval by our administrators. You will receive another email once your account has been approved and you can access the system.</p>
+            <p>Your account is currently pending approval by our administrators. You will receive another email once your account has been approved containing your login credentials.</p>
+            
+            <p><strong>What happens next?</strong></p>
+            <ul>
+                <li>Our administrators will review your registration</li>
+                <li>Once approved, you'll receive an email with your login credentials</li>
+                <li>You can then log in and start using the system</li>
+            </ul>
             
             <p>If you have any questions or need assistance, please don't hesitate to contact our support team.</p>
             

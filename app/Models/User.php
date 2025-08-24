@@ -26,6 +26,7 @@ class User extends Authenticatable
         'is_approve',
         'profile_picture',
         'department_id',
+        'password_changed',
     ];
 
     /**
@@ -75,5 +76,21 @@ class User extends Authenticatable
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    /**
+     * Check if user needs to change their temporary password
+     */
+    public function needsPasswordChange()
+    {
+        return !$this->password_changed;
+    }
+
+    /**
+     * Check if user is using a temporary password
+     */
+    public function isUsingTemporaryPassword()
+    {
+        return $this->is_approve && !$this->password_changed;
     }
 }
