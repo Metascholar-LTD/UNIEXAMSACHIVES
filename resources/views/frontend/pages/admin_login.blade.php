@@ -207,67 +207,6 @@
                     </form>
                 </div>
             </div>
-
-            <!-- Request Administrative Access Form -->
-            <div class="auth-form-panel" id="request-panel">
-                <div class="form-container">
-                    <div class="form-header">
-                        <h2 class="form-title">Request Administrative Access</h2>
-                        <p class="form-subtitle">Request access to the advance communication system</p>
-                        <div class="admin-portal-notice">
-                            <p><strong>Requirements:</strong> You must have an existing regular user account to request administrative access.</p>
-                        </div>
-                    </div>
-
-                    <form method="POST" action="{{ route('admin.access.request') }}" class="animated-form">
-                        @csrf
-                        <div class="form-group">
-                            <div class="input-container">
-                                <input type="email" name="email" id="request-email" class="animated-input" placeholder="Enter your existing user email" value="{{ old('email') }}" required autocomplete="email">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-container">
-                                <input type="password" name="password" id="request-password" class="animated-input" placeholder="Enter your existing password" required autocomplete="current-password">
-                                <button type="button" class="password-toggle" onclick="togglePassword('request-password')">
-                                    <i class="icofont-eye"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-container">
-                                <textarea name="reason" id="request-reason" class="animated-input" placeholder="Explain why you need administrative access (e.g., department communication needs, role requirements)" rows="4" required style="resize: vertical; min-height: 100px;"></textarea>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-container">
-                                <input type="text" name="supervisor" id="request-supervisor" class="animated-input" placeholder="Your supervisor's name (optional)" value="{{ old('supervisor') }}">
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <div class="input-container">
-                                <input type="email" name="supervisor_email" id="request-supervisor-email" class="animated-input" placeholder="Supervisor's email (optional)" value="{{ old('supervisor_email') }}">
-                            </div>
-                        </div>
-
-                        <button type="submit" class="submit-btn">
-                            <span>Submit Request</span>
-                            <div class="btn-ripple"></div>
-                        </button>
-                    </form>
-
-                    <div class="form-footer">
-                        <p class="terms-text">Your request will be reviewed by administrators. You'll be notified via email once a decision is made.</p>
-                        <div class="request-info">
-                            <p><strong>Don't have an account?</strong> <a href="{{ route('frontend.login') }}" class="admin-portal-link">Create a regular account first</a></p>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
