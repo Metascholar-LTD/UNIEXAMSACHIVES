@@ -56,6 +56,16 @@ class PagesController extends Controller
         return view('frontend.pages.login', compact('departments'));
     }
 
+    public function adminLogin(){
+        // Redirect authenticated users to dashboard
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+        
+        $departments = Department::orderBy('name')->get();
+        return view('frontend.pages.admin_login', compact('departments'));
+    }
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([
