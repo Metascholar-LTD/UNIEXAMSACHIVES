@@ -395,6 +395,17 @@
         color: white;
     }
 
+    .action-btn.approve {
+        border-color: #10b981;
+        color: #10b981;
+        background: rgba(16, 185, 129, 0.1);
+    }
+
+    .action-btn.approve:hover {
+        background: #10b981;
+        color: white;
+    }
+
     .action-btn.delete {
         border-color: #ef4444;
         color: #ef4444;
@@ -423,9 +434,9 @@
     }
 
     .status-badge.pending {
-        background: rgba(245, 158, 11, 0.1);
-        color: #f59e0b;
-        border: 1px solid rgba(245, 158, 11, 0.2);
+        background: rgba(254, 243, 199, 0.8);
+        color: #d97706;
+        border: 1px solid rgba(245, 158, 11, 0.3);
     }
 
     .no-exams {

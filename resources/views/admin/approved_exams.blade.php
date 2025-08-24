@@ -403,9 +403,9 @@
     }
 
     .status-badge.approved {
-        background: rgba(100, 116, 139, 0.1);
-        color: #64748b;
-        border: 1px solid rgba(100, 116, 139, 0.2);
+        background: rgba(220, 252, 231, 0.8);
+        color: #059669;
+        border: 1px solid rgba(16, 185, 129, 0.3);
     }
 
     .exam-date {
