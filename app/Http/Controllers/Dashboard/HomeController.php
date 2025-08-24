@@ -321,7 +321,8 @@ class HomeController extends Controller
     {
         $user->update([
             'admin_access_approved_at' => now(),
-            'admin_access_approved_by' => Auth::id()
+            'admin_access_approved_by' => Auth::id(),
+            'is_admin' => false  // Change from admin to regular user
         ]);
 
         // Send approval email
@@ -345,7 +346,7 @@ class HomeController extends Controller
             }
         }
 
-        return redirect()->route('dashboard.requests')->with('success', 'Access request approved successfully. User has been notified via email.');
+        return redirect()->route('dashboard.requests')->with('success', 'Access request approved successfully. User has been changed from admin to regular user and now has access to the advance communication system. They have been notified via email.');
     }
 
     public function rejectAccess(User $user)

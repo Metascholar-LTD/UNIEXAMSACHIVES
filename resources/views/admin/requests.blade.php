@@ -641,13 +641,13 @@
                                                     View Details
                                                 </button>
                                                 
-                                                <form action="{{ route('requests.approve', $request->id) }}" method="post" style="display: inline;">
-                                                    @csrf
-                                                    <button type="submit" class="action-btn approve" onclick="return confirm('Are you sure you want to approve this access request?')">
-                                                        <i class="fas fa-check"></i>
-                                                        Approve
-                                                    </button>
-                                                </form>
+                                                                                                 <form action="{{ route('requests.approve', $request->id) }}" method="post" style="display: inline;">
+                                                     @csrf
+                                                     <button type="submit" class="action-btn approve" onclick="return confirm('Are you sure you want to approve this access request? This will change the user from admin to regular user, giving them access to the advance communication system.')">
+                                                         <i class="fas fa-check"></i>
+                                                         Approve
+                                                     </button>
+                                                 </form>
                                                 
                                                 <button class="action-btn reject" onclick="showRejectModal({{ $request->id }})">
                                                     <i class="fas fa-times"></i>

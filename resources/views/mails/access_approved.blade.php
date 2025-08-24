@@ -156,12 +156,12 @@
             </div>
 
             <div class="next-steps">
-                <h3>Next Steps:</h3>
+                <h3>What This Means:</h3>
                 <ul>
-                    <li>Visit the admin portal at: <strong>/admin</strong></li>
-                    <li>Log in with your existing email and password</li>
-                    <li>You'll now have access to the advance communication features</li>
-                    <li>Explore the new capabilities available to you</li>
+                    <li>✅ Your account is now a <strong>Administrative User</strong> account</li>
+                    <li>✅ You have access to the <strong>Advance Communication System</strong></li>
+                    <li>✅ You can use the <strong>/admin</strong> portal for communication features</li>
+                    <li>✅ You retain all your existing data and login credentials</li>
                 </ul>
             </div>
 
