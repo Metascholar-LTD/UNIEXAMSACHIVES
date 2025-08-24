@@ -78,7 +78,7 @@
                                         <img src="https://i.ibb.co/1GtfNBwH/IJMSIR.jpg" alt="IJMSIR Logo" class="partner-logo">
                     </div>
                                     <div class="partner-info">
-                                        <span class="partner-name">IJMSIR Journal</span>
+                                        <span class="partner-name">CUG International Journal (IJMSIR)</span>
                                         <span class="partner-desc">Research Publication</span>
                 </div>
                                     <i class="icofont-external-link external-icon"></i>

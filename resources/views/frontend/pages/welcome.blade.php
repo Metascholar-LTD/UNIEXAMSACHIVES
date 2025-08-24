@@ -297,7 +297,7 @@
                             <i class="icofont-login me-2"></i>
                             Access System
                         </a>
-                        <a href="{{ route('frontend.about') }}" class="btn-secondary-modern">
+                        <a href="https://www.cug.edu.gh/" target="_blank" class="btn-secondary-modern">
                             <i class="icofont-info-circle me-2"></i>
                             Learn More
                         </a>
