@@ -2589,43 +2589,40 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Form submission with AJAX for memo delivery notification
     document.getElementById('emailForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-        
         // Ensure the textarea has the latest content
         updateTextareaContent();
         
-        const action = e.submitter.value;
-        const submitButton = e.submitter;
+        const action = e.submitter ? e.submitter.value : 'send';
+        const submitButton = e.submitter || document.querySelector('button[type="submit"]');
         
-        // Set the hidden input for send_immediately
-        const sendImmediatelyInput = document.createElement('input');
-        sendImmediatelyInput.type = 'hidden';
-        sendImmediatelyInput.name = 'send_immediately';
-        sendImmediatelyInput.value = action === 'send' && document.getElementById('send_now').checked ? '1' : '0';
-        this.appendChild(sendImmediatelyInput);
-        
-        // Show loading state
-        submitButton.disabled = true;
-        const originalText = submitButton.innerHTML;
-        submitButton.innerHTML = '<i class="icofont-spinner icofont-spin"></i> Sending Memo...';
-        
-        // Prepare form data
-        const formData = new FormData(this);
-        
-        // Send AJAX request only for "Send Memo" action
+        // Only prevent default for Send Memo action, let Draft submit normally
         if (action === 'send') {
-            fetch(this.action, {
+            e.preventDefault();
+            
+            // Show loading state
+            submitButton.disabled = true;
+            const originalText = submitButton.innerHTML;
+            submitButton.innerHTML = '<i class="icofont-spinner icofont-spin"></i> Sending Memo...';
+            
+            // Create FormData from the actual form
+            const formData = new FormData(this);
+            
+            // Ensure action is set correctly
+            formData.set('action', 'send');
+            
+            // Make AJAX request
+            fetch('{{ route("admin.communication.store") }}', {
                 method: 'POST',
                 body: formData,
                 headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || 
-                                    document.querySelector('input[name="_token"]').value
+                    'X-Requested-With': 'XMLHttpRequest'
                 }
             })
             .then(response => {
                 if (!response.ok) {
-                    throw new Error('Network response was not ok');
+                    return response.text().then(text => {
+                        throw new Error(`HTTP ${response.status}: ${text}`);
+                    });
                 }
                 return response.json();
             })
@@ -2637,19 +2634,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
+                console.error('Ajax Error:', error);
                 // Restore button state
                 submitButton.disabled = false;
                 submitButton.innerHTML = originalText;
                 
-                // Show error notification
+                // Show error
                 alert('Error sending memo: ' + error.message);
             });
-        } else {
-            // For draft action, submit normally
-            this.removeEventListener('submit', arguments.callee);
-            this.submit();
         }
+        // If it's draft action, let the form submit normally (don't prevent default)
     });
     
     // Function to show the impressive memo delivery notification
