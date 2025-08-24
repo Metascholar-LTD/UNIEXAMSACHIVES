@@ -100,8 +100,20 @@
   {{-- Datatables --}}
   <script>
     $(document).ready(function() {
-        $('.example').DataTable({
-            "searching": true,
+        // Only initialize DataTables if there are tables with the 'example' class
+        // and ensure they have proper structure
+        $('.example').each(function() {
+            if ($(this).find('thead th').length > 0 && $(this).find('tbody tr').length > 0) {
+                try {
+                    $(this).DataTable({
+                        "searching": true,
+                        "responsive": true,
+                        "autoWidth": false
+                    });
+                } catch (error) {
+                    console.log('DataTables initialization skipped for table:', this);
+                }
+            }
         });
     });
     </script>
