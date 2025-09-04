@@ -1809,40 +1809,29 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileList = document.getElementById('file-list');
     const fileUploadArea = document.querySelector('.file-upload-area');
     
+    // Store accumulated files globally
+    window.accumulatedFiles = [];
+    
     fileInput.addEventListener('change', function(e) {
-        // Get existing files and new files
-        const existingFiles = Array.from(fileInput.files);
         const newFiles = Array.from(e.target.files);
         
-        // Combine existing and new files
-        const dt = new DataTransfer();
-        
-        // Add existing files first
-        const currentFileList = document.getElementById('file-list');
-        const existingFileItems = currentFileList.querySelectorAll('.file-item');
-        
-        // If we have existing files displayed, we need to preserve them
-        if (existingFileItems.length > 0) {
-            // Get the actual files from the input (these are the existing ones)
-            existingFiles.forEach(file => dt.items.add(file));
-        }
-        
-        // Add new files
+        // Add new files to accumulated files
         newFiles.forEach(file => {
-            if (dt.files.length < 3) {
-                dt.items.add(file);
+            if (window.accumulatedFiles.length < 3) {
+                window.accumulatedFiles.push(file);
             }
         });
         
         // Check limit
-        if (dt.files.length > 3) {
+        if (window.accumulatedFiles.length > 3) {
             alert('Maximum 3 files allowed. Only the first 3 files will be kept.');
-            const limitedDt = new DataTransfer();
-            Array.from(dt.files).slice(0, 3).forEach(file => limitedDt.items.add(file));
-            fileInput.files = limitedDt.files;
-        } else {
-            fileInput.files = dt.files;
+            window.accumulatedFiles = window.accumulatedFiles.slice(0, 3);
         }
+        
+        // Update the file input with accumulated files
+        const dt = new DataTransfer();
+        window.accumulatedFiles.forEach(file => dt.items.add(file));
+        fileInput.files = dt.files;
         
         handleFileSelect();
     });
@@ -2112,15 +2101,19 @@ document.addEventListener('DOMContentLoaded', function() {
 // Make functions globally accessible
 window.removeFile = function(index) {
     const fileInput = document.getElementById('attachments');
+    
+    // Remove from accumulated files array
+    if (window.accumulatedFiles) {
+        window.accumulatedFiles.splice(index, 1);
+    } else {
+        // Fallback if accumulatedFiles not available
+        window.accumulatedFiles = Array.from(fileInput.files);
+        window.accumulatedFiles.splice(index, 1);
+    }
+    
+    // Update the file input
     const dt = new DataTransfer();
-    const files = Array.from(fileInput.files);
-    
-    files.forEach((file, i) => {
-        if (i !== index) {
-            dt.items.add(file);
-        }
-    });
-    
+    window.accumulatedFiles.forEach(file => dt.items.add(file));
     fileInput.files = dt.files;
     
     // Re-render file list with updated indices
