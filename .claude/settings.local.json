@@ -48,7 +48,8 @@
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)",
-      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)"
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)"
     ],
     "deny": []
   }

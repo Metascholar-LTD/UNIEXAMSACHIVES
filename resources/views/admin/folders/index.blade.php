@@ -325,10 +325,6 @@
                                     <i class="fas fa-folder-open"></i>
                                     <h4>No Folders Created Yet</h4>
                                     <p>Start organizing your files by creating your first folder.</p>
-                                    <a href="{{ route('dashboard.folders.create') }}" class="create-folder-btn mt-3">
-                                        <i class="fas fa-plus"></i>
-                                        Create Your First Folder
-                                    </a>
                                 </div>
                             @endif
                         </div>
