@@ -58,6 +58,8 @@
                                             <i class="icofont-ui-check"></i>
                                             <span>{{ session('success') }}</span>
                                         </div>
+                                    </div>
+                                    <div class="security-details">
                                         <div class="detail-item security-message">
                                             <i class="icofont-shield"></i>
                                             <span>🔒 Security Verified: Steganography and crypto features are active. All activities are safely guided by the Meta IronDom Security System</span>
