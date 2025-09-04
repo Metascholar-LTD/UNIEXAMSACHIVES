@@ -87,14 +87,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">University Exams Archive System</div>
+            <div class="logo">University Advanced Communication System</div>
             <div class="subject">{{ $subject }}</div>
         </div>
         
         <div class="content">
             <p>Dear <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>,</p>
             
-            <p>You have received an important message from the University Exams Archive System.</p>
+            <p>You have received an important message from the University Advanced Communication System.</p>
             
             <div class="message">
                 {!! $message !!}
@@ -129,9 +129,9 @@
         </div>
         
         <div class="footer">
-            <p>This is an automated message from the University Exams Archive System.</p>
+            <p>This is an automated message from the University Advanced Communication System.</p>
                                         <p>Please do not reply to this memo.</p>
-            <p>&copy; {{ date('Y') }} University Exams Archive System. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} University Advanced Communication System. All rights reserved.</p>
         </div>
     </div>
 </body>

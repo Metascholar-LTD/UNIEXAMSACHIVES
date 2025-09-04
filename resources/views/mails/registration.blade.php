@@ -71,14 +71,14 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">University Exams Archive System</div>
+            <div class="logo">University Digital Archival System</div>
             <div class="title">Registration Successful!</div>
         </div>
         
         <div class="content">
             <p>Dear <strong>{{ $firstname }}</strong>,</p>
             
-            <p>Welcome to the University Exams Archive System! Your registration has been completed successfully.</p>
+            <p>Welcome to the University Digital Archival System! Your registration has been completed successfully.</p>
             
             <div class="highlight">
                 <strong>Account Details:</strong><br>
@@ -103,9 +103,9 @@
         </div>
         
         <div class="footer">
-            <p>This is an automated message from the University Exams Archive System.</p>
+            <p>This is an automated message from the University Digital Archival System.</p>
             <p>Please do not reply to this email.</p>
-            <p>&copy; {{ date('Y') }} University Exams Archive System. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} University Digital Archival System. All rights reserved.</p>
         </div>
     </div>
 </body>

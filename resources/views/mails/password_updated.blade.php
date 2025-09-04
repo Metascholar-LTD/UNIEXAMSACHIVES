@@ -85,7 +85,7 @@
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo">University Exams Archive System</div>
+            <div class="logo">University Digital Archival System</div>
             <div class="title">Password Updated Successfully!</div>
         </div>
         
@@ -129,7 +129,7 @@
                 <li>Use the advance communication system (if applicable)</li>
             </ul>
             
-            <p>Welcome to the University Exams Archive System! We're excited to have you fully onboard.</p>
+            <p>Welcome to the University Digital Archival System! We're excited to have you fully onboard.</p>
             
             <div style="text-align: center;">
                 <a href="{{ url('/login') }}" class="button">Login to Your Account</a>
@@ -137,9 +137,9 @@
         </div>
         
         <div class="footer">
-            <p>This is an automated message from the University Exams Archive System.</p>
+            <p>This is an automated message from the University Digital Archival System.</p>
             <p>Please do not reply to this email.</p>
-            <p>&copy; {{ date('Y') }} University Exams Archive System. All rights reserved.</p>
+            <p>&copy; {{ date('Y') }} University Digital Archival System. All rights reserved.</p>
         </div>
     </div>
 </body>
