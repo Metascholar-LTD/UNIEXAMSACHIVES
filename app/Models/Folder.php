@@ -5,9 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class File extends Model
+class Folder extends Model
 {
     use HasFactory;
+    
     protected $guarded = [];
 
     public function user()
@@ -15,8 +16,13 @@ class File extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function folders()
+    public function files()
     {
-        return $this->belongsToMany(Folder::class, 'file_folder');
+        return $this->belongsToMany(File::class, 'file_folder');
+    }
+
+    public function approvedFiles()
+    {
+        return $this->belongsToMany(File::class, 'file_folder')->where('is_approve', 1);
     }
 }
