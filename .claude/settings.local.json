@@ -50,6 +50,11 @@
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\routes/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\components/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)"
     ],
     "deny": []
