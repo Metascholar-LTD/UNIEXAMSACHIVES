@@ -4,7 +4,12 @@
       "Bash(php artisan make:migration:*)",
       "Bash(del:*)",
       "Bash(rm:*)",
-      "Bash(php artisan:*)"
+      "Bash(php artisan:*)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\app\\Http\\Controllers\\Dashboard/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\communication/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\communication/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\communication/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\communication/**)"
     ],
     "deny": []
   }
