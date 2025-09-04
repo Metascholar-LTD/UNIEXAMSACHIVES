@@ -317,7 +317,7 @@
                             </svg>
                         </div>
                         <div class="section-text">
-                            <h6 class="section-title">REGISTRY ADVANCED COMMUNICATION SYSTEM</h6>
+                            <h6 class="section-title">ADVANCED COMMUNICATION SYSTEM</h6>
                             <span class="section-subtitle">3 features</span>
                         </div>
                         <div class="section-arrow">
