@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Registry Advanced Communication System</h4>
+                            <h4>Advanced Communication System</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication.create')}}" class="responsive-btn compose-btn">
                                     <div class="svgWrapper">
