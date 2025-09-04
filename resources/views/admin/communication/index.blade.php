@@ -824,6 +824,22 @@
   margin-bottom: 24px;
 }
 
+.security-details {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 32px;
+}
+
+.security-details .detail-item {
+  color: #dc2626;
+}
+
+.security-details .detail-item i {
+  color: #ef4444;
+}
+
 .detail-item {
   display: flex;
   align-items: center;
