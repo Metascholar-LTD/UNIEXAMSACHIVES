@@ -1809,7 +1809,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const fileList = document.getElementById('file-list');
     const fileUploadArea = document.querySelector('.file-upload-area');
     
-    fileInput.addEventListener('change', handleFileSelect);
+    fileInput.addEventListener('change', function(e) {
+        // Get existing files and new files
+        const existingFiles = Array.from(fileInput.files);
+        const newFiles = Array.from(e.target.files);
+        
+        // Combine existing and new files
+        const dt = new DataTransfer();
+        
+        // Add existing files first
+        const currentFileList = document.getElementById('file-list');
+        const existingFileItems = currentFileList.querySelectorAll('.file-item');
+        
+        // If we have existing files displayed, we need to preserve them
+        if (existingFileItems.length > 0) {
+            // Get the actual files from the input (these are the existing ones)
+            existingFiles.forEach(file => dt.items.add(file));
+        }
+        
+        // Add new files
+        newFiles.forEach(file => {
+            if (dt.files.length < 3) {
+                dt.items.add(file);
+            }
+        });
+        
+        // Check limit
+        if (dt.files.length > 3) {
+            alert('Maximum 3 files allowed. Only the first 3 files will be kept.');
+            const limitedDt = new DataTransfer();
+            Array.from(dt.files).slice(0, 3).forEach(file => limitedDt.items.add(file));
+            fileInput.files = limitedDt.files;
+        } else {
+            fileInput.files = dt.files;
+        }
+        
+        handleFileSelect();
+    });
     
     // Drag and drop functionality
     fileUploadArea.addEventListener('dragover', function(e) {
