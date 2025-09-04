@@ -218,7 +218,7 @@
         <!-- Footer -->
         <div class="email-footer">
             <p><strong>University Digital Archive</strong></p>
-            <p>Registry Communication System</p>
+            <p>Advanced Communication System</p>
             
             <div class="contact-info">
                 <p>This is an automated message. Please do not reply to this email.</p>
