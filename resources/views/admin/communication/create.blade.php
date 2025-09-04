@@ -196,7 +196,7 @@
                                                         </div>
                                                         <div class="file-upload-text">
                                                             <strong>Click to upload files</strong> or drag and drop here
-                                                            <br><small>Supported: PDF, DOC, DOCX, TXT, JPG, PNG, GIF, ZIP (Max: 10MB each)</small>
+                                                            <br><small>Supported: PDF, DOC, DOCX, TXT, JPG, PNG, GIF, ZIP (Max: 3 files, 10MB each)</small>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -1831,6 +1831,16 @@ document.addEventListener('DOMContentLoaded', function() {
     
     function handleFileSelect() {
         fileList.innerHTML = '';
+        const files = Array.from(fileInput.files);
+        
+        // Limit to maximum 3 files
+        if (files.length > 3) {
+            alert('Maximum 3 files allowed. Only the first 3 files will be kept.');
+            const dt = new DataTransfer();
+            files.slice(0, 3).forEach(file => dt.items.add(file));
+            fileInput.files = dt.files;
+        }
+        
         Array.from(fileInput.files).forEach((file, index) => {
             const fileItem = document.createElement('div');
             fileItem.className = 'file-item';
@@ -2063,7 +2073,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-function removeFile(index) {
+// Make functions globally accessible
+window.removeFile = function(index) {
     const fileInput = document.getElementById('attachments');
     const dt = new DataTransfer();
     const files = Array.from(fileInput.files);
@@ -2075,7 +2086,33 @@ function removeFile(index) {
     });
     
     fileInput.files = dt.files;
-    handleFileSelect();
+    
+    // Re-render file list with updated indices
+    const fileList = document.getElementById('file-list');
+    fileList.innerHTML = '';
+    Array.from(fileInput.files).forEach((file, newIndex) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        fileItem.innerHTML = `
+            <div class="file-info">
+                <i class="icofont-file-alt"></i>
+                <span>${file.name}</span>
+                <span class="file-size">(${formatFileSize(file.size)})</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-danger" onclick="removeFile(${newIndex})">
+                <i class="icofont-close"></i>
+            </button>
+        `;
+        fileList.appendChild(fileItem);
+    });
+}
+
+window.formatFileSize = function(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
 }
 </script>
 @endsection
