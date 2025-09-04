@@ -517,12 +517,6 @@
                                     <i class="fas fa-folder-open"></i>
                                     <h4>No Files in Folder</h4>
                                     <p>This folder is empty. Add some approved files to organize them here.</p>
-                                    @if($availableFiles->count() > 0)
-                                        <button class="add-files-btn mt-3" data-bs-toggle="modal" data-bs-target="#addFilesModal">
-                                            <i class="fas fa-plus"></i>
-                                            Add Your First File
-                                        </button>
-                                    @endif
                                 </div>
                             @endif
                         </div>
