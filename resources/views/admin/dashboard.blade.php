@@ -328,12 +328,342 @@
             max-width: 150px;
         }
     }
+
+    /* Welcome Popup Styles - Reuse memo popup styles */
+    .memo-success-popup {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+        opacity: 0;
+        animation: popupFadeIn 0.8s ease-out forwards;
+    }
+
+    .popup-container {
+        position: relative;
+        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+        border-radius: 24px;
+        padding: 40px;
+        box-shadow: 
+            0 25px 50px rgba(0, 0, 0, 0.25),
+            0 0 0 1px rgba(255, 255, 255, 0.05),
+            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        max-width: 450px;
+        width: 90%;
+        text-align: center;
+        transform: scale(0.5) translateY(100px);
+        animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        border: 3px solid #10b981;
+        overflow: hidden;
+    }
+
+    .popup-content {
+        position: relative;
+        z-index: 2;
+    }
+
+    .popup-icon {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 24px;
+        animation: popupIconBlink 2s infinite;
+    }
+
+    .success-icon {
+        font-size: 64px;
+        color: #10b981;
+        position: relative;
+        z-index: 3;
+        display: block;
+        filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6));
+    }
+
+    .pulse-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 3px solid #10b981;
+        border-radius: 50%;
+        width: 80px;
+        height: 80px;
+        opacity: 0;
+        animation: pulseRing 2s infinite ease-out;
+    }
+
+    .pulse-ring-delay-1 {
+        animation-delay: 0.33s;
+    }
+
+    .pulse-ring-delay-2 {
+        animation-delay: 0.66s;
+    }
+
+    .popup-title {
+        font-size: 28px;
+        font-weight: 800;
+        color: #1e293b;
+        margin: 0 0 16px 0;
+        letter-spacing: -0.02em;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        animation: titleBlink 3s infinite;
+    }
+
+    .popup-message {
+        font-size: 16px;
+        color: #64748b;
+        margin: 0 0 24px 0;
+        font-weight: 500;
+        line-height: 1.5;
+    }
+
+    .popup-details {
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.2);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 24px;
+    }
+
+    .security-details {
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        border-radius: 12px;
+        padding: 16px;
+        margin-bottom: 32px;
+    }
+
+    .security-details .detail-item {
+        color: #dc2626;
+    }
+
+    .security-details .detail-item i {
+        color: #ef4444;
+    }
+
+    .detail-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        font-size: 14px;
+        color: #059669;
+        font-weight: 600;
+    }
+
+    .detail-item i {
+        font-size: 16px;
+        color: #10b981;
+    }
+
+    .popup-close-btn {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 12px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    .popup-close-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+    }
+
+    .popup-confetti {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        overflow: hidden;
+        border-radius: 24px;
+    }
+
+    .popup-confetti::before,
+    .popup-confetti::after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        background: #10b981;
+        animation: confettiFall 3s infinite ease-in;
+    }
+
+    .popup-confetti::before {
+        left: 20%;
+        animation-delay: 0s;
+        background: #3b82f6;
+    }
+
+    .popup-confetti::after {
+        left: 80%;
+        animation-delay: 1s;
+        background: #f59e0b;
+    }
+
+    /* Keyframe Animations */
+    @keyframes popupFadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes popupBounceIn {
+        0% {
+            transform: scale(0.5) translateY(100px);
+            opacity: 0;
+        }
+        50% {
+            transform: scale(1.1) translateY(-20px);
+        }
+        100% {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+    }
+
+    @keyframes popupIconBlink {
+        0%, 100% {
+            transform: scale(1);
+            filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6));
+        }
+        25% {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.8));
+        }
+        50% {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 40px rgba(16, 185, 129, 1));
+        }
+        75% {
+            transform: scale(1.1);
+            filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.8));
+        }
+    }
+
+    @keyframes titleBlink {
+        0%, 100% {
+            color: #1e293b;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        50% {
+            color: #10b981;
+            text-shadow: 0 0 20px rgba(16, 185, 129, 0.6);
+        }
+    }
+
+    @keyframes pulseRing {
+        0% {
+            transform: translate(-50%, -50%) scale(0.8);
+            opacity: 1;
+        }
+        100% {
+            transform: translate(-50%, -50%) scale(2);
+            opacity: 0;
+        }
+    }
+
+    @keyframes confettiFall {
+        0% {
+            transform: translateY(-100px) rotate(0deg);
+            opacity: 1;
+        }
+        100% {
+            transform: translateY(400px) rotate(720deg);
+            opacity: 0;
+        }
+    }
+
+    @keyframes popupFadeOut {
+        from {
+            opacity: 1;
+            transform: scale(1);
+        }
+        to {
+            opacity: 0;
+            transform: scale(0.8);
+        }
+    }
+
+    /* Responsive Design for Popup */
+    @media (max-width: 768px) {
+        .popup-container {
+            padding: 30px 20px;
+            max-width: 95%;
+        }
+        
+        .popup-title {
+            font-size: 24px;
+        }
+        
+        .success-icon {
+            font-size: 48px;
+        }
+        
+        .pulse-ring {
+            width: 60px;
+            height: 60px;
+        }
+    }
 </style>
 @endpush
 
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
+
+<!-- Welcome Popup for Login -->
+@if(session('success') && session('success') === 'Login successful')
+<div id="welcomePopup" class="memo-success-popup">
+    <div class="popup-container">
+        <div class="popup-content">
+            <div class="popup-icon">
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring pulse-ring-delay-1"></div>
+                <div class="pulse-ring pulse-ring-delay-2"></div>
+                <i class="icofont-check-circled success-icon"></i>
+            </div>
+            <h3 class="popup-title">Welcome Back {{ Auth::user()->first_name }}! 👋</h3>
+            <p class="popup-message">Advanced security features activated.</p>
+            <div class="popup-details">
+                <div class="detail-item">
+                    <i class="icofont-ui-check"></i>
+                    <span>Login successful and secure session established</span>
+                </div>
+            </div>
+            <div class="security-details">
+                <div class="detail-item security-message">
+                    <i class="icofont-shield"></i>
+                    <span>🔒 Security Verified: Steganography and crypto features are active. All activities are safely guided by the Meta IronDom Security System</span>
+                </div>
+            </div>
+            <button type="button" class="popup-close-btn" onclick="closeWelcomePopup()">
+                <i class="icofont-close"></i> Close
+            </button>
+        </div>
+        <div class="popup-confetti"></div>
+    </div>
+</div>
+@endif
+
 <div class="dashboardarea sp_bottom_100">
     <div class="container-fluid full__width__padding">
         <div class="row">
@@ -804,7 +1134,125 @@ document.addEventListener('DOMContentLoaded', function() {
             showDownloadSuccess(message);
         });
     });
+
+    // Welcome Popup with Sound
+    const welcomePopup = document.getElementById('welcomePopup');
+    if (welcomePopup) {
+        // Create and play success sound (same as memo popup)
+        playWelcomeSuccessSound();
+        
+        // Auto hide popup after 10 seconds unless user interaction
+        let autoHideTimer = setTimeout(() => {
+            closeWelcomePopup();
+        }, 10000);
+        
+        // Clear auto-hide timer if user hovers over popup
+        welcomePopup.addEventListener('mouseenter', () => {
+            clearTimeout(autoHideTimer);
+        });
+        
+        // Restart auto-hide timer when user stops hovering
+        welcomePopup.addEventListener('mouseleave', () => {
+            autoHideTimer = setTimeout(() => {
+                closeWelcomePopup();
+            }, 5000);
+        });
+        
+        // Close popup when clicking outside
+        welcomePopup.addEventListener('click', (e) => {
+            if (e.target === welcomePopup) {
+                closeWelcomePopup();
+            }
+        });
+        
+        // Close popup with Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && welcomePopup) {
+                closeWelcomePopup();
+            }
+        });
+    }
 });
+
+// Welcome Popup Functions
+function closeWelcomePopup() {
+    const popup = document.getElementById('welcomePopup');
+    if (popup) {
+        popup.style.animation = 'popupFadeOut 0.5s ease-in forwards';
+        setTimeout(() => {
+            popup.remove();
+        }, 500);
+    }
+}
+
+function playWelcomeSuccessSound() {
+    // Create success sound using Web Audio API (same as memo popup)
+    try {
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        // Success notification sound sequence
+        const successTune = [
+            { freq: 523.25, duration: 0.2 }, // C5
+            { freq: 659.25, duration: 0.2 }, // E5
+            { freq: 783.99, duration: 0.2 }, // G5
+            { freq: 1046.50, duration: 0.4 } // C6
+        ];
+        
+        let startTime = audioContext.currentTime;
+        
+        successTune.forEach((note, index) => {
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = note.freq;
+            oscillator.type = 'sine';
+            
+            // Envelope for smooth sound
+            gainNode.gain.setValueAtTime(0, startTime);
+            gainNode.gain.linearRampToValueAtTime(0.3, startTime + 0.05);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + note.duration);
+            
+            oscillator.start(startTime);
+            oscillator.stop(startTime + note.duration);
+            
+            startTime += note.duration;
+        });
+        
+        // Add celebratory bell sound
+        setTimeout(() => {
+            const bellOscillator = audioContext.createOscillator();
+            const bellGain = audioContext.createGain();
+            
+            bellOscillator.connect(bellGain);
+            bellGain.connect(audioContext.destination);
+            
+            bellOscillator.frequency.value = 2093; // C7
+            bellOscillator.type = 'triangle';
+            
+            bellGain.gain.setValueAtTime(0, audioContext.currentTime);
+            bellGain.gain.linearRampToValueAtTime(0.2, audioContext.currentTime + 0.02);
+            bellGain.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.8);
+            
+            bellOscillator.start();
+            bellOscillator.stop(audioContext.currentTime + 0.8);
+        }, 800);
+        
+    } catch (error) {
+        console.log('Audio not supported or blocked by browser');
+        // Fallback: use notification sound if available
+        if ('speechSynthesis' in window) {
+            // Create a subtle beep using speech synthesis as fallback
+            const utterance = new SpeechSynthesisUtterance('');
+            utterance.volume = 0.1;
+            utterance.rate = 10;
+            utterance.pitch = 2;
+            speechSynthesis.speak(utterance);
+        }
+    }
+}
 </script>
 
 @endsection

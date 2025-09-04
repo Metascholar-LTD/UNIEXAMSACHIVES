@@ -55,7 +55,11 @@
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\components/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
       "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
-      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)"
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\folders/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin\\communication/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\app\\Http\\Controllers\\Frontend/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\app\\Http\\Controllers\\Dashboard/**)",
+      "Read(/C:\\Users\\USER\\Desktop\\UNIEXAMSACHIVES\\resources\\views\\admin/**)"
     ],
     "deny": []
   }
