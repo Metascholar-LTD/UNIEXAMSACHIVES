@@ -642,17 +642,16 @@
                 <i class="icofont-check-circled success-icon"></i>
             </div>
             <h3 class="popup-title">Welcome Back {{ Auth::user()->first_name }}! 👋</h3>
-            <p class="popup-message">Advanced security features activated.</p>
             <div class="popup-details">
                 <div class="detail-item">
                     <i class="icofont-ui-check"></i>
-                    <span>Login successful and secure session established</span>
+                    <span>Login Successful and Advanced Security Features Activated</span>
                 </div>
             </div>
             <div class="security-details">
                 <div class="detail-item security-message">
                     <i class="icofont-shield"></i>
-                    <span>🔒 Security Verified: Steganography and crypto features are active. All activities are safely guided by the Meta IronDom Security System</span>
+                    <span>🔒 Security Verified: Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</span>
                 </div>
             </div>
             <button type="button" class="popup-close-btn" onclick="closeWelcomePopup()">
