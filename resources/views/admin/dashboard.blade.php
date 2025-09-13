@@ -521,17 +521,17 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+        background: rgba(0, 0, 0, 0.1);
     }
 
     .login-card {
-        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-        color: white;
+        background: #d1fae5;
+        color: #065f46;
     }
 
     .security-card {
-        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-        color: white;
+        background: #fee2e2;
+        color: #991b1b;
     }
 
     .message-header {
@@ -554,7 +554,7 @@
         width: 20px;
         height: 20px;
         border-radius: 50%;
-        background: rgba(255, 255, 255, 0.2);
+        background: rgba(0, 0, 0, 0.1);
         display: flex;
         align-items: center;
         justify-content: center;
@@ -577,16 +577,20 @@
     .spinner {
         width: 20px;
         height: 20px;
-        border: 2px solid rgba(255, 255, 255, 0.3);
-        border-top: 2px solid white;
+        border: 2px solid rgba(0, 0, 0, 0.1);
+        border-top: 2px solid #065f46;
         border-radius: 50%;
         animation: spin 1s linear infinite;
+    }
+
+    .security-card .spinner {
+        border-top: 2px solid #991b1b;
     }
 
     .checkmark {
         width: 24px;
         height: 24px;
-        background: rgba(255, 255, 255, 0.2);
+        background: #065f46;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -594,7 +598,10 @@
         color: white;
         font-size: 14px;
         animation: checkmarkPop 0.3s ease-out;
-        border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .security-card .checkmark {
+        background: #991b1b;
     }
 
     .popup-message {
