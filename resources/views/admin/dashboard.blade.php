@@ -377,14 +377,12 @@
 
     /* Login Animation - Pulsing Checkmark */
     .login-animation-container {
-        position: absolute;
-        top: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        z-index: 10;
+        position: relative;
         display: flex;
         align-items: center;
         justify-content: center;
+        margin: 20px 0;
+        z-index: 2;
     }
 
     .login-animation-container .success-icon {
@@ -420,7 +418,6 @@
     .popup-main-content {
         display: flex;
         flex: 1;
-        margin-top: 60px; /* Account for animation */
     }
 
     /* Left Side Styles */
@@ -498,28 +495,77 @@
 
     .login-messages {
         margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .message-item {
+    .message-card {
+        border-radius: 16px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .message-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .message-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    }
+
+    .login-card {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .security-card {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .message-header {
         display: flex;
         align-items: center;
-        margin-bottom: 20px;
-        padding: 15px 0;
-        border-bottom: 1px solid #f1f5f9;
+        justify-content: space-between;
+        margin-bottom: 12px;
     }
 
-    .message-item:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
+    .message-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .message-text {
-        flex: 1;
-        font-size: 14px;
-        font-weight: 600;
-        color: #1e293b;
-        margin-right: 15px;
-        line-height: 1.4;
+    .message-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+    }
+
+    .message-description {
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: 0.9;
+        margin: 0;
     }
 
     .loading-spinner {
@@ -531,8 +577,8 @@
     .spinner {
         width: 20px;
         height: 20px;
-        border: 2px solid #e2e8f0;
-        border-top: 2px solid #10b981;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }
@@ -540,7 +586,7 @@
     .checkmark {
         width: 24px;
         height: 24px;
-        background: #10b981;
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -548,6 +594,7 @@
         color: white;
         font-size: 14px;
         animation: checkmarkPop 0.3s ease-out;
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .popup-message {
@@ -792,9 +839,16 @@
             padding: 20px;
         }
         
-        .message-text {
-            font-size: 12px;
-            line-height: 1.3;
+        .message-card {
+            padding: 15px;
+        }
+        
+        .message-title {
+            font-size: 14px;
+        }
+        
+        .message-description {
+            font-size: 11px;
         }
     }
 
@@ -860,45 +914,58 @@
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
         <div class="popup-content">
-            <!-- Top Login Animation - Pulsing Checkmark -->
-            <div class="login-animation-container">
-                <div class="pulse-ring"></div>
-                <div class="pulse-ring pulse-ring-delay-1"></div>
-                <div class="pulse-ring pulse-ring-delay-2"></div>
-                <i class="icofont-check-circled success-icon"></i>
-            </div>
-            
             <!-- Main Content Wrapper -->
             <div class="popup-main-content">
-                <!-- Left Side: University Image and Welcome -->
+                <!-- Left Side: University Image, Welcome and Animation -->
                 <div class="popup-left">
                     <div class="university-image-container">
                         <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg" alt="Catholic University Ghana" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
                     </div>
+                    
+                    <!-- Login Animation - Pulsing Checkmark -->
+                    <div class="login-animation-container">
+                        <div class="pulse-ring"></div>
+                        <div class="pulse-ring pulse-ring-delay-1"></div>
+                        <div class="pulse-ring pulse-ring-delay-2"></div>
+                        <i class="icofont-check-circled success-icon"></i>
+                    </div>
+                    
                     <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
                 </div>
                 
                 <!-- Right Side: Login Messages -->
                 <div class="popup-right">
                 <div class="login-messages">
-                    <div class="message-item">
-                        <div class="message-text">Login Successful and Advanced Security Features Activated</div>
-                        <div class="loading-spinner" id="loginSpinner">
-                            <div class="spinner"></div>
+                    <div class="message-card login-card">
+                        <div class="message-header">
+                            <div class="message-title">
+                                <div class="message-icon">✓</div>
+                                Login Successful
+                            </div>
+                            <div class="loading-spinner" id="loginSpinner">
+                                <div class="spinner"></div>
+                            </div>
+                            <div class="checkmark" id="loginCheck" style="display: none;">
+                                <i class="icofont-check"></i>
+                            </div>
                         </div>
-                        <div class="checkmark" id="loginCheck" style="display: none;">
-                            <i class="icofont-check"></i>
-                        </div>
+                        <p class="message-description">Advanced Security Features Activated</p>
                     </div>
                     
-                    <div class="message-item">
-                        <div class="message-text">🔒 Security Verified: Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</div>
-                        <div class="loading-spinner" id="securitySpinner">
-                            <div class="spinner"></div>
+                    <div class="message-card security-card">
+                        <div class="message-header">
+                            <div class="message-title">
+                                <div class="message-icon">🔒</div>
+                                Security Verified
+                            </div>
+                            <div class="loading-spinner" id="securitySpinner">
+                                <div class="spinner"></div>
+                            </div>
+                            <div class="checkmark" id="securityCheck" style="display: none;">
+                                <i class="icofont-check"></i>
+                            </div>
                         </div>
-                        <div class="checkmark" id="securityCheck" style="display: none;">
-                            <i class="icofont-check"></i>
-                        </div>
+                        <p class="message-description">Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</p>
                     </div>
                 </div>
                 
