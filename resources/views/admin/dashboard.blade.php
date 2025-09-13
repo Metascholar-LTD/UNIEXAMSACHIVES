@@ -375,30 +375,52 @@
         min-height: 300px;
     }
 
-    /* Login Animation Bar */
-    .login-animation-bar {
+    /* Login Animation - Pulsing Checkmark */
+    .login-animation-container {
         position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: rgba(255, 255, 255, 0.1);
+        top: 20px;
+        left: 50%;
+        transform: translateX(-50%);
         z-index: 10;
-        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .animation-progress {
-        height: 100%;
-        background: linear-gradient(90deg, #10b981 0%, #059669 50%, #10b981 100%);
-        background-size: 200% 100%;
-        animation: loginProgress 3s ease-in-out infinite;
-        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    .login-animation-container .success-icon {
+        font-size: 32px;
+        color: #10b981;
+        position: relative;
+        z-index: 3;
+        display: block;
+        filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.6));
+    }
+
+    .login-animation-container .pulse-ring {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        border: 2px solid #10b981;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        opacity: 0;
+        animation: pulseRing 2s infinite ease-out;
+    }
+
+    .login-animation-container .pulse-ring-delay-1 {
+        animation-delay: 0.33s;
+    }
+
+    .login-animation-container .pulse-ring-delay-2 {
+        animation-delay: 0.66s;
     }
 
     .popup-main-content {
         display: flex;
         flex: 1;
-        margin-top: 4px; /* Account for animation bar */
+        margin-top: 60px; /* Account for animation */
     }
 
     /* Left Side Styles */
@@ -735,20 +757,6 @@
         }
     }
 
-    @keyframes loginProgress {
-        0% {
-            background-position: -200% 0;
-            width: 0%;
-        }
-        50% {
-            background-position: 0% 0;
-            width: 100%;
-        }
-        100% {
-            background-position: 200% 0;
-            width: 100%;
-        }
-    }
 
     /* Responsive Design for Popup */
     /* Mobile: 0px - 767px */
@@ -852,9 +860,12 @@
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
         <div class="popup-content">
-            <!-- Top Animation Bar -->
-            <div class="login-animation-bar">
-                <div class="animation-progress"></div>
+            <!-- Top Login Animation - Pulsing Checkmark -->
+            <div class="login-animation-container">
+                <div class="pulse-ring"></div>
+                <div class="pulse-ring pulse-ring-delay-1"></div>
+                <div class="pulse-ring pulse-ring-delay-2"></div>
+                <i class="icofont-check-circled success-icon"></i>
             </div>
             
             <!-- Main Content Wrapper -->
