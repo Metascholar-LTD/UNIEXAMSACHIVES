@@ -352,47 +352,16 @@
         border-radius: 0;
         padding: 0;
         box-shadow: 
-            0 25px 50px rgba(0, 0, 0, 0.15),
-            0 0 0 1px rgba(0, 0, 0, 0.1);
+            0 25px 50px rgba(0, 0, 0, 0.15);
         max-width: 600px;
         width: 90%;
         text-align: left;
         transform: scale(0.5) translateY(100px);
         animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        border: 1px solid #e5e7eb;
+        border: none;
         overflow: hidden;
         display: flex;
         min-height: 300px;
-    }
-
-    /* Close X Button */
-    .popup-close-x {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-        width: 32px;
-        height: 32px;
-        background: rgba(0, 0, 0, 0.05);
-        border: 1px solid rgba(0, 0, 0, 0.1);
-        border-radius: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        z-index: 20;
-        transition: all 0.2s ease;
-        color: #666;
-        font-size: 16px;
-    }
-
-    .popup-close-x:hover {
-        background: rgba(0, 0, 0, 0.1);
-        color: #333;
-        border-color: rgba(0, 0, 0, 0.2);
-    }
-
-    .popup-close-x:active {
-        background: rgba(0, 0, 0, 0.15);
     }
 
     .popup-content {
@@ -631,6 +600,45 @@
 
     .security-card .checkmark {
         background: #991b1b;
+    }
+
+    /* Continue Button */
+    .continue-btn {
+        background: #3b82f6;
+        color: white;
+        border: none;
+        padding: 12px 24px;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+        margin-top: 20px;
+        width: fit-content;
+        min-width: 120px;
+        justify-content: center;
+    }
+
+    .continue-btn:hover {
+        background: #2563eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+
+    .continue-btn:active {
+        transform: translateY(0);
+        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
+    }
+
+    .continue-btn i {
+        transition: transform 0.3s ease;
+    }
+
+    .continue-btn:hover i {
+        transform: translateX(2px);
     }
 
     .popup-message {
@@ -949,11 +957,6 @@
 @if(session('success') && session('success') === 'Login successful')
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
-        <!-- Close Button -->
-        <button type="button" class="popup-close-x" onclick="closeWelcomePopup()">
-            <i class="icofont-close"></i>
-        </button>
-        
         <div class="popup-content">
             <!-- Main Content Wrapper -->
             <div class="popup-main-content">
@@ -1010,6 +1013,11 @@
                     </div>
                 </div>
                 
+                <!-- Continue Button -->
+                <button type="button" class="continue-btn" onclick="closeWelcomePopup()">
+                    <span>Continue</span>
+                    <i class="icofont-arrow-right"></i>
+                </button>
                 </div>
             </div>
         </div>
