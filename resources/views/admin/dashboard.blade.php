@@ -370,14 +370,41 @@
         position: relative;
         z-index: 2;
         display: flex;
+        flex-direction: column;
         width: 100%;
         min-height: 300px;
+    }
+
+    /* Login Animation Bar */
+    .login-animation-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: rgba(255, 255, 255, 0.1);
+        z-index: 10;
+        overflow: hidden;
+    }
+
+    .animation-progress {
+        height: 100%;
+        background: linear-gradient(90deg, #10b981 0%, #059669 50%, #10b981 100%);
+        background-size: 200% 100%;
+        animation: loginProgress 3s ease-in-out infinite;
+        box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
+    }
+
+    .popup-main-content {
+        display: flex;
+        flex: 1;
+        margin-top: 4px; /* Account for animation bar */
     }
 
     /* Left Side Styles */
     .popup-left {
         flex: 1;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #2a2a2a;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -708,6 +735,21 @@
         }
     }
 
+    @keyframes loginProgress {
+        0% {
+            background-position: -200% 0;
+            width: 0%;
+        }
+        50% {
+            background-position: 0% 0;
+            width: 100%;
+        }
+        100% {
+            background-position: 200% 0;
+            width: 100%;
+        }
+    }
+
     /* Responsive Design for Popup */
     /* Mobile: 0px - 767px */
     @media (max-width: 767px) {
@@ -716,9 +758,8 @@
             min-height: 250px;
         }
         
-        .popup-content {
+        .popup-main-content {
             flex-direction: column;
-            min-height: 250px;
         }
         
         .popup-left {
@@ -811,16 +852,23 @@
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
         <div class="popup-content">
-            <!-- Left Side: University Image and Welcome -->
-            <div class="popup-left">
-                <div class="university-image-container">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg" alt="Catholic University Ghana" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
-                </div>
-                <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
+            <!-- Top Animation Bar -->
+            <div class="login-animation-bar">
+                <div class="animation-progress"></div>
             </div>
             
-            <!-- Right Side: Login Messages -->
-            <div class="popup-right">
+            <!-- Main Content Wrapper -->
+            <div class="popup-main-content">
+                <!-- Left Side: University Image and Welcome -->
+                <div class="popup-left">
+                    <div class="university-image-container">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg" alt="Catholic University Ghana" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
+                    </div>
+                    <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
+                </div>
+                
+                <!-- Right Side: Login Messages -->
+                <div class="popup-right">
                 <div class="login-messages">
                     <div class="message-item">
                         <div class="message-text">Login Successful and Advanced Security Features Activated</div>
@@ -846,6 +894,7 @@
                 <button type="button" class="popup-close-btn" onclick="closeWelcomePopup()">
                     <i class="icofont-close"></i> Continue
                 </button>
+                </div>
             </div>
         </div>
         <div class="popup-confetti"></div>
