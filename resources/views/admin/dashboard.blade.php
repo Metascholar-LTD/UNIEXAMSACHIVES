@@ -374,10 +374,13 @@
         min-height: 300px;
     }
 
-    /* Left Side Styles */
+    /* Left Side Styles - Full Image Background */
     .popup-left {
         flex: 1;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background-image: url('https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -394,47 +397,58 @@
         left: 0;
         right: 0;
         bottom: 0;
-        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
-        opacity: 0.3;
+        background: linear-gradient(135deg, rgba(0, 0, 0, 0.7) 0%, rgba(0, 0, 0, 0.5) 50%, rgba(0, 0, 0, 0.8) 100%);
+        backdrop-filter: blur(1px);
     }
 
-    .university-image-container {
+    .popup-left::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(circle at center, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+    }
+
+    .welcome-content {
         position: relative;
-        z-index: 2;
-        margin-bottom: 20px;
+        z-index: 3;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 30px 25px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     }
 
-    .university-image {
-        width: 120px;
-        height: 120px;
+    .university-logo {
+        width: 80px;
+        height: 80px;
         border-radius: 50%;
         object-fit: cover;
-        border: 4px solid rgba(255, 255, 255, 0.3);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease;
-    }
-
-    .university-image:hover {
-        transform: scale(1.05);
+        border: 3px solid rgba(255, 255, 255, 0.4);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        margin: 0 auto 20px auto;
+        display: block;
     }
 
     .welcome-text {
         color: white;
-        font-size: 24px;
+        font-size: 22px;
         font-weight: 700;
-        text-align: center;
-        margin: 0;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
-        position: relative;
-        z-index: 2;
+        margin: 0 0 8px 0;
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.5px;
     }
 
     .user-name {
-        display: block;
-        font-size: 18px;
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 16px;
         font-weight: 500;
-        margin-top: 8px;
-        opacity: 0.9;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.5);
+        letter-spacing: 0.3px;
     }
 
     /* Right Side Styles */
@@ -449,28 +463,77 @@
 
     .login-messages {
         margin-bottom: 30px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
     }
 
-    .message-item {
+    .message-card {
+        border-radius: 16px;
+        padding: 20px;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .message-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .message-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+    }
+
+    .login-card {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: white;
+    }
+
+    .security-card {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .message-header {
         display: flex;
         align-items: center;
-        margin-bottom: 20px;
-        padding: 15px 0;
-        border-bottom: 1px solid #f1f5f9;
+        justify-content: space-between;
+        margin-bottom: 12px;
     }
 
-    .message-item:last-child {
-        border-bottom: none;
-        margin-bottom: 0;
+    .message-title {
+        font-size: 16px;
+        font-weight: 700;
+        margin: 0;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
-    .message-text {
-        flex: 1;
-        font-size: 14px;
-        font-weight: 600;
-        color: #1e293b;
-        margin-right: 15px;
-        line-height: 1.4;
+    .message-icon {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+    }
+
+    .message-description {
+        font-size: 13px;
+        line-height: 1.5;
+        opacity: 0.9;
+        margin: 0;
     }
 
     .loading-spinner {
@@ -482,8 +545,8 @@
     .spinner {
         width: 20px;
         height: 20px;
-        border: 2px solid #e2e8f0;
-        border-top: 2px solid #10b981;
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-top: 2px solid white;
         border-radius: 50%;
         animation: spin 1s linear infinite;
     }
@@ -491,7 +554,7 @@
     .checkmark {
         width: 24px;
         height: 24px;
-        background: #10b981;
+        background: rgba(255, 255, 255, 0.2);
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -499,6 +562,7 @@
         color: white;
         font-size: 14px;
         animation: checkmarkPop 0.3s ease-out;
+        border: 2px solid rgba(255, 255, 255, 0.3);
     }
 
     .popup-message {
@@ -726,9 +790,13 @@
             flex: 0 0 auto;
         }
         
-        .university-image {
-            width: 80px;
-            height: 80px;
+        .welcome-content {
+            padding: 20px 15px;
+        }
+        
+        .university-logo {
+            width: 60px;
+            height: 60px;
         }
         
         .welcome-text {
@@ -743,9 +811,16 @@
             padding: 20px;
         }
         
-        .message-text {
-            font-size: 12px;
-            line-height: 1.3;
+        .message-card {
+            padding: 15px;
+        }
+        
+        .message-title {
+            font-size: 14px;
+        }
+        
+        .message-description {
+            font-size: 11px;
         }
     }
 
@@ -755,9 +830,9 @@
             max-width: 500px;
         }
         
-        .university-image {
-            width: 100px;
-            height: 100px;
+        .university-logo {
+            width: 70px;
+            height: 70px;
         }
         
         .welcome-text {
@@ -782,21 +857,25 @@
             max-width: 700px;
         }
         
-        .university-image {
-            width: 140px;
-            height: 140px;
+        .university-logo {
+            width: 90px;
+            height: 90px;
         }
         
         .welcome-text {
-            font-size: 26px;
+            font-size: 24px;
         }
         
         .user-name {
-            font-size: 20px;
+            font-size: 18px;
         }
         
-        .message-text {
+        .message-title {
             font-size: 18px;
+        }
+        
+        .message-description {
+            font-size: 15px;
         }
     }
 </style>
@@ -811,35 +890,48 @@
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
         <div class="popup-content">
-            <!-- Left Side: University Image and Welcome -->
+            <!-- Left Side: University Image Background and Welcome -->
             <div class="popup-left">
-                <div class="university-image-container">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg" alt="Catholic University Ghana" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
+                <div class="welcome-content">
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg" alt="Catholic University Ghana" class="university-logo" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
+                    <h3 class="welcome-text">Welcome back</h3>
+                    <div class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</div>
                 </div>
-                <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
             </div>
             
             <!-- Right Side: Login Messages -->
             <div class="popup-right">
                 <div class="login-messages">
-                    <div class="message-item">
-                        <div class="message-text">Login Successful and Advanced Security Features Activated</div>
-                        <div class="loading-spinner" id="loginSpinner">
-                            <div class="spinner"></div>
+                    <div class="message-card login-card">
+                        <div class="message-header">
+                            <div class="message-title">
+                                <div class="message-icon">✓</div>
+                                Login Successful
+                            </div>
+                            <div class="loading-spinner" id="loginSpinner">
+                                <div class="spinner"></div>
+                            </div>
+                            <div class="checkmark" id="loginCheck" style="display: none;">
+                                <i class="icofont-check"></i>
+                            </div>
                         </div>
-                        <div class="checkmark" id="loginCheck" style="display: none;">
-                            <i class="icofont-check"></i>
-                        </div>
+                        <p class="message-description">Advanced Security Features Activated</p>
                     </div>
                     
-                    <div class="message-item">
-                        <div class="message-text">🔒 Security Verified: Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</div>
-                        <div class="loading-spinner" id="securitySpinner">
-                            <div class="spinner"></div>
+                    <div class="message-card security-card">
+                        <div class="message-header">
+                            <div class="message-title">
+                                <div class="message-icon">🔒</div>
+                                Security Verified
+                            </div>
+                            <div class="loading-spinner" id="securitySpinner">
+                                <div class="spinner"></div>
+                            </div>
+                            <div class="checkmark" id="securityCheck" style="display: none;">
+                                <i class="icofont-check"></i>
+                            </div>
                         </div>
-                        <div class="checkmark" id="securityCheck" style="display: none;">
-                            <i class="icofont-check"></i>
-                        </div>
+                        <p class="message-description">Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</p>
                     </div>
                 </div>
                 
