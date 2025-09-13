@@ -466,10 +466,11 @@
 
     .message-text {
         flex: 1;
-        font-size: 16px;
+        font-size: 14px;
         font-weight: 600;
         color: #1e293b;
         margin-right: 15px;
+        line-height: 1.4;
     }
 
     .loading-spinner {
@@ -743,7 +744,8 @@
         }
         
         .message-text {
-            font-size: 14px;
+            font-size: 12px;
+            line-height: 1.3;
         }
     }
 
@@ -812,7 +814,7 @@
             <!-- Left Side: University Image and Welcome -->
             <div class="popup-left">
                 <div class="university-image-container">
-                    <img src="{{ asset('img/cug_logo_new.jpeg') }}" alt="Catholic University" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg" alt="Catholic University Ghana" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
                 </div>
                 <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
             </div>
@@ -821,7 +823,7 @@
             <div class="popup-right">
                 <div class="login-messages">
                     <div class="message-item">
-                        <div class="message-text">Login successful</div>
+                        <div class="message-text">Login Successful and Advanced Security Features Activated</div>
                         <div class="loading-spinner" id="loginSpinner">
                             <div class="spinner"></div>
                         </div>
@@ -831,7 +833,7 @@
                     </div>
                     
                     <div class="message-item">
-                        <div class="message-text">Security verified</div>
+                        <div class="message-text">🔒 Security Verified: Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</div>
                         <div class="loading-spinner" id="securitySpinner">
                             <div class="spinner"></div>
                         </div>
