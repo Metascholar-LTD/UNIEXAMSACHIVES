@@ -348,22 +348,51 @@
 
     .popup-container {
         position: relative;
-        background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
-        border-radius: 24px;
+        background: #ffffff;
+        border-radius: 0;
         padding: 0;
         box-shadow: 
-            0 25px 50px rgba(0, 0, 0, 0.25),
-            0 0 0 1px rgba(255, 255, 255, 0.05),
-            inset 0 1px 0 rgba(255, 255, 255, 0.1);
+            0 25px 50px rgba(0, 0, 0, 0.15),
+            0 0 0 1px rgba(0, 0, 0, 0.1);
         max-width: 600px;
         width: 90%;
         text-align: left;
         transform: scale(0.5) translateY(100px);
         animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
-        border: 3px solid #10b981;
+        border: 1px solid #e5e7eb;
         overflow: hidden;
         display: flex;
         min-height: 300px;
+    }
+
+    /* Close X Button */
+    .popup-close-x {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        width: 32px;
+        height: 32px;
+        background: rgba(0, 0, 0, 0.05);
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        z-index: 20;
+        transition: all 0.2s ease;
+        color: #666;
+        font-size: 16px;
+    }
+
+    .popup-close-x:hover {
+        background: rgba(0, 0, 0, 0.1);
+        color: #333;
+        border-color: rgba(0, 0, 0, 0.2);
+    }
+
+    .popup-close-x:active {
+        background: rgba(0, 0, 0, 0.15);
     }
 
     .popup-content {
@@ -920,6 +949,11 @@
 @if(session('success') && session('success') === 'Login successful')
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
+        <!-- Close Button -->
+        <button type="button" class="popup-close-x" onclick="closeWelcomePopup()">
+            <i class="icofont-close"></i>
+        </button>
+        
         <div class="popup-content">
             <!-- Main Content Wrapper -->
             <div class="popup-main-content">
@@ -976,9 +1010,6 @@
                     </div>
                 </div>
                 
-                <button type="button" class="popup-close-btn" onclick="closeWelcomePopup()">
-                    <i class="icofont-close"></i> Continue
-                </button>
                 </div>
             </div>
         </div>
