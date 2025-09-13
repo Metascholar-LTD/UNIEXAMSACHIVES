@@ -350,70 +350,154 @@
         position: relative;
         background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
         border-radius: 24px;
-        padding: 40px;
+        padding: 0;
         box-shadow: 
             0 25px 50px rgba(0, 0, 0, 0.25),
             0 0 0 1px rgba(255, 255, 255, 0.05),
             inset 0 1px 0 rgba(255, 255, 255, 0.1);
-        max-width: 450px;
+        max-width: 600px;
         width: 90%;
-        text-align: center;
+        text-align: left;
         transform: scale(0.5) translateY(100px);
         animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         border: 3px solid #10b981;
         overflow: hidden;
+        display: flex;
+        min-height: 300px;
     }
 
     .popup-content {
         position: relative;
         z-index: 2;
+        display: flex;
+        width: 100%;
+        min-height: 300px;
     }
 
-    .popup-icon {
+    /* Left Side Styles */
+    .popup-left {
+        flex: 1;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 30px;
         position: relative;
-        display: inline-block;
-        margin-bottom: 24px;
-        animation: popupIconBlink 2s infinite;
+        overflow: hidden;
     }
 
-    .success-icon {
-        font-size: 64px;
-        color: #10b981;
-        position: relative;
-        z-index: 3;
-        display: block;
-        filter: drop-shadow(0 0 20px rgba(16, 185, 129, 0.6));
-    }
-
-    .pulse-ring {
+    .popup-left::before {
+        content: '';
         position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        border: 3px solid #10b981;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+        opacity: 0.3;
+    }
+
+    .university-image-container {
+        position: relative;
+        z-index: 2;
+        margin-bottom: 20px;
+    }
+
+    .university-image {
+        width: 120px;
+        height: 120px;
         border-radius: 50%;
-        width: 80px;
-        height: 80px;
-        opacity: 0;
-        animation: pulseRing 2s infinite ease-out;
+        object-fit: cover;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
     }
 
-    .pulse-ring-delay-1 {
-        animation-delay: 0.33s;
+    .university-image:hover {
+        transform: scale(1.05);
     }
 
-    .pulse-ring-delay-2 {
-        animation-delay: 0.66s;
+    .welcome-text {
+        color: white;
+        font-size: 24px;
+        font-weight: 700;
+        text-align: center;
+        margin: 0;
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        position: relative;
+        z-index: 2;
     }
 
-    .popup-title {
-        font-size: 28px;
-        font-weight: 800;
+    .user-name {
+        display: block;
+        font-size: 18px;
+        font-weight: 500;
+        margin-top: 8px;
+        opacity: 0.9;
+    }
+
+    /* Right Side Styles */
+    .popup-right {
+        flex: 1;
+        padding: 40px 30px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        background: white;
+    }
+
+    .login-messages {
+        margin-bottom: 30px;
+    }
+
+    .message-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+        padding: 15px 0;
+        border-bottom: 1px solid #f1f5f9;
+    }
+
+    .message-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+    }
+
+    .message-text {
+        flex: 1;
+        font-size: 16px;
+        font-weight: 600;
         color: #1e293b;
-        margin: 0 0 16px 0;
-        letter-spacing: -0.02em;
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        animation: titleBlink 3s infinite;
+        margin-right: 15px;
+    }
+
+    .loading-spinner {
+        width: 24px;
+        height: 24px;
+        position: relative;
+    }
+
+    .spinner {
+        width: 20px;
+        height: 20px;
+        border: 2px solid #e2e8f0;
+        border-top: 2px solid #10b981;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+    }
+
+    .checkmark {
+        width: 24px;
+        height: 24px;
+        background: #10b981;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 14px;
+        animation: checkmarkPop 0.3s ease-out;
     }
 
     .popup-message {
@@ -603,24 +687,114 @@
         }
     }
 
+    /* Animations */
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    @keyframes checkmarkPop {
+        0% { 
+            transform: scale(0);
+            opacity: 0;
+        }
+        50% { 
+            transform: scale(1.2);
+        }
+        100% { 
+            transform: scale(1);
+            opacity: 1;
+        }
+    }
+
     /* Responsive Design for Popup */
-    @media (max-width: 768px) {
+    /* Mobile: 0px - 767px */
+    @media (max-width: 767px) {
         .popup-container {
-            padding: 30px 20px;
             max-width: 95%;
+            min-height: 250px;
         }
         
-        .popup-title {
-            font-size: 24px;
+        .popup-content {
+            flex-direction: column;
+            min-height: 250px;
         }
         
-        .success-icon {
-            font-size: 48px;
+        .popup-left {
+            padding: 20px;
+            flex: 0 0 auto;
         }
         
-        .pulse-ring {
-            width: 60px;
-            height: 60px;
+        .university-image {
+            width: 80px;
+            height: 80px;
+        }
+        
+        .welcome-text {
+            font-size: 18px;
+        }
+        
+        .user-name {
+            font-size: 14px;
+        }
+        
+        .popup-right {
+            padding: 20px;
+        }
+        
+        .message-text {
+            font-size: 14px;
+        }
+    }
+
+    /* Tablet: 768px - 1199px */
+    @media (min-width: 768px) and (max-width: 1199px) {
+        .popup-container {
+            max-width: 500px;
+        }
+        
+        .university-image {
+            width: 100px;
+            height: 100px;
+        }
+        
+        .welcome-text {
+            font-size: 20px;
+        }
+        
+        .user-name {
+            font-size: 16px;
+        }
+    }
+
+    /* Desktop: 1200px - 1599px */
+    @media (min-width: 1200px) and (max-width: 1599px) {
+        .popup-container {
+            max-width: 600px;
+        }
+    }
+
+    /* Large: 1600px+ */
+    @media (min-width: 1600px) {
+        .popup-container {
+            max-width: 700px;
+        }
+        
+        .university-image {
+            width: 140px;
+            height: 140px;
+        }
+        
+        .welcome-text {
+            font-size: 26px;
+        }
+        
+        .user-name {
+            font-size: 20px;
+        }
+        
+        .message-text {
+            font-size: 18px;
         }
     }
 </style>
@@ -635,28 +809,42 @@
 <div id="welcomePopup" class="memo-success-popup">
     <div class="popup-container">
         <div class="popup-content">
-            <div class="popup-icon">
-                <div class="pulse-ring"></div>
-                <div class="pulse-ring pulse-ring-delay-1"></div>
-                <div class="pulse-ring pulse-ring-delay-2"></div>
-                <i class="icofont-check-circled success-icon"></i>
-            </div>
-            <h3 class="popup-title">Welcome Back {{ Auth::user()->first_name }}! 👋</h3>
-            <div class="popup-details">
-                <div class="detail-item">
-                    <i class="icofont-ui-check"></i>
-                    <span>Login Successful and Advanced Security Features Activated</span>
+            <!-- Left Side: University Image and Welcome -->
+            <div class="popup-left">
+                <div class="university-image-container">
+                    <img src="{{ asset('frontend/assets/images/logo/catholic-university-logo.png') }}" alt="Catholic University" class="university-image" onerror="this.src='{{ asset('frontend/assets/images/logo/logo.png') }}'">
                 </div>
+                <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
             </div>
-            <div class="security-details">
-                <div class="detail-item security-message">
-                    <i class="icofont-shield"></i>
-                    <span>🔒 Security Verified: Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</span>
+            
+            <!-- Right Side: Login Messages -->
+            <div class="popup-right">
+                <div class="login-messages">
+                    <div class="message-item">
+                        <div class="message-text">Login successful</div>
+                        <div class="loading-spinner" id="loginSpinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <div class="checkmark" id="loginCheck" style="display: none;">
+                            <i class="icofont-check"></i>
+                        </div>
+                    </div>
+                    
+                    <div class="message-item">
+                        <div class="message-text">Security verified</div>
+                        <div class="loading-spinner" id="securitySpinner">
+                            <div class="spinner"></div>
+                        </div>
+                        <div class="checkmark" id="securityCheck" style="display: none;">
+                            <i class="icofont-check"></i>
+                        </div>
+                    </div>
                 </div>
+                
+                <button type="button" class="popup-close-btn" onclick="closeWelcomePopup()">
+                    <i class="icofont-close"></i> Continue
+                </button>
             </div>
-            <button type="button" class="popup-close-btn" onclick="closeWelcomePopup()">
-                <i class="icofont-close"></i> Close
-            </button>
         </div>
         <div class="popup-confetti"></div>
     </div>
@@ -1183,6 +1371,37 @@ function closeWelcomePopup() {
         }, 500);
     }
 }
+
+// Initialize loading animations for login popup
+function initializeLoginAnimations() {
+    const loginSpinner = document.getElementById('loginSpinner');
+    const loginCheck = document.getElementById('loginCheck');
+    const securitySpinner = document.getElementById('securitySpinner');
+    const securityCheck = document.getElementById('securityCheck');
+    
+    if (loginSpinner && loginCheck && securitySpinner && securityCheck) {
+        // First message completes after 2 seconds
+        setTimeout(() => {
+            loginSpinner.style.display = 'none';
+            loginCheck.style.display = 'flex';
+        }, 2000);
+        
+        // Second message completes after 4 seconds (2 seconds after first)
+        setTimeout(() => {
+            securitySpinner.style.display = 'none';
+            securityCheck.style.display = 'flex';
+        }, 4000);
+    }
+}
+
+// Initialize animations when popup loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Check if welcome popup exists and initialize animations
+    const welcomePopup = document.getElementById('welcomePopup');
+    if (welcomePopup) {
+        initializeLoginAnimations();
+    }
+});
 
 function playWelcomeSuccessSound() {
     // Create success sound using Web Audio API (same as memo popup)
