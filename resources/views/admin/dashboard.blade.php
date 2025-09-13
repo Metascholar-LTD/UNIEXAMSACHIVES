@@ -349,7 +349,7 @@
     .popup-container {
         position: relative;
         background: #ffffff;
-        border-radius: 0;
+        border-radius: 12px;
         padding: 0;
         box-shadow: 
             0 25px 50px rgba(0, 0, 0, 0.15);
@@ -500,11 +500,12 @@
 
     .message-card {
         border-radius: 16px;
-        padding: 20px;
+        padding: 20px 30px;
         position: relative;
         overflow: hidden;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
+        min-width: 280px;
     }
 
     .message-card:hover {
@@ -537,6 +538,7 @@
         align-items: center;
         justify-content: space-between;
         margin-bottom: 12px;
+        min-height: 32px;
     }
 
     .message-title {
@@ -546,6 +548,7 @@
         display: flex;
         align-items: center;
         gap: 8px;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
     .message-icon {
@@ -564,12 +567,14 @@
         line-height: 1.5;
         opacity: 0.9;
         margin: 0;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
     .loading-spinner {
         width: 24px;
         height: 24px;
         position: relative;
+        flex-shrink: 0;
     }
 
     .spinner {
@@ -596,6 +601,7 @@
         color: white;
         font-size: 14px;
         animation: checkmarkPop 0.3s ease-out;
+        flex-shrink: 0;
     }
 
     .security-card .checkmark {
