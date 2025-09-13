@@ -812,7 +812,7 @@
             <!-- Left Side: University Image and Welcome -->
             <div class="popup-left">
                 <div class="university-image-container">
-                    <img src="{{ asset('frontend/assets/images/logo/catholic-university-logo.png') }}" alt="Catholic University" class="university-image" onerror="this.src='{{ asset('frontend/assets/images/logo/logo.png') }}'">
+                    <img src="{{ asset('img/cug_logo_new.jpeg') }}" alt="Catholic University" class="university-image" onerror="this.src='{{ asset('img/logo/logo_1.png') }}'">
                 </div>
                 <h3 class="welcome-text">Welcome back<br><span class="user-name">{{ Auth::user()->first_name }} {{ Auth::user()->last_name }}</span></h3>
             </div>
