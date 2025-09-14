@@ -570,6 +570,31 @@
         font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
+    .highlight-term {
+        position: relative;
+        font-weight: 600;
+        color: inherit;
+    }
+
+    .highlight-term::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: currentColor;
+        border-radius: 1px;
+        opacity: 0.7;
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform 0.3s ease;
+    }
+
+    .highlight-term:hover::after {
+        transform: scaleX(1);
+    }
+
     .loading-spinner {
         width: 24px;
         height: 24px;
@@ -1015,7 +1040,7 @@
                                 <i class="icofont-check"></i>
                             </div>
                         </div>
-                        <p class="message-description">Steganography and Crypto Features are Activated. All Activities are Safely Guided by the Meta IronDom Security System</p>
+                        <p class="message-description"><span class="highlight-term">Steganography</span> and <span class="highlight-term">Crypto</span> Features are Activated. All Activities are Safely Guided by the <span class="highlight-term">Meta IronDom</span> Security System</p>
                     </div>
                 </div>
                 
