@@ -633,43 +633,75 @@
         background: #991b1b;
     }
 
-    /* Continue Button */
+    /* Continue Button - Responsive Design */
     .continue-btn {
-        background: #3b82f6;
-        color: white;
-        border: none;
-        padding: 12px 24px;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: 600;
-        cursor: pointer;
         display: flex;
         align-items: center;
-        gap: 8px;
-        transition: all 0.3s ease;
+        justify-content: flex-start;
+        width: 45px;
+        height: 45px;
+        border: none;
+        border-radius: 50%;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+        transition-duration: 0.3s;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+        background-color: #3b82f6;
+        text-decoration: none;
+        flex-shrink: 0;
         margin-top: 20px;
-        width: fit-content;
-        min-width: 120px;
-        justify-content: center;
     }
 
     .continue-btn:hover {
-        background: #2563eb;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        width: 160px;
+        border-radius: 40px;
+        transition-duration: 0.3s;
+        text-decoration: none;
+        background-color: #2563eb;
+    }
+
+    .continue-btn .svgWrapper {
+        width: 100%;
+        transition-duration: 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .continue-btn .svgIcon {
+        width: 17px;
+        flex-shrink: 0;
+    }
+
+    .continue-btn .text {
+        position: absolute;
+        left: 50px;
+        width: 100px;
+        opacity: 0;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        transition-duration: 0.3s;
+        white-space: nowrap;
+        text-align: left;
+        padding-right: 10px;
+    }
+
+    .continue-btn:hover .svgWrapper {
+        width: 45px;
+        transition-duration: 0.3s;
+        padding-left: 0;
+    }
+
+    .continue-btn:hover .text {
+        opacity: 1;
+        transition-duration: 0.3s;
     }
 
     .continue-btn:active {
-        transform: translateY(0);
-        box-shadow: 0 2px 6px rgba(59, 130, 246, 0.2);
-    }
-
-    .continue-btn i {
-        transition: transform 0.3s ease;
-    }
-
-    .continue-btn:hover i {
-        transform: translateX(2px);
+        transform: translate(2px, 2px);
     }
 
     .popup-message {
@@ -1046,8 +1078,21 @@
                 
                 <!-- Continue Button -->
                 <button type="button" class="continue-btn" onclick="closeWelcomePopup()">
-                    <span>Continue</span>
-                    <i class="icofont-arrow-right"></i>
+                    <div class="svgWrapper">
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            class="svgIcon"
+                        >
+                            <path
+                                stroke="#fff"
+                                stroke-width="2"
+                                d="M5 12h14m-7-7 7 7-7 7"
+                            ></path>
+                        </svg>
+                        <div class="text">Continue</div>
+                    </div>
                 </button>
                 </div>
             </div>
