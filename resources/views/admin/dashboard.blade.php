@@ -650,7 +650,6 @@
         background-color: #3b82f6;
         text-decoration: none;
         flex-shrink: 0;
-        margin-top: 20px;
     }
 
     .continue-btn:hover {
@@ -702,6 +701,38 @@
 
     .continue-btn:active {
         transform: translate(2px, 2px);
+    }
+
+    /* Continue Section */
+    .continue-section {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 20px;
+        padding-top: 15px;
+        border-top: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .continue-hint {
+        font-size: 12px;
+        color: #6b7280;
+        font-weight: 500;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        opacity: 0.8;
+        position: relative;
+    }
+
+    .continue-hint::after {
+        content: '→';
+        margin-left: 8px;
+        color: #3b82f6;
+        font-weight: 600;
+        animation: pointRight 2s ease-in-out infinite;
+    }
+
+    @keyframes pointRight {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(3px); }
     }
 
     .popup-message {
@@ -1076,24 +1107,27 @@
                     </div>
                 </div>
                 
-                <!-- Continue Button -->
-                <button type="button" class="continue-btn" onclick="closeWelcomePopup()">
-                    <div class="svgWrapper">
-                        <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            class="svgIcon"
-                        >
-                            <path
-                                stroke="#fff"
-                                stroke-width="2"
-                                d="M5 12h14m-7-7 7 7-7 7"
-                            ></path>
-                        </svg>
-                        <div class="text">Continue</div>
-                    </div>
-                </button>
+                <!-- Continue Section -->
+                <div class="continue-section">
+                    <div class="continue-hint">Click to continue</div>
+                    <button type="button" class="continue-btn" onclick="closeWelcomePopup()">
+                        <div class="svgWrapper">
+                            <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                fill="none"
+                                viewBox="0 0 24 24"
+                                class="svgIcon"
+                            >
+                                <path
+                                    stroke="#fff"
+                                    stroke-width="2"
+                                    d="M5 12h14m-7-7 7 7-7 7"
+                                ></path>
+                            </svg>
+                            <div class="text">Continue</div>
+                        </div>
+                    </button>
+                </div>
                 </div>
             </div>
         </div>
