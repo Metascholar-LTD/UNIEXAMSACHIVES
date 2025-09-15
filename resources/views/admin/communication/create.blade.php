@@ -2085,6 +2085,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const action = e.submitter.value;
         
+        // Preserve clicked action value even if the submit button is disabled
+        // Some browsers exclude disabled controls from form submission
+        const actionInput = document.createElement('input');
+        actionInput.type = 'hidden';
+        actionInput.name = 'action';
+        actionInput.value = action;
+        this.appendChild(actionInput);
+        
         // Set the hidden input for send_immediately (only for send action, not draft)
         if (action === 'send') {
             const sendImmediatelyInput = document.createElement('input');
