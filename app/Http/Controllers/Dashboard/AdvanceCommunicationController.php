@@ -83,6 +83,13 @@ class AdvanceCommunicationController extends Controller
         // Determine if this is a draft or send action
         $isDraft = $request->input('action') === 'draft';
         
+        // Log the action for debugging
+        Log::info('Communication store action', [
+            'action' => $request->input('action'),
+            'is_draft' => $isDraft,
+            'user_id' => auth()->id()
+        ]);
+        
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
@@ -130,17 +137,19 @@ class AdvanceCommunicationController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        // Create recipient records
-        foreach ($recipientUsers as $user) {
-            EmailCampaignRecipient::create([
-                'comm_campaign_id' => $campaign->id,
-                'user_id' => $user->id,
-                'status' => 'pending',
-            ]);
-        }
-
-        // Only send emails if it's not a draft
+        // Only create recipient records and send emails if it's not a draft
         if (!$isDraft) {
+            Log::info('Processing as SEND action - creating recipients and sending emails', [
+                'campaign_id' => $campaign->id
+            ]);
+            // Create recipient records
+            foreach ($recipientUsers as $user) {
+                EmailCampaignRecipient::create([
+                    'comm_campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'status' => 'pending',
+                ]);
+            }
             // Send emails directly using ResendMailService (reliable method)
             $sentCount = 0;
             $failedCount = 0;
@@ -239,6 +248,9 @@ class AdvanceCommunicationController extends Controller
                             ->with('memo_delivered', true);
         } else {
             // For drafts, just redirect with success message
+            Log::info('Processing as DRAFT action - no emails sent', [
+                'campaign_id' => $campaign->id
+            ]);
             return redirect()->route('admin.communication.index')
                             ->with('success', 'Memo saved as draft successfully!');
         }
@@ -322,14 +334,8 @@ class AdvanceCommunicationController extends Controller
             'total_recipients' => count($recipients),
         ]);
 
-        // Create new recipient records
-        foreach ($recipients as $userId) {
-            EmailCampaignRecipient::create([
-                'comm_campaign_id' => $campaign->id,
-                'user_id' => $userId,
-                'status' => 'pending',
-            ]);
-        }
+        // For drafts, we don't create recipient records until they're ready to send
+        // Recipient records will be created when the draft is actually sent
 
         return redirect()->route('admin.communication.show', $campaign)
                         ->with('success', 'Memo updated successfully!');
@@ -358,6 +364,26 @@ class AdvanceCommunicationController extends Controller
         
         if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
             return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
+        }
+
+        // If this is a draft, we need to create recipient records first
+        if ($campaign->status === 'draft') {
+            // Get recipients based on the campaign settings
+            $recipientUsers = $campaign->recipient_type === 'all' 
+                ? User::where('is_approve', true)->get()
+                : User::whereIn('id', $campaign->selected_users)->where('is_approve', true)->get();
+
+            // Create recipient records
+            foreach ($recipientUsers as $user) {
+                EmailCampaignRecipient::create([
+                    'comm_campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'status' => 'pending',
+                ]);
+            }
+
+            // Update total recipients count
+            $campaign->update(['total_recipients' => $recipientUsers->count()]);
         }
 
         $campaign->update([
