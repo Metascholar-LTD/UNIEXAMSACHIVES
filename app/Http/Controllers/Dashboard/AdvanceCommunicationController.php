@@ -27,25 +27,40 @@ class AdvanceCommunicationController extends Controller
         }
     }
 
-    public function index()
+    public function index(Request $request)
     {
         $this->checkAdminAccess();
         
-        $campaigns = EmailCampaign::with(['creator', 'recipients'])
-                                ->recentFirst()
-                                ->paginate(10);
+        // Get filter parameter
+        $statusFilter = $request->get('status', 'all');
+        
+        // Build query based on filter
+        $query = EmailCampaign::with(['creator', 'recipients'])->recentFirst();
+        
+        if ($statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+        
+        $campaigns = $query->paginate(10);
 
         $totalCampaigns = EmailCampaign::count();
         $sentCampaigns = EmailCampaign::byStatus('sent')->count();
-        $pendingCampaigns = EmailCampaign::whereIn('status', ['draft', 'scheduled', 'sending'])->count();
+        $draftCampaigns = EmailCampaign::byStatus('draft')->count();
+        $scheduledCampaigns = EmailCampaign::byStatus('scheduled')->count();
+        $sendingCampaigns = EmailCampaign::byStatus('sending')->count();
+        $failedCampaigns = EmailCampaign::byStatus('failed')->count();
         $totalUsers = User::where('is_approve', true)->count();
 
         return view('admin.communication.index', compact(
             'campaigns', 
             'totalCampaigns', 
             'sentCampaigns', 
-            'pendingCampaigns',
-            'totalUsers'
+            'draftCampaigns',
+            'scheduledCampaigns',
+            'sendingCampaigns',
+            'failedCampaigns',
+            'totalUsers',
+            'statusFilter'
         ));
     }
 
@@ -65,6 +80,9 @@ class AdvanceCommunicationController extends Controller
     {
         $this->checkAdminAccess();
         
+        // Determine if this is a draft or send action
+        $isDraft = $request->input('action') === 'draft';
+        
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
@@ -73,7 +91,7 @@ class AdvanceCommunicationController extends Controller
             'selected_users.*' => 'exists:users,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
             'send_immediately' => 'boolean',
-            'scheduled_at' => 'nullable|required_if:send_immediately,false|date|after:now',
+            'scheduled_at' => $isDraft ? 'nullable|date' : 'nullable|required_if:send_immediately,false|date|after:now',
         ]);
 
         if ($validator->fails()) {
@@ -106,8 +124,8 @@ class AdvanceCommunicationController extends Controller
             'attachments' => $attachmentPaths,
             'recipient_type' => $request->recipient_type,
             'selected_users' => $request->recipient_type === 'selected' ? $recipientUsers->pluck('id')->toArray() : null,
-            'status' => 'sending',
-            'scheduled_at' => now(),
+            'status' => $isDraft ? 'draft' : 'sending',
+            'scheduled_at' => $isDraft ? null : ($request->scheduled_at ?? now()),
             'total_recipients' => $recipientUsers->count(),
             'created_by' => auth()->id(),
         ]);
@@ -121,13 +139,15 @@ class AdvanceCommunicationController extends Controller
             ]);
         }
 
-        // Send emails directly using ResendMailService (reliable method)
-        $sentCount = 0;
-        $failedCount = 0;
-        $resendService = new ResendMailService();
-        
+        // Only send emails if it's not a draft
+        if (!$isDraft) {
+            // Send emails directly using ResendMailService (reliable method)
+            $sentCount = 0;
+            $failedCount = 0;
+            $resendService = new ResendMailService();
+            
 
-        foreach ($recipientUsers as $user) {
+            foreach ($recipientUsers as $user) {
             try {
 
                 // Generate HTML content for this recipient (like the job does)
@@ -204,20 +224,24 @@ class AdvanceCommunicationController extends Controller
                 
                 $failedCount++;
             }
+            }
+
+            // Update campaign final status for sent campaigns
+            $campaign->update([
+                'status' => 'sent',
+                'sent_at' => now(),
+                'sent_count' => $sentCount,
+                'failed_count' => $failedCount,
+            ]);
+
+            return redirect()->route('admin.communication.index')
+                            ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}")
+                            ->with('memo_delivered', true);
+        } else {
+            // For drafts, just redirect with success message
+            return redirect()->route('admin.communication.index')
+                            ->with('success', 'Memo saved as draft successfully!');
         }
-
-        // Update campaign final status
-        $campaign->update([
-            'status' => 'sent',
-            'sent_at' => now(),
-            'sent_count' => $sentCount,
-            'failed_count' => $failedCount,
-        ]);
-
-
-        return redirect()->route('admin.communication.index')
-                        ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}")
-                        ->with('memo_delivered', true);
     }
 
     public function show(EmailCampaign $campaign)

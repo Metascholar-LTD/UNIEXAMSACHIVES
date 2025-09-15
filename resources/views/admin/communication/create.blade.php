@@ -2085,12 +2085,14 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const action = e.submitter.value;
         
-        // Set the hidden input for send_immediately
-        const sendImmediatelyInput = document.createElement('input');
-        sendImmediatelyInput.type = 'hidden';
-        sendImmediatelyInput.name = 'send_immediately';
-        sendImmediatelyInput.value = action === 'send' && document.getElementById('send_now').checked ? '1' : '0';
-        this.appendChild(sendImmediatelyInput);
+        // Set the hidden input for send_immediately (only for send action, not draft)
+        if (action === 'send') {
+            const sendImmediatelyInput = document.createElement('input');
+            sendImmediatelyInput.type = 'hidden';
+            sendImmediatelyInput.name = 'send_immediately';
+            sendImmediatelyInput.value = document.getElementById('send_now').checked ? '1' : '0';
+            this.appendChild(sendImmediatelyInput);
+        }
         
         // Show loading state
         e.submitter.disabled = true;

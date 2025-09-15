@@ -101,11 +101,11 @@
                             <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
                                 <div class="metric-card">
                                     <div class="metric-icon">
-                                        <i class="icofont-clock-time"></i>
+                                        <i class="icofont-edit"></i>
                                     </div>
                                     <div class="metric-content">
-                                        <h3 class="metric-number">{{ $pendingCampaigns }}</h3>
-                                        <p class="metric-label">Pending Memos</p>
+                                        <h3 class="metric-number">{{ $draftCampaigns }}</h3>
+                                        <p class="metric-label">Draft Memos</p>
                                     </div>
                                 </div>
                             </div>
@@ -122,10 +122,44 @@
                             </div>
                         </div>
 
+                        <!-- Status Filter Buttons -->
+                        <div class="filter-section mb-4">
+                            <div class="filter-buttons">
+                                <a href="{{ route('admin.communication.index') }}" 
+                                   class="filter-btn {{ $statusFilter === 'all' ? 'active' : '' }}">
+                                    <i class="icofont-list"></i> All ({{ $totalCampaigns }})
+                                </a>
+                                <a href="{{ route('admin.communication.index', ['status' => 'draft']) }}" 
+                                   class="filter-btn {{ $statusFilter === 'draft' ? 'active' : '' }}">
+                                    <i class="icofont-edit"></i> Drafts ({{ $draftCampaigns }})
+                                </a>
+                                <a href="{{ route('admin.communication.index', ['status' => 'scheduled']) }}" 
+                                   class="filter-btn {{ $statusFilter === 'scheduled' ? 'active' : '' }}">
+                                    <i class="icofont-clock-time"></i> Scheduled ({{ $scheduledCampaigns }})
+                                </a>
+                                <a href="{{ route('admin.communication.index', ['status' => 'sending']) }}" 
+                                   class="filter-btn {{ $statusFilter === 'sending' ? 'active' : '' }}">
+                                    <i class="icofont-spinner"></i> Sending ({{ $sendingCampaigns }})
+                                </a>
+                                <a href="{{ route('admin.communication.index', ['status' => 'sent']) }}" 
+                                   class="filter-btn {{ $statusFilter === 'sent' ? 'active' : '' }}">
+                                    <i class="icofont-check-circled"></i> Sent ({{ $sentCampaigns }})
+                                </a>
+                                <a href="{{ route('admin.communication.index', ['status' => 'failed']) }}" 
+                                   class="filter-btn {{ $statusFilter === 'failed' ? 'active' : '' }}">
+                                    <i class="icofont-close-circled"></i> Failed ({{ $failedCampaigns }})
+                                </a>
+                            </div>
+                        </div>
+
                         <!-- Memos Table -->
                         <div class="stats-panel">
                             <div class="panel-header">
-                                <h5>Memo Campaigns</h5>
+                                <h5>Memo Campaigns
+                                    @if($statusFilter !== 'all')
+                                        <span class="filter-indicator">- {{ ucfirst($statusFilter) }} Only</span>
+                                    @endif
+                                </h5>
                                 <p class="panel-subtitle">Manage and monitor your memo communications</p>
                             </div>
 
@@ -331,6 +365,64 @@
   text-transform: uppercase;
   letter-spacing: 0.05em;
   opacity: 0.9;
+}
+
+/* Filter Section */
+.filter-section {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid #f1f5f9;
+}
+
+.filter-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: #f8fafc;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  color: #64748b;
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.filter-btn:hover {
+  background: #e2e8f0;
+  border-color: #cbd5e1;
+  color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+}
+
+.filter-btn.active {
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-color: #3b82f6;
+  color: white;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.filter-btn i {
+  font-size: 16px;
+}
+
+.filter-indicator {
+  color: #64748b;
+  font-weight: 400;
+  font-size: 14px;
 }
 
 .stats-panel {
@@ -1124,6 +1216,17 @@
   
   .search-form {
     max-width: 100%;
+  }
+  
+  .filter-buttons {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .filter-btn {
+    padding: 10px 16px;
+    font-size: 13px;
+    justify-content: center;
   }
 }
 </style>
