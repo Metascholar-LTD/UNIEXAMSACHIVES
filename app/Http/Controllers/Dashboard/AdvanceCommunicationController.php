@@ -83,13 +83,6 @@ class AdvanceCommunicationController extends Controller
         // Determine if this is a draft or send action
         $isDraft = $request->input('action') === 'draft';
         
-        // Log the action for debugging
-        Log::info('Communication store action', [
-            'action' => $request->input('action'),
-            'is_draft' => $isDraft,
-            'user_id' => auth()->id()
-        ]);
-        
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
@@ -137,26 +130,28 @@ class AdvanceCommunicationController extends Controller
             'created_by' => auth()->id(),
         ]);
 
-        // Only create recipient records and send emails if it's not a draft
-        if (!$isDraft) {
-            Log::info('Processing as SEND action - creating recipients and sending emails', [
-                'campaign_id' => $campaign->id
-            ]);
-            // Create recipient records
-            foreach ($recipientUsers as $user) {
-                EmailCampaignRecipient::create([
-                    'comm_campaign_id' => $campaign->id,
-                    'user_id' => $user->id,
-                    'status' => 'pending',
-                ]);
-            }
-            // Send emails directly using ResendMailService (reliable method)
-            $sentCount = 0;
-            $failedCount = 0;
-            $resendService = new ResendMailService();
-            
+        // If this is a draft, save and return immediately - NO EMAIL PROCESSING
+        if ($isDraft) {
+            return redirect()->route('admin.communication.index')
+                            ->with('success', 'Memo saved as draft successfully!');
+        }
 
-            foreach ($recipientUsers as $user) {
+        // ONLY EXECUTE EMAIL SENDING LOGIC FOR NON-DRAFT CAMPAIGNS
+        // Create recipient records
+        foreach ($recipientUsers as $user) {
+            EmailCampaignRecipient::create([
+                'comm_campaign_id' => $campaign->id,
+                'user_id' => $user->id,
+                'status' => 'pending',
+            ]);
+        }
+        
+        // Send emails directly using ResendMailService (reliable method)
+        $sentCount = 0;
+        $failedCount = 0;
+        $resendService = new ResendMailService();
+
+        foreach ($recipientUsers as $user) {
             try {
 
                 // Generate HTML content for this recipient (like the job does)
@@ -233,27 +228,19 @@ class AdvanceCommunicationController extends Controller
                 
                 $failedCount++;
             }
-            }
-
-            // Update campaign final status for sent campaigns
-            $campaign->update([
-                'status' => 'sent',
-                'sent_at' => now(),
-                'sent_count' => $sentCount,
-                'failed_count' => $failedCount,
-            ]);
-
-            return redirect()->route('admin.communication.index')
-                            ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}")
-                            ->with('memo_delivered', true);
-        } else {
-            // For drafts, just redirect with success message
-            Log::info('Processing as DRAFT action - no emails sent', [
-                'campaign_id' => $campaign->id
-            ]);
-            return redirect()->route('admin.communication.index')
-                            ->with('success', 'Memo saved as draft successfully!');
         }
+
+        // Update campaign final status for sent campaigns
+        $campaign->update([
+            'status' => 'sent',
+            'sent_at' => now(),
+            'sent_count' => $sentCount,
+            'failed_count' => $failedCount,
+        ]);
+
+        return redirect()->route('admin.communication.index')
+                        ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}")
+                        ->with('memo_delivered', true);
     }
 
     public function show(EmailCampaign $campaign)
