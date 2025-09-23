@@ -100,6 +100,8 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/folders/create', [FoldersController::class, 'create'])->name('dashboard.folders.create');
     Route::post('/dashboard/folders', [FoldersController::class, 'store'])->name('dashboard.folders.store');
     Route::get('/dashboard/folders/{folder}', [FoldersController::class, 'show'])->name('dashboard.folders.show');
+    Route::get('/dashboard/folders/{folder}/unlock', [FoldersController::class, 'unlockForm'])->name('dashboard.folders.unlock.form');
+    Route::post('/dashboard/folders/{folder}/unlock', [FoldersController::class, 'unlock'])->name('dashboard.folders.unlock');
     Route::get('/dashboard/folders/{folder}/edit', [FoldersController::class, 'edit'])->name('dashboard.folders.edit');
     Route::put('/dashboard/folders/{folder}', [FoldersController::class, 'update'])->name('dashboard.folders.update');
     Route::delete('/dashboard/folders/{folder}', [FoldersController::class, 'destroy'])->name('dashboard.folders.destroy');

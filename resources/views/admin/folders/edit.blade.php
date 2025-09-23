@@ -285,6 +285,42 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>Change/Set Password (optional)
+                                    </label>
+                                    <input type="password"
+                                           class="form-control @error('password') is-invalid @enderror"
+                                           id="password"
+                                           name="password"
+                                           placeholder="Leave blank to keep existing password">
+                                    @error('password')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password_confirmation" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>Confirm New Password
+                                    </label>
+                                    <input type="password"
+                                           class="form-control"
+                                           id="password_confirmation"
+                                           name="password_confirmation"
+                                           placeholder="Re-enter the new password">
+                                </div>
+
+                                @if(!empty($folder->password_hash))
+                                <div class="form-group" style="margin-top:0.5rem;">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="1" id="remove_password" name="remove_password">
+                                        <label class="form-check-label" for="remove_password">
+                                            Remove existing password protection
+                                        </label>
+                                    </div>
+                                </div>
+                                @endif
+
+                                <div class="form-group">
                                     <label for="description" class="form-label">
                                         <i class="fas fa-align-left me-2"></i>Description
                                     </label>

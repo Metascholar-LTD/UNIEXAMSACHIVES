@@ -284,6 +284,31 @@
                                 </div>
 
                                 <div class="form-group">
+                                    <label for="password" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>Folder Password (optional)
+                                    </label>
+                                    <input type="password"
+                                           class="form-control @error('password') is-invalid @enderror"
+                                           id="password"
+                                           name="password"
+                                           placeholder="Set a password to protect this folder">
+                                    @error('password')
+                                        <div class="text-danger mt-1">{{ $message }}</div>
+                                    @enderror
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="password_confirmation" class="form-label">
+                                        <i class="fas fa-lock me-2"></i>Confirm Password
+                                    </label>
+                                    <input type="password"
+                                           class="form-control"
+                                           id="password_confirmation"
+                                           name="password_confirmation"
+                                           placeholder="Re-enter the password">
+                                </div>
+
+                                <div class="form-group">
                                     <label for="description" class="form-label">
                                         <i class="fas fa-align-left me-2"></i>Description
                                     </label>

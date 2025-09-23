@@ -7,6 +7,7 @@ use App\Models\File;
 use App\Models\Folder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class FoldersController extends Controller
 {
@@ -31,11 +32,22 @@ class FoldersController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'password' => 'nullable|string|min:6|confirmed',
         ]);
 
         $validatedData['user_id'] = Auth::id();
-        
+
+        // Remove password fields from mass-assignment and set hash if provided
+        $password = $validatedData['password'] ?? null;
+        unset($validatedData['password']);
+        unset($validatedData['password_confirmation']);
+
         $folder = Folder::create($validatedData);
+
+        if (!empty($password)) {
+            $folder->password_hash = Hash::make($password);
+            $folder->save();
+        }
 
         return redirect()->route('dashboard.folders.show', $folder)
             ->with('success', 'Folder created successfully.');
@@ -45,6 +57,15 @@ class FoldersController extends Controller
     {
         if ($folder->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to folder.');
+        }
+        // Gate access if password protected and not recently unlocked
+        if (!empty($folder->password_hash)) {
+            if (!$this->isFolderRecentlyUnlocked($folder)) {
+                return redirect()->route('dashboard.folders.unlock.form', $folder)
+                    ->with('info', 'This folder is password protected.');
+            }
+            // Refresh the last-access timestamp to maintain the 1-minute window
+            $this->markFolderUnlockedNow($folder);
         }
 
         $folder->load('files');
@@ -77,9 +98,26 @@ class FoldersController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
+            'password' => 'nullable|string|min:6|confirmed',
+            'remove_password' => 'nullable|boolean',
         ]);
 
+        // Handle password updates separately
+        $password = $validatedData['password'] ?? null;
+        $removePassword = (bool)($validatedData['remove_password'] ?? false);
+        unset($validatedData['password']);
+        unset($validatedData['password_confirmation']);
+        unset($validatedData['remove_password']);
+
         $folder->update($validatedData);
+
+        if ($removePassword) {
+            $folder->password_hash = null;
+            $folder->save();
+        } elseif (!empty($password)) {
+            $folder->password_hash = Hash::make($password);
+            $folder->save();
+        }
 
         return redirect()->route('dashboard.folders.show', $folder)
             ->with('success', 'Folder updated successfully.');
@@ -129,5 +167,60 @@ class FoldersController extends Controller
 
         return redirect()->route('dashboard.folders.show', $folder)
             ->with('success', 'File removed from folder successfully.');
+    }
+
+    public function unlockForm(Folder $folder)
+    {
+        if ($folder->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to folder.');
+        }
+        if (empty($folder->password_hash)) {
+            return redirect()->route('dashboard.folders.show', $folder);
+        }
+        return view('admin.folders.unlock', compact('folder'));
+    }
+
+    public function unlock(Request $request, Folder $folder)
+    {
+        if ($folder->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to folder.');
+        }
+        if (empty($folder->password_hash)) {
+            return redirect()->route('dashboard.folders.show', $folder);
+        }
+
+        $data = $request->validate([
+            'password' => 'required|string',
+        ]);
+
+        if (Hash::check($data['password'], $folder->password_hash)) {
+            $this->markFolderUnlockedNow($folder);
+            return redirect()->route('dashboard.folders.show', $folder)
+                ->with('success', 'Folder unlocked.');
+        }
+
+        return back()->withErrors(['password' => 'Incorrect password.']);
+    }
+
+    private function isFolderRecentlyUnlocked(Folder $folder): bool
+    {
+        $key = $this->getFolderSessionKey($folder);
+        $timestamp = session($key);
+        if (!$timestamp) {
+            return false;
+        }
+        $threshold = now()->subSeconds(60)->timestamp;
+        return $timestamp >= $threshold;
+    }
+
+    private function markFolderUnlockedNow(Folder $folder): void
+    {
+        $key = $this->getFolderSessionKey($folder);
+        session([$key => now()->timestamp]);
+    }
+
+    private function getFolderSessionKey(Folder $folder): string
+    {
+        return 'folders.unlocked.' . $folder->id;
     }
 }
