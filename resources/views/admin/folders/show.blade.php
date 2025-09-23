@@ -437,6 +437,10 @@
                                         <i class="fas fa-edit"></i>
                                         Edit Folder
                                     </a>
+                                    <a href="{{ route('dashboard.folders.security', $folder) }}" class="action-btn secondary" title="Security">
+                                        <i class="fas fa-shield-alt"></i>
+                                        Security
+                                    </a>
                                 </div>
                             </div>
                         </div>

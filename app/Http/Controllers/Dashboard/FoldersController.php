@@ -98,26 +98,9 @@ class FoldersController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string|max:1000',
             'color' => 'required|string|regex:/^#[0-9A-Fa-f]{6}$/',
-            'password' => 'nullable|string|min:6|confirmed',
-            'remove_password' => 'nullable|boolean',
         ]);
 
-        // Handle password updates separately
-        $password = $validatedData['password'] ?? null;
-        $removePassword = (bool)($validatedData['remove_password'] ?? false);
-        unset($validatedData['password']);
-        unset($validatedData['password_confirmation']);
-        unset($validatedData['remove_password']);
-
         $folder->update($validatedData);
-
-        if ($removePassword) {
-            $folder->password_hash = null;
-            $folder->save();
-        } elseif (!empty($password)) {
-            $folder->password_hash = Hash::make($password);
-            $folder->save();
-        }
 
         return redirect()->route('dashboard.folders.show', $folder)
             ->with('success', 'Folder updated successfully.');
@@ -222,5 +205,58 @@ class FoldersController extends Controller
     private function getFolderSessionKey(Folder $folder): string
     {
         return 'folders.unlocked.' . $folder->id;
+    }
+
+    public function security(Folder $folder)
+    {
+        if ($folder->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to folder.');
+        }
+        return view('admin.folders.security', compact('folder'));
+    }
+
+    public function updateSecurity(Request $request, Folder $folder)
+    {
+        if ($folder->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to folder.');
+        }
+
+        $removePassword = $request->boolean('remove_password');
+
+        // Build validation rules depending on action
+        $rules = [];
+        if ($removePassword) {
+            // Require current password if folder has password
+            if (!empty($folder->password_hash)) {
+                $rules['current_password'] = 'required|string';
+            }
+        } else {
+            // Setting or changing password
+            $rules['new_password'] = 'required|string|min:6|confirmed';
+            if (!empty($folder->password_hash)) {
+                $rules['current_password'] = 'required|string';
+            }
+        }
+
+        $data = $request->validate($rules);
+
+        // If a current password is required, verify it
+        if (isset($data['current_password']) && !empty($folder->password_hash)) {
+            if (!Hash::check($data['current_password'], $folder->password_hash)) {
+                return back()->withErrors(['current_password' => 'Current folder password is incorrect.']);
+            }
+        }
+
+        if ($removePassword) {
+            $folder->password_hash = null;
+            $folder->save();
+            return redirect()->route('dashboard.folders.security', $folder)->with('success', 'Password protection removed.');
+        }
+
+        // Change or set new password
+        $folder->password_hash = Hash::make($data['new_password']);
+        $folder->save();
+
+        return redirect()->route('dashboard.folders.security', $folder)->with('success', 'Folder password updated.');
     }
 }
