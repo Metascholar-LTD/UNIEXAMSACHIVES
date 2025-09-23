@@ -41,6 +41,9 @@
                             <div class="form-container" style="background:white;border-radius:16px;padding:2rem;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
                                 <form action="{{ route('dashboard.folders.security.update', $folder) }}" method="POST">
                                     @csrf
+                                    @if(request('return_to'))
+                                        <input type="hidden" name="return_to" value="{{ request('return_to') }}">
+                                    @endif
 
                                     @if(!empty($folder->password_hash))
                                     <div class="mb-3">

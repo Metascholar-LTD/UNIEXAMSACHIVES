@@ -48,9 +48,12 @@
                                             <div class="text-danger mt-1">{{ $message }}</div>
                                         @enderror
                                     </div>
-                                    <div style="display:flex;gap:0.75rem;justify-content:flex-end;">
-                                        <a href="{{ route('dashboard.folders.index') }}" class="btn btn-secondary" style="border:2px solid #e5e7eb;">Cancel</a>
-                                        <button type="submit" class="btn btn-primary" style="background:linear-gradient(135deg,#64748b 0%,#475569 100%);border:2px solid #64748b;">Unlock</button>
+                                    <div style="display:flex;gap:0.75rem;justify-content:space-between;align-items:center;">
+                                        <a href="{{ route('dashboard.folders.security', ['folder' => $folder, 'return_to' => route('dashboard.folders.unlock.form', $folder)]) }}" class="btn btn-link" style="padding:0;">Change password</a>
+                                        <div style="display:flex;gap:0.75rem;">
+                                            <a href="{{ route('dashboard.folders.index') }}" class="btn btn-secondary" style="border:2px solid #e5e7eb;">Cancel</a>
+                                            <button type="submit" class="btn btn-primary" style="background:linear-gradient(135deg,#64748b 0%,#475569 100%);border:2px solid #64748b;">Unlock</button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>

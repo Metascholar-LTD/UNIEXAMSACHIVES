@@ -222,6 +222,7 @@ class FoldersController extends Controller
         }
 
         $removePassword = $request->boolean('remove_password');
+        $returnTo = $request->input('return_to');
 
         // Build validation rules depending on action
         $rules = [];
@@ -250,13 +251,21 @@ class FoldersController extends Controller
         if ($removePassword) {
             $folder->password_hash = null;
             $folder->save();
-            return redirect()->route('dashboard.folders.security', $folder)->with('success', 'Password protection removed.');
+            // Clear any prior unlock stamp
+            session()->forget($this->getFolderSessionKey($folder));
+            return $returnTo
+                ? redirect($returnTo)->with('success', 'Password protection removed.')
+                : redirect()->route('dashboard.folders.show', $folder)->with('success', 'Password protection removed.');
         }
 
         // Change or set new password
         $folder->password_hash = Hash::make($data['new_password']);
         $folder->save();
+        // Clear any prior unlock stamp so user must enter new password
+        session()->forget($this->getFolderSessionKey($folder));
 
-        return redirect()->route('dashboard.folders.security', $folder)->with('success', 'Folder password updated.');
+        // Redirect back to unlock prompt (or provided return URL)
+        $defaultUnlock = route('dashboard.folders.unlock.form', $folder);
+        return redirect($returnTo ?: $defaultUnlock)->with('success', 'Folder password updated. Please unlock with the new password.');
     }
 }

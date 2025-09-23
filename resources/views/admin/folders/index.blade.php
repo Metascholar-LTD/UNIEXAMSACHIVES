@@ -291,7 +291,11 @@
                                                     <i class="fas fa-folder"></i>
                                                 </div>
                                                 <div class="folder-info">
-                                                    <h3>{{ $folder->name }}</h3>
+                                                    <h3>
+                                                        <a href="{{ route('dashboard.folders.show', $folder) }}" style="text-decoration:none;color:inherit;">
+                                                            {{ $folder->name }}
+                                                        </a>
+                                                    </h3>
                                                     <div class="file-count">{{ $folder->files_count }} file(s)</div>
                                                 </div>
                                             </div>
@@ -303,9 +307,6 @@
                                             @endif
                                             
                                             <div class="folder-actions">
-                                                <a href="{{ route('dashboard.folders.show', $folder) }}" class="action-btn view" title="View Folder">
-                                                    <i class="fas fa-eye"></i>
-                                                </a>
                                                 <a href="{{ route('dashboard.folders.edit', $folder) }}" class="action-btn edit" title="Edit Folder">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
