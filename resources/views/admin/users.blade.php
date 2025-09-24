@@ -347,6 +347,64 @@
         grid-column: 1 / -1;
     }
 
+    /* Table View Styles */
+    .view-toggle {
+        display: inline-flex;
+        gap: 0.5rem;
+        border: 2px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+        background: white;
+    }
+    .view-toggle button {
+        padding: 8px 12px;
+        border: none;
+        background: transparent;
+        color: #6b7280;
+        font-weight: 600;
+        cursor: pointer;
+    }
+    .view-toggle button.active {
+        background: #64748b;
+        color: white;
+    }
+    .users-table-wrapper {
+        background: white;
+        border-radius: 16px;
+        border: 1px solid #f3f4f6;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        overflow: auto;
+    }
+    table.users-table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 900px;
+    }
+    table.users-table th, table.users-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid #f1f5f9;
+        vertical-align: middle;
+        font-size: 0.95rem;
+    }
+    table.users-table th {
+        background: #f8fafc;
+        color: #475569;
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+    .status-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 6px 10px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.85rem;
+    }
+    .status-chip.approved { background: rgba(220, 252, 231, 0.8); color: #059669; border: 1px solid rgba(16,185,129,0.3); }
+    .status-chip.pending { background: rgba(254, 243, 199, 0.8); color: #d97706; border: 1px solid rgba(245,158,11,0.3); }
+
     .no-users i {
         font-size: 4rem;
         margin-bottom: 1rem;
@@ -447,6 +505,12 @@
                                 <a href="#" class="filter-tab" data-filter="pending">Pending Only</a>
                                 <a href="#" class="filter-tab" data-filter="recent">Recently Added</a>
                             </div>
+                            <div style="margin-top:1rem; display:flex; justify-content:center;">
+                                <div class="view-toggle" role="group" aria-label="View toggle">
+                                    <button type="button" id="gridViewBtn" class="active"><i class="fas fa-th-large"></i> Grid</button>
+                                    <button type="button" id="tableViewBtn"><i class="fas fa-table"></i> Table</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -454,7 +518,7 @@
                     <div class="users-section">
                         <div class="container">
                             @if (count($users) > 0)
-                                <div class="users-list">
+                                <div class="users-list" id="gridView">
                                     @foreach ($users as $user)
                                         <div class="user-card" data-status="{{ $user->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
                                             <div class="user-card-header">
@@ -505,6 +569,60 @@
                                         </div>
                                     @endforeach
                                 </div>
+                                <div class="users-table-wrapper" id="tableView" style="display:none;">
+                                    <table class="users-table" id="usersTable">
+                                        <thead>
+                                            <tr>
+                                                <th>#</th>
+                                                <th>Name</th>
+                                                <th>Email</th>
+                                                <th>Status</th>
+                                                <th>Actions</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($users as $index => $user)
+                                            <tr data-status="{{ $user->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
+                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                                                <td>{{ $user->email }}</td>
+                                                <td>
+                                                    <span class="status-chip {{ $user->is_approve ? 'approved' : 'pending' }}">
+                                                        <i class="fas {{ $user->is_approve ? 'fa-check-circle' : 'fa-clock' }}"></i>
+                                                        {{ $user->is_approve ? 'Approved' : 'Pending' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <div style="display:flex; gap:0.5rem;">
+                                                        @if (!$user->is_approve)
+                                                        <form action="{{ route('users.approve', $user->id) }}" method="post" style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" class="action-btn approve" style="min-width:auto; padding:8px 12px;">
+                                                                <i class="fas fa-check"></i>
+                                                            </button>
+                                                        </form>
+                                                        @else
+                                                        <form action="{{ route('users.disapprove', $user->id) }}" method="post" style="display: inline;">
+                                                            @csrf
+                                                            <button type="submit" class="action-btn disapprove" style="min-width:auto; padding:8px 12px;">
+                                                                <i class="fas fa-thumbs-down"></i>
+                                                            </button>
+                                                        </form>
+                                                        @endif
+                                                        <form action="{{ route('users.destroy', $user->id) }}" method="post" style="display: inline;">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" class="action-btn delete" style="min-width:auto; padding:8px 12px;" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                                <i class="fas fa-trash"></i>
+                                                            </button>
+                                                        </form>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
                             @else
                                 <div class="no-users">
                                     <i class="fas fa-users"></i>
@@ -528,38 +646,34 @@ document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const filterTabs = document.querySelectorAll('.filter-tab');
     const userCards = document.querySelectorAll('.user-card');
+    const gridView = document.getElementById('gridView');
+    const tableView = document.getElementById('tableView');
+    const gridViewBtn = document.getElementById('gridViewBtn');
+    const tableViewBtn = document.getElementById('tableViewBtn');
+    const tableRows = document.querySelectorAll('#usersTable tbody tr');
 
     // Search functionality
     function performSearch() {
         const searchTerm = searchInput.value.toLowerCase();
         const activeFilter = document.querySelector('.filter-tab.active').getAttribute('data-filter');
 
+        // Grid items
         userCards.forEach(card => {
             const searchData = card.getAttribute('data-search');
             const cardStatus = card.getAttribute('data-status');
-            
             let showBySearch = searchData.includes(searchTerm);
-            let showByFilter = true;
+            let showByFilter = activeFilter === 'all' || (activeFilter === 'approved' && cardStatus === 'approved') || (activeFilter === 'pending' && cardStatus === 'pending') || (activeFilter === 'recent');
+            card.style.display = (showBySearch && showByFilter) ? 'block' : 'none';
+            if (showBySearch && showByFilter) card.style.animation = 'fadeIn 0.3s ease';
+        });
 
-            // Apply filters
-            if (activeFilter !== 'all') {
-                if (activeFilter === 'approved') {
-                    showByFilter = cardStatus === 'approved';
-                } else if (activeFilter === 'pending') {
-                    showByFilter = cardStatus === 'pending';
-                } else if (activeFilter === 'recent') {
-                    // For recent, we could add date logic here
-                    showByFilter = true; // For now, show all
-                }
-            }
-
-            // Show/hide card
-            if (showBySearch && showByFilter) {
-                card.style.display = 'block';
-                card.style.animation = 'fadeIn 0.3s ease';
-            } else {
-                card.style.display = 'none';
-            }
+        // Table rows
+        tableRows.forEach(row => {
+            const searchData = row.getAttribute('data-search');
+            const rowStatus = row.getAttribute('data-status');
+            let showBySearch = searchData.includes(searchTerm);
+            let showByFilter = activeFilter === 'all' || (activeFilter === 'approved' && rowStatus === 'approved') || (activeFilter === 'pending' && rowStatus === 'pending') || (activeFilter === 'recent');
+            row.style.display = (showBySearch && showByFilter) ? '' : 'none';
         });
     }
 
@@ -591,6 +705,21 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     `;
     document.head.appendChild(style);
+
+    // Toggle view handlers
+    gridViewBtn.addEventListener('click', function() {
+        gridViewBtn.classList.add('active');
+        tableViewBtn.classList.remove('active');
+        gridView.style.display = 'grid';
+        tableView.style.display = 'none';
+    });
+
+    tableViewBtn.addEventListener('click', function() {
+        tableViewBtn.classList.add('active');
+        gridViewBtn.classList.remove('active');
+        gridView.style.display = 'none';
+        tableView.style.display = 'block';
+    });
 });
 
 // Make performSearch global for the search button
