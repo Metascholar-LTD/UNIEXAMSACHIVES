@@ -848,7 +848,7 @@
 /* Recipient Options */
 .recipient-options {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 16px;
 }
 
@@ -859,6 +859,7 @@
   transition: all 0.3s ease;
   cursor: pointer;
   overflow: hidden;
+  flex: 1 1 0;
 }
 
 .option-card:hover {
