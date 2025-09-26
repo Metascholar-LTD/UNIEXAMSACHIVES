@@ -18,6 +18,11 @@
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
                             <h4>Memo</h4>
+                            <div style="margin-top:8px">
+                                <a href="{{ route('dashboard.message') }}" class="btn btn-sm btn-primary">
+                                    <i class="icofont-arrow-left"></i> Back to Memos
+                                </a>
+                            </div>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12">

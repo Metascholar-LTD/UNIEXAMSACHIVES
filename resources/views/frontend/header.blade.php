@@ -218,5 +218,53 @@ document.addEventListener('click', function(){
   var dd = document.getElementById('uda-memo-dropdown');
   if (dd) dd.style.display = 'none';
 });
+
+// Notification sound and polling for unread count
+let udaBellAudio;
+function initBellAudio(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    udaBellAudio = function(){
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'triangle'; osc.frequency.value = 880;
+      gain.gain.setValueAtTime(0, ctx.currentTime);
+      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + 0.01);
+      gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.6);
+      osc.start(); osc.stop(ctx.currentTime + 0.6);
+      setTimeout(()=>{
+        const o2 = ctx.createOscillator(); const g2 = ctx.createGain();
+        o2.connect(g2); g2.connect(ctx.destination);
+        o2.type='sine'; o2.frequency.value=1320;
+        g2.gain.setValueAtTime(0, ctx.currentTime);
+        g2.gain.linearRampToValueAtTime(0.15, ctx.currentTime + 0.01);
+        g2.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
+        o2.start(); o2.stop(ctx.currentTime + 0.4);
+      }, 120);
+    }
+  }catch(e){ udaBellAudio = function(){}; }
+}
+
+let lastUnread = Number({{ $newMessagesCount ?? 0 }});
+function pollUnread(){
+  fetch('{{ route('dashboard.memos.unreadCount') }}', {credentials:'same-origin'})
+    .then(r=>r.json())
+    .then(data=>{
+      const unread = Number(data.unread||0);
+      const badge = document.querySelector('.uda-badge');
+      if (badge){
+        if (unread>0){ badge.textContent = unread; badge.style.display='inline-block'; }
+        else { badge.style.display='none'; }
+      }
+      if (unread>lastUnread && typeof udaBellAudio==='function'){ udaBellAudio(); }
+      lastUnread = unread;
+    }).catch(()=>{});
+}
+
+document.addEventListener('DOMContentLoaded', function(){
+  initBellAudio();
+  setInterval(pollUnread, 15000);
+});
 </script>
 

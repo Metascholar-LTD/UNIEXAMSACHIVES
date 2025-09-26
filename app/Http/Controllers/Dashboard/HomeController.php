@@ -170,6 +170,15 @@ class HomeController extends Controller
         return redirect()->back();
     }
 
+    public function unreadMemoCount()
+    {
+        return response()->json([
+            'unread' => EmailCampaignRecipient::where('user_id', Auth::id())
+                ->where('is_read', false)
+                ->count()
+        ]);
+    }
+
     public function profile(){
 
         return view('admin.profile',[

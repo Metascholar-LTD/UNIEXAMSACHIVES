@@ -26,6 +26,12 @@
                                     <div class="dashboard__meessage">
                                         <div class="dashboard__meessage__chat">
                                             <h3>All Memos</h3>
+                                            <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}" style="display:inline-block; margin-left:10px;">
+                                                @csrf
+                                                <button type="submit" class="btn btn-sm btn-outline-primary">
+                                                    <i class="icofont-check-circled"></i> Mark all as read
+                                                </button>
+                                            </form>
                                         </div>
                                         {{-- <div class="dashboard__meessage__search">
                                             <button><i class="icofont-search-1"></i></button>
@@ -47,6 +53,9 @@
                                                                     <p class="preview">{{$message->campaign->subject}}</p>
                                                                     <span class="chat__time">{{$message->created_at->format('d M Y')}}</span>
                                                                     <a href="{{route('dashboard.memo.read', $message->id)}}">Read More</a>
+                                                                    @if(!$message->is_read)
+                                                                        <span class="badge bg-success" style="margin-left:8px;">New</span>
+                                                                    @endif
                                                                 </div>
                                                             </div>
                                                         </li>
