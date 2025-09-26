@@ -17,7 +17,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__message__content__main">
                         <div class="dashboard__message__content__main__title dashboard__message__content__main__title__2">
-                            <h3>Messages</h3>
+                            <h3>Memos</h3>
 
                         </div>
                         <div class="dashboard__meessage__wraper">
@@ -25,7 +25,7 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                     <div class="dashboard__meessage">
                                         <div class="dashboard__meessage__chat">
-                                            <h3>All Messages</h3>
+                                            <h3>All Memos</h3>
                                         </div>
                                         {{-- <div class="dashboard__meessage__search">
                                             <button><i class="icofont-search-1"></i></button>

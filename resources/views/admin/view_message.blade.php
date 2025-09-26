@@ -17,7 +17,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Message</h4>
+                            <h4>Memo</h4>
                         </div>
                         <div class="row">
                             <div class="col-lg-12 col-md-12">
