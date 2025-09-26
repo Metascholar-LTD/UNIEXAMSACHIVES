@@ -182,7 +182,6 @@
                                             <th>Subject</th>
                                             <th>Recipients</th>
                                             <th>Status</th>
-                                            <th>Progress</th>
                                             <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
@@ -224,25 +223,6 @@
                                                             @break
                                                     @endswitch
                                                 </span>
-                                            </td>
-                                            <td>
-                                                @if($campaign->status === 'sent')
-                                                    <div class="progress-wrapper">
-                                                        <div class="progress-bar">
-                                                            <div class="progress-fill sent-fill" style="width: 100%"></div>
-                                                        </div>
-                                                        <small class="progress-text">{{ $campaign->sent_count }}/{{ $campaign->total_recipients }}</small>
-                                                    </div>
-                                                @elseif($campaign->status === 'sending')
-                                                    <div class="progress-wrapper">
-                                                        <div class="progress-bar">
-                                                            <div class="progress-fill sending-fill" style="width: {{ $campaign->progress_percentage }}%"></div>
-                                                        </div>
-                                                        <small class="progress-text">{{ $campaign->sent_count }}/{{ $campaign->total_recipients }}</small>
-                                                    </div>
-                                                @else
-                                                    <span class="no-progress">-</span>
-                                                @endif
                                             </td>
                                             <td class="created-date">{{ $campaign->created_at->format('M j, Y') }}</td>
                                             <td>

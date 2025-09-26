@@ -54,7 +54,7 @@
                             @csrf
                             
                             <div class="row">
-                                <div class="col-xl-8">
+                                <div class="col-xl-12">
                                     <div class="compose-panel">
                                         <div class="panel-header">
                                             <h5><i class="icofont-edit"></i> Compose Your Memo</h5>
@@ -206,7 +206,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-xl-4">
+                                <div class="col-xl-12">
                                     <div class="compose-panel">
                                         <div class="panel-header">
                                             <h5><i class="icofont-users"></i> Recipients & Settings</h5>
