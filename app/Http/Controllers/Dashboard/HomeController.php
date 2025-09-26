@@ -8,6 +8,8 @@ use App\Models\Academic;
 use App\Models\Department;
 use App\Models\File;
 use App\Models\Message;
+use App\Models\EmailCampaignRecipient;
+use App\Models\EmailCampaign;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Exam;
@@ -127,8 +129,27 @@ class HomeController extends Controller
 
 
     public function message(){
+        $userId = Auth::id();
+        $memos = EmailCampaignRecipient::with(['campaign'])
+            ->where('user_id', $userId)
+            ->orderBy('created_at','desc')
+            ->get();
+
         return view('admin.message',[
-            'messages' => Message::all(),
+            'messages' => $memos,
+        ]);
+    }
+
+    public function readMemo(EmailCampaignRecipient $recipient)
+    {
+        abort_unless($recipient->user_id === Auth::id(), 403);
+        $recipient->load('campaign');
+        return view('admin.view_message', [
+            'message' => (object) [
+                'title' => $recipient->campaign->subject,
+                'body' => $recipient->campaign->message,
+                'created_at' => $recipient->created_at,
+            ]
         ]);
     }
 

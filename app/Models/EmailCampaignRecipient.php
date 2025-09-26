@@ -10,7 +10,7 @@ class EmailCampaignRecipient extends Model
 {
     use HasFactory;
 
-    protected $table = 'comm_recipients';
+    protected $table = 'comm_campaign_recipients';
 
     protected $fillable = [
         'comm_campaign_id',
@@ -31,33 +31,6 @@ class EmailCampaignRecipient extends Model
 
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class);
-    }
-
-    public function scopeByCampaign($query, $campaignId)
-    {
-        return $query->where('comm_campaign_id', $campaignId);
-    }
-
-    public function scopeByStatus($query, $status)
-    {
-        return $query->where('status', $status);
-    }
-
-    public function markAsSent(): void
-    {
-        $this->update([
-            'status' => 'sent',
-            'sent_at' => now(),
-            'error_message' => null,
-        ]);
-    }
-
-    public function markAsFailed(string $errorMessage): void
-    {
-        $this->update([
-            'status' => 'failed',
-            'error_message' => $errorMessage,
-        ]);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

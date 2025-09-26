@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Dashboard\AcademicController;
 use App\Http\Controllers\Dashboard\AdvanceCommunicationController;
-use App\Http\Controllers\Dashboard\BroadcastController;
+ 
 use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\DetailsController;
 use App\Http\Controllers\Dashboard\ExamsController;
@@ -110,11 +110,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/folders/{folder}/add-files', [FoldersController::class, 'addFiles'])->name('dashboard.folders.add-files');
     Route::delete('/dashboard/folders/{folder}/files/{file}', [FoldersController::class, 'removeFile'])->name('dashboard.folders.remove-file');
 
-    #broadcast message
+    #memos (replaces legacy broadcast message)
     Route::get('/dashboard/message',[HomeController::class, 'message'])->name('dashboard.message');
-    Route::get('/dashboard/create-message',[HomeController::class, 'createMessage'])->name('dashboard.message.create');
-    Route::post('/dashboard/broadcast-message/send',[BroadcastController::class,'send'])->name('dashboard.message.send');
-    Route::get('/dashboard/broadcast/messages/{id}',[BroadcastController::class,'read'])->name('dashboard.message.read');
+    Route::get('/dashboard/memos/{recipient}', [HomeController::class, 'readMemo'])->name('dashboard.memo.read');
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');
