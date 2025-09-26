@@ -24,9 +24,9 @@
                             <div class="row">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                     <div class="dashboard__meessage">
-                                        <div class="dashboard__meessage__chat">
-                                            <h3>All Memos</h3>
-                                            <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}" style="display:inline-block; margin-left:10px;">
+                                        <div class="dashboard__meessage__chat memos-toolbar">
+                                            <h3 class="memos-title">All Memos</h3>
+                                            <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}" class="memos-markall">
                                                 @csrf
                                                 <button type="submit" class="btn btn-sm btn-outline-primary">
                                                     <i class="icofont-check-circled"></i> Mark all as read
@@ -65,6 +65,31 @@
                                                 @endif
                                             </ul>
                                         </div>
+
+                                        <style>
+                                        .memos-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; position: sticky; top: 0; z-index: 5; background: #ffffff; padding: 8px 10px; border-bottom: 1px solid #eef2f7; }
+                                        .memos-title { margin: 0; }
+                                        .memos-markall { margin: 0; }
+                                        </style>
+
+                                        <script>
+                                        // Refresh the memos list when coming back from a detail view
+                                        (function(){
+                                          let shouldReloadOnFocus = true;
+                                          window.addEventListener('focus', function(){
+                                            if (shouldReloadOnFocus) {
+                                              shouldReloadOnFocus = false;
+                                              // Delay a tick to avoid double reloads
+                                              setTimeout(function(){ location.reload(); }, 50);
+                                            }
+                                          });
+                                          document.addEventListener('visibilitychange', function(){
+                                            if (!document.hidden) {
+                                              setTimeout(function(){ location.reload(); }, 50);
+                                            }
+                                          });
+                                        })();
+                                        </script>
 
 
                                     </div>
