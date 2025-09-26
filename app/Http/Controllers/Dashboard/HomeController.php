@@ -149,6 +149,7 @@ class HomeController extends Controller
                 'title' => $recipient->campaign->subject,
                 'body' => $recipient->campaign->message,
                 'created_at' => $recipient->created_at,
+                'attachments' => $recipient->campaign->attachments,
             ]
         ]);
     }

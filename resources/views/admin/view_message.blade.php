@@ -25,6 +25,19 @@
                             </div>
                             <div class="col-lg-12 col-md-12">
                                 <div class="dashboard__form">{!!$message->body!!}</div>
+                                @if(isset($message->attachments) && is_array($message->attachments) && count($message->attachments) > 0)
+                                <div class="dashboard__form" style="margin-top: 16px;">
+                                    <h5>Attachments</h5>
+                                    <ul>
+                                        @foreach($message->attachments as $file)
+                                            <li>
+                                                <a href="{{ asset('storage/' . $file['path']) }}" target="_blank">{{ $file['name'] }}</a>
+                                                <small>({{ $file['type'] ?? 'file' }})</small>
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                                @endif
                             </div>
                         </div>
                     </div>

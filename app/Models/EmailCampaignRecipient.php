@@ -10,7 +10,7 @@ class EmailCampaignRecipient extends Model
 {
     use HasFactory;
 
-    protected $table = 'comm_campaign_recipients';
+    protected $table = 'comm_recipients';
 
     protected $fillable = [
         'comm_campaign_id',
