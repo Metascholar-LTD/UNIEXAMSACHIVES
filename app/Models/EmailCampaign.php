@@ -26,6 +26,7 @@ class EmailCampaign extends Model
         'sent_count',
         'failed_count',
         'created_by',
+        'reference',
     ];
 
     protected $casts = [

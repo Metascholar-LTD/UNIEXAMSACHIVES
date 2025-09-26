@@ -268,7 +268,10 @@
                                                     <div class="activity-content">
                                                         <div class="activity-main">
                                                             <h6><a href="{{ route('admin.communication.show', $campaign) }}">{{ Str::limit($campaign->subject, 40) }}</a></h6>
-                                                            <p>{{ Str::limit($campaign->subject, 80) }}</p>
+                                                            <p>
+                                                                <strong>Ref:</strong> {{ $campaign->reference ?? '-' }}
+                                                                &nbsp;—&nbsp;{{ Str::limit($campaign->subject, 80) }}
+                                                            </p>
                                                         </div>
                                                         <div class="activity-meta">
                                                             <div class="meta-group">

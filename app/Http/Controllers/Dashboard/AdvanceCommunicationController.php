@@ -128,6 +128,7 @@ class AdvanceCommunicationController extends Controller
             'scheduled_at' => $isDraft ? null : ($request->scheduled_at ?? now()),
             'total_recipients' => $recipientUsers->count(),
             'created_by' => auth()->id(),
+            'reference' => $this->generateUniqueReference(),
         ]);
 
         // If this is a draft, save and return immediately - NO EMAIL PROCESSING
@@ -241,6 +242,16 @@ class AdvanceCommunicationController extends Controller
         return redirect()->route('admin.communication.index')
                         ->with('success', "Memo campaign sent successfully! Sent: {$sentCount}, Failed: {$failedCount}")
                         ->with('memo_delivered', true);
+    }
+
+    private function generateUniqueReference(): string
+    {
+        do {
+            $random = str_pad((string)random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+            $reference = 'ref-cug' . $random;
+        } while (EmailCampaign::where('reference', $reference)->exists());
+
+        return $reference;
     }
 
     public function show(EmailCampaign $campaign)

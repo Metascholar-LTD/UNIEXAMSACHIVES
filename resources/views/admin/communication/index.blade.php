@@ -178,6 +178,7 @@
                                 <table class="email-table">
                                     <thead>
                                         <tr>
+                                            <th>Reference</th>
                                             <th>Subject</th>
                                             <th>Recipients</th>
                                             <th>Status</th>
@@ -189,6 +190,9 @@
                                     <tbody>
                                         @forelse($campaigns as $campaign)
                                         <tr class="email-row">
+                                            <td>
+                                                <span class="recipient-badge" title="Memo Reference">{{ $campaign->reference ?? '-' }}</span>
+                                            </td>
                                             <td>
                                                 <div class="email-title">
                                                     <strong>{{ Str::limit($campaign->subject, 40) }}</strong>
