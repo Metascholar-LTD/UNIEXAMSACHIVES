@@ -182,7 +182,6 @@
                                             <th>Subject</th>
                                             <th>Recipients</th>
                                             <th>Status</th>
-                                            <th>Progress</th>
                                             <th>Created</th>
                                             <th>Actions</th>
                                         </tr>
