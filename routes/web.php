@@ -112,13 +112,9 @@ Route::middleware(['auth'])->group(function () {
 
     #memos (replaces legacy broadcast message)
     Route::get('/dashboard/message',[HomeController::class, 'message'])->name('dashboard.message');
-    // Place the specific route BEFORE the parameterized one to avoid conflicts
-    Route::get('/dashboard/memos/unread-count', [HomeController::class, 'unreadMemoCount'])->name('dashboard.memos.unreadCount');
+    Route::get('/dashboard/memos/{recipient}', [HomeController::class, 'readMemo'])->name('dashboard.memo.read');
     Route::post('/dashboard/memos/mark-all-read', [HomeController::class, 'markAllMemosRead'])->name('dashboard.memos.markAllRead');
-    // Constrain {recipient} to numeric IDs so 'unread-count' won't match
-    Route::get('/dashboard/memos/{recipient}', [HomeController::class, 'readMemo'])
-        ->whereNumber('recipient')
-        ->name('dashboard.memo.read');
+    Route::get('/dashboard/memos/unread-count', [HomeController::class, 'unreadMemoCount'])->name('dashboard.memos.unreadCount');
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');

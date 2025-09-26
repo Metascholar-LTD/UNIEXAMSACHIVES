@@ -248,25 +248,8 @@ function initBellAudio(){
 
 let lastUnread = Number({{ $newMessagesCount ?? 0 }});
 function pollUnread(){
-  // Only poll if user is authenticated
-  @auth
-  fetch('{{ route('dashboard.memos.unreadCount') }}', {
-    credentials:'same-origin',
-    headers: {
-      'X-Requested-With': 'XMLHttpRequest',
-      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
-    }
-  })
-    .then(r=>{
-      if (!r.ok) {
-        if (r.status === 401 || r.status === 403) {
-          // User is not authenticated, stop polling
-          return Promise.reject('Not authenticated');
-        }
-        throw new Error(`HTTP ${r.status}`);
-      }
-      return r.json();
-    })
+  fetch('{{ route('dashboard.memos.unreadCount') }}', {credentials:'same-origin'})
+    .then(r=>r.json())
     .then(data=>{
       const unread = Number(data.unread||0);
       const badge = document.querySelector('.uda-badge');
@@ -276,22 +259,12 @@ function pollUnread(){
       }
       if (unread>lastUnread && typeof udaBellAudio==='function'){ udaBellAudio(); }
       lastUnread = unread;
-    }).catch((error)=>{
-      if (error === 'Not authenticated') {
-        // Stop polling if not authenticated
-        return;
-      }
-      console.debug('Memo polling error:', error);
-    });
-  @endauth
+    }).catch(()=>{});
 }
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();
-  @auth
-  // Only start polling if user is authenticated
   setInterval(pollUnread, 15000);
-  @endauth
 });
 </script>
 
