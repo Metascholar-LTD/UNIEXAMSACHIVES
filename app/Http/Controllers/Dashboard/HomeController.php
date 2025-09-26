@@ -144,6 +144,13 @@ class HomeController extends Controller
     {
         abort_unless($recipient->user_id === Auth::id(), 403);
         $recipient->load('campaign');
+        // Mark as read if unread
+        if (!$recipient->is_read) {
+            $recipient->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+        }
         return view('admin.view_message', [
             'message' => (object) [
                 'title' => $recipient->campaign->subject,
@@ -152,6 +159,15 @@ class HomeController extends Controller
                 'attachments' => $recipient->campaign->attachments,
             ]
         ]);
+    }
+
+    public function markAllMemosRead()
+    {
+        $userId = Auth::id();
+        EmailCampaignRecipient::where('user_id', $userId)
+            ->where('is_read', false)
+            ->update(['is_read' => true, 'read_at' => now()]);
+        return redirect()->back();
     }
 
     public function profile(){

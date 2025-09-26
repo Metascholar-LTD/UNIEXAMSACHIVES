@@ -27,9 +27,49 @@
                     <div class="uda-title-pill">{{ $udaTitle }}</div>
                 </div>
 
-                <!-- Right: Auth Buttons -->
+                <!-- Right: Auth Buttons & Notifications -->
                 <div class="uda-nav-right">
                     @if (Auth::check())
+                        <div class="uda-notify">
+                            <button class="uda-bell" onclick="toggleMemoDropdown(event)">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                                @if(($newMessagesCount ?? 0) > 0)
+                                <span class="uda-badge">{{$newMessagesCount}}</span>
+                                @endif
+                            </button>
+                            <div id="uda-memo-dropdown" class="uda-dropdown">
+                                <div class="uda-dropdown-header">
+                                    <span>Memos</span>
+                                    <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}">
+                                        @csrf
+                                        <button type="submit" class="uda-link">Mark all as read</button>
+                                    </form>
+                                </div>
+                                <div class="uda-dropdown-list">
+                                    @php
+                                        $recentMemos = \App\Models\EmailCampaignRecipient::with('campaign')
+                                            ->where('user_id', Auth::id())
+                                            ->orderBy('created_at','desc')
+                                            ->limit(5)
+                                            ->get();
+                                    @endphp
+                                    @forelse($recentMemos as $rm)
+                                        <a class="uda-dropdown-item" href="{{ route('dashboard.memo.read', $rm->id) }}">
+                                            <span class="uda-item-title">{{ Str::limit($rm->campaign->subject, 40) }}</span>
+                                            <span class="uda-item-time">{{ $rm->created_at->diffForHumans() }}</span>
+                                            @if(!$rm->is_read)
+                                                <span class="uda-dot"></span>
+                                            @endif
+                                        </a>
+                                    @empty
+                                        <div class="uda-empty">No memos yet</div>
+                                    @endforelse
+                                </div>
+                                <div class="uda-dropdown-footer">
+                                    <a href="{{ route('dashboard.message') }}" class="uda-link">View all</a>
+                                </div>
+                            </div>
+                        </div>
                         <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
                     @else
                         <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
@@ -148,4 +188,35 @@
 
 </header>
 
+
+<style>
+.uda-notify { position: relative; margin-right: 12px; }
+.uda-bell { position: relative; border: none; background: transparent; cursor: pointer; padding: 6px; border-radius: 8px; }
+.uda-bell:hover { background: rgba(0,0,0,0.06); }
+.uda-badge { position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 11px; line-height: 1; padding: 3px 6px; border-radius: 999px; font-weight: 700; }
+.uda-dropdown { position: absolute; right: 0; top: 36px; min-width: 280px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); display: none; z-index: 1000; overflow: hidden; }
+.uda-dropdown-header, .uda-dropdown-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #f9fafb; border-bottom: 1px solid #eef2f7; }
+.uda-dropdown-footer { border-top: 1px solid #eef2f7; border-bottom: none; }
+.uda-dropdown-list { max-height: 320px; overflow-y: auto; }
+.uda-dropdown-item { display: flex; align-items: center; gap: 8px; padding: 10px 12px; text-decoration: none; color: #111827; border-bottom: 1px solid #f3f4f6; position: relative; }
+.uda-dropdown-item:hover { background: #f9fafb; }
+.uda-item-title { font-weight: 600; font-size: 13px; flex: 1; }
+.uda-item-time { font-size: 12px; color: #6b7280; }
+.uda-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
+.uda-link { background: none; border: none; padding: 0; color: #2563eb; font-weight: 600; cursor: pointer; text-decoration: none; }
+.uda-empty { padding: 14px; font-size: 13px; color: #6b7280; text-align: center; }
+</style>
+
+<script>
+function toggleMemoDropdown(e) {
+  e.stopPropagation();
+  var dd = document.getElementById('uda-memo-dropdown');
+  if (!dd) return;
+  dd.style.display = (dd.style.display === 'block') ? 'none' : 'block';
+}
+document.addEventListener('click', function(){
+  var dd = document.getElementById('uda-memo-dropdown');
+  if (dd) dd.style.display = 'none';
+});
+</script>
 

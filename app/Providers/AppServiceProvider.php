@@ -9,6 +9,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use App\Models\Message;
+use App\Models\EmailCampaignRecipient;
 use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,14 +33,16 @@ class AppServiceProvider extends ServiceProvider
         View::composer('*', function ($view) {
             if(Auth::check()){
                 if (Auth::user()->is_admin) {
-                    $newMessagesCount = Message::with(['users' => function ($query) {
-                        $query->where('user_id', Auth::id())->where('is_read', 0);
-                    }])->count();
+                    $newMessagesCount = EmailCampaignRecipient::where('user_id', Auth::id())
+                        ->where('is_read', false)
+                        ->count();
+                    $totalMemosCount = EmailCampaignRecipient::where('user_id', Auth::id())->count();
                     $exams = Exam::where('user_id', Auth::user()->id)->get();
                     $files = File::where('user_id', Auth::user()->id)->get();
 
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
+                        'totalMemosCount' => $totalMemosCount,
                         'allExansCount' => $exams->count(),
                         'approvedCount' => $exams->where('is_approve', 1)->count(),
                         'pendingCount' => $exams->where('is_approve', 0)->count(),
