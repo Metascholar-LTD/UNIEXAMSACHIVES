@@ -33,6 +33,7 @@ class AdvanceCommunicationController extends Controller
         
         // Get filter parameter
         $statusFilter = $request->get('status', 'all');
+        $search = $request->get('search');
         
         // Build query based on filter
         $query = EmailCampaign::with(['creator', 'recipients'])->recentFirst();
@@ -41,7 +42,20 @@ class AdvanceCommunicationController extends Controller
             $query->where('status', $statusFilter);
         }
         
-        $campaigns = $query->paginate(10);
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('subject', 'like', "%{$search}%")
+                  ->orWhere('reference', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%")
+                  ->orWhereHas('creator', function ($qc) use ($search) {
+                      $qc->where('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        $campaigns = $query->paginate(10)->appends($request->only('status', 'search'));
 
         $totalCampaigns = EmailCampaign::count();
         $sentCampaigns = EmailCampaign::byStatus('sent')->count();
