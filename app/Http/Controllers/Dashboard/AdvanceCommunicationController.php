@@ -262,7 +262,7 @@ class AdvanceCommunicationController extends Controller
     {
         do {
             $random = str_pad((string)random_int(0, 9999), 4, '0', STR_PAD_LEFT);
-            $reference = 'ref-cug' . $random;
+            $reference = 'Ref-CUG' . $random;
         } while (EmailCampaign::where('reference', $reference)->exists());
 
         return $reference;
