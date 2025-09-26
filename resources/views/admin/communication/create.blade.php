@@ -367,19 +367,6 @@
                                                 </button>
                                             </div>
                                         </div>
-
-                                        <div class="form-group">
-                                            <label class="form-label">
-                                                <i class="icofont-eye"></i> Memo Preview
-                                            </label>
-                                            <div class="preview-card">
-                                                <div class="preview-header">
-                                                    <div class="preview-subject" id="preview-subject">Subject will appear here</div>
-                                                    <div class="preview-recipients" id="preview-recipients">Recipients: All users</div>
-                                                </div>
-                                                <div class="preview-message" id="preview-message">Message preview will appear here</div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -1355,7 +1342,7 @@
 /* Form Actions */
 .form-actions {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 12px;
 }
 
@@ -2045,6 +2032,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Preview functionality
     function updatePreview() {
+        if (!previewSubject || !previewMessage || !previewRecipients) {
+            return;
+        }
         const subject = subjectInput.value || 'Subject will appear here';
         const message = messageTextarea.value || 'Message preview will appear here';
         
