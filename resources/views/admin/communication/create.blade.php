@@ -1223,6 +1223,18 @@
     padding: 8px 12px;
 }
 
+/* Sending options inline layout */
+.sending-options {
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+  flex-wrap: nowrap;
+}
+
+.sending-options .option-card {
+  flex: 1 1 0;
+}
+
 .sending-options .form-check {
     margin-bottom: 15px;
     padding: 15px;
