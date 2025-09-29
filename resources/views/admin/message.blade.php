@@ -45,7 +45,6 @@
                                                         <li>
                                                             <div class="dashboard__meessage__contact__wrap">
                                                                 <div class="dashboard__meessage__chat__img">
-                                                                <span class="dashboard__meessage__dot online"></span>
                                                                 <img loading="lazy"  src="../img/teacher/teacher__1.png" alt="">
                                                             </div>
                                                                 <div class="dashboard__meessage__meta">
