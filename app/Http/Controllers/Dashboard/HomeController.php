@@ -180,6 +180,29 @@ class HomeController extends Controller
         ]);
     }
 
+    public function recentMemos()
+    {
+        $recentMemos = EmailCampaignRecipient::with('campaign')
+            ->where('user_id', Auth::id())
+            ->orderBy('created_at','desc')
+            ->limit(5)
+            ->get();
+
+        $memos = $recentMemos->map(function($rm) {
+            return [
+                'id' => $rm->id,
+                'subject' => \Str::limit($rm->campaign->subject, 40),
+                'created_at' => $rm->created_at->diffForHumans(),
+                'is_read' => $rm->is_read,
+                'url' => route('dashboard.memo.read', $rm->id)
+            ];
+        });
+
+        return response()->json([
+            'memos' => $memos
+        ]);
+    }
+
     public function downloadMemoAttachment(EmailCampaignRecipient $recipient, $index)
     {
         // Ensure the user can only download attachments from their own memos

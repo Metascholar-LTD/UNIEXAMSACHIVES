@@ -45,7 +45,7 @@
                                         <button type="submit" class="uda-link">Mark all as read</button>
                                     </form>
                                 </div>
-                                <div class="uda-dropdown-list">
+                                <div class="uda-dropdown-list" id="uda-memo-list">
                                     @php
                                         $recentMemos = \App\Models\EmailCampaignRecipient::with('campaign')
                                             ->where('user_id', Auth::id())
@@ -259,25 +259,65 @@ function pollUnread(){
       }
       if (unread>lastUnread && typeof udaBellAudio==='function'){ udaBellAudio(); }
       lastUnread = unread;
+      
+      // Also refresh the memo list in the dropdown
+      refreshMemoList();
+    }).catch(()=>{});
+}
+
+function refreshMemoList(){
+  fetch('{{ route('dashboard.memos.recent') }}', {credentials:'same-origin'})
+    .then(r=>r.json())
+    .then(data=>{
+      const memoList = document.getElementById('uda-memo-list');
+      if (memoList && data.memos){
+        if (data.memos.length > 0){
+          memoList.innerHTML = data.memos.map(memo => 
+            `<a class="uda-dropdown-item" href="${memo.url}">
+              <span class="uda-item-title">${memo.subject}</span>
+              <span class="uda-item-time">${memo.created_at}</span>
+              ${!memo.is_read ? '<span class="uda-dot"></span>' : ''}
+            </a>`
+          ).join('');
+        } else {
+          memoList.innerHTML = '<div class="uda-empty">No memos yet</div>';
+        }
+      }
     }).catch(()=>{});
 }
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();
+  
+  // Poll immediately on page load
+  pollUnread();
+  
   // Poll more frequently for better responsiveness
-  setInterval(pollUnread, 5000);
+  setInterval(pollUnread, 3000);
   
   // Also poll immediately when page becomes visible
   document.addEventListener('visibilitychange', function(){
     if (!document.hidden) {
-      pollUnread();
+      setTimeout(pollUnread, 100);
     }
   });
   
   // Poll when returning from a memo view
   if (document.referrer && document.referrer.includes('/dashboard/memos/')) {
-    setTimeout(pollUnread, 500);
+    setTimeout(pollUnread, 200);
   }
+  
+  // Poll when window regains focus
+  window.addEventListener('focus', function(){
+    setTimeout(pollUnread, 100);
+  });
+  
+  // Poll when coming back from navigation
+  window.addEventListener('pageshow', function(event) {
+    if (event.persisted) {
+      setTimeout(pollUnread, 100);
+    }
+  });
 });
 </script>
 

@@ -32,11 +32,13 @@ class AppServiceProvider extends ServiceProvider
         
         View::composer('*', function ($view) {
             if(Auth::check()){
+                // Calculate message counts for all authenticated users
+                $newMessagesCount = EmailCampaignRecipient::where('user_id', Auth::id())
+                    ->where('is_read', false)
+                    ->count();
+                $totalMemosCount = EmailCampaignRecipient::where('user_id', Auth::id())->count();
+                
                 if (Auth::user()->is_admin) {
-                    $newMessagesCount = EmailCampaignRecipient::where('user_id', Auth::id())
-                        ->where('is_read', false)
-                        ->count();
-                    $totalMemosCount = EmailCampaignRecipient::where('user_id', Auth::id())->count();
                     $exams = Exam::where('user_id', Auth::user()->id)->get();
                     $files = File::where('user_id', Auth::user()->id)->get();
 
@@ -56,6 +58,8 @@ class AppServiceProvider extends ServiceProvider
                     $exams = Exam::all();
                     $files = File::all();
                     $view->with([
+                        'newMessagesCount' => $newMessagesCount,
+                        'totalMemosCount' => $totalMemosCount,
                         'allExansCount' => $exams->count(),
                         'approvedCount' => $exams->where('is_approve', 1)->count(),
                         'pendingCount' => $exams->where('is_approve', 0)->count(),
