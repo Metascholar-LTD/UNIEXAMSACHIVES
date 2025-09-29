@@ -50,7 +50,7 @@
                                                        class="btn btn-sm btn-primary" style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;">
                                                         <i class="icofont-download"></i> Download
                                                     </a>
-                                                    <a href="{{ route('dashboard.memo.download-attachment', ['recipient' => $message->id, 'index' => $index]) }}" 
+                                                    <a href="{{ route('dashboard.memo.view-attachment', ['recipient' => $message->id, 'index' => $index]) }}" 
                                                        target="_blank" class="btn btn-sm btn-outline-primary" style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;">
                                                         <i class="icofont-eye"></i> View
                                                     </a>
