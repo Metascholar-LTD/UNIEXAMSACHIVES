@@ -16,12 +16,25 @@
                 @include('components.sidebar')
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        
                         <div class="dashboard__section__title">
                             <h4>Memo</h4>
-                            <div style="margin-top:8px">
+                            <div style="margin-top:8px; display: flex; gap: 8px; align-items: center;">
                                 <a href="{{ route('dashboard.message') }}" class="btn btn-sm btn-primary">
                                     <i class="icofont-arrow-left"></i> Back to Memos
                                 </a>
+                                <form method="POST" action="{{ route('dashboard.memo.markAsRead', $message->id) }}" style="margin: 0;">
+                                    @csrf
+                                    <button type="submit" class="btn btn-sm btn-success">
+                                        <i class="icofont-check-circled"></i> Mark as Read
+                                    </button>
+                                </form>
                             </div>
                         </div>
                         <div class="row">

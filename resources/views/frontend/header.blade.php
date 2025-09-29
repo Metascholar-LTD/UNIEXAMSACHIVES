@@ -272,6 +272,7 @@ function pollUnread(){
     .then(r => r.json())
     .then(data => {
       const unread = Number(data.unread || 0);
+      console.log('DEBUG: Notification update', {unread, lastUnread, data});
       updateNotificationBadge(unread);
       
       if (unread > lastUnread && typeof udaBellAudio === 'function') {
