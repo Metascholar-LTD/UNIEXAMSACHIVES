@@ -247,31 +247,62 @@ function initBellAudio(){
 }
 
 let lastUnread = Number({{ $newMessagesCount ?? 0 }});
+
+function updateNotificationBadge(unreadCount) {
+  const badge = document.querySelector('.uda-badge');
+  if (badge) {
+    if (unreadCount > 0) {
+      badge.textContent = unreadCount;
+      badge.style.display = 'inline-block';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+}
+
 function pollUnread(){
-  fetch('{{ route('dashboard.memos.unreadCount') }}', {credentials:'same-origin'})
-    .then(r=>r.json())
-    .then(data=>{
-      const unread = Number(data.unread||0);
-      const badge = document.querySelector('.uda-badge');
-      if (badge){
-        if (unread>0){ badge.textContent = unread; badge.style.display='inline-block'; }
-        else { badge.style.display='none'; }
+  fetch('{{ route('dashboard.memos.unreadCount') }}', {
+    credentials: 'same-origin',
+    cache: 'no-cache',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    }
+  })
+    .then(r => r.json())
+    .then(data => {
+      const unread = Number(data.unread || 0);
+      console.log('Notification update:', {unread, lastUnread, timestamp: new Date().toISOString()});
+      updateNotificationBadge(unread);
+      
+      if (unread > lastUnread && typeof udaBellAudio === 'function') {
+        udaBellAudio();
       }
-      if (unread>lastUnread && typeof udaBellAudio==='function'){ udaBellAudio(); }
       lastUnread = unread;
       
       // Also refresh the memo list in the dropdown
       refreshMemoList();
-    }).catch(()=>{});
+    })
+    .catch(err => {
+      console.log('Error polling unread count:', err);
+    });
 }
 
 function refreshMemoList(){
-  fetch('{{ route('dashboard.memos.recent') }}', {credentials:'same-origin'})
-    .then(r=>r.json())
-    .then(data=>{
+  fetch('{{ route('dashboard.memos.recent') }}', {
+    credentials: 'same-origin',
+    cache: 'no-cache',
+    headers: {
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
+    }
+  })
+    .then(r => r.json())
+    .then(data => {
+      console.log('Memo list update:', data.debug);
       const memoList = document.getElementById('uda-memo-list');
-      if (memoList && data.memos){
-        if (data.memos.length > 0){
+      if (memoList && data.memos) {
+        if (data.memos.length > 0) {
           memoList.innerHTML = data.memos.map(memo => 
             `<a class="uda-dropdown-item" href="${memo.url}">
               <span class="uda-item-title">${memo.subject}</span>
@@ -283,38 +314,51 @@ function refreshMemoList(){
           memoList.innerHTML = '<div class="uda-empty">No memos yet</div>';
         }
       }
-    }).catch(()=>{});
+    })
+    .catch(err => {
+      console.log('Error refreshing memo list:', err);
+    });
 }
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();
   
   // Poll immediately on page load
-  pollUnread();
+  setTimeout(pollUnread, 100);
   
-  // Poll more frequently for better responsiveness
-  setInterval(pollUnread, 3000);
+  // Poll frequently for better responsiveness
+  setInterval(pollUnread, 2000);
   
-  // Also poll immediately when page becomes visible
+  // Poll when page becomes visible
   document.addEventListener('visibilitychange', function(){
     if (!document.hidden) {
-      setTimeout(pollUnread, 100);
+      setTimeout(pollUnread, 50);
     }
   });
   
-  // Poll when returning from a memo view
+  // Poll when returning from a memo view - more aggressive
   if (document.referrer && document.referrer.includes('/dashboard/memos/')) {
-    setTimeout(pollUnread, 200);
+    setTimeout(pollUnread, 50);
+    setTimeout(pollUnread, 500);
+    setTimeout(pollUnread, 1000);
   }
   
   // Poll when window regains focus
   window.addEventListener('focus', function(){
-    setTimeout(pollUnread, 100);
+    setTimeout(pollUnread, 50);
   });
   
   // Poll when coming back from navigation
   window.addEventListener('pageshow', function(event) {
-    if (event.persisted) {
+    setTimeout(pollUnread, 50);
+  });
+  
+  // Poll when user clicks anywhere (indicating activity)
+  let lastClickTime = 0;
+  document.addEventListener('click', function(){
+    const now = Date.now();
+    if (now - lastClickTime > 1000) { // Throttle to once per second
+      lastClickTime = now;
       setTimeout(pollUnread, 100);
     }
   });

@@ -72,43 +72,46 @@
                                         </style>
 
                                         <script>
-                                        // Refresh the memos list when coming back from a detail view
+                                        // Force refresh when returning from reading a memo
                                         (function(){
-                                          let hasReloaded = false;
-                                          
-                                          // Check if we're returning from a memo view (URL contains memo ID)
+                                          // Always refresh if coming from a memo view
                                           if (document.referrer && document.referrer.includes('/dashboard/memos/')) {
-                                            // We're returning from a memo view, refresh immediately
-                                            hasReloaded = true;
-                                            setTimeout(function(){ location.reload(); }, 100);
+                                            // Force immediate refresh
+                                            location.reload();
+                                            return;
                                           }
                                           
-                                          window.addEventListener('focus', function(){
-                                            if (!hasReloaded) {
-                                              hasReloaded = true;
-                                              // Delay a tick to avoid double reloads
-                                              setTimeout(function(){ location.reload(); }, 50);
-                                            }
-                                          });
+                                          // Set up refresh triggers for other scenarios
+                                          let refreshed = false;
                                           
-                                          document.addEventListener('visibilitychange', function(){
-                                            if (!document.hidden && !hasReloaded) {
-                                              hasReloaded = true;
-                                              setTimeout(function(){ location.reload(); }, 50);
-                                            }
-                                          });
-                                          
-                                          // Also refresh when the page becomes visible again
-                                          window.addEventListener('pageshow', function(event) {
-                                            if (event.persisted && !hasReloaded) {
-                                              // Page was loaded from cache, refresh to get latest data
-                                              hasReloaded = true;
+                                          function doRefresh() {
+                                            if (!refreshed) {
+                                              refreshed = true;
                                               location.reload();
                                             }
+                                          }
+                                          
+                                          // Refresh on focus
+                                          window.addEventListener('focus', function(){
+                                            setTimeout(doRefresh, 100);
                                           });
                                           
-                                          // Reset the flag after some time to allow future refreshes
-                                          setTimeout(function(){ hasReloaded = false; }, 5000);
+                                          // Refresh when page becomes visible
+                                          document.addEventListener('visibilitychange', function(){
+                                            if (!document.hidden) {
+                                              setTimeout(doRefresh, 100);
+                                            }
+                                          });
+                                          
+                                          // Refresh when coming from browser cache
+                                          window.addEventListener('pageshow', function(event) {
+                                            if (event.persisted) {
+                                              doRefresh();
+                                            }
+                                          });
+                                          
+                                          // Reset refresh flag after 3 seconds
+                                          setTimeout(function(){ refreshed = false; }, 3000);
                                         })();
                                         </script>
 

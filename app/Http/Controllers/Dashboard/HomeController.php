@@ -144,13 +144,16 @@ class HomeController extends Controller
     {
         abort_unless($recipient->user_id === Auth::id(), 403);
         $recipient->load('campaign');
-        // Mark as read if unread
-        if (!$recipient->is_read) {
-            $recipient->update([
-                'is_read' => true,
-                'read_at' => now(),
-            ]);
-        }
+        
+        // Always mark as read when viewing (force update)
+        $recipient->update([
+            'is_read' => true,
+            'read_at' => now(),
+        ]);
+        
+        // Clear any potential cache
+        $recipient->refresh();
+        
         return view('admin.view_message', [
             'message' => (object) [
                 'id' => $recipient->id,
@@ -199,7 +202,13 @@ class HomeController extends Controller
         });
 
         return response()->json([
-            'memos' => $memos
+            'memos' => $memos,
+            'debug' => [
+                'user_id' => Auth::id(),
+                'total_memos' => EmailCampaignRecipient::where('user_id', Auth::id())->count(),
+                'unread_memos' => EmailCampaignRecipient::where('user_id', Auth::id())->where('is_read', false)->count(),
+                'timestamp' => now()->toISOString()
+            ]
         ]);
     }
 
