@@ -272,7 +272,6 @@ function pollUnread(){
     .then(r => r.json())
     .then(data => {
       const unread = Number(data.unread || 0);
-      console.log('Notification update:', {unread, lastUnread, timestamp: new Date().toISOString()});
       updateNotificationBadge(unread);
       
       if (unread > lastUnread && typeof udaBellAudio === 'function') {
@@ -299,7 +298,6 @@ function refreshMemoList(){
   })
     .then(r => r.json())
     .then(data => {
-      console.log('Memo list update:', data.debug);
       const memoList = document.getElementById('uda-memo-list');
       if (memoList && data.memos) {
         if (data.memos.length > 0) {

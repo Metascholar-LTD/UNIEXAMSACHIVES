@@ -202,13 +202,7 @@ class HomeController extends Controller
         });
 
         return response()->json([
-            'memos' => $memos,
-            'debug' => [
-                'user_id' => Auth::id(),
-                'total_memos' => EmailCampaignRecipient::where('user_id', Auth::id())->count(),
-                'unread_memos' => EmailCampaignRecipient::where('user_id', Auth::id())->where('is_read', false)->count(),
-                'timestamp' => now()->toISOString()
-            ]
+            'memos' => $memos
         ]);
     }
 
