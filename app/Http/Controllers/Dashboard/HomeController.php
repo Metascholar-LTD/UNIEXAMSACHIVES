@@ -145,27 +145,10 @@ class HomeController extends Controller
         abort_unless($recipient->user_id === Auth::id(), 403);
         $recipient->load('campaign');
         
-        // Debug: Log the current state
-        \Log::info('Reading memo', [
-            'recipient_id' => $recipient->id,
-            'user_id' => Auth::id(),
-            'is_read_before' => $recipient->is_read,
-        ]);
-        
-        // Always mark as read when viewing (force update)
-        $updateResult = $recipient->update([
+        // Mark as read when viewing (now that fillable is fixed)
+        $recipient->update([
             'is_read' => true,
             'read_at' => now(),
-        ]);
-        
-        // Clear any potential cache and reload from database
-        $recipient->refresh();
-        
-        // Debug: Log the result
-        \Log::info('Memo update result', [
-            'recipient_id' => $recipient->id,
-            'update_result' => $updateResult,
-            'is_read_after' => $recipient->is_read,
         ]);
         
         return view('admin.view_message', [
@@ -207,19 +190,8 @@ class HomeController extends Controller
             ->where('is_read', false)
             ->count();
         
-        // Debug: Log the API call
-        \Log::info('Unread count API called', [
-            'user_id' => $userId,
-            'unread_count' => $unreadCount,
-            'timestamp' => now()->toISOString()
-        ]);
-        
         return response()->json([
-            'unread' => $unreadCount,
-            'debug' => [
-                'user_id' => $userId,
-                'timestamp' => now()->toISOString()
-            ]
+            'unread' => $unreadCount
         ]);
     }
 
@@ -246,29 +218,6 @@ class HomeController extends Controller
         ]);
     }
 
-    // Debug method - remove this after testing
-    public function debugMemos()
-    {
-        $userId = Auth::id();
-        $memos = EmailCampaignRecipient::with('campaign')
-            ->where('user_id', $userId)
-            ->get();
-        
-        return response()->json([
-            'user_id' => $userId,
-            'total_memos' => $memos->count(),
-            'unread_memos' => $memos->where('is_read', false)->count(),
-            'all_memos' => $memos->map(function($memo) {
-                return [
-                    'id' => $memo->id,
-                    'subject' => $memo->campaign->subject,
-                    'is_read' => $memo->is_read,
-                    'read_at' => $memo->read_at,
-                    'created_at' => $memo->created_at
-                ];
-            })
-        ]);
-    }
 
     public function downloadMemoAttachment(EmailCampaignRecipient $recipient, $index)
     {

@@ -116,9 +116,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/memos/recent', [HomeController::class, 'recentMemos'])->name('dashboard.memos.recent');
     Route::post('/dashboard/memos/mark-all-read', [HomeController::class, 'markAllMemosRead'])->name('dashboard.memos.markAllRead');
     Route::post('/dashboard/memos/{recipient}/mark-as-read', [HomeController::class, 'markSingleMemoAsRead'])->name('dashboard.memo.markAsRead');
-    
-    // Debug route - remove this after testing
-    Route::get('/debug/memos', [HomeController::class, 'debugMemos'])->name('debug.memos');
     Route::get('/dashboard/memos/{recipient}', [HomeController::class, 'readMemo'])->name('dashboard.memo.read');
     Route::get('/dashboard/memos/{recipient}/attachment/{index}/download', [HomeController::class, 'downloadMemoAttachment'])->name('dashboard.memo.download-attachment');
 

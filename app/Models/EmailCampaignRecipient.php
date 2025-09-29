@@ -18,10 +18,14 @@ class EmailCampaignRecipient extends Model
         'status',
         'sent_at',
         'error_message',
+        'is_read',
+        'read_at',
     ];
 
     protected $casts = [
         'sent_at' => 'datetime',
+        'read_at' => 'datetime',
+        'is_read' => 'boolean',
     ];
 
     public function campaign(): BelongsTo
