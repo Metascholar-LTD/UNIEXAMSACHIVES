@@ -50,10 +50,15 @@
                                                        class="btn btn-sm btn-primary" style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;">
                                                         <i class="icofont-download"></i> Download
                                                     </a>
-                                                    <a href="{{ route('dashboard.memo.view-attachment', ['recipient' => $message->id, 'index' => $index]) }}" 
-                                                       target="_blank" class="btn btn-sm btn-outline-primary" style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;">
+                                                    <button type="button" 
+                                                            class="btn btn-sm btn-outline-primary view-file-btn" 
+                                                            style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;"
+                                                            data-file-name="{{ $file['name'] }}"
+                                                            data-file-type="{{ $file['type'] ?? 'application/octet-stream' }}"
+                                                            data-view-url="{{ route('dashboard.memo.view-attachment', ['recipient' => $message->id, 'index' => $index]) }}"
+                                                            data-download-url="{{ route('dashboard.memo.download-attachment', ['recipient' => $message->id, 'index' => $index]) }}">
                                                         <i class="icofont-eye"></i> View
-                                                    </a>
+                                                    </button>
                                                 </div>
                                             </div>
                                         @endforeach
@@ -69,4 +74,186 @@
         </div>
     </div>
 </div>
+
+<!-- File Viewer Modal -->
+<div class="modal fade" id="fileViewerModal" tabindex="-1" aria-labelledby="fileViewerModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header" style="background: #f8f9fa; border-bottom: 1px solid #dee2e6;">
+                <h5 class="modal-title" id="fileViewerModalLabel">
+                    <i class="icofont-file-alt"></i> <span id="modalFileName">File Viewer</span>
+                </h5>
+                <div class="modal-actions">
+                    <a href="#" id="modalDownloadBtn" class="btn btn-sm btn-primary me-2">
+                        <i class="icofont-download"></i> Download
+                    </a>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="modal-body" style="padding: 0; height: 70vh; overflow: hidden;">
+                <div id="fileViewerContent" style="height: 100%; display: flex; align-items: center; justify-content: center; background: #f8f9fa;">
+                    <div class="text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                        <p class="mt-2">Loading file...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+/* File Viewer Modal Styles */
+#fileViewerModal .modal-dialog {
+    max-width: 95vw;
+    margin: 1rem auto;
+}
+
+#fileViewerModal .modal-content {
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+
+#fileViewerModal .modal-header {
+    padding: 1rem 1.5rem;
+    border-radius: 8px 8px 0 0;
+}
+
+#fileViewerModal .modal-title {
+    font-weight: 600;
+    color: #333;
+    margin: 0;
+}
+
+#fileViewerModal .modal-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+#fileViewerModal .modal-body {
+    border-radius: 0 0 8px 8px;
+}
+
+/* File content styling */
+.file-content {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: white;
+}
+
+.file-content.pdf {
+    width: 100%;
+    height: 100%;
+}
+
+.file-content.image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.file-unsupported {
+    text-align: center;
+    padding: 2rem;
+    color: #666;
+}
+
+.file-unsupported i {
+    font-size: 3rem;
+    color: #ccc;
+    margin-bottom: 1rem;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #fileViewerModal .modal-dialog {
+        max-width: 100vw;
+        margin: 0;
+        height: 100vh;
+    }
+    
+    #fileViewerModal .modal-content {
+        height: 100vh;
+        border-radius: 0;
+    }
+    
+    #fileViewerModal .modal-body {
+        height: calc(100vh - 80px);
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const modal = new bootstrap.Modal(document.getElementById('fileViewerModal'));
+    const modalTitle = document.getElementById('modalFileName');
+    const modalContent = document.getElementById('fileViewerContent');
+    const modalDownloadBtn = document.getElementById('modalDownloadBtn');
+    
+    // Handle view file button clicks
+    document.querySelectorAll('.view-file-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const fileName = this.getAttribute('data-file-name');
+            const fileType = this.getAttribute('data-file-type');
+            const viewUrl = this.getAttribute('data-view-url');
+            const downloadUrl = this.getAttribute('data-download-url');
+            
+            // Update modal title and download link
+            modalTitle.textContent = fileName;
+            modalDownloadBtn.href = downloadUrl;
+            
+            // Show loading state
+            modalContent.innerHTML = `
+                <div class="text-center">
+                    <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    <p class="mt-2">Loading file...</p>
+                </div>
+            `;
+            
+            // Show modal
+            modal.show();
+            
+            // Load file content
+            loadFileContent(viewUrl, fileType, fileName);
+        });
+    });
+    
+    function loadFileContent(url, fileType, fileName) {
+        // Determine how to display the file based on type
+        if (fileType.startsWith('image/')) {
+            // Display images directly
+            modalContent.innerHTML = `
+                <img src="${url}" class="file-content image" alt="${fileName}" style="max-width: 100%; max-height: 100%; object-fit: contain;">
+            `;
+        } else if (fileType === 'application/pdf') {
+            // Display PDFs in iframe
+            modalContent.innerHTML = `
+                <iframe src="${url}" class="file-content pdf" frameborder="0"></iframe>
+            `;
+        } else if (fileType.startsWith('text/')) {
+            // Display text files in iframe
+            modalContent.innerHTML = `
+                <iframe src="${url}" class="file-content" frameborder="0"></iframe>
+            `;
+        } else {
+            // For unsupported file types, show a message with download option
+            modalContent.innerHTML = `
+                <div class="file-unsupported">
+                    <i class="icofont-file-alt"></i>
+                    <h5>Preview not available</h5>
+                    <p>This file type cannot be previewed in the browser.</p>
+                    <p>Click the download button to save the file to your device.</p>
+                </div>
+            `;
+        }
+    }
+});
+</script>
+
 @endsection
