@@ -241,14 +241,64 @@ document.addEventListener('DOMContentLoaded', function() {
             modalContent.innerHTML = `
                 <iframe src="${url}" class="file-content" frameborder="0"></iframe>
             `;
+        } else if (fileType === 'application/zip' || fileType === 'application/x-zip-compressed') {
+            // Handle ZIP files
+            modalContent.innerHTML = `
+                <div class="file-unsupported">
+                    <i class="icofont-file-zip" style="font-size: 3rem; color: #007bff; margin-bottom: 1rem;"></i>
+                    <h5>ZIP Archive</h5>
+                    <p>This is a compressed archive file.</p>
+                    <p>Download and extract it to view the contents.</p>
+                    <div class="mt-3">
+                        <a href="${url}" class="btn btn-primary" download>
+                            <i class="icofont-download"></i> Download ZIP File
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else if (fileType === 'application/msword' || fileType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+            // Handle Word documents
+            modalContent.innerHTML = `
+                <div class="file-unsupported">
+                    <i class="icofont-file-doc" style="font-size: 3rem; color: #2b579a; margin-bottom: 1rem;"></i>
+                    <h5>Microsoft Word Document</h5>
+                    <p>This is a Word document (.doc/.docx).</p>
+                    <p>Download it to open with Microsoft Word or compatible software.</p>
+                    <div class="mt-3">
+                        <a href="${url}" class="btn btn-primary" download>
+                            <i class="icofont-download"></i> Download Word Document
+                        </a>
+                    </div>
+                </div>
+            `;
+        } else if (fileType === 'application/vnd.ms-excel' || fileType === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
+            // Handle Excel documents
+            modalContent.innerHTML = `
+                <div class="file-unsupported">
+                    <i class="icofont-file-excel" style="font-size: 3rem; color: #217346; margin-bottom: 1rem;"></i>
+                    <h5>Microsoft Excel Spreadsheet</h5>
+                    <p>This is an Excel spreadsheet (.xls/.xlsx).</p>
+                    <p>Download it to open with Microsoft Excel or compatible software.</p>
+                    <div class="mt-3">
+                        <a href="${url}" class="btn btn-primary" download>
+                            <i class="icofont-download"></i> Download Excel File
+                        </a>
+                    </div>
+                </div>
+            `;
         } else {
-            // For unsupported file types, show a message with download option
+            // For other unsupported file types, show a generic message
             modalContent.innerHTML = `
                 <div class="file-unsupported">
                     <i class="icofont-file-alt"></i>
                     <h5>Preview not available</h5>
                     <p>This file type cannot be previewed in the browser.</p>
                     <p>Click the download button to save the file to your device.</p>
+                    <div class="mt-3">
+                        <a href="${url}" class="btn btn-primary" download>
+                            <i class="icofont-download"></i> Download File
+                        </a>
+                    </div>
                 </div>
             `;
         }
