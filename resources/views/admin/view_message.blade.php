@@ -32,15 +32,32 @@
                                 <div class="dashboard__form">{!!$message->body!!}</div>
                                 @if(isset($message->attachments) && is_array($message->attachments) && count($message->attachments) > 0)
                                 <div class="dashboard__form" style="margin-top: 16px;">
-                                    <h5>Attachments</h5>
-                                    <ul>
-                                        @foreach($message->attachments as $file)
-                                            <li>
-                                                <a href="{{ asset('storage/' . $file['path']) }}" target="_blank">{{ $file['name'] }}</a>
-                                                <small>({{ $file['type'] ?? 'file' }})</small>
-                                            </li>
+                                    <h5><i class="icofont-attachment"></i> Attachments</h5>
+                                    <div class="attachments-list">
+                                        @foreach($message->attachments as $index => $file)
+                                            <div class="attachment-item" style="display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; margin: 8px 0; border: 1px solid #e0e0e0; border-radius: 8px; background: #f9f9f9; transition: all 0.2s ease;">
+                                                <div class="attachment-info" style="display: flex; align-items: center; flex: 1;">
+                                                    <i class="icofont-file-alt" style="margin-right: 12px; color: #666; font-size: 1.2em;"></i>
+                                                    <div>
+                                                        <span class="attachment-name" style="font-weight: 500; color: #333; display: block;">{{ $file['name'] }}</span>
+                                                        <span class="attachment-size" style="color: #666; font-size: 0.85em;">
+                                                            {{ number_format($file['size'] / 1024, 1) }} KB
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="attachment-actions" style="display: flex; gap: 8px;">
+                                                    <a href="{{ route('dashboard.memo.download-attachment', ['recipient' => $message->id, 'index' => $index]) }}" 
+                                                       class="btn btn-sm btn-primary" style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;">
+                                                        <i class="icofont-download"></i> Download
+                                                    </a>
+                                                    <a href="{{ route('dashboard.memo.download-attachment', ['recipient' => $message->id, 'index' => $index]) }}" 
+                                                       target="_blank" class="btn btn-sm btn-outline-primary" style="padding: 6px 12px; font-size: 0.85em; border-radius: 4px;">
+                                                        <i class="icofont-eye"></i> View
+                                                    </a>
+                                                </div>
+                                            </div>
                                         @endforeach
-                                    </ul>
+                                    </div>
                                 </div>
                                 @endif
                             </div>

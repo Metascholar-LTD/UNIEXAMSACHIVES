@@ -153,6 +153,7 @@ class HomeController extends Controller
         }
         return view('admin.view_message', [
             'message' => (object) [
+                'id' => $recipient->id,
                 'title' => $recipient->campaign->subject,
                 'body' => $recipient->campaign->message,
                 'created_at' => $recipient->created_at,
@@ -177,6 +178,31 @@ class HomeController extends Controller
                 ->where('is_read', false)
                 ->count()
         ]);
+    }
+
+    public function downloadMemoAttachment(EmailCampaignRecipient $recipient, $index)
+    {
+        // Ensure the user can only download attachments from their own memos
+        abort_unless($recipient->user_id === Auth::id(), 403);
+        
+        $recipient->load('campaign');
+        $attachments = $recipient->campaign->attachments;
+        
+        // Check if the attachment index is valid
+        if (!isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+        
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on server.');
+        }
+        
+        // Return file download response
+        return response()->download($filePath, $attachment['name']);
     }
 
     public function profile(){
