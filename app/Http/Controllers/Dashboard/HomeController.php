@@ -205,37 +205,6 @@ class HomeController extends Controller
         return response()->download($filePath, $attachment['name']);
     }
 
-    public function viewMemoAttachment(EmailCampaignRecipient $recipient, $index)
-    {
-        // Ensure the user can only view attachments from their own memos
-        abort_unless($recipient->user_id === Auth::id(), 403);
-        
-        $recipient->load('campaign');
-        $attachments = $recipient->campaign->attachments;
-        
-        // Check if the attachment index is valid
-        if (!isset($attachments[$index])) {
-            abort(404, 'Attachment not found.');
-        }
-        
-        $attachment = $attachments[$index];
-        $filePath = storage_path('app/public/' . $attachment['path']);
-        
-        // Check if file exists
-        if (!file_exists($filePath)) {
-            abort(404, 'File not found on server.');
-        }
-        
-        // Get file MIME type
-        $mimeType = $attachment['type'] ?? mime_content_type($filePath);
-        
-        // Return file for viewing in browser
-        return response()->file($filePath, [
-            'Content-Type' => $mimeType,
-            'Content-Disposition' => 'inline; filename="' . $attachment['name'] . '"'
-        ]);
-    }
-
     public function profile(){
 
         return view('admin.profile',[

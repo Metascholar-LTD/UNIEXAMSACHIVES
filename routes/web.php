@@ -114,7 +114,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/message',[HomeController::class, 'message'])->name('dashboard.message');
     Route::get('/dashboard/memos/{recipient}', [HomeController::class, 'readMemo'])->name('dashboard.memo.read');
     Route::get('/dashboard/memos/{recipient}/attachment/{index}/download', [HomeController::class, 'downloadMemoAttachment'])->name('dashboard.memo.download-attachment');
-    Route::get('/dashboard/memos/{recipient}/attachment/{index}/view', [HomeController::class, 'viewMemoAttachment'])->name('dashboard.memo.view-attachment');
     Route::post('/dashboard/memos/mark-all-read', [HomeController::class, 'markAllMemosRead'])->name('dashboard.memos.markAllRead');
     Route::get('/dashboard/memos/unread-count', [HomeController::class, 'unreadMemoCount'])->name('dashboard.memos.unreadCount');
 
