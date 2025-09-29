@@ -75,6 +75,13 @@
                                         // Refresh the memos list when coming back from a detail view
                                         (function(){
                                           let shouldReloadOnFocus = true;
+                                          
+                                          // Check if we're returning from a memo view (URL contains memo ID)
+                                          if (document.referrer && document.referrer.includes('/dashboard/memos/')) {
+                                            // We're returning from a memo view, refresh immediately
+                                            setTimeout(function(){ location.reload(); }, 100);
+                                          }
+                                          
                                           window.addEventListener('focus', function(){
                                             if (shouldReloadOnFocus) {
                                               shouldReloadOnFocus = false;
@@ -82,9 +89,18 @@
                                               setTimeout(function(){ location.reload(); }, 50);
                                             }
                                           });
+                                          
                                           document.addEventListener('visibilitychange', function(){
                                             if (!document.hidden) {
                                               setTimeout(function(){ location.reload(); }, 50);
+                                            }
+                                          });
+                                          
+                                          // Also refresh when the page becomes visible again
+                                          window.addEventListener('pageshow', function(event) {
+                                            if (event.persisted) {
+                                              // Page was loaded from cache, refresh to get latest data
+                                              location.reload();
                                             }
                                           });
                                         })();

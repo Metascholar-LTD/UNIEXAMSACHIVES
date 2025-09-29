@@ -264,7 +264,20 @@ function pollUnread(){
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();
-  setInterval(pollUnread, 15000);
+  // Poll more frequently for better responsiveness
+  setInterval(pollUnread, 5000);
+  
+  // Also poll immediately when page becomes visible
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden) {
+      pollUnread();
+    }
+  });
+  
+  // Poll when returning from a memo view
+  if (document.referrer && document.referrer.includes('/dashboard/memos/')) {
+    setTimeout(pollUnread, 500);
+  }
 });
 </script>
 
