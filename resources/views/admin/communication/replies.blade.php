@@ -98,7 +98,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
-                            <i class="icofont-comments"></i> All Replies ({{ $replies->total() }})
+                            <i class="icofont-chat"></i> All Replies ({{ $replies->total() }})
                         </h5>
                     </div>
                     <div class="card-body">
@@ -152,7 +152,7 @@
                             </div>
                         @else
                             <div class="text-center py-5">
-                                <i class="icofont-comments text-muted" style="font-size: 3rem;"></i>
+                                <i class="icofont-chat text-muted" style="font-size: 3rem;"></i>
                                 <h5 class="text-muted mt-3">No replies yet</h5>
                                 <p class="text-muted">No one has replied to this memo yet.</p>
                             </div>

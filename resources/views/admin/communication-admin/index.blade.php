@@ -235,7 +235,7 @@
                                                     @if($campaign->status === 'sent')
                                                         <a href="{{ route('admin.communication-admin.replies', $campaign) }}" 
                                                            class="action-btn replies-btn" title="View Replies ({{ $campaign->replies_count }})">
-                                                            <i class="icofont-comments"></i>
+                                                            <i class="icofont-chat"></i>
                                                         </a>
                                                     @endif
                                                     
