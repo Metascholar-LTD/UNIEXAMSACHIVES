@@ -811,8 +811,8 @@
   align-items: center;
   justify-content: center;
   z-index: 10000;
-  opacity: 0;
-  animation: popupFadeIn 0.8s ease-out forwards;
+  opacity: 1;
+  animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
 
 .popup-container {
