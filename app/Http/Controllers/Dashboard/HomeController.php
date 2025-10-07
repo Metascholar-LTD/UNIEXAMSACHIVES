@@ -383,7 +383,14 @@ class HomeController extends Controller
             ->where('created_at', '>', now()->subMinutes(5))
             ->exists();
 
-        return response()->json(['has_new' => $hasNew]);
+        $replyCount = Notification::forUser(Auth::id())
+            ->unread()
+            ->count();
+
+        return response()->json([
+            'has_new' => $hasNew,
+            'reply_count' => $replyCount
+        ]);
     }
 
     public function markNotificationAsRead($id)

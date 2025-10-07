@@ -33,17 +33,26 @@
                         <div class="uda-notify">
                             <button class="uda-bell" onclick="toggleMemoDropdown(event)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                @if(($newMessagesCount ?? 0) > 0)
-                                <span class="uda-badge">{{$newMessagesCount}}</span>
+                                @php
+                                    $totalNotifications = ($newMessagesCount ?? 0) + ($newReplyNotifications ?? 0);
+                                @endphp
+                                @if($totalNotifications > 0)
+                                <span class="uda-badge">{{$totalNotifications}}</span>
                                 @endif
                             </button>
                             <div id="uda-memo-dropdown" class="uda-dropdown">
                                 <div class="uda-dropdown-header">
-                                    <span>Memos</span>
-                                    <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}">
-                                        @csrf
-                                        <button type="submit" class="uda-link">Mark all as read</button>
-                                    </form>
+                                    <span>Notifications</span>
+                                    <div>
+                                        <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}" style="display: inline;">
+                                            @csrf
+                                            <button type="submit" class="uda-link">Mark memos read</button>
+                                        </form>
+                                        <form method="POST" action="{{ route('dashboard.notifications.markAllRead') }}" style="display: inline; margin-left: 8px;">
+                                            @csrf
+                                            <button type="submit" class="uda-link">Mark replies read</button>
+                                        </form>
+                                    </div>
                                 </div>
                                 <div class="uda-dropdown-list" id="uda-memo-list">
                                     @php
@@ -205,6 +214,7 @@
 .uda-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
 .uda-link { background: none; border: none; padding: 0; color: #2563eb; font-weight: 600; cursor: pointer; text-decoration: none; }
 .uda-empty { padding: 14px; font-size: 13px; color: #6b7280; text-align: center; }
+.uda-section-header { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #6b7280; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; }
 </style>
 
 <script>
@@ -247,12 +257,14 @@ function initBellAudio(){
 }
 
 let lastUnread = Number({{ $newMessagesCount ?? 0 }});
+let lastReplyNotifications = Number({{ $newReplyNotifications ?? 0 }});
 
-function updateNotificationBadge(unreadCount) {
+function updateNotificationBadge(unreadCount, replyCount = 0) {
   const badge = document.querySelector('.uda-badge');
   if (badge) {
-    if (unreadCount > 0) {
-      badge.textContent = unreadCount;
+    const totalCount = unreadCount + replyCount;
+    if (totalCount > 0) {
+      badge.textContent = totalCount;
       badge.style.display = 'inline-block';
     } else {
       badge.style.display = 'none';
@@ -261,6 +273,7 @@ function updateNotificationBadge(unreadCount) {
 }
 
 function pollUnread(){
+  // Poll for memos
   fetch('{{ route('dashboard.memos.unreadCount') }}', {
     credentials: 'same-origin',
     cache: 'no-cache',
@@ -272,15 +285,36 @@ function pollUnread(){
     .then(r => r.json())
     .then(data => {
       const unread = Number(data.unread || 0);
-      updateNotificationBadge(unread);
       
-      if (unread > lastUnread && typeof udaBellAudio === 'function') {
-        udaBellAudio();
-      }
-      lastUnread = unread;
-      
-      // Also refresh the memo list in the dropdown
-      refreshMemoList();
+      // Poll for reply notifications
+      fetch('/dashboard/notifications/check', {
+        credentials: 'same-origin',
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
+        }
+      })
+      .then(r => r.json())
+      .then(notificationData => {
+        const replyCount = notificationData.reply_count || 0;
+        updateNotificationBadge(unread, replyCount);
+        
+        if ((unread > lastUnread || replyCount > lastReplyNotifications) && typeof udaBellAudio === 'function') {
+          udaBellAudio();
+        }
+        lastUnread = unread;
+        lastReplyNotifications = replyCount;
+        
+        // Refresh the memo list in the dropdown
+        refreshMemoList();
+      })
+      .catch(err => {
+        console.log('Error polling reply notifications:', err);
+        updateNotificationBadge(unread);
+        lastUnread = unread;
+        refreshMemoList();
+      });
     })
     .catch(err => {
       console.log('Error polling unread count:', err);
@@ -288,6 +322,7 @@ function pollUnread(){
 }
 
 function refreshMemoList(){
+  // Fetch memos
   fetch('{{ route('dashboard.memos.recent') }}', {
     credentials: 'same-origin',
     cache: 'no-cache',
@@ -298,20 +333,70 @@ function refreshMemoList(){
   })
     .then(r => r.json())
     .then(data => {
-      const memoList = document.getElementById('uda-memo-list');
-      if (memoList && data.memos) {
-        if (data.memos.length > 0) {
-          memoList.innerHTML = data.memos.map(memo => 
-            `<a class="uda-dropdown-item" href="${memo.url}">
-              <span class="uda-item-title">${memo.subject}</span>
-              <span class="uda-item-time">${memo.created_at}</span>
-              ${!memo.is_read ? '<span class="uda-dot"></span>' : ''}
-            </a>`
-          ).join('');
-        } else {
-          memoList.innerHTML = '<div class="uda-empty">No memos yet</div>';
+      // Fetch reply notifications
+      fetch('/dashboard/notifications', {
+        credentials: 'same-origin',
+        cache: 'no-cache',
+        headers: {
+          'Cache-Control': 'no-cache',
+          'Pragma': 'no-cache'
         }
-      }
+      })
+      .then(r => r.json())
+      .then(notificationData => {
+        const memoList = document.getElementById('uda-memo-list');
+        if (memoList) {
+          let html = '';
+          
+          // Add memos
+          if (data.memos && data.memos.length > 0) {
+            html += '<div class="uda-section-header">📧 Memos</div>';
+            html += data.memos.map(memo => 
+              `<a class="uda-dropdown-item" href="${memo.url}">
+                <span class="uda-item-title">${memo.subject}</span>
+                <span class="uda-item-time">${memo.created_at}</span>
+                ${!memo.is_read ? '<span class="uda-dot"></span>' : ''}
+              </a>`
+            ).join('');
+          }
+          
+          // Add reply notifications
+          if (notificationData.notifications && notificationData.notifications.length > 0) {
+            html += '<div class="uda-section-header">💬 Reply Notifications</div>';
+            html += notificationData.notifications.map(notification => 
+              `<a class="uda-dropdown-item" href="${notification.url}">
+                <span class="uda-item-title">${notification.title}</span>
+                <span class="uda-item-time">${notification.time_ago}</span>
+                ${!notification.is_read ? '<span class="uda-dot"></span>' : ''}
+              </a>`
+            ).join('');
+          }
+          
+          if (html === '') {
+            html = '<div class="uda-empty">No notifications yet</div>';
+          }
+          
+          memoList.innerHTML = html;
+        }
+      })
+      .catch(err => {
+        console.log('Error refreshing notifications:', err);
+        // Fallback to just memos
+        const memoList = document.getElementById('uda-memo-list');
+        if (memoList && data.memos) {
+          if (data.memos.length > 0) {
+            memoList.innerHTML = data.memos.map(memo => 
+              `<a class="uda-dropdown-item" href="${memo.url}">
+                <span class="uda-item-title">${memo.subject}</span>
+                <span class="uda-item-time">${memo.created_at}</span>
+                ${!memo.is_read ? '<span class="uda-dot"></span>' : ''}
+              </a>`
+            ).join('');
+          } else {
+            memoList.innerHTML = '<div class="uda-empty">No memos yet</div>';
+          }
+        }
+      });
     })
     .catch(err => {
       console.log('Error refreshing memo list:', err);

@@ -19,12 +19,6 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Notifications -->
-        <div class="notification-container" style="padding: 10px 15px; border-bottom: 1px solid #dee2e6;">
-            @include('components.notifications')
-        </div>
-        
         <div class="dashboard__nav">
             <ul>
                 <li>
