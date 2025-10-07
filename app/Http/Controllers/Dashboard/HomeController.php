@@ -280,7 +280,14 @@ class HomeController extends Controller
         // Create notification for the memo creator
         $campaign = $recipient->campaign;
         $replyAuthor = Auth::user()->first_name . ' ' . Auth::user()->last_name;
-        $repliesUrl = route('dashboard.memo.replies', $recipient->id);
+        
+        // Determine the correct route based on whether the creator is an admin
+        $creator = User::find($campaign->created_by);
+        if ($creator && $creator->is_admin) {
+            $repliesUrl = route('admin.communication-admin.replies', $campaign->id);
+        } else {
+            $repliesUrl = route('admin.communication.replies', $campaign->id);
+        }
         
         Notification::createMemoReplyNotification(
             $campaign->created_by,
@@ -294,16 +301,22 @@ class HomeController extends Controller
 
     public function viewMemoReplies(EmailCampaignRecipient $recipient)
     {
-        // Ensure the user can only view replies to their own memos
-        abort_unless($recipient->user_id === Auth::id(), 403);
-        
         $recipient->load('campaign');
+        
+        // Check if the user is either:
+        // 1. The creator of the memo (sender) - can view all replies
+        // 2. The recipient of the memo - can view their own replies
+        $isCreator = $recipient->campaign->created_by === Auth::id();
+        $isRecipient = $recipient->user_id === Auth::id();
+        
+        abort_unless($isCreator || $isRecipient, 403, 'You do not have permission to view these replies.');
+        
         $replies = $recipient->campaign->replies()
             ->with('user')
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        return view('admin.memo-replies', compact('recipient', 'replies'));
+        return view('admin.memo-replies', compact('recipient', 'replies', 'isCreator'));
     }
 
     public function markReplyAsRead(MemoReply $reply)
