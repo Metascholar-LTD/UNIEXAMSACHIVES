@@ -808,8 +808,9 @@ class AdvanceCommunicationController extends Controller
             ? "Memo sent successfully to {$sentCount} recipients!"
             : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
 
-        return redirect()->route('admin.communication-admin.show', $campaign)
-                        ->with('success', $message);
+        return redirect()->route('admin.communication-admin.index')
+                        ->with('success', $message)
+                        ->with('memo_delivered', true);
     }
 
     public function adminShow(EmailCampaign $campaign)
@@ -984,8 +985,9 @@ class AdvanceCommunicationController extends Controller
             ? "Memo sent successfully to {$sentCount} recipients!"
             : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
 
-        return redirect()->route('admin.communication-admin.show', $campaign)
-                        ->with('success', $message);
+        return redirect()->route('admin.communication-admin.index')
+                        ->with('success', $message)
+                        ->with('memo_delivered', true);
     }
 
     public function adminDestroy(EmailCampaign $campaign)
@@ -1117,8 +1119,9 @@ class AdvanceCommunicationController extends Controller
             ? "Memo sent successfully to {$sentCount} recipients!"
             : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
 
-        return redirect()->route('admin.communication-admin.show', $campaign)
-                        ->with('success', $message);
+        return redirect()->route('admin.communication-admin.index')
+                        ->with('success', $message)
+                        ->with('memo_delivered', true);
     }
 
     public function adminStatistics()
