@@ -10,6 +10,7 @@ use App\Models\File;
 use App\Models\Message;
 use App\Models\EmailCampaignRecipient;
 use App\Models\EmailCampaign;
+use App\Models\MemoReply;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Exam;
@@ -242,6 +243,64 @@ class HomeController extends Controller
         
         // Return file download response
         return response()->download($filePath, $attachment['name']);
+    }
+
+    public function replyToMemo(Request $request, EmailCampaignRecipient $recipient)
+    {
+        // Ensure the user can only reply to their own memos
+        abort_unless($recipient->user_id === Auth::id(), 403);
+        
+        $request->validate([
+            'message' => 'required|string|max:5000',
+            'attachments' => 'nullable|array|max:5',
+            'attachments.*' => 'file|max:10240|mimes:pdf,doc,docx,txt,jpg,jpeg,png,gif',
+        ]);
+
+        $attachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('memo-replies', 'public');
+                $attachments[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'size' => $file->getSize(),
+                    'type' => $file->getMimeType(),
+                ];
+            }
+        }
+
+        $reply = MemoReply::create([
+            'campaign_id' => $recipient->campaign_id,
+            'user_id' => Auth::id(),
+            'message' => $request->message,
+            'attachments' => $attachments,
+        ]);
+
+        return redirect()->back()->with('success', 'Reply sent successfully!');
+    }
+
+    public function viewMemoReplies(EmailCampaignRecipient $recipient)
+    {
+        // Ensure the user can only view replies to their own memos
+        abort_unless($recipient->user_id === Auth::id(), 403);
+        
+        $recipient->load('campaign');
+        $replies = $recipient->campaign->replies()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.memo-replies', compact('recipient', 'replies'));
+    }
+
+    public function markReplyAsRead(MemoReply $reply)
+    {
+        // Ensure the user can only mark their own replies as read
+        abort_unless($reply->user_id === Auth::id(), 403);
+        
+        $reply->markAsRead();
+        
+        return response()->json(['success' => true]);
     }
 
     public function profile(){

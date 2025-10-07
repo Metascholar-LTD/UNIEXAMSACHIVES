@@ -232,6 +232,13 @@
                                                         <i class="icofont-eye"></i>
                                                     </a>
                                                     
+                                                    @if($campaign->status === 'sent')
+                                                        <a href="{{ route('admin.communication.replies', $campaign) }}" 
+                                                           class="action-btn replies-btn" title="View Replies ({{ $campaign->replies_count }})">
+                                                            <i class="icofont-comments"></i>
+                                                        </a>
+                                                    @endif
+                                                    
                                                     @if($campaign->status === 'draft')
                                                         <a href="{{ route('admin.communication.edit', $campaign) }}" 
                                                            class="action-btn edit-btn" title="Edit">
@@ -797,6 +804,7 @@
 .edit-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
 .send-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
 .delete-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+.replies-btn { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
 
 /* Memo Success Popup Styles */
 .memo-success-popup {

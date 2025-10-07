@@ -29,6 +29,9 @@
                                 <a href="{{ route('dashboard.message') }}" class="btn btn-sm btn-primary">
                                     <i class="icofont-arrow-left"></i> Back to Memos
                                 </a>
+                                <a href="{{ route('dashboard.memo.replies', $message->id) }}" class="btn btn-sm btn-info">
+                                    <i class="icofont-comments"></i> View Replies
+                                </a>
                                 <form method="POST" action="{{ route('dashboard.memo.markAsRead', $message->id) }}" style="margin: 0;">
                                     @csrf
                                     <button type="submit" class="btn btn-sm btn-success">

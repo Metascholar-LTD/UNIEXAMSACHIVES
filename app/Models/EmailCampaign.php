@@ -51,6 +51,16 @@ class EmailCampaign extends Model
         return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id')->where('status', 'sent');
     }
 
+    public function replies(): HasMany
+    {
+        return $this->hasMany(MemoReply::class, 'campaign_id');
+    }
+
+    public function getRepliesCountAttribute()
+    {
+        return $this->replies()->count();
+    }
+
     public function failedRecipients(): HasMany
     {
         return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id')->where('status', 'failed');

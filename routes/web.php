@@ -118,6 +118,11 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/memos/{recipient}/mark-as-read', [HomeController::class, 'markSingleMemoAsRead'])->name('dashboard.memo.markAsRead');
     Route::get('/dashboard/memos/{recipient}', [HomeController::class, 'readMemo'])->name('dashboard.memo.read');
     Route::get('/dashboard/memos/{recipient}/attachment/{index}/download', [HomeController::class, 'downloadMemoAttachment'])->name('dashboard.memo.download-attachment');
+    
+    #memo replies
+    Route::post('/dashboard/memos/{recipient}/reply', [HomeController::class, 'replyToMemo'])->name('dashboard.memo.reply');
+    Route::get('/dashboard/memos/{recipient}/replies', [HomeController::class, 'viewMemoReplies'])->name('dashboard.memo.replies');
+    Route::post('/dashboard/memos/replies/{reply}/mark-as-read', [HomeController::class, 'markReplyAsRead'])->name('dashboard.memo.reply.markAsRead');
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');
@@ -188,6 +193,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{campaign}/attachment/{index}/download', [AdvanceCommunicationController::class, 'adminDownloadAttachment'])->name('download-attachment');
         Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'adminRemoveAttachment'])->name('remove-attachment');
         Route::get('/ajax/users', [AdvanceCommunicationController::class, 'adminGetUsersAjax'])->name('users.ajax');
+        Route::get('/{campaign}/replies', [AdvanceCommunicationController::class, 'adminViewReplies'])->name('replies');
     });
 
     #logout
