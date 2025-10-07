@@ -174,6 +174,22 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/ajax/users', [AdvanceCommunicationController::class, 'getUsersAjax'])->name('users.ajax');
     });
 
+    #Advanced Communication System (Admin Only)
+    Route::prefix('admin/communication-admin')->name('admin.communication-admin.')->middleware('auth')->group(function () {
+        Route::get('/', [AdvanceCommunicationController::class, 'adminIndex'])->name('index');
+        Route::get('/create', [AdvanceCommunicationController::class, 'adminCreate'])->name('create');
+        Route::post('/store', [AdvanceCommunicationController::class, 'adminStore'])->name('store');
+        Route::get('/{campaign}', [AdvanceCommunicationController::class, 'adminShow'])->name('show');
+        Route::get('/{campaign}/edit', [AdvanceCommunicationController::class, 'adminEdit'])->name('edit');
+        Route::put('/{campaign}', [AdvanceCommunicationController::class, 'adminUpdate'])->name('update');
+        Route::delete('/{campaign}', [AdvanceCommunicationController::class, 'adminDestroy'])->name('destroy');
+        Route::post('/{campaign}/send', [AdvanceCommunicationController::class, 'adminSend'])->name('send');
+        Route::get('/statistics/overview', [AdvanceCommunicationController::class, 'adminStatistics'])->name('statistics');
+        Route::get('/{campaign}/attachment/{index}/download', [AdvanceCommunicationController::class, 'adminDownloadAttachment'])->name('download-attachment');
+        Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'adminRemoveAttachment'])->name('remove-attachment');
+        Route::get('/ajax/users', [AdvanceCommunicationController::class, 'adminGetUsersAjax'])->name('users.ajax');
+    });
+
     #logout
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');
 });

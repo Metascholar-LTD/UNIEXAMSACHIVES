@@ -589,4 +589,640 @@ class AdvanceCommunicationController extends Controller
 
         return view('admin.communication.statistics', compact('stats', 'recentActivity', 'monthlyStats'));
     }
+
+    // ==================== ADMIN METHODS ====================
+    
+    private function checkAdminOnlyAccess()
+    {
+        // Only admin users are allowed to access admin communication pages
+        if (!auth()->check() || !auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action. Admin access required.');
+        }
+    }
+
+    public function adminIndex(Request $request)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        // Get filter parameter
+        $statusFilter = $request->get('status', 'all');
+        $search = $request->get('search');
+        
+        // Build query based on filter
+        $query = EmailCampaign::with(['creator', 'recipients'])->recentFirst();
+        
+        if ($statusFilter !== 'all') {
+            $query->where('status', $statusFilter);
+        }
+        
+        if (!empty($search)) {
+            $query->where(function ($q) use ($search) {
+                $q->where('subject', 'like', "%{$search}%")
+                  ->orWhere('reference', 'like', "%{$search}%")
+                  ->orWhere('message', 'like', "%{$search}%")
+                  ->orWhereHas('creator', function ($qc) use ($search) {
+                      $qc->where('first_name', 'like', "%{$search}%")
+                         ->orWhere('last_name', 'like', "%{$search}%")
+                         ->orWhere('email', 'like', "%{$search}%");
+                  });
+            });
+        }
+        
+        $campaigns = $query->paginate(10);
+        
+        // Get statistics
+        $stats = [
+            'total' => EmailCampaign::count(),
+            'draft' => EmailCampaign::where('status', 'draft')->count(),
+            'scheduled' => EmailCampaign::where('status', 'scheduled')->count(),
+            'sending' => EmailCampaign::where('status', 'sending')->count(),
+            'sent' => EmailCampaign::where('status', 'sent')->count(),
+            'failed' => EmailCampaign::where('status', 'failed')->count(),
+        ];
+        
+        return view('admin.communication-admin.index', compact('campaigns', 'stats', 'statusFilter', 'search'));
+    }
+
+    public function adminCreate()
+    {
+        $this->checkAdminOnlyAccess();
+        
+        $users = User::where('is_approve', true)
+                    ->select('id', 'first_name', 'last_name', 'email')
+                    ->orderBy('first_name')
+                    ->get();
+
+        return view('admin.communication-admin.create', compact('users'));
+    }
+
+    public function adminStore(Request $request)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        // Determine if this is a draft or send action
+        $isDraft = $request->input('action') === 'draft';
+        
+        $validator = Validator::make($request->all(), [
+            'subject' => 'required|string|max:500',
+            'message' => 'required|string',
+            'recipient_type' => 'required|in:all,selected',
+            'selected_users' => 'required_if:recipient_type,selected|array',
+            'selected_users.*' => 'exists:users,id',
+            'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
+            'send_immediately' => 'boolean',
+            'scheduled_at' => $isDraft ? 'nullable|date' : 'nullable|required_if:send_immediately,false|date|after:now',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->withErrors($validator)->withInput();
+        }
+
+        // Handle file uploads
+        $attachmentPaths = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('email_attachments', 'public');
+                $attachmentPaths[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'size' => $file->getSize(),
+                    'type' => $file->getClientMimeType(),
+                ];
+            }
+        }
+
+        // Get recipients
+        $recipientUsers = $request->recipient_type === 'all' 
+            ? User::where('is_approve', true)->get()
+            : User::whereIn('id', $request->selected_users)->where('is_approve', true)->get();
+
+        // Create campaign
+        $campaign = EmailCampaign::create([
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'attachments' => $attachmentPaths,
+            'recipient_type' => $request->recipient_type,
+            'selected_users' => $request->recipient_type === 'selected' ? $recipientUsers->pluck('id')->toArray() : null,
+            'status' => $isDraft ? 'draft' : 'sending',
+            'scheduled_at' => $isDraft ? null : ($request->scheduled_at ?? now()),
+            'total_recipients' => $recipientUsers->count(),
+            'created_by' => auth()->id(),
+            'reference' => $this->generateUniqueReference(),
+        ]);
+
+        // If this is a draft, save and return immediately - NO EMAIL PROCESSING
+        if ($isDraft) {
+            return redirect()->route('admin.communication-admin.index')
+                            ->with('success', 'Memo saved as draft successfully!');
+        }
+
+        // ONLY EXECUTE EMAIL SENDING LOGIC FOR NON-DRAFT CAMPAIGNS
+        // Create recipient records
+        foreach ($recipientUsers as $user) {
+            EmailCampaignRecipient::create([
+                'comm_campaign_id' => $campaign->id,
+                'user_id' => $user->id,
+                'status' => 'pending',
+            ]);
+        }
+        
+        // Send emails directly using ResendMailService (reliable method)
+        $sentCount = 0;
+        $failedCount = 0;
+        $resendService = new ResendMailService();
+
+        foreach ($recipientUsers as $user) {
+            try {
+                // Generate HTML content for this recipient (like the job does)
+                $htmlContent = view('mails.campaign_simple', [
+                    'campaign' => $campaign,
+                    'user' => $user,
+                    'subject' => $campaign->subject,
+                    'message' => $campaign->message,
+                ])->render();
+
+                // Prepare attachments for Resend API
+                $attachments = [];
+                if ($campaign->attachments && is_array($campaign->attachments)) {
+                    foreach ($campaign->attachments as $attachment) {
+                        $filePath = storage_path('app/public/' . $attachment['path']);
+                        if (file_exists($filePath)) {
+                            $fileContent = file_get_contents($filePath);
+                            if ($fileContent !== false) {
+                                $attachments[] = [
+                                    'filename' => $attachment['name'],
+                                    'content' => base64_encode($fileContent),
+                                    'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                ];
+                            }
+                        }
+                    }
+                }
+                
+                // Send email using ResendMailService directly (proven to work)
+                $result = $resendService->sendEmail(
+                    $user->email,
+                    $campaign->subject,
+                    $htmlContent,
+                    config('mail.from.address'),
+                    $attachments
+                );
+
+                if ($result['success']) {
+                    $sentCount++;
+                    // Update recipient status
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update(['status' => 'sent']);
+                } else {
+                    $failedCount++;
+                    // Update recipient status
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update(['status' => 'failed']);
+                }
+            } catch (Exception $e) {
+                $failedCount++;
+                Log::error('Campaign email failed: ' . $e->getMessage(), [
+                    'campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage()
+                ]);
+                
+                // Update recipient status
+                EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                    ->where('user_id', $user->id)
+                    ->update(['status' => 'failed']);
+            }
+        }
+
+        // Update campaign status
+        $finalStatus = $failedCount > 0 ? ($sentCount > 0 ? 'partial' : 'failed') : 'sent';
+        $campaign->update([
+            'status' => $finalStatus,
+            'sent_count' => $sentCount,
+            'failed_count' => $failedCount,
+        ]);
+
+        $message = $finalStatus === 'sent' 
+            ? "Memo sent successfully to {$sentCount} recipients!"
+            : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
+
+        return redirect()->route('admin.communication-admin.show', $campaign)
+                        ->with('success', $message);
+    }
+
+    public function adminShow(EmailCampaign $campaign)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        $campaign->load(['creator', 'recipients.user']);
+        
+        return view('admin.communication-admin.show', compact('campaign'));
+    }
+
+    public function adminEdit(EmailCampaign $campaign)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        $users = User::where('is_approve', true)
+                    ->select('id', 'first_name', 'last_name', 'email')
+                    ->orderBy('first_name')
+                    ->get();
+
+        return view('admin.communication-admin.edit', compact('campaign', 'users'));
+    }
+
+    public function adminUpdate(Request $request, EmailCampaign $campaign)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        // Determine if this is a draft or send action
+        $isDraft = $request->input('action') === 'draft';
+        
+        $validator = Validator::make($request->all(), [
+            'subject' => 'required|string|max:500',
+            'message' => 'required|string',
+            'recipient_type' => 'required|in:all,selected',
+            'selected_users' => 'required_if:recipient_type,selected|array',
+            'selected_users.*' => 'exists:users,id',
+            'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
+            'send_immediately' => 'boolean',
+            'scheduled_at' => $isDraft ? 'nullable|date' : 'nullable|required_if:send_immediately,false|date|after:now',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()->withErrors($validator)->withInput();
+        }
+
+        // Handle file uploads
+        $attachmentPaths = $campaign->attachments ?? [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('email_attachments', 'public');
+                $attachmentPaths[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'size' => $file->getSize(),
+                    'type' => $file->getClientMimeType(),
+                ];
+            }
+        }
+
+        // Get recipients
+        $recipientUsers = $request->recipient_type === 'all' 
+            ? User::where('is_approve', true)->get()
+            : User::whereIn('id', $request->selected_users)->where('is_approve', true)->get();
+
+        // Update campaign
+        $campaign->update([
+            'subject' => $request->subject,
+            'message' => $request->message,
+            'attachments' => $attachmentPaths,
+            'recipient_type' => $request->recipient_type,
+            'selected_users' => $request->recipient_type === 'selected' ? $recipientUsers->pluck('id')->toArray() : null,
+            'status' => $isDraft ? 'draft' : 'sending',
+            'scheduled_at' => $isDraft ? null : ($request->scheduled_at ?? now()),
+            'total_recipients' => $recipientUsers->count(),
+        ]);
+
+        // If this is a draft, save and return immediately - NO EMAIL PROCESSING
+        if ($isDraft) {
+            return redirect()->route('admin.communication-admin.index')
+                            ->with('success', 'Memo updated and saved as draft successfully!');
+        }
+
+        // Clear existing recipients and create new ones
+        $campaign->recipients()->delete();
+        foreach ($recipientUsers as $user) {
+            EmailCampaignRecipient::create([
+                'comm_campaign_id' => $campaign->id,
+                'user_id' => $user->id,
+                'status' => 'pending',
+            ]);
+        }
+        
+        // Send emails directly using ResendMailService (reliable method)
+        $sentCount = 0;
+        $failedCount = 0;
+        $resendService = new ResendMailService();
+
+        foreach ($recipientUsers as $user) {
+            try {
+                // Generate HTML content for this recipient (like the job does)
+                $htmlContent = view('mails.campaign_simple', [
+                    'campaign' => $campaign,
+                    'user' => $user,
+                    'subject' => $campaign->subject,
+                    'message' => $campaign->message,
+                ])->render();
+
+                // Prepare attachments for Resend API
+                $attachments = [];
+                if ($campaign->attachments && is_array($campaign->attachments)) {
+                    foreach ($campaign->attachments as $attachment) {
+                        $filePath = storage_path('app/public/' . $attachment['path']);
+                        if (file_exists($filePath)) {
+                            $fileContent = file_get_contents($filePath);
+                            if ($fileContent !== false) {
+                                $attachments[] = [
+                                    'filename' => $attachment['name'],
+                                    'content' => base64_encode($fileContent),
+                                    'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                ];
+                            }
+                        }
+                    }
+                }
+                
+                // Send email using ResendMailService directly (proven to work)
+                $result = $resendService->sendEmail(
+                    $user->email,
+                    $campaign->subject,
+                    $htmlContent,
+                    config('mail.from.address'),
+                    $attachments
+                );
+
+                if ($result['success']) {
+                    $sentCount++;
+                    // Update recipient status
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update(['status' => 'sent']);
+                } else {
+                    $failedCount++;
+                    // Update recipient status
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update(['status' => 'failed']);
+                }
+            } catch (Exception $e) {
+                $failedCount++;
+                Log::error('Campaign email failed: ' . $e->getMessage(), [
+                    'campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage()
+                ]);
+                
+                // Update recipient status
+                EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                    ->where('user_id', $user->id)
+                    ->update(['status' => 'failed']);
+            }
+        }
+
+        // Update campaign status
+        $finalStatus = $failedCount > 0 ? ($sentCount > 0 ? 'partial' : 'failed') : 'sent';
+        $campaign->update([
+            'status' => $finalStatus,
+            'sent_count' => $sentCount,
+            'failed_count' => $failedCount,
+        ]);
+
+        $message = $finalStatus === 'sent' 
+            ? "Memo sent successfully to {$sentCount} recipients!"
+            : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
+
+        return redirect()->route('admin.communication-admin.show', $campaign)
+                        ->with('success', $message);
+    }
+
+    public function adminDestroy(EmailCampaign $campaign)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        // Delete associated recipients first
+        $campaign->recipients()->delete();
+        
+        // Delete campaign
+        $campaign->delete();
+        
+        return redirect()->route('admin.communication-admin.index')
+                        ->with('success', 'Memo deleted successfully!');
+    }
+
+    public function adminSend(EmailCampaign $campaign)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
+            return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
+        }
+
+        // Determine recipients based on campaign settings
+        $recipientUsers = $campaign->recipient_type === 'all' 
+            ? User::where('is_approve', true)->get()
+            : User::whereIn('id', $campaign->selected_users)->where('is_approve', true)->get();
+
+        // Ensure recipient records exist (create if draft or missing)
+        if ($campaign->status === 'draft' || $campaign->recipients()->count() === 0) {
+            foreach ($recipientUsers as $user) {
+                EmailCampaignRecipient::firstOrCreate([
+                    'comm_campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                ], [
+                    'status' => 'pending',
+                ]);
+            }
+
+            $campaign->update(['total_recipients' => $recipientUsers->count()]);
+        }
+
+        // Mark as sending
+        $campaign->update([
+            'status' => 'sending',
+            'scheduled_at' => now(),
+        ]);
+
+        // Send emails synchronously (no queue dependency) using ResendMailService
+        $sentCount = 0;
+        $failedCount = 0;
+        $resendService = new ResendMailService();
+
+        foreach ($recipientUsers as $user) {
+            try {
+                // Generate HTML content for this recipient (like the job does)
+                $htmlContent = view('mails.campaign_simple', [
+                    'campaign' => $campaign,
+                    'user' => $user,
+                    'subject' => $campaign->subject,
+                    'message' => $campaign->message,
+                ])->render();
+
+                // Prepare attachments for Resend API
+                $attachments = [];
+                if ($campaign->attachments && is_array($campaign->attachments)) {
+                    foreach ($campaign->attachments as $attachment) {
+                        $filePath = storage_path('app/public/' . $attachment['path']);
+                        if (file_exists($filePath)) {
+                            $fileContent = file_get_contents($filePath);
+                            if ($fileContent !== false) {
+                                $attachments[] = [
+                                    'filename' => $attachment['name'],
+                                    'content' => base64_encode($fileContent),
+                                    'type' => $attachment['type'] ?? mime_content_type($filePath),
+                                ];
+                            }
+                        }
+                    }
+                }
+                
+                // Send email using ResendMailService directly (proven to work)
+                $result = $resendService->sendEmail(
+                    $user->email,
+                    $campaign->subject,
+                    $htmlContent,
+                    config('mail.from.address'),
+                    $attachments
+                );
+
+                if ($result['success']) {
+                    $sentCount++;
+                    // Update recipient status
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update(['status' => 'sent']);
+                } else {
+                    $failedCount++;
+                    // Update recipient status
+                    EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                        ->where('user_id', $user->id)
+                        ->update(['status' => 'failed']);
+                }
+            } catch (Exception $e) {
+                $failedCount++;
+                Log::error('Campaign email failed: ' . $e->getMessage(), [
+                    'campaign_id' => $campaign->id,
+                    'user_id' => $user->id,
+                    'error' => $e->getMessage()
+                ]);
+                
+                // Update recipient status
+                EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
+                    ->where('user_id', $user->id)
+                    ->update(['status' => 'failed']);
+            }
+        }
+
+        // Update campaign status
+        $finalStatus = $failedCount > 0 ? ($sentCount > 0 ? 'partial' : 'failed') : 'sent';
+        $campaign->update([
+            'status' => $finalStatus,
+            'sent_count' => $sentCount,
+            'failed_count' => $failedCount,
+        ]);
+
+        $message = $finalStatus === 'sent' 
+            ? "Memo sent successfully to {$sentCount} recipients!"
+            : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
+
+        return redirect()->route('admin.communication-admin.show', $campaign)
+                        ->with('success', $message);
+    }
+
+    public function adminStatistics()
+    {
+        $this->checkAdminOnlyAccess();
+        
+        // Get overall statistics
+        $stats = [
+            'total_campaigns' => EmailCampaign::count(),
+            'total_sent' => EmailCampaign::where('status', 'sent')->sum('sent_count'),
+            'total_failed' => EmailCampaign::where('status', 'failed')->sum('failed_count'),
+            'total_recipients' => EmailCampaignRecipient::count(),
+            'success_rate' => 0,
+        ];
+
+        if ($stats['total_recipients'] > 0) {
+            $stats['success_rate'] = round(($stats['total_sent'] / $stats['total_recipients']) * 100, 2);
+        }
+
+        // Get recent activity
+        $recentActivity = EmailCampaign::with('creator')
+            ->orderBy('created_at', 'desc')
+            ->limit(5)
+            ->get();
+
+        // Get monthly statistics for the last 6 months
+        $monthlyStats = [];
+        for ($i = 5; $i >= 0; $i--) {
+            $date = Carbon::now()->subMonths($i);
+            $monthlyStats[] = [
+                'month' => $date->format('M Y'),
+                'campaigns' => EmailCampaign::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
+                    ->count(),
+                'sent' => EmailCampaign::whereYear('created_at', $date->year)
+                    ->whereMonth('created_at', $date->month)
+                    ->where('status', 'sent')
+                    ->sum('sent_count'),
+            ];
+        }
+
+        return view('admin.communication-admin.statistics', compact('stats', 'recentActivity', 'monthlyStats'));
+    }
+
+    public function adminDownloadAttachment(EmailCampaign $campaign, $index)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        $attachments = $campaign->attachments;
+        if (!$attachments || !isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on disk.');
+        }
+
+        return response()->download($filePath, $attachment['name']);
+    }
+
+    public function adminRemoveAttachment(EmailCampaign $campaign, $index)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        $attachments = $campaign->attachments;
+        if (!$attachments || !isset($attachments[$index])) {
+            return response()->json(['success' => false, 'message' => 'Attachment not found.']);
+        }
+
+        // Delete file from storage
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        if (file_exists($filePath)) {
+            unlink($filePath);
+        }
+
+        // Remove from array
+        unset($attachments[$index]);
+        $attachments = array_values($attachments); // Re-index array
+
+        $campaign->update(['attachments' => $attachments]);
+
+        return response()->json(['success' => true, 'message' => 'Attachment removed successfully.']);
+    }
+
+    public function adminGetUsersAjax(Request $request)
+    {
+        $this->checkAdminOnlyAccess();
+        
+        $search = $request->get('search', '');
+        
+        $users = User::where('is_approve', true)
+            ->where(function ($query) use ($search) {
+                $query->where('first_name', 'like', "%{$search}%")
+                      ->orWhere('last_name', 'like', "%{$search}%")
+                      ->orWhere('email', 'like', "%{$search}%");
+            })
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->limit(20)
+            ->get();
+
+        return response()->json($users);
+    }
 }
