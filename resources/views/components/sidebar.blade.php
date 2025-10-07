@@ -390,7 +390,7 @@
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                                     <polyline points="22,6 12,13 2,6"></polyline>
                                 </svg>
-                                Memos (Admin)</a>
+                                Memos</a>
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('admin.communication-admin.create') ? 'active' : '' }}" href="{{route('admin.communication-admin.create')}}">
@@ -401,7 +401,7 @@
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                                 </svg>
-                                Compose Memo (Admin)</a>
+                                Compose Memo</a>
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('admin.communication-admin.statistics') ? 'active' : '' }}" href="{{route('admin.communication-admin.statistics')}}">
@@ -413,7 +413,7 @@
                                     <line x1="12" y1="20" x2="12" y2="4"></line>
                                     <line x1="6" y1="20" x2="6" y2="14"></line>
                                 </svg>
-                                Statistics (Admin)</a>
+                                Statistics</a>
                         </li>
                     </ul>
                 </div>
