@@ -42,8 +42,7 @@
 
                         <!-- Memo Delivery Success Popup -->
                         @if(session('memo_delivered'))
-                        <!-- Session memo_delivered is true -->
-                        <div id="memoSuccessPopup" class="memo-success-popup" style="display: flex !important; position: fixed !important; top: 0 !important; left: 0 !important; width: 100% !important; height: 100% !important; z-index: 999999 !important;">
+                        <div id="memoSuccessPopup" class="memo-success-popup">
                             <div class="popup-container">
                                 <div class="popup-content">
                                     <div class="popup-icon">
