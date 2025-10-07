@@ -1125,40 +1125,27 @@ class AdvanceCommunicationController extends Controller
     {
         $this->checkAdminOnlyAccess();
         
-        // Get overall statistics
         $stats = [
             'total_campaigns' => EmailCampaign::count(),
-            'total_sent' => EmailCampaign::where('status', 'sent')->sum('sent_count'),
-            'total_failed' => EmailCampaign::where('status', 'failed')->sum('failed_count'),
-            'total_recipients' => EmailCampaignRecipient::count(),
-            'success_rate' => 0,
+            'sent_campaigns' => EmailCampaign::byStatus('sent')->count(),
+            'draft_campaigns' => EmailCampaign::byStatus('draft')->count(),
+            'scheduled_campaigns' => EmailCampaign::byStatus('scheduled')->count(),
+            'total_emails_sent' => EmailCampaignRecipient::where('status', 'sent')->count(),
+            'total_users' => User::where('is_approve', true)->count(),
         ];
 
-        if ($stats['total_recipients'] > 0) {
-            $stats['success_rate'] = round(($stats['total_sent'] / $stats['total_recipients']) * 100, 2);
-        }
-
-        // Get recent activity
+        // Get recent email activity
         $recentActivity = EmailCampaign::with('creator')
-            ->orderBy('created_at', 'desc')
-            ->limit(5)
-            ->get();
+                                    ->recentFirst()
+                                    ->limit(5)
+                                    ->get();
 
-        // Get monthly statistics for the last 6 months
-        $monthlyStats = [];
-        for ($i = 5; $i >= 0; $i--) {
-            $date = Carbon::now()->subMonths($i);
-            $monthlyStats[] = [
-                'month' => $date->format('M Y'),
-                'campaigns' => EmailCampaign::whereYear('created_at', $date->year)
-                    ->whereMonth('created_at', $date->month)
-                    ->count(),
-                'sent' => EmailCampaign::whereYear('created_at', $date->year)
-                    ->whereMonth('created_at', $date->month)
-                    ->where('status', 'sent')
-                    ->sum('sent_count'),
-            ];
-        }
+        // Get monthly statistics
+        $monthlyStats = EmailCampaign::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+                                   ->where('created_at', '>=', Carbon::now()->subMonths(12))
+                                   ->groupBy('month')
+                                   ->orderBy('month')
+                                   ->get();
 
         return view('admin.communication-admin.statistics', compact('stats', 'recentActivity', 'monthlyStats'));
     }
