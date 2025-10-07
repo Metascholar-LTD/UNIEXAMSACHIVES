@@ -1,6 +1,41 @@
-@extends('layouts.app')
+@extends('layout.app')
 
 @section('content')
+@include('frontend.header')
+@include('frontend.theme_shadow')
+
+<div class="dashboardarea sp_bottom_100">
+    <div class="container-fluid full__width__padding">
+        <div class="row">
+            @include('components.create_section')
+        </div>
+    </div>
+    <div class="dashboard">
+        <div class="container-fluid full__width__padding">
+            <div class="row">
+                {{-- sidebar menu --}}
+                @include('components.sidebar')
+                <div class="col-xl-9 col-lg-9 col-md-12">
+                    <div class="dashboard__content__wraper">
+                        @if(session('success'))
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                {{ session('success') }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        @endif
+                        
+                        <div class="dashboard__section__title">
+                            <h4>Memo Replies</h4>
+                            <div style="margin-top:8px; display: flex; gap: 8px; align-items: center;">
+                                <a href="{{ route('admin.communication.index') }}" class="btn btn-sm btn-primary">
+                                    <i class="icofont-arrow-left"></i> Back to Memos
+                                </a>
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-lg-12 col-md-12">
+                                <div class="dashboard__form">
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
@@ -201,4 +236,13 @@
     font-size: 0.875rem;
 }
 </style>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @endsection
