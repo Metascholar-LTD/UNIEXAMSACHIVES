@@ -11,6 +11,7 @@ use App\Models\Message;
 use App\Models\EmailCampaignRecipient;
 use App\Models\EmailCampaign;
 use App\Models\MemoReply;
+use App\Models\Notification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Exam;
@@ -276,6 +277,18 @@ class HomeController extends Controller
             'attachments' => $attachments,
         ]);
 
+        // Create notification for the memo creator
+        $campaign = $recipient->campaign;
+        $replyAuthor = Auth::user()->first_name . ' ' . Auth::user()->last_name;
+        $repliesUrl = route('dashboard.memo.replies', $recipient->id);
+        
+        Notification::createMemoReplyNotification(
+            $campaign->created_by,
+            $replyAuthor,
+            $campaign->subject,
+            $repliesUrl
+        );
+
         return redirect()->back()->with('success', 'Reply sent successfully!');
     }
 
@@ -340,6 +353,60 @@ class HomeController extends Controller
         
         // Return file download response
         return response()->download($filePath, $attachment['name']);
+    }
+
+    public function getNotifications()
+    {
+        $notifications = Notification::forUser(Auth::id())
+            ->orderBy('created_at', 'desc')
+            ->limit(20)
+            ->get()
+            ->map(function ($notification) {
+                return [
+                    'id' => $notification->id,
+                    'type' => $notification->type,
+                    'title' => $notification->title,
+                    'message' => $notification->message,
+                    'url' => $notification->url,
+                    'is_read' => $notification->is_read,
+                    'time_ago' => $notification->time_ago,
+                ];
+            });
+
+        return response()->json(['notifications' => $notifications]);
+    }
+
+    public function checkNewNotifications()
+    {
+        $hasNew = Notification::forUser(Auth::id())
+            ->unread()
+            ->where('created_at', '>', now()->subMinutes(5))
+            ->exists();
+
+        return response()->json(['has_new' => $hasNew]);
+    }
+
+    public function markNotificationAsRead(Notification $notification)
+    {
+        if ($notification->user_id !== Auth::id()) {
+            abort(403, 'Unauthorized access to this notification.');
+        }
+
+        $notification->markAsRead();
+
+        return response()->json(['success' => true]);
+    }
+
+    public function markAllNotificationsAsRead()
+    {
+        Notification::forUser(Auth::id())
+            ->unread()
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+
+        return response()->json(['success' => true]);
     }
 
     public function profile(){
