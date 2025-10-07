@@ -35,8 +35,10 @@ class AdvanceCommunicationController extends Controller
         $statusFilter = $request->get('status', 'all');
         $search = $request->get('search');
         
-        // Build query based on filter
-        $query = EmailCampaign::with(['creator', 'recipients'])->recentFirst();
+        // Build query based on filter - ONLY show campaigns created by current user
+        $query = EmailCampaign::with(['creator', 'recipients'])
+            ->where('created_by', auth()->id())
+            ->recentFirst();
         
         if ($statusFilter !== 'all') {
             $query->where('status', $statusFilter);
@@ -46,23 +48,19 @@ class AdvanceCommunicationController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('subject', 'like', "%{$search}%")
                   ->orWhere('reference', 'like', "%{$search}%")
-                  ->orWhere('message', 'like', "%{$search}%")
-                  ->orWhereHas('creator', function ($qc) use ($search) {
-                      $qc->where('first_name', 'like', "%{$search}%")
-                         ->orWhere('last_name', 'like', "%{$search}%")
-                         ->orWhere('email', 'like', "%{$search}%");
-                  });
+                  ->orWhere('message', 'like', "%{$search}%");
             });
         }
         
         $campaigns = $query->paginate(10)->appends($request->only('status', 'search'));
 
-        $totalCampaigns = EmailCampaign::count();
-        $sentCampaigns = EmailCampaign::byStatus('sent')->count();
-        $draftCampaigns = EmailCampaign::byStatus('draft')->count();
-        $scheduledCampaigns = EmailCampaign::byStatus('scheduled')->count();
-        $sendingCampaigns = EmailCampaign::byStatus('sending')->count();
-        $failedCampaigns = EmailCampaign::byStatus('failed')->count();
+        // Statistics for current user only
+        $totalCampaigns = EmailCampaign::where('created_by', auth()->id())->count();
+        $sentCampaigns = EmailCampaign::where('created_by', auth()->id())->byStatus('sent')->count();
+        $draftCampaigns = EmailCampaign::where('created_by', auth()->id())->byStatus('draft')->count();
+        $scheduledCampaigns = EmailCampaign::where('created_by', auth()->id())->byStatus('scheduled')->count();
+        $sendingCampaigns = EmailCampaign::where('created_by', auth()->id())->byStatus('sending')->count();
+        $failedCampaigns = EmailCampaign::where('created_by', auth()->id())->byStatus('failed')->count();
         $totalUsers = User::where('is_approve', true)->count();
 
         return view('admin.communication.index', compact(
@@ -272,6 +270,11 @@ class AdvanceCommunicationController extends Controller
     {
         $this->checkAdminAccess();
         
+        // Ensure user can only view their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
+        
         $campaign->load(['creator', 'recipients.user']);
         
         return view('admin.communication.show', compact('campaign'));
@@ -280,6 +283,11 @@ class AdvanceCommunicationController extends Controller
     public function edit(EmailCampaign $campaign)
     {
         $this->checkAdminAccess();
+        
+        // Ensure user can only edit their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
         
         if ($campaign->status !== 'draft') {
             return redirect()->back()->with('error', 'Only draft memos can be edited.');
@@ -296,6 +304,11 @@ class AdvanceCommunicationController extends Controller
     public function update(Request $request, EmailCampaign $campaign)
     {
         $this->checkAdminAccess();
+        
+        // Ensure user can only update their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
         
         if ($campaign->status !== 'draft') {
             return redirect()->back()->with('error', 'Only draft memos can be updated.');
@@ -356,6 +369,11 @@ class AdvanceCommunicationController extends Controller
     public function destroy(EmailCampaign $campaign)
     {
         $this->checkAdminAccess();
+        
+        // Ensure user can only delete their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
 
         // Delete attachment files
         if ($campaign->attachments) {
@@ -373,6 +391,11 @@ class AdvanceCommunicationController extends Controller
     public function send(EmailCampaign $campaign)
     {
         $this->checkAdminAccess();
+        
+        // Ensure user can only send their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
         
         if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
             return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
@@ -566,22 +589,26 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         $stats = [
-            'total_campaigns' => EmailCampaign::count(),
-            'sent_campaigns' => EmailCampaign::byStatus('sent')->count(),
-            'draft_campaigns' => EmailCampaign::byStatus('draft')->count(),
-            'scheduled_campaigns' => EmailCampaign::byStatus('scheduled')->count(),
-            'total_emails_sent' => EmailCampaignRecipient::where('status', 'sent')->count(),
+            'total_campaigns' => EmailCampaign::where('created_by', auth()->id())->count(),
+            'sent_campaigns' => EmailCampaign::where('created_by', auth()->id())->byStatus('sent')->count(),
+            'draft_campaigns' => EmailCampaign::where('created_by', auth()->id())->byStatus('draft')->count(),
+            'scheduled_campaigns' => EmailCampaign::where('created_by', auth()->id())->byStatus('scheduled')->count(),
+            'total_emails_sent' => EmailCampaignRecipient::whereHas('campaign', function($q) {
+                $q->where('created_by', auth()->id());
+            })->where('status', 'sent')->count(),
             'total_users' => User::where('is_approve', true)->count(),
         ];
 
-        // Get recent email activity
+        // Get recent email activity for current user only
         $recentActivity = EmailCampaign::with('creator')
+                                    ->where('created_by', auth()->id())
                                     ->recentFirst()
                                     ->limit(5)
                                     ->get();
 
-        // Get monthly statistics
+        // Get monthly statistics for current user only
         $monthlyStats = EmailCampaign::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+                                   ->where('created_by', auth()->id())
                                    ->where('created_at', '>=', Carbon::now()->subMonths(12))
                                    ->groupBy('month')
                                    ->orderBy('month')
@@ -608,8 +635,10 @@ class AdvanceCommunicationController extends Controller
         $statusFilter = $request->get('status', 'all');
         $search = $request->get('search');
         
-        // Build query based on filter
-        $query = EmailCampaign::with(['creator', 'recipients'])->recentFirst();
+        // Build query based on filter - ONLY show campaigns created by current admin user
+        $query = EmailCampaign::with(['creator', 'recipients'])
+            ->where('created_by', auth()->id())
+            ->recentFirst();
         
         if ($statusFilter !== 'all') {
             $query->where('status', $statusFilter);
@@ -619,25 +648,20 @@ class AdvanceCommunicationController extends Controller
             $query->where(function ($q) use ($search) {
                 $q->where('subject', 'like', "%{$search}%")
                   ->orWhere('reference', 'like', "%{$search}%")
-                  ->orWhere('message', 'like', "%{$search}%")
-                  ->orWhereHas('creator', function ($qc) use ($search) {
-                      $qc->where('first_name', 'like', "%{$search}%")
-                         ->orWhere('last_name', 'like', "%{$search}%")
-                         ->orWhere('email', 'like', "%{$search}%");
-                  });
+                  ->orWhere('message', 'like', "%{$search}%");
             });
         }
         
         $campaigns = $query->paginate(10);
         
-        // Get statistics
+        // Get statistics for current admin user only
         $stats = [
-            'total' => EmailCampaign::count(),
-            'draft' => EmailCampaign::where('status', 'draft')->count(),
-            'scheduled' => EmailCampaign::where('status', 'scheduled')->count(),
-            'sending' => EmailCampaign::where('status', 'sending')->count(),
-            'sent' => EmailCampaign::where('status', 'sent')->count(),
-            'failed' => EmailCampaign::where('status', 'failed')->count(),
+            'total' => EmailCampaign::where('created_by', auth()->id())->count(),
+            'draft' => EmailCampaign::where('created_by', auth()->id())->where('status', 'draft')->count(),
+            'scheduled' => EmailCampaign::where('created_by', auth()->id())->where('status', 'scheduled')->count(),
+            'sending' => EmailCampaign::where('created_by', auth()->id())->where('status', 'sending')->count(),
+            'sent' => EmailCampaign::where('created_by', auth()->id())->where('status', 'sent')->count(),
+            'failed' => EmailCampaign::where('created_by', auth()->id())->where('status', 'failed')->count(),
         ];
         
         return view('admin.communication-admin.index', compact('campaigns', 'stats', 'statusFilter', 'search'));
@@ -817,6 +841,11 @@ class AdvanceCommunicationController extends Controller
     {
         $this->checkAdminOnlyAccess();
         
+        // Ensure admin can only view their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
+        
         $campaign->load(['creator', 'recipients.user']);
         
         return view('admin.communication-admin.show', compact('campaign'));
@@ -825,6 +854,11 @@ class AdvanceCommunicationController extends Controller
     public function adminEdit(EmailCampaign $campaign)
     {
         $this->checkAdminOnlyAccess();
+        
+        // Ensure admin can only edit their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
         
         $users = User::where('is_approve', true)
                     ->select('id', 'first_name', 'last_name', 'email')
@@ -837,6 +871,11 @@ class AdvanceCommunicationController extends Controller
     public function adminUpdate(Request $request, EmailCampaign $campaign)
     {
         $this->checkAdminOnlyAccess();
+        
+        // Ensure admin can only update their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
         
         // Determine if this is a draft or send action
         $isDraft = $request->input('action') === 'draft';
@@ -994,6 +1033,11 @@ class AdvanceCommunicationController extends Controller
     {
         $this->checkAdminOnlyAccess();
         
+        // Ensure admin can only delete their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
+        
         // Delete associated recipients first
         $campaign->recipients()->delete();
         
@@ -1007,6 +1051,11 @@ class AdvanceCommunicationController extends Controller
     public function adminSend(EmailCampaign $campaign)
     {
         $this->checkAdminOnlyAccess();
+        
+        // Ensure admin can only send their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
         
         if ($campaign->status !== 'draft' && $campaign->status !== 'scheduled') {
             return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
@@ -1129,22 +1178,26 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminOnlyAccess();
         
         $stats = [
-            'total_campaigns' => EmailCampaign::count(),
-            'sent_campaigns' => EmailCampaign::byStatus('sent')->count(),
-            'draft_campaigns' => EmailCampaign::byStatus('draft')->count(),
-            'scheduled_campaigns' => EmailCampaign::byStatus('scheduled')->count(),
-            'total_emails_sent' => EmailCampaignRecipient::where('status', 'sent')->count(),
+            'total_campaigns' => EmailCampaign::where('created_by', auth()->id())->count(),
+            'sent_campaigns' => EmailCampaign::where('created_by', auth()->id())->byStatus('sent')->count(),
+            'draft_campaigns' => EmailCampaign::where('created_by', auth()->id())->byStatus('draft')->count(),
+            'scheduled_campaigns' => EmailCampaign::where('created_by', auth()->id())->byStatus('scheduled')->count(),
+            'total_emails_sent' => EmailCampaignRecipient::whereHas('campaign', function($q) {
+                $q->where('created_by', auth()->id());
+            })->where('status', 'sent')->count(),
             'total_users' => User::where('is_approve', true)->count(),
         ];
 
-        // Get recent email activity
+        // Get recent email activity for current admin user only
         $recentActivity = EmailCampaign::with('creator')
+                                    ->where('created_by', auth()->id())
                                     ->recentFirst()
                                     ->limit(5)
                                     ->get();
 
-        // Get monthly statistics
+        // Get monthly statistics for current admin user only
         $monthlyStats = EmailCampaign::selectRaw('DATE_FORMAT(created_at, "%Y-%m") as month, COUNT(*) as count')
+                                   ->where('created_by', auth()->id())
                                    ->where('created_at', '>=', Carbon::now()->subMonths(12))
                                    ->groupBy('month')
                                    ->orderBy('month')
