@@ -386,8 +386,10 @@ class HomeController extends Controller
         return response()->json(['has_new' => $hasNew]);
     }
 
-    public function markNotificationAsRead(Notification $notification)
+    public function markNotificationAsRead($id)
     {
+        $notification = Notification::findOrFail($id);
+        
         if ($notification->user_id !== Auth::id()) {
             abort(403, 'Unauthorized access to this notification.');
         }

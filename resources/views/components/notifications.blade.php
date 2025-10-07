@@ -230,9 +230,17 @@ function toggleNotifications() {
 }
 
 function loadNotifications() {
+    console.log('Loading notifications...');
     fetch('/dashboard/notifications')
-        .then(response => response.json())
+        .then(response => {
+            console.log('Notifications response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('Notifications data:', data);
             notifications = data.notifications || [];
             updateNotificationDisplay();
         })
@@ -295,6 +303,7 @@ function handleNotificationClick(notification) {
 }
 
 function markNotificationAsRead(notificationId) {
+    console.log('Marking notification as read:', notificationId);
     fetch(`/dashboard/notifications/${notificationId}/mark-read`, {
         method: 'POST',
         headers: {
@@ -302,11 +311,21 @@ function markNotificationAsRead(notificationId) {
             'Content-Type': 'application/json'
         }
     })
-    .then(response => response.json())
+    .then(response => {
+        console.log('Response status:', response.status);
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
     .then(data => {
+        console.log('Response data:', data);
         if (data.success) {
             loadNotifications(); // Reload to update display
         }
+    })
+    .catch(error => {
+        console.error('Error marking notification as read:', error);
     });
 }
 
