@@ -11,6 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
+        // Drop the existing table if it exists
+        Schema::dropIfExists('memo_replies');
+        
+        // Recreate the table with correct foreign key
         Schema::create('memo_replies', function (Blueprint $table) {
             $table->id();
             $table->foreignId('campaign_id')->constrained('comm_campaigns')->onDelete('cascade');
