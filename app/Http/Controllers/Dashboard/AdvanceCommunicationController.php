@@ -617,6 +617,23 @@ class AdvanceCommunicationController extends Controller
         return view('admin.communication.statistics', compact('stats', 'recentActivity', 'monthlyStats'));
     }
 
+    public function viewReplies(EmailCampaign $campaign)
+    {
+        $this->checkAdminAccess();
+        
+        // Ensure user can only view replies to their own campaigns
+        if ($campaign->created_by !== auth()->id()) {
+            abort(403, 'Unauthorized access to this memo.');
+        }
+        
+        $replies = $campaign->replies()
+            ->with('user')
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return view('admin.communication.replies', compact('campaign', 'replies'));
+    }
+
     // ==================== ADMIN METHODS ====================
     
     private function checkAdminOnlyAccess()

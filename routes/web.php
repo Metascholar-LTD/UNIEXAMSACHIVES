@@ -177,6 +177,7 @@ Route::middleware(['auth'])->group(function () {
         Route::get('/{campaign}/attachment/{index}/download', [AdvanceCommunicationController::class, 'downloadAttachment'])->name('download-attachment');
         Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'removeAttachment'])->name('remove-attachment');
         Route::get('/ajax/users', [AdvanceCommunicationController::class, 'getUsersAjax'])->name('users.ajax');
+        Route::get('/{campaign}/replies', [AdvanceCommunicationController::class, 'viewReplies'])->name('replies');
     });
 
     #Advanced Communication System (Admin Only)
