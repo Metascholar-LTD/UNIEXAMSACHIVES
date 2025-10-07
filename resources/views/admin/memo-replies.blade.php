@@ -161,11 +161,20 @@
                                             <div class="reply-attachments">
                                                 <h6 class="mb-2">Attachments:</h6>
                                                 <div class="attachments-list">
-                                                    @foreach($reply->attachments as $attachment)
-                                                        <div class="attachment-item d-flex align-items-center mb-2">
-                                                            <i class="icofont-file me-2"></i>
-                                                            <span class="attachment-name">{{ $attachment['name'] }}</span>
-                                                            <span class="attachment-size ms-2 text-muted">({{ number_format($attachment['size'] / 1024, 1) }} KB)</span>
+                                                    @foreach($reply->attachments as $index => $attachment)
+                                                        <div class="attachment-item d-flex align-items-center justify-content-between mb-2 p-2 border rounded">
+                                                            <div class="d-flex align-items-center">
+                                                                <i class="icofont-file me-2"></i>
+                                                                <div>
+                                                                    <span class="attachment-name">{{ $attachment['name'] }}</span>
+                                                                    <br>
+                                                                    <small class="attachment-size text-muted">({{ number_format($attachment['size'] / 1024, 1) }} KB)</small>
+                                                                </div>
+                                                            </div>
+                                                            <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                               class="btn btn-sm btn-primary">
+                                                                <i class="icofont-download"></i> Download
+                                                            </a>
                                                         </div>
                                                     @endforeach
                                                 </div>
@@ -248,12 +257,16 @@
 }
 
 .attachment-item {
-    padding: 5px 0;
-    border-bottom: 1px solid #f8f9fa;
+    padding: 10px;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
 }
 
-.attachment-item:last-child {
-    border-bottom: none;
+.attachment-item:hover {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
 }
 
 .attachment-name {

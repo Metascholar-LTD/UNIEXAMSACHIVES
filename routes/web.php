@@ -123,6 +123,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/memos/{recipient}/reply', [HomeController::class, 'replyToMemo'])->name('dashboard.memo.reply');
     Route::get('/dashboard/memos/{recipient}/replies', [HomeController::class, 'viewMemoReplies'])->name('dashboard.memo.replies');
     Route::post('/dashboard/memos/replies/{reply}/mark-as-read', [HomeController::class, 'markReplyAsRead'])->name('dashboard.memo.reply.markAsRead');
+    Route::get('/dashboard/memos/replies/{reply}/attachment/{index}/download', [HomeController::class, 'downloadReplyAttachment'])->name('dashboard.memo.reply.download-attachment');
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');

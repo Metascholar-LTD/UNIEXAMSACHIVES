@@ -303,6 +303,45 @@ class HomeController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function downloadReplyAttachment(MemoReply $reply, $index)
+    {
+        // Ensure the user can only download attachments from their own replies or replies to their memos
+        $userId = Auth::id();
+        $canDownload = false;
+        
+        // Check if user is the author of the reply
+        if ($reply->user_id === $userId) {
+            $canDownload = true;
+        }
+        
+        // Check if user is the creator of the original memo
+        if (!$canDownload && $reply->campaign && $reply->campaign->created_by === $userId) {
+            $canDownload = true;
+        }
+        
+        if (!$canDownload) {
+            abort(403, 'Unauthorized access to this attachment.');
+        }
+        
+        $attachments = $reply->attachments;
+        
+        // Check if the attachment index is valid
+        if (!isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+        
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on server.');
+        }
+        
+        // Return file download response
+        return response()->download($filePath, $attachment['name']);
+    }
+
     public function profile(){
 
         return view('admin.profile',[
