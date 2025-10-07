@@ -270,7 +270,7 @@ class HomeController extends Controller
         }
 
         $reply = MemoReply::create([
-            'campaign_id' => $recipient->campaign_id,
+            'campaign_id' => $recipient->comm_campaign_id,
             'user_id' => Auth::id(),
             'message' => $request->message,
             'attachments' => $attachments,
