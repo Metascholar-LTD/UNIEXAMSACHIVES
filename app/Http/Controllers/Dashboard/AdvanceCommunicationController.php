@@ -808,9 +808,6 @@ class AdvanceCommunicationController extends Controller
             ? "Memo sent successfully to {$sentCount} recipients!"
             : "Memo sent with issues. {$sentCount} successful, {$failedCount} failed.";
 
-        // Debug: Log the redirect
-        \Log::info('Admin redirecting with memo_delivered: true and message: ' . $message);
-        
         return redirect()->route('admin.communication-admin.index')
                         ->with('success', $message)
                         ->with('memo_delivered', true);

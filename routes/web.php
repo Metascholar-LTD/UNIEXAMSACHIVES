@@ -192,11 +192,4 @@ Route::middleware(['auth'])->group(function () {
 
     #logout
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');
-    
-    # Test route for popup debugging
-    Route::get('/test-popup', function() {
-        return redirect()->route('admin.communication-admin.index')
-                        ->with('success', 'Test message')
-                        ->with('memo_delivered', true);
-    })->name('test.popup');
 });

@@ -40,29 +40,6 @@
                             </div>
                         </div>
 
-                        <!-- Debug Session Variables -->
-                        @if(session('memo_delivered'))
-                            <div style="background: red; color: white; padding: 10px; margin: 10px;">
-                                DEBUG: memo_delivered session is TRUE
-                            </div>
-                        @endif
-                        
-                        @if(session('success'))
-                            <div style="background: blue; color: white; padding: 10px; margin: 10px;">
-                                DEBUG: success session = {{ session('success') }}
-                            </div>
-                        @endif
-
-                        <!-- Test Popup (Always Show) -->
-                        <div id="testPopup" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 99999; display: flex; align-items: center; justify-content: center;">
-                            <div style="background: white; padding: 20px; border-radius: 10px;">
-                                <h3>TEST POPUP - This should always show</h3>
-                                <button onclick="document.getElementById('testPopup').style.display='none'">Close Test</button>
-                                <br><br>
-                                <a href="{{ route('test.popup') }}" class="btn btn-primary">Test Popup with Session</a>
-                            </div>
-                        </div>
-
                         <!-- Memo Delivery Success Popup -->
                         @if(session('memo_delivered'))
                         <div id="memoSuccessPopup" class="memo-success-popup">
