@@ -405,6 +405,40 @@
     .status-chip.approved { background: rgba(220, 252, 231, 0.8); color: #059669; border: 1px solid rgba(16,185,129,0.3); }
     .status-chip.pending { background: rgba(254, 243, 199, 0.8); color: #d97706; border: 1px solid rgba(245,158,11,0.3); }
 
+    /* Staff Category Styles */
+    .staff-category-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(147, 197, 253, 0.8);
+        color: #1e40af;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        margin-top: 0.5rem;
+    }
+
+    .staff-category-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 4px 8px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        background: rgba(147, 197, 253, 0.8);
+        color: #1e40af;
+        border: 1px solid rgba(59, 130, 246, 0.3);
+    }
+
+    .no-category {
+        color: #9ca3af;
+        font-style: italic;
+        font-size: 0.9rem;
+    }
+
     .no-users i {
         font-size: 4rem;
         margin-bottom: 1rem;
@@ -536,6 +570,12 @@
                                                     <i class="fas {{ $user->is_approve ? 'fa-check-circle' : 'fa-clock' }}"></i>
                                                     {{ $user->is_approve ? 'Approved' : 'Pending' }}
                                                 </div>
+                                                @if($user->staff_category)
+                                                    <div class="staff-category-badge">
+                                                        <i class="fas fa-user-tag"></i>
+                                                        {{ $user->staff_category }}
+                                                    </div>
+                                                @endif
                                             </div>
                                             
                                             <div class="user-actions">
@@ -576,6 +616,7 @@
                                                 <th>#</th>
                                                 <th>Name</th>
                                                 <th>Email</th>
+                                                <th>Staff Category</th>
                                                 <th>Status</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -586,6 +627,16 @@
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $user->first_name }} {{ $user->last_name }}</td>
                                                 <td>{{ $user->email }}</td>
+                                                <td>
+                                                    @if($user->staff_category)
+                                                        <span class="staff-category-chip">
+                                                            <i class="fas fa-user-tag"></i>
+                                                            {{ $user->staff_category }}
+                                                        </span>
+                                                    @else
+                                                        <span class="no-category">-</span>
+                                                    @endif
+                                                </td>
                                                 <td>
                                                     <span class="status-chip {{ $user->is_approve ? 'approved' : 'pending' }}">
                                                         <i class="fas {{ $user->is_approve ? 'fa-check-circle' : 'fa-clock' }}"></i>
