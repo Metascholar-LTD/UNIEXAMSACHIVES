@@ -1015,13 +1015,26 @@
   line-height: 1.4;
 }
 
-.option-radio:checked + .option-label .option-card {
+.option-radio:checked + .option-label {
   border-color: #3b82f6;
   background: #f0f9ff;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
 }
 
 .option-radio:checked + .option-label .option-icon {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+/* Selected card state */
+.option-card.selected {
+  border-color: #3b82f6 !important;
+  background: #f0f9ff !important;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15) !important;
+  transform: translateY(-2px);
+}
+
+.option-card.selected .option-icon {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%) !important;
 }
 
 /* User Selector */
@@ -1755,6 +1768,9 @@ document.addEventListener('DOMContentLoaded', function() {
     // Handle recipient type changes
     recipientRadios.forEach(radio => {
         radio.addEventListener('change', function() {
+            // Update visual state for all cards
+            updateCardStates();
+            
             if (this.value === 'selected') {
                 userSelector.style.display = 'block';
                 updateSelectedCount();
@@ -1765,6 +1781,21 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+    
+    // Function to update card visual states
+    function updateCardStates() {
+        recipientRadios.forEach(radio => {
+            const card = radio.closest('.option-card');
+            if (radio.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+        });
+    }
+    
+    // Initialize card states on page load
+    updateCardStates();
     
     // Handle send option changes
     sendOptionRadios.forEach(radio => {
