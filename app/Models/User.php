@@ -26,6 +26,7 @@ class User extends Authenticatable
         'is_approve',
         'profile_picture',
         'department_id',
+        'staff_category',
         'password_changed',
         'admin_access_requested',
         'admin_access_reason',

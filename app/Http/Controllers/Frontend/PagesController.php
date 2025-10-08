@@ -154,6 +154,7 @@ class PagesController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'department_id' => 'nullable|exists:departments,id',
+            'staff_category' => 'required|string|in:Junior Staff,Senior Staff,Senior Member (Non-Teaching),Senior Member (Teaching)',
         ]);
 
         User::create([
@@ -165,6 +166,7 @@ class PagesController extends Controller
             'password_changed' => false,
             'password' => Hash::make($validatedData['password']),
             'department_id' => $validatedData['department_id'],
+            'staff_category' => $validatedData['staff_category'],
         ]);
 
         # Send registration confirmation email to user
