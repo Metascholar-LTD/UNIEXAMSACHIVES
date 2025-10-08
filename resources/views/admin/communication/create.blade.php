@@ -247,6 +247,72 @@
                                                         </label>
                                                     </div>
                                                 </div>
+
+                                                <!-- Staff Category Cards -->
+                                                <div class="staff-category-section">
+                                                    <h6 class="section-title">Staff Categories</h6>
+                                                    <div class="staff-category-grid">
+                                                        <div class="option-card">
+                                                            <input class="option-radio" type="radio" name="recipient_type" 
+                                                                   id="junior_staff" value="junior_staff"
+                                                                   {{ old('recipient_type') === 'junior_staff' ? 'checked' : '' }}>
+                                                            <label class="option-label" for="junior_staff">
+                                                                <div class="option-icon">
+                                                                    <i class="icofont-user"></i>
+                                                                </div>
+                                                                <div class="option-content">
+                                                                    <strong>Junior Staff</strong>
+                                                                    <span class="option-desc">Send to all Junior Staff members</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="option-card">
+                                                            <input class="option-radio" type="radio" name="recipient_type" 
+                                                                   id="senior_staff" value="senior_staff"
+                                                                   {{ old('recipient_type') === 'senior_staff' ? 'checked' : '' }}>
+                                                            <label class="option-label" for="senior_staff">
+                                                                <div class="option-icon">
+                                                                    <i class="icofont-user-alt-2"></i>
+                                                                </div>
+                                                                <div class="option-content">
+                                                                    <strong>Senior Staff</strong>
+                                                                    <span class="option-desc">Send to all Senior Staff members</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="option-card">
+                                                            <input class="option-radio" type="radio" name="recipient_type" 
+                                                                   id="senior_member_non_teaching" value="senior_member_non_teaching"
+                                                                   {{ old('recipient_type') === 'senior_member_non_teaching' ? 'checked' : '' }}>
+                                                            <label class="option-label" for="senior_member_non_teaching">
+                                                                <div class="option-icon">
+                                                                    <i class="icofont-user-alt-3"></i>
+                                                                </div>
+                                                                <div class="option-content">
+                                                                    <strong>Senior Member (Non-Teaching)</strong>
+                                                                    <span class="option-desc">Send to all Senior Members (Non-Teaching)</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+
+                                                        <div class="option-card">
+                                                            <input class="option-radio" type="radio" name="recipient_type" 
+                                                                   id="senior_member_teaching" value="senior_member_teaching"
+                                                                   {{ old('recipient_type') === 'senior_member_teaching' ? 'checked' : '' }}>
+                                                            <label class="option-label" for="senior_member_teaching">
+                                                                <div class="option-icon">
+                                                                    <i class="icofont-user-alt-5"></i>
+                                                                </div>
+                                                                <div class="option-content">
+                                                                    <strong>Senior Member (Teaching)</strong>
+                                                                    <span class="option-desc">Send to all Senior Members (Teaching)</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         <div id="user-selector" class="user-selector" style="display: none;">
@@ -849,6 +915,37 @@
 .recipient-options {
   display: flex;
   flex-direction: row;
+  gap: 16px;
+}
+
+/* Staff Category Section */
+.staff-category-section {
+  margin-top: 24px;
+  padding-top: 24px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #374151;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.section-title:before {
+  content: '';
+  width: 4px;
+  height: 20px;
+  background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+  border-radius: 2px;
+}
+
+.staff-category-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 16px;
 }
 

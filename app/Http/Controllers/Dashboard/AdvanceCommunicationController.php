@@ -98,7 +98,7 @@ class AdvanceCommunicationController extends Controller
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
-            'recipient_type' => 'required|in:all,selected',
+            'recipient_type' => 'required|in:all,selected,junior_staff,senior_staff,senior_member_non_teaching,senior_member_teaching',
             'selected_users' => 'required_if:recipient_type,selected|array',
             'selected_users.*' => 'exists:users,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
@@ -317,7 +317,7 @@ class AdvanceCommunicationController extends Controller
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
-            'recipient_type' => 'required|in:all,selected',
+            'recipient_type' => 'required|in:all,selected,junior_staff,senior_staff,senior_member_non_teaching,senior_member_teaching',
             'selected_users' => 'required_if:recipient_type,selected|array',
             'selected_users.*' => 'exists:users,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
@@ -706,7 +706,7 @@ class AdvanceCommunicationController extends Controller
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
-            'recipient_type' => 'required|in:all,selected',
+            'recipient_type' => 'required|in:all,selected,junior_staff,senior_staff,senior_member_non_teaching,senior_member_teaching',
             'selected_users' => 'required_if:recipient_type,selected|array',
             'selected_users.*' => 'exists:users,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
@@ -900,7 +900,7 @@ class AdvanceCommunicationController extends Controller
         $validator = Validator::make($request->all(), [
             'subject' => 'required|string|max:500',
             'message' => 'required|string',
-            'recipient_type' => 'required|in:all,selected',
+            'recipient_type' => 'required|in:all,selected,junior_staff,senior_staff,senior_member_non_teaching,senior_member_teaching',
             'selected_users' => 'required_if:recipient_type,selected|array',
             'selected_users.*' => 'exists:users,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
@@ -1301,5 +1301,32 @@ class AdvanceCommunicationController extends Controller
             ->get();
 
         return response()->json($users);
+    }
+
+    /**
+     * Get recipients based on recipient type
+     */
+    private function getRecipientsByType($recipientType, $selectedUsers = null)
+    {
+        if ($recipientType === 'all') {
+            return User::where('is_approve', true)->get();
+        } elseif ($recipientType === 'selected') {
+            return User::whereIn('id', $selectedUsers)->where('is_approve', true)->get();
+        } elseif (in_array($recipientType, ['junior_staff', 'senior_staff', 'senior_member_non_teaching', 'senior_member_teaching'])) {
+            // Map recipient types to staff categories
+            $staffCategoryMap = [
+                'junior_staff' => 'Junior Staff',
+                'senior_staff' => 'Senior Staff',
+                'senior_member_non_teaching' => 'Senior Member (Non-Teaching)',
+                'senior_member_teaching' => 'Senior Member (Teaching)'
+            ];
+            
+            $staffCategory = $staffCategoryMap[$recipientType];
+            return User::where('is_approve', true)
+                      ->where('staff_category', $staffCategory)
+                      ->get();
+        } else {
+            return collect();
+        }
     }
 }
