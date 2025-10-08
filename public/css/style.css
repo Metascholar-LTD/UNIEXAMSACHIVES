@@ -14813,6 +14813,13 @@ Dark Mode
   max-height: 400px;
   overflow-y: auto;
   padding: 8px 0;
+  /* Hide scrollbar but keep functionality */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+}
+
+.uda-dropdown-list::-webkit-scrollbar {
+  display: none; /* WebKit browsers */
 }
 
 .uda-dropdown-item {
