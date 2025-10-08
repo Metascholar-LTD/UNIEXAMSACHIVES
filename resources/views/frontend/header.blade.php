@@ -42,17 +42,17 @@
                             </button>
                             <div id="uda-memo-dropdown" class="uda-dropdown">
                                 <div class="uda-dropdown-header">
-                                    <span>Notifications</span>
-                                    <div>
-                                        <form method="POST" action="{{ route('dashboard.memos.markAllRead') }}" style="display: inline;">
-                                            @csrf
-                                            <button type="submit" class="uda-link">Mark memos read</button>
-                                        </form>
-                                        <form method="POST" action="{{ route('dashboard.notifications.markAllRead') }}" style="display: inline; margin-left: 8px;">
-                                            @csrf
-                                            <button type="submit" class="uda-link">Mark replies read</button>
-                                        </form>
+                                    <div class="uda-header-title">
+                                        <span class="uda-notification-icon">🔔</span>
+                                        <span>Notifications</span>
                                     </div>
+                                    <form method="POST" action="{{ route('dashboard.notifications.markAllUnified') }}" class="uda-mark-all-form">
+                                        @csrf
+                                        <button type="submit" class="uda-mark-all-btn">
+                                            <span class="uda-mark-all-icon">✓</span>
+                                            Mark all as read
+                                        </button>
+                                    </form>
                                 </div>
                                 <div class="uda-dropdown-list" id="uda-memo-list">
                                     @php
@@ -402,6 +402,58 @@ function refreshMemoList(){
       console.log('Error refreshing memo list:', err);
     });
 }
+
+// Handle unified "Mark all as read" button
+document.addEventListener('DOMContentLoaded', function(){
+  const markAllForm = document.querySelector('.uda-mark-all-form');
+  if (markAllForm) {
+    markAllForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Show loading state
+      const button = this.querySelector('.uda-mark-all-btn');
+      const originalText = button.innerHTML;
+      button.innerHTML = '<span class="uda-mark-all-icon">⏳</span>Marking all as read...';
+      button.disabled = true;
+      
+      // Submit the form
+      fetch(this.action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: new URLSearchParams(new FormData(this))
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Reset button
+          button.innerHTML = '<span class="uda-mark-all-icon">✓</span>All marked as read';
+          button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
+          
+          // Refresh the notification list
+          refreshMemoList();
+          
+          // Update badge
+          updateNotificationBadge(0, 0);
+          
+          // Reset button after 2 seconds
+          setTimeout(() => {
+            button.innerHTML = originalText;
+            button.style.background = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
+            button.disabled = false;
+          }, 2000);
+        }
+      })
+      .catch(error => {
+        console.error('Error marking all as read:', error);
+        button.innerHTML = originalText;
+        button.disabled = false;
+      });
+    });
+  }
+});
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();

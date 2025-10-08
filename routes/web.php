@@ -130,6 +130,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/notifications/check', [HomeController::class, 'checkNewNotifications'])->name('dashboard.notifications.check');
     Route::post('/dashboard/notifications/{id}/mark-read', [HomeController::class, 'markNotificationAsRead'])->name('dashboard.notification.markAsRead');
     Route::post('/dashboard/notifications/mark-all-read', [HomeController::class, 'markAllNotificationsAsRead'])->name('dashboard.notifications.markAllRead');
+    Route::post('/dashboard/notifications/mark-all-unified', [HomeController::class, 'markAllUnifiedAsRead'])->name('dashboard.notifications.markAllUnified');
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');

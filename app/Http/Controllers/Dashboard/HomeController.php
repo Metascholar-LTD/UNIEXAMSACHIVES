@@ -466,6 +466,27 @@ class HomeController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function markAllUnifiedAsRead()
+    {
+        // Mark all notifications as read
+        Notification::forUser(Auth::id())
+            ->unread()
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+
+        // Mark all memos as read
+        EmailCampaignRecipient::where('user_id', Auth::id())
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
+
+        return response()->json(['success' => true]);
+    }
+
     public function profile(){
 
         return view('admin.profile',[
