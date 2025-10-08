@@ -30,7 +30,7 @@
                                     <i class="icofont-arrow-left"></i> Back to Memos
                                 </a>
                                 <a href="{{ route('dashboard.memo.replies', $message->id) }}" class="btn btn-sm btn-info">
-                                    <i class="icofont-chat"></i> View Replies
+                                    <i class="icofont-chat"></i> Reply to Memo
                                 </a>
                                 <form method="POST" action="{{ route('dashboard.memo.markAsRead', $message->id) }}" style="margin: 0;">
                                     @csrf
