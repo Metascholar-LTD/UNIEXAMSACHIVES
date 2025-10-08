@@ -277,24 +277,53 @@ class HomeController extends Controller
             'attachments' => $attachments,
         ]);
 
-        // Create notification for the memo creator
+        // Create notifications for ALL recipients of the memo (group replies)
         $campaign = $recipient->campaign;
         $replyAuthor = Auth::user()->first_name . ' ' . Auth::user()->last_name;
         
-        // Determine the correct route based on whether the creator is an admin
-        $creator = User::find($campaign->created_by);
-        if ($creator && $creator->is_admin) {
-            $repliesUrl = route('admin.communication-admin.replies', $campaign->id);
-        } else {
-            $repliesUrl = route('admin.communication.replies', $campaign->id);
+        // Get all recipients of this campaign
+        $allRecipients = $campaign->recipients()->with('user')->get();
+        
+        foreach ($allRecipients as $campaignRecipient) {
+            // Skip notifying the person who just replied
+            if ($campaignRecipient->user_id === Auth::id()) {
+                continue;
+            }
+            
+            // Determine the correct route based on whether the recipient is an admin
+            $recipientUser = $campaignRecipient->user;
+            if ($recipientUser && $recipientUser->is_admin) {
+                $repliesUrl = route('admin.communication-admin.replies', $campaign->id);
+            } else {
+                $repliesUrl = route('admin.communication.replies', $campaign->id);
+            }
+            
+            Notification::createMemoReplyNotification(
+                $campaignRecipient->user_id,
+                $replyAuthor,
+                $campaign->subject,
+                $repliesUrl
+            );
         }
         
-        Notification::createMemoReplyNotification(
-            $campaign->created_by,
-            $replyAuthor,
-            $campaign->subject,
-            $repliesUrl
-        );
+        // Also notify the memo creator if they're not already a recipient
+        if ($campaign->created_by !== Auth::id()) {
+            $creator = User::find($campaign->created_by);
+            if ($creator) {
+                if ($creator->is_admin) {
+                    $repliesUrl = route('admin.communication-admin.replies', $campaign->id);
+                } else {
+                    $repliesUrl = route('admin.communication.replies', $campaign->id);
+                }
+                
+                Notification::createMemoReplyNotification(
+                    $campaign->created_by,
+                    $replyAuthor,
+                    $campaign->subject,
+                    $repliesUrl
+                );
+            }
+        }
 
         return redirect()->back()->with('success', 'Reply sent successfully!');
     }
@@ -305,12 +334,18 @@ class HomeController extends Controller
         
         // Check if the user is either:
         // 1. The creator of the memo (sender) - can view all replies
-        // 2. The recipient of the memo - can view their own replies
+        // 2. Any recipient of the memo - can view all replies from all recipients
         $isCreator = $recipient->campaign->created_by === Auth::id();
         $isRecipient = $recipient->user_id === Auth::id();
         
-        abort_unless($isCreator || $isRecipient, 403, 'You do not have permission to view these replies.');
+        // Also check if user is any recipient of this campaign (for group replies)
+        $isAnyRecipient = $recipient->campaign->recipients()
+            ->where('user_id', Auth::id())
+            ->exists();
         
+        abort_unless($isCreator || $isRecipient || $isAnyRecipient, 403, 'You do not have permission to view these replies.');
+        
+        // Show ALL replies to this campaign (group replies)
         $replies = $recipient->campaign->replies()
             ->with('user')
             ->orderBy('created_at', 'desc')
