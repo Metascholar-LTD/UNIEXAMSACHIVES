@@ -262,7 +262,7 @@
                                                                 </div>
                                                                 <div class="option-content">
                                                                     <strong>Junior Staff</strong>
-                                                                    <span class="option-desc">Send to all Junior Staff members</span>
+                                                                    <span class="option-desc">Send to all Junior Staff members ({{ $staffCategoryCounts['junior_staff'] }} users)</span>
                                                                 </div>
                                                             </label>
                                                         </div>
@@ -277,7 +277,7 @@
                                                                 </div>
                                                                 <div class="option-content">
                                                                     <strong>Senior Staff</strong>
-                                                                    <span class="option-desc">Send to all Senior Staff members</span>
+                                                                    <span class="option-desc">Send to all Senior Staff members ({{ $staffCategoryCounts['senior_staff'] }} users)</span>
                                                                 </div>
                                                             </label>
                                                         </div>
@@ -292,7 +292,7 @@
                                                                 </div>
                                                                 <div class="option-content">
                                                                     <strong>Senior Member (Non-Teaching)</strong>
-                                                                    <span class="option-desc">Send to all Senior Members (Non-Teaching)</span>
+                                                                    <span class="option-desc">Send to all Senior Members (Non-Teaching) ({{ $staffCategoryCounts['senior_member_non_teaching'] }} users)</span>
                                                                 </div>
                                                             </label>
                                                         </div>
@@ -307,7 +307,7 @@
                                                                 </div>
                                                                 <div class="option-content">
                                                                     <strong>Senior Member (Teaching)</strong>
-                                                                    <span class="option-desc">Send to all Senior Members (Teaching)</span>
+                                                                    <span class="option-desc">Send to all Senior Members (Teaching) ({{ $staffCategoryCounts['senior_member_teaching'] }} users)</span>
                                                                 </div>
                                                             </label>
                                                         </div>

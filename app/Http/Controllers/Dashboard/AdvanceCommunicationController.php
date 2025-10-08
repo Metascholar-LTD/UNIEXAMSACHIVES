@@ -85,7 +85,23 @@ class AdvanceCommunicationController extends Controller
                     ->orderBy('first_name')
                     ->get();
 
-        return view('admin.communication.create', compact('users'));
+        // Calculate staff category counts
+        $staffCategoryCounts = [
+            'junior_staff' => User::where('is_approve', true)
+                                ->where('staff_category', 'Junior Staff')
+                                ->count(),
+            'senior_staff' => User::where('is_approve', true)
+                                ->where('staff_category', 'Senior Staff')
+                                ->count(),
+            'senior_member_non_teaching' => User::where('is_approve', true)
+                                                ->where('staff_category', 'Senior Member (Non-Teaching)')
+                                                ->count(),
+            'senior_member_teaching' => User::where('is_approve', true)
+                                            ->where('staff_category', 'Senior Member (Teaching)')
+                                            ->count(),
+        ];
+
+        return view('admin.communication.create', compact('users', 'staffCategoryCounts'));
     }
 
     public function store(Request $request)
@@ -689,7 +705,23 @@ class AdvanceCommunicationController extends Controller
                     ->orderBy('first_name')
                     ->get();
 
-        return view('admin.communication-admin.create', compact('users'));
+        // Calculate staff category counts
+        $staffCategoryCounts = [
+            'junior_staff' => User::where('is_approve', true)
+                                ->where('staff_category', 'Junior Staff')
+                                ->count(),
+            'senior_staff' => User::where('is_approve', true)
+                                ->where('staff_category', 'Senior Staff')
+                                ->count(),
+            'senior_member_non_teaching' => User::where('is_approve', true)
+                                                ->where('staff_category', 'Senior Member (Non-Teaching)')
+                                                ->count(),
+            'senior_member_teaching' => User::where('is_approve', true)
+                                            ->where('staff_category', 'Senior Member (Teaching)')
+                                            ->count(),
+        ];
+
+        return view('admin.communication-admin.create', compact('users', 'staffCategoryCounts'));
     }
 
     public function adminStore(Request $request)
