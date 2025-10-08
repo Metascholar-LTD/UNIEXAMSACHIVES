@@ -131,4 +131,54 @@ class FilesController extends Controller
         return redirect()->back()->with('success', 'File deleted successfully');
     }
 
+    public function downloadFile(File $file)
+    {
+        $user = auth()->user();
+        
+        // Permission logic:
+        // 1. Admins can download any file
+        // 2. Users can download their own files
+        // 3. Approvers can only VIEW files (not download) unless it's their own file
+        if (!$user->is_admin && $file->user_id !== $user->id) {
+            abort(403, 'You can only download your own files. Use the view button to review files for approval.');
+        }
+
+        // Check if file exists in public storage
+        $filePath = public_path($file->document_file);
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found');
+        }
+
+        // Get file info
+        $extension = pathinfo($file->document_file, PATHINFO_EXTENSION);
+        
+        // Create a proper filename for download
+        $downloadName = $file->file_title . '.' . $extension;
+        $downloadName = preg_replace('/[^a-zA-Z0-9._-]/', '_', $downloadName); // Sanitize filename
+
+        // Return the file as a download response
+        return response()->download($filePath, $downloadName);
+    }
+
+    /**
+     * Check if current user can download a specific file
+     */
+    public static function canDownloadFile($file)
+    {
+        $user = auth()->user();
+        
+        // Admins can download any file
+        if ($user->is_admin) {
+            return true;
+        }
+        
+        // Users can download their own files
+        if ($file->user_id === $user->id) {
+            return true;
+        }
+        
+        // Approvers cannot download files they didn't upload
+        return false;
+    }
+
 }

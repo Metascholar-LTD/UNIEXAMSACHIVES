@@ -141,7 +141,7 @@
                                             <div class="dashboard__form__wraper">
                                                 <div class="dashboard__form__input">
                                                     <label for="#">Current File: 
-                                                        <a href="{{ Storage::url($file->document_file) }}" target="_blank" class="text-primary">
+                                                        <a href="{{ asset($file->document_file) }}" target="_blank" class="text-primary">
                                                             <i class="fas fa-eye"></i> View
                                                         </a>
                                                     </label>

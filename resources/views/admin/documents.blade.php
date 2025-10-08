@@ -1015,7 +1015,7 @@
                                             </div>
                                         
                                         <div class="document-actions">
-                                            <a href="{{ Storage::url($exam->document_file) }}" download class="action-btn primary">
+                                            <a href="{{ route('download.exam', $exam->id) }}" class="action-btn primary">
                                                 <i class="fas fa-download"></i>
                                                 Download
                                             </a>

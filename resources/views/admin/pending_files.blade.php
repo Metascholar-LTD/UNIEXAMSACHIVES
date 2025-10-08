@@ -410,6 +410,15 @@
         color: white;
     }
 
+    .action-btn.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        pointer-events: none;
+        background: #f3f4f6;
+        color: #9ca3af;
+        border-color: #d1d5db;
+    }
+
     .file-status {
         min-width: 120px;
         display: flex;
@@ -645,13 +654,19 @@
                                                 
                                                 <div class="file-actions">
                                                     @if($isPdf)
-                                                        <a href="{{ Storage::url($file->document_file) }}" target="_blank" class="action-btn view" title="View PDF">
+                                                        <a href="{{ asset($file->document_file) }}" target="_blank" class="action-btn view" title="View PDF">
                                                             <i class="fas fa-eye"></i>
                                                         </a>
                                                     @endif
-                                                    <a href="{{ Storage::url($file->document_file) }}" download class="action-btn download" title="Download File">
-                                                        <i class="fas fa-download"></i>
-                                                    </a>
+                                                    @if(\App\Http\Controllers\Dashboard\FilesController::canDownloadFile($file))
+                                                        <a href="{{ route('download.file', $file->id) }}" class="action-btn download" title="Download File">
+                                                            <i class="fas fa-download"></i>
+                                                        </a>
+                                                    @else
+                                                        <span class="action-btn download disabled" title="You can only download your own files">
+                                                            <i class="fas fa-download"></i>
+                                                        </span>
+                                                    @endif
                                                     <a href="{{ route('files.edit', $file->id) }}" class="action-btn edit" title="Edit File">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
