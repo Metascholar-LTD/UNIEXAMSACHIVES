@@ -43,13 +43,7 @@
             <div class="dashboard__inner">
                 <div class="dashboard__inner__head">
                     <div class="dashboard__inner__head__left">
-                        <h2 class="dashboard__inner__head__title">Memo Replies</h2>
                         <p class="dashboard__inner__head__subtitle">View all replies for this memo</p>
-                    </div>
-                    <div class="dashboard__inner__head__right">
-                        <a href="{{ route('admin.communication-admin.index') }}" class="btn btn-secondary">
-                            <i class="icofont-arrow-left"></i> Back to Memos
-                        </a>
                     </div>
                 </div>
 

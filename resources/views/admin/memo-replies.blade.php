@@ -43,7 +43,6 @@
             <div class="dashboard__inner">
                 <div class="dashboard__inner__head">
                     <div class="dashboard__inner__head__left">
-                        <h2 class="dashboard__inner__head__title">Memo Replies</h2>
                         <p class="dashboard__inner__head__subtitle">View all replies for this memo</p>
                     </div>
                 </div>
