@@ -64,9 +64,6 @@
                                 <p class="text-muted mb-3">
                                     <i class="icofont-calendar"></i> {{ $recipient->campaign->created_at->format('M d, Y \a\t h:i A') }}
                                 </p>
-                                <div class="memo-content">
-                                    {!! nl2br(e($recipient->campaign->message)) !!}
-                                </div>
                             </div>
                             <div class="col-md-4">
                                 <div class="memo-stats">
