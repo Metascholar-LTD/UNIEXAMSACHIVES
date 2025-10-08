@@ -25,17 +25,14 @@
                         @endif
                         
                         <div class="dashboard__section__title">
-                            <h4>💬 Group Discussion: {{ $recipient->campaign->subject }}</h4>
+                            <h4>💬 Memo Replies: {{ $recipient->campaign->subject }}</h4>
                             <p class="text-muted mb-3">
-                                <i class="icofont-users"></i> All recipients can see and participate in this discussion
+                                <i class="icofont-users"></i> All recipients can see these replies
                             </p>
                             <div style="margin-top:8px; display: flex; gap: 8px; align-items: center;">
                                 <a href="{{ route('dashboard.message') }}" class="btn btn-sm btn-primary">
                                     <i class="icofont-arrow-left"></i> Back to Memos
                                 </a>
-                                <span class="badge bg-info">
-                                    <i class="icofont-users"></i> Group Chat
-                                </span>
                             </div>
                         </div>
                         
@@ -91,7 +88,7 @@
                 <div class="card mb-4">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
-                            <i class="icofont-reply"></i> Join Group Discussion
+                            <i class="icofont-reply"></i> Reply to Memo
                         </h5>
                         <p class="text-muted mb-2">
                             <i class="icofont-info-circle"></i> Your reply will be visible to all recipients of this memo
@@ -127,7 +124,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
-                            <i class="icofont-chat"></i> Group Discussion ({{ $replies->total() }} replies)
+                            <i class="icofont-chat"></i> All Replies ({{ $replies->total() }})
                         </h5>
                         <p class="text-muted mb-0">
                             <i class="icofont-users"></i> All recipients can see these replies
