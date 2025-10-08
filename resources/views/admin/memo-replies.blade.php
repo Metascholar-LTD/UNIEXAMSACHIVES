@@ -46,11 +46,6 @@
                         <h2 class="dashboard__inner__head__title">Memo Replies</h2>
                         <p class="dashboard__inner__head__subtitle">View all replies for this memo</p>
                     </div>
-                    <div class="dashboard__inner__head__right">
-                        <a href="{{ route('dashboard.message') }}" class="btn btn-secondary">
-                            <i class="icofont-arrow-left"></i> Back to Memos
-                        </a>
-                    </div>
                 </div>
 
                 <!-- Original Memo Card -->
