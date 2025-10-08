@@ -124,10 +124,8 @@ class AdvanceCommunicationController extends Controller
             }
         }
 
-        // Get recipients
-        $recipientUsers = $request->recipient_type === 'all' 
-            ? User::where('is_approve', true)->get()
-            : User::whereIn('id', $request->selected_users)->where('is_approve', true)->get();
+        // Get recipients using helper method
+        $recipientUsers = $this->getRecipientsByType($request->recipient_type, $request->selected_users);
 
         // Create campaign
         $campaign = EmailCampaign::create([
@@ -401,10 +399,8 @@ class AdvanceCommunicationController extends Controller
             return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
         }
 
-        // Determine recipients based on campaign settings
-        $recipientUsers = $campaign->recipient_type === 'all' 
-            ? User::where('is_approve', true)->get()
-            : User::whereIn('id', $campaign->selected_users)->where('is_approve', true)->get();
+        // Determine recipients based on campaign settings using helper method
+        $recipientUsers = $this->getRecipientsByType($campaign->recipient_type, $campaign->selected_users);
 
         // Ensure recipient records exist (create if draft or missing)
         if ($campaign->status === 'draft' || $campaign->recipients()->count() === 0) {
@@ -732,10 +728,8 @@ class AdvanceCommunicationController extends Controller
             }
         }
 
-        // Get recipients
-        $recipientUsers = $request->recipient_type === 'all' 
-            ? User::where('is_approve', true)->get()
-            : User::whereIn('id', $request->selected_users)->where('is_approve', true)->get();
+        // Get recipients using helper method
+        $recipientUsers = $this->getRecipientsByType($request->recipient_type, $request->selected_users);
 
         // Create campaign
         $campaign = EmailCampaign::create([
@@ -926,10 +920,8 @@ class AdvanceCommunicationController extends Controller
             }
         }
 
-        // Get recipients
-        $recipientUsers = $request->recipient_type === 'all' 
-            ? User::where('is_approve', true)->get()
-            : User::whereIn('id', $request->selected_users)->where('is_approve', true)->get();
+        // Get recipients using helper method
+        $recipientUsers = $this->getRecipientsByType($request->recipient_type, $request->selected_users);
 
         // Update campaign
         $campaign->update([
@@ -1078,10 +1070,8 @@ class AdvanceCommunicationController extends Controller
             return redirect()->back()->with('error', 'Memo cannot be sent in current status.');
         }
 
-        // Determine recipients based on campaign settings
-        $recipientUsers = $campaign->recipient_type === 'all' 
-            ? User::where('is_approve', true)->get()
-            : User::whereIn('id', $campaign->selected_users)->where('is_approve', true)->get();
+        // Determine recipients based on campaign settings using helper method
+        $recipientUsers = $this->getRecipientsByType($campaign->recipient_type, $campaign->selected_users);
 
         // Ensure recipient records exist (create if draft or missing)
         if ($campaign->status === 'draft' || $campaign->recipients()->count() === 0) {
@@ -1311,6 +1301,10 @@ class AdvanceCommunicationController extends Controller
         if ($recipientType === 'all') {
             return User::where('is_approve', true)->get();
         } elseif ($recipientType === 'selected') {
+            // Ensure selectedUsers is an array and not null
+            if (empty($selectedUsers) || !is_array($selectedUsers)) {
+                return collect();
+            }
             return User::whereIn('id', $selectedUsers)->where('is_approve', true)->get();
         } elseif (in_array($recipientType, ['junior_staff', 'senior_staff', 'senior_member_non_teaching', 'senior_member_teaching'])) {
             // Map recipient types to staff categories
