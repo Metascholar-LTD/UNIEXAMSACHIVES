@@ -169,44 +169,37 @@ class PagesController extends Controller
             'staff_category' => $validatedData['staff_category'],
         ]);
 
-        # Send registration confirmation email to user
+        // Send registration confirmation email to user (always attempt send)
         try {
-            if (env('MAIL_MAILER') == 'resend') {
-                $resendService = new ResendMailService();
-                
-                $htmlContent = view('mails.registration', [
-                    'firstname' => $validatedData['first_name'],
-                    'email' => $validatedData['email']
-                ])->render();
-                
-                \Log::info('Attempting to send registration email', [
+            $resendService = new ResendMailService();
+            
+            $htmlContent = view('mails.registration', [
+                'firstname' => $validatedData['first_name'],
+                'email' => $validatedData['email']
+            ])->render();
+            
+            \Log::info('Attempting to send registration email', [
+                'user_email' => $validatedData['email'],
+                'user_name' => $validatedData['first_name']
+            ]);
+            
+            $response = $resendService->sendEmail(
+                $validatedData['email'],
+                'Registration Successful - Awaiting Approval',
+                $htmlContent,
+                config('mail.from.address')
+            );
+            
+            if (!empty($response['success'])) {
+                \Log::info('Registration email sent successfully', [
                     'user_email' => $validatedData['email'],
-                    'user_name' => $validatedData['first_name']
+                    'message_id' => $response['message_id'] ?? 'N/A'
                 ]);
-                
-                $response = $resendService->sendEmail(
-                    $validatedData['email'],
-                    'Registration Successful - Awaiting Approval',
-                    $htmlContent,
-                    'cug@academicdigital.space'
-                );
-                
-                if ($response['success']) {
-                    \Log::info('Registration email sent successfully', [
-                        'user_email' => $validatedData['email'],
-                        'message_id' => $response['message_id'] ?? 'N/A'
-                    ]);
-                } else {
-                    \Log::error('Failed to send registration email', [
-                        'user_email' => $validatedData['email'],
-                        'error' => $response['error'] ?? 'Unknown error',
-                        'response' => $response
-                    ]);
-                }
             } else {
-                \Log::warning('Mail mailer is not set to resend', [
-                    'current_mailer' => env('MAIL_MAILER'),
-                    'user_email' => $validatedData['email']
+                \Log::error('Failed to send registration email', [
+                    'user_email' => $validatedData['email'],
+                    'error' => $response['error'] ?? 'Unknown error',
+                    'response' => $response
                 ]);
             }
         } catch (\Exception $e) {

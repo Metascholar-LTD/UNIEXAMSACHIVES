@@ -683,9 +683,9 @@ class HomeController extends Controller
                 'password_changed' => $user->password_changed
             ]);
             
-            // Send approval email with credentials
+            // Send approval email with credentials (always attempt send)
             $emailSent = false;
-            if (env('MAIL_MAILER') == 'resend') {
+            try {
                 $resendService = new ResendMailService();
                 
                 $htmlContent = view('mails.approval', [
@@ -695,18 +695,17 @@ class HomeController extends Controller
                 ])->render();
                 
                 \Log::info('Attempting to send approval email', [
-                    'user_email' => $user->email,
-                    'mail_service' => 'resend'
+                    'user_email' => $user->email
                 ]);
                 
                 $response = $resendService->sendEmail(
                     $user->email,
                     'Account Successfully Approved - Your Login Credentials',
                     $htmlContent,
-                    'cug@academicdigital.space'
+                    config('mail.from.address')
                 );
                 
-                if ($response['success']) {
+                if (!empty($response['success'])) {
                     $emailSent = true;
                     \Log::info('Approval email sent successfully', [
                         'user_email' => $user->email,
@@ -719,10 +718,10 @@ class HomeController extends Controller
                         'response' => $response
                     ]);
                 }
-            } else {
-                \Log::warning('Mail mailer is not set to resend', [
-                    'current_mailer' => env('MAIL_MAILER'),
-                    'user_email' => $user->email
+            } catch (\Exception $e) {
+                \Log::error('Exception while sending approval email', [
+                    'user_email' => $user->email,
+                    'error' => $e->getMessage()
                 ]);
             }
             
