@@ -840,14 +840,24 @@ class AdvanceCommunicationController extends Controller
                     // Update recipient status
                     EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                         ->where('user_id', $user->id)
-                        ->update(['status' => 'sent']);
+                        ->update([
+                            'status' => 'sent',
+                            'sent_at' => now()
+                        ]);
                 } else {
                     $failedCount++;
-                    // Update recipient status
+                    // Update recipient status with error
+                    $error = $result['error'] ?? 'Unknown error';
                     EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                         ->where('user_id', $user->id)
-                        ->update(['status' => 'failed']);
+                        ->update([
+                            'status' => 'failed',
+                            'error_message' => 'ResendMailService error: ' . $error
+                        ]);
                 }
+
+                // Rate limiting delay to avoid provider throttling
+                usleep(500000);
             } catch (Exception $e) {
                 $failedCount++;
                 Log::error('Campaign email failed: ' . $e->getMessage(), [
@@ -859,7 +869,10 @@ class AdvanceCommunicationController extends Controller
                 // Update recipient status
                 EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                     ->where('user_id', $user->id)
-                    ->update(['status' => 'failed']);
+                    ->update([
+                        'status' => 'failed',
+                        'error_message' => $e->getMessage()
+                    ]);
             }
         }
 
@@ -1030,14 +1043,24 @@ class AdvanceCommunicationController extends Controller
                     // Update recipient status
                     EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                         ->where('user_id', $user->id)
-                        ->update(['status' => 'sent']);
+                        ->update([
+                            'status' => 'sent',
+                            'sent_at' => now()
+                        ]);
                 } else {
                     $failedCount++;
-                    // Update recipient status
+                    // Update recipient status with error
+                    $error = $result['error'] ?? 'Unknown error';
                     EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                         ->where('user_id', $user->id)
-                        ->update(['status' => 'failed']);
+                        ->update([
+                            'status' => 'failed',
+                            'error_message' => 'ResendMailService error: ' . $error
+                        ]);
                 }
+
+                // Rate limiting delay to avoid provider throttling
+                usleep(500000);
             } catch (Exception $e) {
                 $failedCount++;
                 Log::error('Campaign email failed: ' . $e->getMessage(), [
@@ -1049,7 +1072,10 @@ class AdvanceCommunicationController extends Controller
                 // Update recipient status
                 EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                     ->where('user_id', $user->id)
-                    ->update(['status' => 'failed']);
+                    ->update([
+                        'status' => 'failed',
+                        'error_message' => $e->getMessage()
+                    ]);
             }
         }
 
@@ -1172,14 +1198,24 @@ class AdvanceCommunicationController extends Controller
                     // Update recipient status
                     EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                         ->where('user_id', $user->id)
-                        ->update(['status' => 'sent']);
+                        ->update([
+                            'status' => 'sent',
+                            'sent_at' => now()
+                        ]);
                 } else {
                     $failedCount++;
-                    // Update recipient status
+                    // Update recipient status with error
+                    $error = $result['error'] ?? 'Unknown error';
                     EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                         ->where('user_id', $user->id)
-                        ->update(['status' => 'failed']);
+                        ->update([
+                            'status' => 'failed',
+                            'error_message' => 'ResendMailService error: ' . $error
+                        ]);
                 }
+
+                // Rate limiting delay to avoid provider throttling
+                usleep(500000);
             } catch (Exception $e) {
                 $failedCount++;
                 Log::error('Campaign email failed: ' . $e->getMessage(), [
@@ -1191,7 +1227,10 @@ class AdvanceCommunicationController extends Controller
                 // Update recipient status
                 EmailCampaignRecipient::where('comm_campaign_id', $campaign->id)
                     ->where('user_id', $user->id)
-                    ->update(['status' => 'failed']);
+                    ->update([
+                        'status' => 'failed',
+                        'error_message' => $e->getMessage()
+                    ]);
             }
         }
 
