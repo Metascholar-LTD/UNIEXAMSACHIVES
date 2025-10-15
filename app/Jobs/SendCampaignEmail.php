@@ -172,9 +172,8 @@ class SendCampaignEmail implements ShouldQueue
 
             // Update campaign final status and counts
             if ($this->campaign->fresh()) {
-                $finalStatus = $failedCount > 0 ? ($sentCount > 0 ? 'partial' : 'failed') : 'sent';
                 $this->campaign->update([
-                    'status' => $finalStatus,
+                    'status' => 'sent',
                     'sent_at' => now(),
                     'sent_count' => $sentCount,
                     'failed_count' => $failedCount,
