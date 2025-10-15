@@ -258,8 +258,9 @@ class AdvanceCommunicationController extends Controller
         }
 
         // Update campaign final status for sent campaigns
+        $finalStatus = $failedCount > 0 ? ($sentCount > 0 ? 'partial' : 'failed') : 'sent';
         $campaign->update([
-            'status' => 'sent',
+            'status' => $finalStatus,
             'sent_at' => now(),
             'sent_count' => $sentCount,
             'failed_count' => $failedCount,
@@ -514,8 +515,9 @@ class AdvanceCommunicationController extends Controller
         }
 
         // Finalize campaign status
+        $finalStatus = $failedCount > 0 ? ($sentCount > 0 ? 'partial' : 'failed') : 'sent';
         $campaign->update([
-            'status' => 'sent',
+            'status' => $finalStatus,
             'sent_at' => now(),
             'sent_count' => $sentCount,
             'failed_count' => $failedCount,

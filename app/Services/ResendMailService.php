@@ -67,15 +67,26 @@ class ResendMailService
             ];
 
         } catch (Exception $e) {
+            $message = $e->getMessage();
             Log::error('Failed to send email via SMTP', [
                 'to' => $to,
                 'subject' => $subject,
-                'error' => $e->getMessage()
+                'error' => $message
             ]);
-            
+
+            // Handle rate limiting/transient errors: 429/450/451 or "Too many requests"
+            $isRateLimited = str_contains($message, '429') || str_contains($message, '450') || str_contains($message, '451') || str_contains(strtolower($message), 'too many requests');
+            $maxRetries = 5;
+            if ($isRateLimited && $retryCount < $maxRetries) {
+                // Exponential backoff with jitter, base 0.6s to respect 2 req/s
+                $backoffSeconds = pow(2, $retryCount) * 0.6 + (mt_rand(0, 200) / 1000);
+                usleep((int)($backoffSeconds * 1_000_000));
+                return $this->sendEmail($to, $subject, $htmlContent, $from, $attachments, $retryCount + 1);
+            }
+
             return [
                 'success' => false,
-                'error' => $e->getMessage()
+                'error' => $message
             ];
         }
     }
