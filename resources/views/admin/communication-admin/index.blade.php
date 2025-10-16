@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__content__wraper">
                         <div class="dashboard__section__title">
-                            <h4>Advanced Communication System (Admin)</h4>
+                            <h4>Advanced Communication System</h4>
                             <div class="dashboard__section__actions">
                                 <a href="{{route('admin.communication-admin.create')}}" class="responsive-btn compose-btn">
                                     <div class="svgWrapper">
@@ -155,7 +155,7 @@
                         <!-- Memos Table -->
                         <div class="stats-panel">
                             <div class="panel-header">
-                                <h5>Memo Campaigns (Admin View)
+                                <h5>Memo Campaigns
                                     @if($statusFilter !== 'all')
                                         <span class="filter-indicator">- {{ ucfirst($statusFilter) }} Only</span>
                                     @endif
@@ -818,7 +818,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 2147483647; /* ensure on top across all screen sizes */
   opacity: 1;
   animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }

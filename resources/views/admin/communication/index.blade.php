@@ -818,7 +818,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10000;
+  z-index: 2147483647; /* ensure on top across all screen sizes */
   opacity: 1;
   animation: popupBounceIn 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
 }
