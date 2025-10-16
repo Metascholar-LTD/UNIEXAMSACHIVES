@@ -132,7 +132,7 @@ class HomeController extends Controller
 
     public function message(){
         $userId = Auth::id();
-        $memos = EmailCampaignRecipient::with(['campaign'])
+        $memos = EmailCampaignRecipient::with(['campaign.creator'])
             ->where('user_id', $userId)
             ->orderBy('created_at','desc')
             ->get();
