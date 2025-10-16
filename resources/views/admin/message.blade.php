@@ -45,7 +45,7 @@
                                                         <li>
                                                             <div class="dashboard__meessage__contact__wrap">
                                                                 <div class="dashboard__meessage__chat__img">
-                                                                <img loading="lazy" src="{{ optional($message->campaign->creator)->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" alt="{{ optional($message->campaign->creator)->first_name ?? 'User' }}">
+                                                                <img loading="lazy" src="{{ optional($message->campaign->creator)->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" alt="{{ optional($message->campaign->creator)->first_name ?? 'User' }}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
                                                             </div>
                                                                 <div class="dashboard__meessage__meta">
                                                                     <h5>System Memo</h5>
