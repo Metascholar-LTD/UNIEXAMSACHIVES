@@ -48,7 +48,7 @@
                                                                 <img loading="lazy" src="{{ optional($message->campaign->creator)->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" alt="{{ optional($message->campaign->creator)->first_name ?? 'User' }}" style="width:48px;height:48px;border-radius:50%;object-fit:cover;">
                                                             </div>
                                                                 <div class="dashboard__meessage__meta">
-                                                                    <h5>System Memo</h5>
+                                                                    <h5>{{ $message->campaign->creator ? trim($message->campaign->creator->first_name . ' ' . $message->campaign->creator->last_name) : 'System Memo' }}</h5>
                                                                     <p class="preview">{{$message->campaign->subject}}</p>
                                                                     <span class="chat__time">{{$message->created_at->format('d M Y')}}</span>
                                                                     <a href="{{route('dashboard.memo.read', $message->id)}}">Read More</a>
