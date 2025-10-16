@@ -208,12 +208,15 @@ class AdvanceCommunicationController extends Controller
                 }
                 
                 // Send email using ResendMailService directly (proven to work)
+                $fromName = $campaign->creator ? trim($campaign->creator->first_name . ' ' . $campaign->creator->last_name) : (config('mail.from.name') ?: 'CUG');
                 $result = $resendService->sendEmail(
                     $user->email,
                     $campaign->subject,
                     $htmlContent,
                     config('mail.from.address'),
-                    $attachments
+                    $attachments,
+                    0,
+                    $fromName
                 );
 
                 if ($result['success']) {
@@ -472,12 +475,15 @@ class AdvanceCommunicationController extends Controller
                 }
 
                 // Send email
+                $fromName = $campaign->creator ? trim($campaign->creator->first_name . ' ' . $campaign->creator->last_name) : (config('mail.from.name') ?: 'CUG');
                 $result = $resendService->sendEmail(
                     $user->email,
                     $campaign->subject,
                     $htmlContent,
                     config('mail.from.address'),
-                    $attachments
+                    $attachments,
+                    0,
+                    $fromName
                 );
 
                 if ($result['success']) {

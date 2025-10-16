@@ -22,10 +22,11 @@ class ResendMailService
     /**
      * Send a simple email using Resend SMTP
      */
-    public function sendEmail($to, $subject, $htmlContent, $from = null, $attachments = [], $retryCount = 0)
+    public function sendEmail($to, $subject, $htmlContent, $from = null, $attachments = [], $retryCount = 0, $fromName = null)
     {
         try {
             $from = $from ?: config('mail.from.address');
+            $fromName = $fromName ?: (config('mail.from.name') ?: null);
             
             // Validate from address format
             if (!str_contains($from, '@')) {
@@ -34,10 +35,10 @@ class ResendMailService
             
             $messageId = Str::uuid()->toString();
             
-            Mail::send([], [], function (Message $message) use ($to, $subject, $htmlContent, $from, $attachments) {
+            Mail::send([], [], function (Message $message) use ($to, $subject, $htmlContent, $from, $attachments, $fromName) {
                 $message->to($to)
                         ->subject($subject)
-                        ->from($from)
+                        ->from($from, $fromName)
                         ->html($htmlContent);
                 
                 // Add attachments if any

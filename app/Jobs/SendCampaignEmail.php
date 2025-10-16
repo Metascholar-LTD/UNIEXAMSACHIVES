@@ -114,12 +114,17 @@ class SendCampaignEmail implements ShouldQueue
                      ]);
                      
                      try {
+                         $fromName = optional($this->campaign->creator)->first_name && optional($this->campaign->creator)->last_name
+                             ? trim($this->campaign->creator->first_name . ' ' . $this->campaign->creator->last_name)
+                             : (config('mail.from.name') ?: 'CUG');
                          $result = $resendService->sendEmail(
                              $recipient->user->email,
                              $this->campaign->subject,
                              $htmlContent,
                              config('mail.from.address'),
-                             $attachments
+                             $attachments,
+                             0,
+                             $fromName
                          );
                      } catch (Exception $e) {
                          Log::error("Exception in Resend sendEmail", [
