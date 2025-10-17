@@ -1687,12 +1687,13 @@
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
-.attachment-icon {
+.attachment-btn .attachment-icon {
     width: 20px;
     height: 20px;
     stroke: white;
     stroke-width: 2;
     fill: none;
+    background: none !important;
 }
 
 .input-field-wrapper {
