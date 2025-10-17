@@ -342,29 +342,37 @@
                                         }
                                         
                                         .memo-item {
-                                            border-bottom: 1px solid #eef2f7;
-                                            transition: all 0.3s ease;
+                                            border-bottom: 1px solid #e9ecef;
+                                            transition: all 0.2s ease;
                                             cursor: pointer;
+                                            background: #ffffff;
+                                            margin-bottom: 8px;
+                                            border-radius: 12px;
+                                            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+                                            border: 1px solid #f1f3f4;
                                         }
                                         
                                         .memo-item:hover {
                                             background: #f8f9ff;
+                                            transform: translateY(-1px);
+                                            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                                            border-color: #e3f2fd;
                                         }
                                         
                                         .dashboard__meessage__contact__wrap {
                                             display: flex;
-                                            gap: 20px;
-                                            padding: 20px 25px;
+                                            gap: 16px;
+                                            padding: 16px 20px;
                                             align-items: flex-start;
                                             position: relative;
                                         }
                                         
                                         .dashboard__meessage__chat__img img {
-                                            width: 52px;
-                                            height: 52px;
+                                            width: 48px;
+                                            height: 48px;
                                             border-radius: 50%;
                                             object-fit: cover;
-                                            border: 3px solid #e9ecef;
+                                            border: 2px solid #e9ecef;
                                             flex-shrink: 0;
                                         }
                                         
@@ -377,18 +385,18 @@
                                             display: flex;
                                             align-items: center;
                                             justify-content: space-between;
-                                            margin-bottom: 8px;
+                                            margin-bottom: 6px;
                                         }
                                         
                                         .memo-sender-info {
                                             display: flex;
                                             align-items: center;
-                                            gap: 12px;
+                                            gap: 8px;
                                         }
                                         
                                         .dashboard__meessage__meta h5 {
                                             margin: 0;
-                                            font-size: 1.1rem;
+                                            font-size: 1rem;
                                             font-weight: 600;
                                             color: #333;
                                         }
@@ -396,19 +404,19 @@
                                         .memo-subject {
                                             font-weight: 600;
                                             color: #1a4a9b;
-                                            margin-bottom: 6px;
-                                            font-size: 1rem;
+                                            margin-bottom: 4px;
+                                            font-size: 0.95rem;
                                         }
                                         
                                         .memo-preview {
                                             color: #666;
-                                            font-size: 0.9rem;
-                                            margin-bottom: 12px;
+                                            font-size: 0.85rem;
+                                            margin-bottom: 8px;
                                             display: -webkit-box;
                                             -webkit-line-clamp: 2;
                                             -webkit-box-orient: vertical;
                                             overflow: hidden;
-                                            line-height: 1.4;
+                                            line-height: 1.3;
                                         }
                                         
                                         .memo-footer {
@@ -416,17 +424,17 @@
                                             align-items: center;
                                             justify-content: space-between;
                                             flex-wrap: wrap;
-                                            gap: 10px;
+                                            gap: 8px;
                                         }
                                         
                                         .memo-left-info {
                                             display: flex;
                                             align-items: center;
-                                            gap: 15px;
+                                            gap: 12px;
                                         }
                                         
                                         .chat__time {
-                                            font-size: 0.85rem;
+                                            font-size: 0.8rem;
                                             color: #999;
                                             font-weight: 500;
                                         }
@@ -434,27 +442,27 @@
                                         .memo-right-section {
                                             display: flex;
                                             align-items: center;
-                                            gap: 12px;
+                                            gap: 10px;
                                         }
                                         
                                         .memo-participants {
                                             display: flex;
                                             align-items: center;
-                                            gap: 4px;
+                                            gap: 3px;
                                             background: #f8f9fa;
-                                            padding: 3px 6px;
-                                            border-radius: 10px;
+                                            padding: 2px 5px;
+                                            border-radius: 8px;
                                             border: 1px solid #e9ecef;
                                         }
                                         
                                         .memo-participants i {
                                             color: #6c757d;
-                                            font-size: 0.7rem;
+                                            font-size: 0.65rem;
                                         }
                                         
                                         .participant-avatar-small {
-                                            width: 18px;
-                                            height: 18px;
+                                            width: 16px;
+                                            height: 16px;
                                             border-radius: 50%;
                                             object-fit: cover;
                                             border: 1px solid #fff;
@@ -462,28 +470,28 @@
                                         }
                                         
                                         .participant-count {
-                                            font-size: 0.7rem;
+                                            font-size: 0.65rem;
                                             color: #6c757d;
                                             font-weight: 600;
                                             background: #e9ecef;
-                                            padding: 2px 6px;
-                                            border-radius: 8px;
+                                            padding: 1px 4px;
+                                            border-radius: 6px;
                                             margin-left: 2px;
                                         }
                                         
                                         .memo-right-badges {
                                             display: flex;
                                             align-items: center;
-                                            gap: 6px;
+                                            gap: 4px;
                                         }
                                         
                                         .memo-status-badge {
-                                            padding: 6px 12px;
-                                            border-radius: 15px;
-                                            font-size: 0.75rem;
+                                            padding: 4px 8px;
+                                            border-radius: 12px;
+                                            font-size: 0.7rem;
                                             font-weight: 600;
                                             text-transform: uppercase;
-                                            letter-spacing: 0.5px;
+                                            letter-spacing: 0.3px;
                                         }
                                         
                                         .status-pending { background: #e3f2fd; color: #1976d2; }
