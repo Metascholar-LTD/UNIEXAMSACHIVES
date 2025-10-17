@@ -19,15 +19,48 @@
                     <div class="dashboard__content__wraper">
                         {{-- Chat Header --}}
                         <div class="chat-header">
-                            <div class="chat-header-left">
-                                <a href="{{ route('dashboard.uimms.portal') }}" class="responsive-btn back-btn">
-                                    <div class="svgWrapper">
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
-                                            <path stroke="#fff" stroke-width="2" d="M19 12H5m7-7-7 7 7 7"></path>
-                                        </svg>
-                                        <div class="text">Back</div>
+                            {{-- Top Section: Buttons --}}
+                            <div class="chat-header-top">
+                                <div class="chat-header-left">
+                                    <a href="{{ route('dashboard.uimms.portal') }}" class="responsive-btn back-btn">
+                                        <div class="svgWrapper">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                <path stroke="#fff" stroke-width="2" d="M19 12H5m7-7-7 7 7 7"></path>
+                                            </svg>
+                                            <div class="text">Back</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="chat-header-right">
+                                    <div class="memo-status">
+                                        <span class="status-badge status-{{ $memo->memo_status ?? 'pending' }}">
+                                            {{ $memo->memo_status ?? 'pending' }}
+                                        </span>
                                     </div>
-                                </a>
+                                    <div class="chat-actions">
+                                        <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
+                                            <i class="icofont-user"></i> Assign
+                                        </button>
+                                        <div class="btn-group">
+                                            <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
+                                                <i class="icofont-check-circled"></i> Complete
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
+                                                <i class="icofont-pause"></i> Suspend
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
+                                                <i class="icofont-archive"></i> Archive
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {{-- Separator Line --}}
+                            <div class="chat-header-separator"></div>
+                            
+                            {{-- Bottom Section: Subject and Participants --}}
+                            <div class="chat-header-bottom">
                                 <div class="chat-title">
                                     <h4>{{ $memo->subject }}</h4>
                                     <div class="chat-participants">
@@ -37,29 +70,6 @@
                                                  class="participant-avatar"
                                                  title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
                                         @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="chat-header-right">
-                                <div class="memo-status">
-                                    <span class="status-badge status-{{ $memo->memo_status ?? 'pending' }}">
-                                        {{ $memo->memo_status ?? 'pending' }}
-                                    </span>
-                                </div>
-                                <div class="chat-actions">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
-                                        <i class="icofont-user"></i> Assign
-                                    </button>
-                                    <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
-                                            <i class="icofont-check-circled"></i> Complete
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
-                                            <i class="icofont-pause"></i> Suspend
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
-                                            <i class="icofont-archive"></i> Archive
-                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -193,20 +203,40 @@
 
 <style>
 .chat-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 20px;
     background: #fff;
     border-bottom: 1px solid #e9ecef;
     border-radius: 8px 8px 0 0;
     margin-bottom: 0;
+    padding: 0;
+}
+
+.chat-header-top {
+    padding: 20px 20px 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .chat-header-left {
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+.chat-header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.chat-header-separator {
+    height: 1px;
+    background: #e9ecef;
+    margin: 0 20px;
+}
+
+.chat-header-bottom {
+    padding: 15px 20px 20px 20px;
 }
 
 .chat-title h4 {
@@ -227,12 +257,6 @@
     object-fit: cover;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.chat-header-right {
-    display: flex;
-    align-items: center;
-    gap: 15px;
 }
 
 .status-badge {
