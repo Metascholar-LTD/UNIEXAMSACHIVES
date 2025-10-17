@@ -45,7 +45,7 @@
                 </li>
                 {{-- Memos Section with Dropdown --}}
                 <li class="memo-dropdown">
-                    <a class="{{ request()->routeIs('dashboard.message') || request()->routeIs('dashboard.uimms.*') ? 'active' : '' }}" href="#" onclick="toggleMemoDropdown(event)">
+                    <a class="{{ request()->routeIs('dashboard.message') || request()->routeIs('dashboard.uimms.*') ? 'active' : '' }}" href="#" onclick="toggleMemoDropdown(event)" id="memo-dropdown-trigger">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -57,7 +57,7 @@
                             <polyline points="6,9 12,15 18,9"></polyline>
                         </svg>
                     </a>
-                    <ul class="memo-submenu" id="memo-submenu">
+                    <ul class="memo-submenu" id="memo-submenu" style="display: none;">
                         <li>
                             <a class="{{ request()->routeIs('dashboard.uimms.portal') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
                                 <i class="icofont-chat"></i>
@@ -648,6 +648,8 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM loaded, initializing sidebar...'); // Debug log
+    
     // Get all sidebar section headers
     const sectionHeaders = document.querySelectorAll('.sidebar-section-header');
     
@@ -680,20 +682,53 @@ document.addEventListener('DOMContentLoaded', function() {
     navSections.forEach(nav => {
         nav.style.transition = 'all 0.3s ease-in-out';
     });
+    
+    // Initialize memo dropdown
+    const memoDropdown = document.querySelector('.memo-dropdown');
+    if (memoDropdown) {
+        console.log('Memo dropdown found!'); // Debug log
+    } else {
+        console.error('Memo dropdown not found!'); // Debug log
+    }
 });
 
 // Memo dropdown functionality
 function toggleMemoDropdown(event) {
     event.preventDefault();
+    event.stopPropagation();
+    
+    console.log('Dropdown clicked!'); // Debug log
+    
     const submenu = document.getElementById('memo-submenu');
     const arrow = event.currentTarget.querySelector('.dropdown-arrow');
     
-    if (submenu.style.display === 'block') {
-        submenu.style.display = 'none';
-        arrow.style.transform = 'rotate(0deg)';
-    } else {
+    if (!submenu) {
+        console.error('Submenu not found!');
+        return;
+    }
+    
+    if (!arrow) {
+        console.error('Arrow not found!');
+        return;
+    }
+    
+    const isVisible = submenu.style.display === 'block';
+    console.log('Current visibility:', isVisible); // Debug log
+    
+    // Close all other dropdowns first
+    document.querySelectorAll('.memo-submenu').forEach(menu => {
+        menu.style.display = 'none';
+    });
+    document.querySelectorAll('.dropdown-arrow').forEach(arr => {
+        arr.style.transform = 'rotate(0deg)';
+    });
+    
+    if (!isVisible) {
         submenu.style.display = 'block';
         arrow.style.transform = 'rotate(180deg)';
+        console.log('Dropdown opened!'); // Debug log
+    } else {
+        console.log('Dropdown closed!'); // Debug log
     }
 }
 
@@ -702,10 +737,26 @@ document.addEventListener('click', function(event) {
     const memoDropdown = document.querySelector('.memo-dropdown');
     const submenu = document.getElementById('memo-submenu');
     
-    if (!memoDropdown.contains(event.target)) {
+    if (memoDropdown && submenu && !memoDropdown.contains(event.target)) {
         submenu.style.display = 'none';
         const arrow = memoDropdown.querySelector('.dropdown-arrow');
-        arrow.style.transform = 'rotate(0deg)';
+        if (arrow) {
+            arrow.style.transform = 'rotate(0deg)';
+        }
+    }
+});
+
+// Close dropdown on escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const submenu = document.getElementById('memo-submenu');
+        const arrow = document.querySelector('.dropdown-arrow');
+        if (submenu && submenu.style.display === 'block') {
+            submenu.style.display = 'none';
+            if (arrow) {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+        }
     }
 });
 </script>
@@ -713,12 +764,15 @@ document.addEventListener('click', function(event) {
 <style>
 .memo-dropdown {
     position: relative;
+    z-index: 1000;
 }
 
 .memo-dropdown > a {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
+    z-index: 1001;
 }
 
 .dropdown-arrow {
@@ -729,15 +783,16 @@ document.addEventListener('click', function(event) {
 .memo-submenu {
     display: none;
     position: absolute;
-    left: 100%;
-    top: 0;
+    left: 0;
+    top: 100%;
     background: #fff;
     border: 1px solid #e9ecef;
     border-radius: 8px;
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    min-width: 250px;
-    z-index: 1000;
+    min-width: 280px;
+    z-index: 9999;
     padding: 8px 0;
+    margin-top: 5px;
 }
 
 .memo-submenu li {
@@ -785,5 +840,24 @@ document.addEventListener('click', function(event) {
     border-radius: 10px;
     font-size: 0.7rem;
     margin-left: auto;
+}
+
+/* Ensure dropdown works on mobile */
+@media (max-width: 768px) {
+    .memo-submenu {
+        position: fixed;
+        left: 10px;
+        right: 10px;
+        top: auto;
+        bottom: 10px;
+        min-width: auto;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+}
+
+/* Debug styles - remove after testing */
+.memo-dropdown:hover .memo-submenu {
+    /* Uncomment this line to debug: display: block !important; */
 }
 </style>
