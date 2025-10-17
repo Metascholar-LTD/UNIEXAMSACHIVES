@@ -21,20 +21,64 @@
                             <h3>💬 Memos Portal</h3>
                         </div>
                         
-                        {{-- Status Tabs --}}
-                        <div class="memo-tabs">
-                            <button class="memo-tab active" onclick="loadMemos('pending')" data-status="pending">
-                                💬 Active Chats <span class="tab-count" id="count-pending">({{ $pendingCount }})</span>
-                            </button>
-                            <button class="memo-tab" onclick="loadMemos('suspended')" data-status="suspended">
-                                ⏸️ Suspended <span class="tab-count" id="count-suspended">({{ $suspendedCount }})</span>
-                            </button>
-                            <button class="memo-tab" onclick="loadMemos('completed')" data-status="completed">
-                                ✅ Completed <span class="tab-count" id="count-completed">({{ $completedCount }})</span>
-                            </button>
-                            <button class="memo-tab" onclick="loadMemos('archived')" data-status="archived">
-                                📦 Archived <span class="tab-count" id="count-archived">({{ $archivedCount }})</span>
-                            </button>
+                        {{-- Status Cards --}}
+                        <div class="row mb-4">
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12 mb-3">
+                                <div class="dashboard__card uimms-card pending" onclick="loadMemos('pending')" data-status="pending">
+                                    <div class="dashboard__card__content">
+                                        <div class="dashboard__card__icon">
+                                            <i class="icofont-chat"></i>
+                                        </div>
+                                        <div class="dashboard__card__text">
+                                            <h5>💬 Active Chats</h5>
+                                            <h3 class="count" id="count-pending">{{ $pendingCount }}</h3>
+                                            <p>Pending conversations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12 mb-3">
+                                <div class="dashboard__card uimms-card suspended" onclick="loadMemos('suspended')" data-status="suspended">
+                                    <div class="dashboard__card__content">
+                                        <div class="dashboard__card__icon">
+                                            <i class="icofont-pause"></i>
+                                        </div>
+                                        <div class="dashboard__card__text">
+                                            <h5>⏸️ Suspended</h5>
+                                            <h3 class="count" id="count-suspended">{{ $suspendedCount }}</h3>
+                                            <p>Paused conversations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12 mb-3">
+                                <div class="dashboard__card uimms-card completed" onclick="loadMemos('completed')" data-status="completed">
+                                    <div class="dashboard__card__content">
+                                        <div class="dashboard__card__icon">
+                                            <i class="icofont-check-circled"></i>
+                                        </div>
+                                        <div class="dashboard__card__text">
+                                            <h5>✅ Completed</h5>
+                                            <h3 class="count" id="count-completed">{{ $completedCount }}</h3>
+                                            <p>Finished conversations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12 mb-3">
+                                <div class="dashboard__card uimms-card archived" onclick="loadMemos('archived')" data-status="archived">
+                                    <div class="dashboard__card__content">
+                                        <div class="dashboard__card__icon">
+                                            <i class="icofont-archive"></i>
+                                        </div>
+                                        <div class="dashboard__card__text">
+                                            <h5>📦 Archive</h5>
+                                            <h3 class="count" id="count-archived">{{ $archivedCount }}</h3>
+                                            <p>Old conversations</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="dashboard__meessage__wraper">
@@ -51,48 +95,165 @@
                                         <div class="dashboard__meessage__contact" id="memos-container">
                                             <div class="text-center py-5">
                                                 <i class="icofont-chat" style="font-size: 48px; color: #ddd;"></i>
-                                                <p class="text-muted mt-3">Click on a tab above to load memos</p>
+                                                <p class="text-muted mt-3">Click on a card above to load memos</p>
                                             </div>
                                         </div>
 
                                         <style>
-                                        .memo-tabs {
-                                            display: flex;
-                                            gap: 8px;
-                                            margin-bottom: 20px;
-                                            flex-wrap: wrap;
-                                            padding: 0 20px;
-                                        }
-                                        
-                                        .memo-tab {
-                                            flex: 1;
-                                            min-width: 150px;
-                                            padding: 12px 20px;
-                                            background: #f8f9fa;
-                                            border: 2px solid #e9ecef;
-                                            border-radius: 8px;
+                                        /* Card Styles */
+                                        .uimms-card {
                                             cursor: pointer;
                                             transition: all 0.3s ease;
-                                            font-weight: 500;
-                                            color: #666;
+                                            border: 2px solid transparent;
+                                            border-radius: 12px;
+                                            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+                                            position: relative;
+                                            overflow: hidden;
                                         }
-                                        
-                                        .memo-tab:hover {
-                                            background: #e9ecef;
+
+                                        .uimms-card::before {
+                                            content: '';
+                                            position: absolute;
+                                            top: 0;
+                                            left: 0;
+                                            right: 0;
+                                            bottom: 0;
+                                            background: inherit;
+                                            opacity: 0;
+                                            transition: opacity 0.3s ease;
+                                        }
+
+                                        .uimms-card:hover {
+                                            transform: translateY(-5px);
+                                            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+                                        }
+
+                                        .uimms-card.active {
+                                            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+                                            border-width: 3px;
+                                        }
+
+                                        .uimms-card.pending {
                                             border-color: #007bff;
-                                            color: #007bff;
+                                            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
                                         }
-                                        
-                                        .memo-tab.active {
-                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                                            border-color: #667eea;
+
+                                        .uimms-card.pending.active {
+                                            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
                                             color: white;
-                                            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
                                         }
-                                        
-                                        .tab-count {
-                                            font-size: 0.9em;
+
+                                        .uimms-card.suspended {
+                                            border-color: #ffc107;
+                                            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+                                        }
+
+                                        .uimms-card.suspended.active {
+                                            background: linear-gradient(135deg, #ffc107 0%, #ffa000 100%);
+                                            color: white;
+                                        }
+
+                                        .uimms-card.completed {
+                                            border-color: #28a745;
+                                            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+                                        }
+
+                                        .uimms-card.completed.active {
+                                            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+                                            color: white;
+                                        }
+
+                                        .uimms-card.archived {
+                                            border-color: #6c757d;
+                                            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+                                        }
+
+                                        .uimms-card.archived.active {
+                                            background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+                                            color: white;
+                                        }
+
+                                        .dashboard__card__content {
+                                            display: flex;
+                                            align-items: center;
+                                            padding: 20px;
+                                            position: relative;
+                                            z-index: 1;
+                                        }
+
+                                        .dashboard__card__icon {
+                                            font-size: 48px;
+                                            margin-right: 20px;
                                             opacity: 0.8;
+                                        }
+
+                                        .uimms-card.active .dashboard__card__icon {
+                                            opacity: 1;
+                                        }
+
+                                        .dashboard__card__text h5 {
+                                            margin: 0 0 10px 0;
+                                            font-weight: 600;
+                                            font-size: 1rem;
+                                        }
+
+                                        .dashboard__card__text h3 {
+                                            margin: 0 0 5px 0;
+                                            font-size: 2.5rem;
+                                            font-weight: 700;
+                                        }
+
+                                        .dashboard__card__text p {
+                                            margin: 0;
+                                            font-size: 0.9rem;
+                                            opacity: 0.8;
+                                        }
+
+                                        /* Responsive Adjustments */
+                                        @media (max-width: 1199px) {
+                                            .dashboard__card__icon {
+                                                font-size: 40px;
+                                                margin-right: 15px;
+                                            }
+                                            
+                                            .dashboard__card__text h3 {
+                                                font-size: 2rem;
+                                            }
+                                        }
+
+                                        @media (max-width: 767px) {
+                                            .dashboard__card__content {
+                                                padding: 15px;
+                                            }
+                                            
+                                            .dashboard__card__icon {
+                                                font-size: 36px;
+                                                margin-right: 12px;
+                                            }
+                                            
+                                            .dashboard__card__text h3 {
+                                                font-size: 1.8rem;
+                                            }
+                                            
+                                            .dashboard__card__text h5 {
+                                                font-size: 0.9rem;
+                                            }
+                                            
+                                            .dashboard__card__text p {
+                                                font-size: 0.8rem;
+                                            }
+                                        }
+
+                                        @media (max-width: 575px) {
+                                            .dashboard__card__content {
+                                                flex-direction: column;
+                                                text-align: center;
+                                            }
+                                            
+                                            .dashboard__card__icon {
+                                                margin-right: 0;
+                                                margin-bottom: 10px;
+                                            }
                                         }
                                         
                                         .memos-toolbar {
@@ -224,11 +385,11 @@
                                         function loadMemos(status) {
                                             currentStatus = status;
                                             
-                                            // Update active tab
-                                            document.querySelectorAll('.memo-tab').forEach(tab => {
-                                                tab.classList.remove('active');
+                                            // Update active card
+                                            document.querySelectorAll('.uimms-card').forEach(card => {
+                                                card.classList.remove('active');
                                             });
-                                            document.querySelector(`[data-status="${status}"]`).classList.add('active');
+                                            document.querySelector(`.uimms-card[data-status="${status}"]`).classList.add('active');
                                             
                                             // Update section title
                                             const titles = {
