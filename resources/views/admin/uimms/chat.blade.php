@@ -111,23 +111,38 @@
                         <div class="chat-input-container">
                             <form id="chat-form" enctype="multipart/form-data">
                                 @csrf
-                                <div class="chat-input-wrapper">
-                                    <div class="chat-input">
+                                <div class="telegram-style-input">
+                                    <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()">
+                                        <svg viewBox="0 0 24 24" class="attachment-icon">
+                                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
+                                        </svg>
+                                    </button>
+                                    
+                                    <div class="input-field-wrapper">
                                         <textarea id="message-input" 
                                                   name="message" 
                                                   placeholder="Type your message..." 
                                                   rows="1" 
                                                   required></textarea>
-                                        <div class="chat-input-actions">
-                                            <label for="file-input" class="btn btn-sm btn-outline-secondary">
-                                                <i class="icofont-paperclip"></i>
-                                            </label>
-                                            <input type="file" id="file-input" name="attachments[]" multiple style="display: none;">
-                                            <button type="submit" class="btn btn-primary">
-                                                <i class="icofont-send"></i>
-                                            </button>
-                                        </div>
+                                        
+                                        <button type="button" class="emoji-btn">
+                                            <svg viewBox="0 0 24 24" class="emoji-icon">
+                                                <circle cx="12" cy="12" r="10"></circle>
+                                                <path d="M8 14s1.5 2 4 2 4-2 4-2"></path>
+                                                <line x1="9" y1="9" x2="9.01" y2="9"></line>
+                                                <line x1="15" y1="9" x2="15.01" y2="9"></line>
+                                            </svg>
+                                        </button>
                                     </div>
+                                    
+                                    <button type="submit" class="send-btn">
+                                        <svg viewBox="0 0 24 24" class="send-icon">
+                                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                                            <polygon points="22,2 15,22 11,13 2,9"></polygon>
+                                        </svg>
+                                    </button>
+                                    
+                                    <input type="file" id="file-input" name="attachments[]" multiple style="display: none;">
                                 </div>
                             </form>
                         </div>
@@ -555,42 +570,146 @@
 }
 
 .chat-input-container {
-    background: #fff;
-    border: 1px solid #e9ecef;
-    border-top: none;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border: none;
     border-radius: 0 0 8px 8px;
     padding: 20px;
+    position: relative;
+    overflow: hidden;
 }
 
-.chat-input-wrapper {
+.chat-input-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="20" font-size="12" fill="rgba(255,255,255,0.1)">x² + y² = r²</text><text x="60" y="40" font-size="10" fill="rgba(255,255,255,0.08)">∫f(x)dx</text><text x="20" y="70" font-size="14" fill="rgba(255,255,255,0.06)">α + β = γ</text><text x="70" y="90" font-size="8" fill="rgba(255,255,255,0.05)">∂/∂x</text></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.telegram-style-input {
     display: flex;
-    align-items: flex-end;
-    gap: 10px;
+    align-items: center;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border-radius: 25px;
+    padding: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
 }
 
-.chat-input {
+.attachment-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-right: 8px;
+}
+
+.attachment-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.attachment-icon {
+    width: 20px;
+    height: 20px;
+    stroke: #1976d2;
+    stroke-width: 2;
+    fill: none;
+}
+
+.input-field-wrapper {
     flex: 1;
     display: flex;
-    align-items: flex-end;
-    gap: 10px;
-    background: #f8f9fa;
-    border-radius: 25px;
-    padding: 10px 15px;
+    align-items: center;
+    background: transparent;
+    border-radius: 20px;
+    padding: 8px 12px;
+    position: relative;
 }
 
-.chat-input textarea {
+.input-field-wrapper textarea {
     flex: 1;
     border: none;
     background: transparent;
     resize: none;
     outline: none;
-    font-family: inherit;
+    font-size: 14px;
     line-height: 1.4;
+    max-height: 120px;
+    min-height: 20px;
+    color: #333;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.chat-input-actions {
+.input-field-wrapper textarea::placeholder {
+    color: #666;
+}
+
+.emoji-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: none;
     display: flex;
-    gap: 5px;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-left: 8px;
+}
+
+.emoji-btn:hover {
+    background: rgba(25, 118, 210, 0.1);
+}
+
+.emoji-icon {
+    width: 18px;
+    height: 18px;
+    stroke: #1976d2;
+    stroke-width: 2;
+    fill: none;
+}
+
+.send-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(25, 118, 210, 0.3);
+    margin-left: 8px;
+}
+
+.send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.4);
+    background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+}
+
+.send-icon {
+    width: 20px;
+    height: 20px;
+    stroke: white;
+    stroke-width: 2;
+    fill: none;
 }
 
 .typing-indicator {
