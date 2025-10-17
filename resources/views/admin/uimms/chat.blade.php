@@ -753,7 +753,7 @@
 }
 
 .memo-message-content {
-    background: #f8f9fa;
+    background: #DAECFF;
     border: 1px solid #e9ecef;
     border-radius: 6px;
     padding: 15px;
