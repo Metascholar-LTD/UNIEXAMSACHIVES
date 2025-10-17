@@ -277,10 +277,13 @@
                                 @csrf
                         <input type="hidden" name="reply_mode" id="reply-mode" value="all">
                         <input type="hidden" name="specific_recipients" id="specific-recipients" value="">
+                        <!-- Selected Files Preview -->
+                        <div id="selected-files-preview" class="selected-files-preview" style="display: none;"></div>
+                        
                         <div class="telegram-style-input">
-                                    <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()">
-                                        <svg viewBox="0 0 24 24" class="attachment-icon">
-                                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
+                                    <button type="button" class="attachment-btn" id="attachment-btn">
+                                        <svg viewBox="0 0 24 24" class="attachment-icon" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-8.97 8.97a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
                                         </svg>
                                     </button>
                                     
@@ -288,8 +291,7 @@
                                         <textarea id="message-input" 
                                                   name="message" 
                                                   placeholder="Type your message..." 
-                                                  rows="1" 
-                                                  required></textarea>
+                                                  rows="1"></textarea>
                                     </div>
                                     
                                     <button type="submit" class="send-btn">
@@ -299,8 +301,7 @@
                                         </svg>
                                     </button>
                                     
-                                    <input type="file" id="file-input" name="attachments[]" multiple style="display: none;" onchange="showSelectedFiles(this)">
-                                    <div id="selected-files" class="selected-files" style="display: none;"></div>
+                                    <input type="file" id="file-input" name="attachments[]" multiple style="display: none;" accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png,.gif">
                                 </div>
                             </form>
                         </div>
@@ -1345,83 +1346,148 @@
     z-index: 1;
 }
 
+/* Modern Attachment Button */
 .attachment-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 8px;
-    background: #ffffff;
-    border: 1px solid #e9ecef;
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     margin-right: 8px;
+    box-shadow: 
+        2px 2px 4px rgba(0, 0, 0, 0.1),
+        -2px -2px 4px rgba(255, 255, 255, 0.9);
+    position: relative;
 }
 
 .attachment-btn:hover {
-    background: #f8f9fa;
-    border-color: #dee2e6;
+    background: linear-gradient(145deg, #e9ecef, #dee2e6);
+    transform: translateY(-1px);
+    box-shadow: 
+        3px 3px 6px rgba(0, 0, 0, 0.15),
+        -3px -3px 6px rgba(255, 255, 255, 1);
+}
+
+.attachment-btn:active {
+    transform: translateY(0);
+    box-shadow: 
+        1px 1px 2px rgba(0, 0, 0, 0.1),
+        -1px -1px 2px rgba(255, 255, 255, 0.9);
 }
 
 .attachment-icon {
-    width: 20px;
-    height: 20px;
-    stroke: #000000;
-    stroke-width: 2;
-    fill: none;
+    width: 22px;
+    height: 22px;
+    color: #495057;
+    transition: color 0.3s ease;
 }
 
-/* Selected Files Display */
-.selected-files {
-    margin-top: 8px;
-    padding: 8px;
-    background: #f8f9fa;
-    border-radius: 6px;
+.attachment-btn:hover .attachment-icon {
+    color: #212529;
+}
+
+/* Selected Files Preview */
+.selected-files-preview {
+    background: #ffffff;
     border: 1px solid #e9ecef;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 10px;
+    max-height: 200px;
+    overflow-y: auto;
 }
 
 .selected-file-item {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 4px 8px;
-    margin: 2px 0;
-    background: #ffffff;
-    border-radius: 4px;
-    border: 1px solid #e9ecef;
-    font-size: 0.85rem;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: linear-gradient(145deg, #f8f9fa, #e9ecef);
+    border-radius: 8px;
+    border: 1px solid #dee2e6;
+    transition: all 0.2s ease;
 }
 
-.file-name {
-    font-weight: 500;
-    color: #333;
+.selected-file-item:hover {
+    background: linear-gradient(145deg, #e9ecef, #dee2e6);
+    transform: translateX(2px);
+}
+
+.selected-file-item:last-child {
+    margin-bottom: 0;
+}
+
+.file-info {
+    display: flex;
+    align-items: center;
     flex: 1;
-    margin-right: 8px;
+    gap: 10px;
 }
 
-.file-size {
-    color: #666;
-    font-size: 0.8rem;
-    margin-right: 8px;
-}
-
-.remove-file {
-    background: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    cursor: pointer;
-    font-size: 12px;
+.file-icon {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(145deg, #007bff, #0056b3);
+    border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    flex-shrink: 0;
 }
 
-.remove-file:hover {
-    background: #c82333;
+.file-details {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-weight: 600;
+    color: #212529;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+}
+
+.file-size {
+    color: #6c757d;
+    font-size: 0.75rem;
+    margin-top: 2px;
+}
+
+.remove-file-btn {
+    background: linear-gradient(145deg, #dc3545, #c82333);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.remove-file-btn:hover {
+    background: linear-gradient(145deg, #c82333, #bd2130);
+    transform: scale(1.1);
+}
+
+.remove-file-btn:active {
+    transform: scale(0.95);
 }
 
 .input-field-wrapper {
@@ -1749,54 +1815,122 @@ function initializeDropdownFunctionality() {
     });
 }
 
-// Show selected files
-function showSelectedFiles(input) {
-    const selectedFilesDiv = document.getElementById('selected-files');
-    const files = input.files;
+// Modern File Attachment System
+let selectedFiles = [];
+
+// Get file extension icon
+function getFileIcon(fileName) {
+    const ext = fileName.split('.').pop().toLowerCase();
+    const iconMap = {
+        'pdf': '📄',
+        'doc': '📝',
+        'docx': '📝',
+        'txt': '📃',
+        'jpg': '🖼️',
+        'jpeg': '🖼️',
+        'png': '🖼️',
+        'gif': '🖼️'
+    };
+    return iconMap[ext] || '📎';
+}
+
+// Attachment button click handler
+document.getElementById('attachment-btn').addEventListener('click', function() {
+    document.getElementById('file-input').click();
+});
+
+// File input change handler
+document.getElementById('file-input').addEventListener('change', function(e) {
+    const files = Array.from(e.target.files);
     
     if (files.length > 0) {
-        selectedFilesDiv.innerHTML = '';
-        selectedFilesDiv.style.display = 'block';
-        
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const fileItem = document.createElement('div');
-            fileItem.className = 'selected-file-item';
-            fileItem.innerHTML = `
-                <span class="file-name">${file.name}</span>
-                <span class="file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
-                <button type="button" class="remove-file" onclick="removeFile(${i})">×</button>
-            `;
-            selectedFilesDiv.appendChild(fileItem);
-        }
-    } else {
-        selectedFilesDiv.style.display = 'none';
+        selectedFiles = files;
+        displaySelectedFiles();
     }
+});
+
+// Display selected files
+function displaySelectedFiles() {
+    const preview = document.getElementById('selected-files-preview');
+    
+    if (selectedFiles.length === 0) {
+        preview.style.display = 'none';
+        return;
+    }
+    
+    preview.style.display = 'block';
+    preview.innerHTML = '';
+    
+    selectedFiles.forEach((file, index) => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'selected-file-item';
+        fileItem.innerHTML = `
+            <div class="file-info">
+                <div class="file-icon">${getFileIcon(file.name)}</div>
+                <div class="file-details">
+                    <div class="file-name" title="${file.name}">${file.name}</div>
+                    <div class="file-size">${(file.size / 1024).toFixed(1)} KB</div>
+                </div>
+            </div>
+            <button type="button" class="remove-file-btn" data-index="${index}">
+                ×
+            </button>
+        `;
+        preview.appendChild(fileItem);
+    });
+    
+    // Add event listeners to remove buttons
+    preview.querySelectorAll('.remove-file-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const index = parseInt(this.dataset.index);
+            removeFile(index);
+        });
+    });
 }
 
 // Remove file from selection
 function removeFile(index) {
-    const fileInput = document.getElementById('file-input');
+    selectedFiles.splice(index, 1);
+    
+    // Update file input
     const dt = new DataTransfer();
+    selectedFiles.forEach(file => dt.items.add(file));
+    document.getElementById('file-input').files = dt.files;
     
-    for (let i = 0; i < fileInput.files.length; i++) {
-        if (i !== index) {
-            dt.items.add(fileInput.files[i]);
-        }
-    }
-    
-    fileInput.files = dt.files;
-    showSelectedFiles(fileInput);
+    displaySelectedFiles();
+}
+
+// Clear all files
+function clearFiles() {
+    selectedFiles = [];
+    document.getElementById('file-input').value = '';
+    document.getElementById('selected-files-preview').style.display = 'none';
+    document.getElementById('selected-files-preview').innerHTML = '';
 }
 
 // Send message
 document.getElementById('chat-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const formData = new FormData(this);
     const messageInput = document.getElementById('message-input');
     
-    if (!messageInput.value.trim()) return;
+    // Check if there's a message or files
+    if (!messageInput.value.trim() && selectedFiles.length === 0) {
+        alert('Please enter a message or attach files');
+        return;
+    }
+    
+    // Create form data
+    const formData = new FormData();
+    formData.append('_token', document.querySelector('input[name="_token"]').value);
+    formData.append('message', messageInput.value.trim() || '(Attachment)');
+    formData.append('reply_mode', document.getElementById('reply-mode').value);
+    formData.append('specific_recipients', document.getElementById('specific-recipients').value);
+    
+    // Append files
+    selectedFiles.forEach((file, index) => {
+        formData.append(`attachments[${index}]`, file);
+    });
     
     // Show typing indicator
     showTypingIndicator();
@@ -1816,9 +1950,7 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
             messageInput.style.height = 'auto';
             
             // Clear selected files
-            document.getElementById('file-input').value = '';
-            document.getElementById('selected-files').style.display = 'none';
-            document.getElementById('selected-files').innerHTML = '';
+            clearFiles();
             
             hideTypingIndicator();
         }
