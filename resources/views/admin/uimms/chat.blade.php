@@ -77,13 +77,6 @@
 
                         {{-- Memo Details Section --}}
                         <div class="memo-details-section">
-                            <div class="memo-details-header">
-                                <h4>Memo Details</h4>
-                                <span class="memo-status-badge status-{{ $memo->memo_status ?? 'pending' }}">
-                                    {{ ucfirst($memo->memo_status ?? 'pending') }}
-                                </span>
-                            </div>
-                            
                             <div class="memo-details-content">
                                 <div class="memo-details-row">
                                     <div class="memo-detail-item">
@@ -639,21 +632,6 @@
     overflow: hidden;
 }
 
-.memo-details-header {
-    background: #f8f9fa;
-    padding: 15px 20px;
-    border-bottom: 1px solid #e9ecef;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.memo-details-header h4 {
-    margin: 0;
-    color: #333;
-    font-size: 1.1rem;
-    font-weight: 600;
-}
 
 .memo-details-content {
     padding: 20px;
