@@ -94,6 +94,32 @@
                                         <span class="memo-date">{{ $memo->created_at->format('M d, Y H:i') }}</span>
                                     </div>
                                     
+                                    @if($memo->workflow_history && count($memo->workflow_history) > 0)
+                                        @php
+                                            $lastAssignment = collect($memo->workflow_history)
+                                                ->where('action', 'assigned')
+                                                ->sortByDesc('timestamp')
+                                                ->first();
+                                        @endphp
+                                        @if($lastAssignment)
+                                            <div class="memo-detail-item-inline">
+                                                <label>Assigned By:</label>
+                                                <span class="memo-assigner">
+                                                    @php
+                                                        $assigner = \App\Models\User::find($lastAssignment['user_id']);
+                                                    @endphp
+                                                    @if($assigner)
+                                                        <img src="{{ $assigner->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                             alt="{{ $assigner->first_name }}" class="assigner-avatar">
+                                                        {{ $assigner->first_name }} {{ $assigner->last_name }}
+                                                    @else
+                                                        <span class="text-muted">Unknown</span>
+                                                    @endif
+                                                </span>
+                                            </div>
+                                        @endif
+                                    @endif
+                                    
                                     <div class="memo-detail-item-inline">
                                         <label>Assigned To:</label>
                                         <span class="memo-assignee">
@@ -758,7 +784,7 @@
     color: #333;
 }
 
-.sender-avatar, .assignee-avatar {
+.sender-avatar, .assigner-avatar, .assignee-avatar {
     width: 24px;
     height: 24px;
     border-radius: 50%;
