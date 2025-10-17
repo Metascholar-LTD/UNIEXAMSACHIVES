@@ -99,7 +99,7 @@
                                             </button>
                                         </div>
 
-                                        <div class="dashboard__meessage__contact" id="memos-container">
+                                        <div class="dashboard__meessage__contact memos-scroll-container" id="memos-container">
                                             <div class="text-center py-5">
                                                 <i class="icofont-chat" style="font-size: 48px; color: #ddd;"></i>
                                                 <p class="text-muted mt-3">Click on a card above to load memos</p>
@@ -318,10 +318,12 @@
                                             gap: 12px;
                                             position: sticky;
                                             top: 0;
-                                            z-index: 5;
+                                            z-index: 100;
                                             background: #f8f9fa;
                                             padding: 15px 20px;
                                             border-bottom: 2px solid #eef2f7;
+                                            backdrop-filter: blur(10px);
+                                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                                         }
                                         
                                         .memos-title-container {
@@ -558,6 +560,31 @@
 
                                         .refresh-btn:hover {
                                             background-color: #0f3a7a;
+                                        }
+
+                                        /* Scroll Container */
+                                        .memos-scroll-container {
+                                            max-height: calc(100vh - 200px);
+                                            overflow-y: auto;
+                                            padding: 0 20px 20px 20px;
+                                        }
+
+                                        .memos-scroll-container::-webkit-scrollbar {
+                                            width: 6px;
+                                        }
+
+                                        .memos-scroll-container::-webkit-scrollbar-track {
+                                            background: #f1f1f1;
+                                            border-radius: 3px;
+                                        }
+
+                                        .memos-scroll-container::-webkit-scrollbar-thumb {
+                                            background: #c1c1c1;
+                                            border-radius: 3px;
+                                        }
+
+                                        .memos-scroll-container::-webkit-scrollbar-thumb:hover {
+                                            background: #a8a8a8;
                                         }
                                         </style>
 
