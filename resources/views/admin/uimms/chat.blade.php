@@ -64,9 +64,9 @@
                                 <div class="chat-title">
                                     <h4>{{ $memo->subject }}</h4>
                                 </div>
-                                <div class="chat-participants">
+                                <div class="chat-participants"> <span class="recipients-count">Participants:</span>
                                     @foreach($memo->recipients as $participant)
-                                        Recipients: <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                        <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
                                              alt="{{ $participant->user->first_name }}" 
                                              class="participant-avatar"
                                              title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
