@@ -245,7 +245,92 @@
 
 .chat-actions {
     display: flex;
-    gap: 10px;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Modern Action Button Styling */
+.chat-actions .btn {
+    border: none;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    transition: all 0.2s ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    text-transform: none;
+    letter-spacing: 0.3px;
+}
+
+.chat-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+}
+
+.chat-actions .btn:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+/* Assign Button */
+.chat-actions .btn-outline-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
+    border: none;
+}
+
+.chat-actions .btn-outline-primary:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    color: white;
+}
+
+/* Complete Button */
+.chat-actions .btn-outline-success {
+    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
+    color: white;
+    border: none;
+}
+
+.chat-actions .btn-outline-success:hover {
+    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
+    color: white;
+}
+
+/* Suspend Button */
+.chat-actions .btn-outline-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+    color: #212529;
+    border: none;
+}
+
+.chat-actions .btn-outline-warning:hover {
+    background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
+    color: #212529;
+}
+
+/* Archive Button */
+.chat-actions .btn-outline-secondary {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+    color: white;
+    border: none;
+}
+
+.chat-actions .btn-outline-secondary:hover {
+    background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
+    color: white;
+}
+
+/* Back Button */
+.btn-outline-secondary:not(.chat-actions .btn) {
+    background: #f8f9fa;
+    color: #6c757d;
+    border: 1px solid #dee2e6;
+}
+
+.btn-outline-secondary:not(.chat-actions .btn):hover {
+    background: #e9ecef;
+    color: #495057;
+    border-color: #adb5bd;
 }
 
 .chat-container {
