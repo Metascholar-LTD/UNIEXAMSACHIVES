@@ -446,73 +446,47 @@
                                             font-size: 0.7rem;
                                         }
 
-                                        /* Responsive Button Styling */
+                                        /* Compact Refresh Button Styling */
                                         .responsive-btn {
                                             display: flex;
                                             align-items: center;
-                                            justify-content: flex-start;
-                                            width: 45px;
-                                            height: 45px;
+                                            justify-content: center;
+                                            width: 40px;
+                                            height: 40px;
                                             border: none;
                                             border-radius: 50%;
                                             cursor: pointer;
-                                            position: relative;
-                                            overflow: hidden;
-                                            transition-duration: 0.3s;
-                                            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+                                            box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
                                             background-color: #1a4a9b;
-                                            text-decoration: none;
+                                            transition: all 0.2s ease;
                                             flex-shrink: 0;
                                         }
 
                                         .responsive-btn:hover {
-                                            width: 160px;
-                                            border-radius: 40px;
-                                            transition-duration: 0.3s;
-                                            text-decoration: none;
-                                        }
-
-                                        .responsive-btn .svgWrapper {
-                                            width: 100%;
-                                            transition-duration: 0.3s;
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: center;
-                                            flex-shrink: 0;
-                                        }
-
-                                        .responsive-btn .svgIcon {
-                                            width: 17px;
-                                            flex-shrink: 0;
-                                        }
-
-                                        .responsive-btn .text {
-                                            position: absolute;
-                                            left: 50px;
-                                            width: 100px;
-                                            opacity: 0;
-                                            color: white;
-                                            font-size: 14px;
-                                            font-weight: 600;
-                                            transition-duration: 0.3s;
-                                            white-space: nowrap;
-                                            text-align: left;
-                                            padding-right: 10px;
-                                        }
-
-                                        .responsive-btn:hover .svgWrapper {
-                                            width: 45px;
-                                            transition-duration: 0.3s;
-                                            padding-left: 0;
-                                        }
-
-                                        .responsive-btn:hover .text {
-                                            opacity: 1;
-                                            transition-duration: 0.3s;
+                                            background-color: #0f3a7a;
+                                            box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
                                         }
 
                                         .responsive-btn:active {
-                                            transform: translate(2px, 2px);
+                                            transform: translate(1px, 1px);
+                                            box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
+                                        }
+
+                                        .responsive-btn .svgWrapper {
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            width: 100%;
+                                            height: 100%;
+                                        }
+
+                                        .responsive-btn .svgIcon {
+                                            width: 16px;
+                                            height: 16px;
+                                        }
+
+                                        .responsive-btn .text {
+                                            display: none;
                                         }
 
                                         .refresh-btn {
@@ -520,7 +494,7 @@
                                         }
 
                                         .refresh-btn:hover {
-                                            background-color: #1a4a9b;
+                                            background-color: #0f3a7a;
                                         }
                                         </style>
 
