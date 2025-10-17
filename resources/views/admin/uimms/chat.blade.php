@@ -79,8 +79,8 @@
                         {{-- Memo Details Section --}}
                         <div class="memo-details-section">
                             <div class="memo-details-content">
-                                <div class="memo-details-row">
-                                    <div class="memo-detail-item">
+                                <div class="memo-details-single-row">
+                                    <div class="memo-detail-item-inline">
                                         <label>From:</label>
                                         <span class="memo-sender">
                                             <img src="{{ $memo->creator->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
@@ -88,14 +88,13 @@
                                             {{ $memo->creator->first_name }} {{ $memo->creator->last_name }}
                                         </span>
                                     </div>
-                                    <div class="memo-detail-item">
+                                    
+                                    <div class="memo-detail-item-inline">
                                         <label>Created:</label>
                                         <span class="memo-date">{{ $memo->created_at->format('M d, Y H:i') }}</span>
                                     </div>
-                                </div>
-                                
-                                <div class="memo-details-row">
-                                    <div class="memo-detail-item">
+                                    
+                                    <div class="memo-detail-item-inline">
                                         <label>Assigned To:</label>
                                         <span class="memo-assignee">
                                             @if($memo->currentAssignee)
@@ -653,6 +652,21 @@
 
 .memo-details-row:last-child {
     margin-bottom: 0;
+}
+
+.memo-details-single-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.memo-detail-item-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 .memo-detail-item {
