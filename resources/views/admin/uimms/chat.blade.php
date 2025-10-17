@@ -1348,35 +1348,29 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #ffffff;
-    border: 2px solid #e9ecef;
+    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+    border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
     margin-right: 8px;
 }
 
 .attachment-btn:hover {
-    background: #f8f9fa;
-    border-color: #007bff;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
 }
 
 .attachment-icon {
     width: 20px;
     height: 20px;
-    stroke: #6c757d;
+    stroke: white;
     stroke-width: 2;
     fill: none;
-    transition: stroke 0.3s ease;
-}
-
-.attachment-btn:hover .attachment-icon {
-    stroke: #007bff;
 }
 
 .input-field-wrapper {
