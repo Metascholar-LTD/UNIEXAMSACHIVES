@@ -27,6 +27,17 @@ class EmailCampaign extends Model
         'failed_count',
         'created_by',
         'reference',
+        // UIMMS fields
+        'memo_status',
+        'current_assignee_id',
+        'original_sender_id',
+        'assigned_to_office',
+        'priority',
+        'due_date',
+        'completed_at',
+        'suspended_at',
+        'archived_at',
+        'workflow_history',
     ];
 
     protected $casts = [
@@ -34,11 +45,28 @@ class EmailCampaign extends Model
         'selected_users' => 'array',
         'scheduled_at' => 'datetime',
         'sent_at' => 'datetime',
+        // UIMMS casts
+        'workflow_history' => 'array',
+        'due_date' => 'datetime',
+        'completed_at' => 'datetime',
+        'suspended_at' => 'datetime',
+        'archived_at' => 'datetime',
     ];
 
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    // UIMMS Relationships
+    public function currentAssignee(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'current_assignee_id');
+    }
+
+    public function originalSender(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'original_sender_id');
     }
 
     public function recipients(): HasMany
@@ -102,5 +130,153 @@ class EmailCampaign extends Model
     {
         return $query->where('status', 'scheduled')
                     ->where('scheduled_at', '<=', now());
+    }
+
+    // UIMMS Methods
+    public function activeParticipants(): HasMany
+    {
+        return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id')
+                    ->where('is_active_participant', true);
+    }
+
+    public function allParticipants(): HasMany
+    {
+        return $this->hasMany(EmailCampaignRecipient::class, 'comm_campaign_id');
+    }
+
+    public function chatMessages()
+    {
+        return $this->replies()->with('user')->orderBy('created_at', 'asc');
+    }
+
+    public function getLastMessageAttribute()
+    {
+        return $this->replies()->latest()->first();
+    }
+
+    public function getActiveParticipantsCountAttribute()
+    {
+        return $this->activeParticipants()->count();
+    }
+
+    public function isActiveParticipant($userId)
+    {
+        return $this->activeParticipants()->where('user_id', $userId)->exists();
+    }
+
+    public function assignTo($userId, $assignedBy, $office = null)
+    {
+        // Deactivate current active participants
+        $this->activeParticipants()->update(['is_active_participant' => false]);
+        
+        // Add new assignee as active participant
+        $recipient = $this->recipients()->where('user_id', $userId)->first();
+        if (!$recipient) {
+            $recipient = $this->recipients()->create([
+                'user_id' => $userId,
+                'status' => 'sent',
+                'is_active_participant' => true,
+                'assigned_at' => now(),
+                'last_activity_at' => now(),
+            ]);
+        } else {
+            $recipient->update([
+                'is_active_participant' => true,
+                'assigned_at' => now(),
+                'last_activity_at' => now(),
+            ]);
+        }
+
+        // Update memo assignment
+        $this->update([
+            'current_assignee_id' => $userId,
+            'assigned_to_office' => $office,
+            'memo_status' => 'pending',
+        ]);
+
+        // Add to workflow history
+        $this->addToWorkflowHistory('assigned', $assignedBy, $userId, $office);
+
+        return $recipient;
+    }
+
+    public function addToWorkflowHistory($action, $userId, $targetUserId = null, $details = null)
+    {
+        $history = $this->workflow_history ?? [];
+        $history[] = [
+            'action' => $action,
+            'user_id' => $userId,
+            'target_user_id' => $targetUserId,
+            'details' => $details,
+            'timestamp' => now()->toISOString(),
+        ];
+        
+        $this->update(['workflow_history' => $history]);
+    }
+
+    public function markAsCompleted($userId)
+    {
+        $this->update([
+            'memo_status' => 'completed',
+            'completed_at' => now(),
+        ]);
+
+        $this->addToWorkflowHistory('completed', $userId);
+    }
+
+    public function markAsSuspended($userId, $reason = null)
+    {
+        $this->update([
+            'memo_status' => 'suspended',
+            'suspended_at' => now(),
+        ]);
+
+        $this->addToWorkflowHistory('suspended', $userId, null, $reason);
+    }
+
+    public function markAsArchived($userId)
+    {
+        $this->update([
+            'memo_status' => 'archived',
+            'archived_at' => now(),
+        ]);
+
+        $this->addToWorkflowHistory('archived', $userId);
+    }
+
+    // UIMMS Scopes
+    public function scopeByMemoStatus($query, $status)
+    {
+        return $query->where('memo_status', $status);
+    }
+
+    public function scopePendingMemos($query)
+    {
+        return $query->where('memo_status', 'pending');
+    }
+
+    public function scopeSuspendedMemos($query)
+    {
+        return $query->where('memo_status', 'suspended');
+    }
+
+    public function scopeCompletedMemos($query)
+    {
+        return $query->where('memo_status', 'completed');
+    }
+
+    public function scopeArchivedMemos($query)
+    {
+        return $query->where('memo_status', 'archived');
+    }
+
+    public function scopeAssignedTo($query, $userId)
+    {
+        return $query->where('current_assignee_id', $userId);
+    }
+
+    public function scopeCreatedBy($query, $userId)
+    {
+        return $query->where('created_by', $userId);
     }
 }

@@ -125,6 +125,15 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/memos/replies/{reply}/mark-as-read', [HomeController::class, 'markReplyAsRead'])->name('dashboard.memo.reply.markAsRead');
     Route::get('/dashboard/memos/replies/{reply}/attachment/{index}/download', [HomeController::class, 'downloadReplyAttachment'])->name('dashboard.memo.reply.download-attachment');
     
+    #UIMMS - Chat-based Memo Management System
+    Route::get('/dashboard/uimms', [HomeController::class, 'uimmsPortal'])->name('dashboard.uimms.portal');
+    Route::get('/dashboard/uimms/memos/{status}', [HomeController::class, 'getMemosByStatus'])->name('dashboard.uimms.memos.byStatus');
+    Route::get('/dashboard/uimms/chat/{memo}', [HomeController::class, 'memoChat'])->name('dashboard.uimms.chat');
+    Route::post('/dashboard/uimms/chat/{memo}/message', [HomeController::class, 'sendChatMessage'])->name('dashboard.uimms.chat.message');
+    Route::post('/dashboard/uimms/chat/{memo}/assign', [HomeController::class, 'assignMemo'])->name('dashboard.uimms.chat.assign');
+    Route::post('/dashboard/uimms/chat/{memo}/status', [HomeController::class, 'updateMemoStatus'])->name('dashboard.uimms.chat.status');
+    Route::get('/dashboard/uimms/chat/{memo}/messages', [HomeController::class, 'getChatMessages'])->name('dashboard.uimms.chat.messages');
+    
     #notifications
     Route::get('/dashboard/notifications', [HomeController::class, 'getNotifications'])->name('dashboard.notifications');
     Route::get('/dashboard/notifications/check', [HomeController::class, 'checkNewNotifications'])->name('dashboard.notifications.check');

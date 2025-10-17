@@ -43,36 +43,37 @@
                         </svg>
                         My Profile</a>
                 </li>
-                @auth
-                    @if(auth()->user()->is_admin)
+                {{-- Memos Section with Dropdown --}}
+                <li class="memo-dropdown">
+                    <a class="{{ request()->routeIs('dashboard.message') || request()->routeIs('dashboard.uimms.*') ? 'active' : '' }}" href="#" onclick="toggleMemoDropdown(event)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="feather feather-message-circle">
+                            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+                        </svg>
+                        📱 Memos Portal
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down dropdown-arrow">
+                            <polyline points="6,9 12,15 18,9"></polyline>
+                        </svg>
+                    </a>
+                    <ul class="memo-submenu" id="memo-submenu">
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.uimms.portal') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
+                                <i class="icofont-chat"></i>
+                                💬 Chat-Based Memos
+                                <span class="badge bg-primary">NEW</span>
+                            </a>
+                        </li>
                         <li>
                             <a class="{{ request()->routeIs('dashboard.message') ? 'active' : '' }}" href="{{route('dashboard.message')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-book-open">
-                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                                </svg>
-                               Received Memos</a><span class="dashboard__label">{{$newMessagesCount}} / {{$totalMemosCount ?? 0}}</span>
+                                <i class="icofont-book-open"></i>
+                                📋 Traditional Memos
+                                <span class="dashboard__label">{{$newMessagesCount}} / {{$totalMemosCount ?? 0}}</span>
+                            </a>
                         </li>
-                    @endif
-                @endauth
-                @auth
-                    @unless(auth()->user()->is_admin)
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.message') ? 'active' : '' }}" href="{{route('dashboard.message')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-book-open">
-                                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
-                                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
-                                </svg>
-                               Received Memos</a><span class="dashboard__label">{{$newMessagesCount}} / {{$totalMemosCount ?? 0}}</span>
-                        </li>
-                    @endunless
-                @endauth
+                    </ul>
+                </li>
 
                 <li>
                     <a class="{{ request()->routeIs('dashboard.document') ? 'active' : '' }}" href="{{route('dashboard.document')}}">
@@ -680,4 +681,109 @@ document.addEventListener('DOMContentLoaded', function() {
         nav.style.transition = 'all 0.3s ease-in-out';
     });
 });
+
+// Memo dropdown functionality
+function toggleMemoDropdown(event) {
+    event.preventDefault();
+    const submenu = document.getElementById('memo-submenu');
+    const arrow = event.currentTarget.querySelector('.dropdown-arrow');
+    
+    if (submenu.style.display === 'block') {
+        submenu.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+    } else {
+        submenu.style.display = 'block';
+        arrow.style.transform = 'rotate(180deg)';
+    }
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', function(event) {
+    const memoDropdown = document.querySelector('.memo-dropdown');
+    const submenu = document.getElementById('memo-submenu');
+    
+    if (!memoDropdown.contains(event.target)) {
+        submenu.style.display = 'none';
+        const arrow = memoDropdown.querySelector('.dropdown-arrow');
+        arrow.style.transform = 'rotate(0deg)';
+    }
+});
 </script>
+
+<style>
+.memo-dropdown {
+    position: relative;
+}
+
+.memo-dropdown > a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.dropdown-arrow {
+    transition: transform 0.3s ease;
+    margin-left: auto;
+}
+
+.memo-submenu {
+    display: none;
+    position: absolute;
+    left: 100%;
+    top: 0;
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    min-width: 250px;
+    z-index: 1000;
+    padding: 8px 0;
+}
+
+.memo-submenu li {
+    list-style: none;
+    margin: 0;
+}
+
+.memo-submenu a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    color: #333;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    border-radius: 0;
+    border: none;
+}
+
+.memo-submenu a:hover {
+    background-color: #f8f9fa;
+    color: #007bff;
+}
+
+.memo-submenu a.active {
+    background-color: #e3f2fd;
+    color: #1976d2;
+}
+
+.memo-submenu a i {
+    margin-right: 10px;
+    width: 16px;
+}
+
+.badge {
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: 10px;
+}
+
+.dashboard__label {
+    background: #007bff;
+    color: white;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    margin-left: auto;
+}
+</style>

@@ -766,4 +766,272 @@ class HomeController extends Controller
 
         return redirect()->route('frontend.welcome')->with('success', 'You have been logged out successfully.');
     }
+
+    // ==================== UIMMS METHODS ====================
+    
+    /**
+     * UIMMS Portal - Main dashboard for chat-based memo management
+     */
+    public function uimmsPortal()
+    {
+        $userId = Auth::id();
+        
+        // Get memo counts for each section
+        $pendingCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('memo_status', 'pending')->count();
+        
+        $suspendedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('memo_status', 'suspended')->count();
+        
+        $completedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('memo_status', 'completed')->count();
+        
+        $archivedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
+            $query->where('user_id', $userId);
+        })->where('memo_status', 'archived')->count();
+
+        return view('admin.uimms.portal', compact(
+            'pendingCount', 
+            'suspendedCount', 
+            'completedCount', 
+            'archivedCount'
+        ));
+    }
+
+    /**
+     * Get memos by status for UIMMS
+     */
+    public function getMemosByStatus($status)
+    {
+        $userId = Auth::id();
+        
+        $memos = EmailCampaign::with(['creator', 'currentAssignee', 'activeParticipants.user', 'lastMessage'])
+            ->whereHas('activeParticipants', function($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })
+            ->where('memo_status', $status)
+            ->orderBy('updated_at', 'desc')
+            ->get();
+
+        return response()->json($memos);
+    }
+
+    /**
+     * Chat view for a specific memo
+     */
+    public function memoChat(EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is an active participant
+        if (!$memo->isActiveParticipant($userId)) {
+            abort(403, 'You are not an active participant in this memo conversation.');
+        }
+
+        $memo->load([
+            'creator', 
+            'currentAssignee', 
+            'activeParticipants.user',
+            'chatMessages.user',
+            'recipients.user'
+        ]);
+
+        // Get all users for assignment dropdown
+        $users = User::where('is_approve', true)
+            ->where('id', '!=', $userId)
+            ->select('id', 'first_name', 'last_name', 'email')
+            ->get();
+
+        return view('admin.uimms.chat', compact('memo', 'users'));
+    }
+
+    /**
+     * Send a chat message in memo
+     */
+    public function sendChatMessage(Request $request, EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is an active participant
+        if (!$memo->isActiveParticipant($userId)) {
+            abort(403, 'You are not an active participant in this memo conversation.');
+        }
+
+        $request->validate([
+            'message' => 'required|string|max:5000',
+            'attachments' => 'nullable|array|max:5',
+            'attachments.*' => 'file|max:10240|mimes:pdf,doc,docx,txt,jpg,jpeg,png,gif',
+        ]);
+
+        $attachments = [];
+        if ($request->hasFile('attachments')) {
+            foreach ($request->file('attachments') as $file) {
+                $path = $file->store('memo-replies', 'public');
+                $attachments[] = [
+                    'name' => $file->getClientOriginalName(),
+                    'path' => $path,
+                    'size' => $file->getSize(),
+                    'type' => $file->getMimeType(),
+                ];
+            }
+        }
+
+        $reply = MemoReply::create([
+            'campaign_id' => $memo->id,
+            'user_id' => $userId,
+            'message' => $request->message,
+            'attachments' => $attachments,
+        ]);
+
+        // Update last activity for all active participants
+        $memo->activeParticipants()->update(['last_activity_at' => now()]);
+
+        // Create notifications for other active participants
+        $otherParticipants = $memo->activeParticipants()
+            ->where('user_id', '!=', $userId)
+            ->with('user')
+            ->get();
+
+        foreach ($otherParticipants as $participant) {
+            Notification::create([
+                'user_id' => $participant->user_id,
+                'type' => 'memo_message',
+                'title' => 'New Message in Memo',
+                'message' => Auth::user()->first_name . ' sent a message in: ' . $memo->subject,
+                'url' => route('dashboard.uimms.chat', $memo->id),
+                'data' => [
+                    'memo_id' => $memo->id,
+                    'sender_name' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
+                ]
+            ]);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => $reply->load('user'),
+        ]);
+    }
+
+    /**
+     * Assign memo to another user
+     */
+    public function assignMemo(Request $request, EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is an active participant
+        if (!$memo->isActiveParticipant($userId)) {
+            abort(403, 'You are not an active participant in this memo conversation.');
+        }
+
+        $request->validate([
+            'assignee_id' => 'required|exists:users,id',
+            'office' => 'nullable|string|max:255',
+            'message' => 'nullable|string|max:1000',
+        ]);
+
+        $assignee = User::findOrFail($request->assignee_id);
+        
+        // Assign the memo
+        $memo->assignTo($request->assignee_id, $userId, $request->office);
+
+        // Send a system message about the assignment
+        if ($request->message) {
+            MemoReply::create([
+                'campaign_id' => $memo->id,
+                'user_id' => $userId,
+                'message' => "📋 **Assigned to " . $assignee->first_name . " " . $assignee->last_name . "**\n\n" . $request->message,
+                'attachments' => [],
+            ]);
+        }
+
+        // Create notification for new assignee
+        Notification::create([
+            'user_id' => $request->assignee_id,
+            'type' => 'memo_assigned',
+            'title' => 'Memo Assigned to You',
+            'message' => Auth::user()->first_name . ' assigned a memo to you: ' . $memo->subject,
+            'url' => route('dashboard.uimms.chat', $memo->id),
+            'data' => [
+                'memo_id' => $memo->id,
+                'assigned_by' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
+            ]
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Memo assigned successfully',
+            'assignee' => $assignee,
+        ]);
+    }
+
+    /**
+     * Update memo status (complete, suspend, archive)
+     */
+    public function updateMemoStatus(Request $request, EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is an active participant
+        if (!$memo->isActiveParticipant($userId)) {
+            abort(403, 'You are not an active participant in this memo conversation.');
+        }
+
+        $request->validate([
+            'status' => 'required|in:completed,suspended,archived',
+            'reason' => 'nullable|string|max:1000',
+        ]);
+
+        switch ($request->status) {
+            case 'completed':
+                $memo->markAsCompleted($userId);
+                break;
+            case 'suspended':
+                $memo->markAsSuspended($userId, $request->reason);
+                break;
+            case 'archived':
+                $memo->markAsArchived($userId);
+                break;
+        }
+
+        // Send a system message about status change
+        $statusMessages = [
+            'completed' => '✅ **Memo marked as completed**',
+            'suspended' => '⏸️ **Memo suspended**' . ($request->reason ? "\n\nReason: " . $request->reason : ''),
+            'archived' => '📦 **Memo archived**',
+        ];
+
+        MemoReply::create([
+            'campaign_id' => $memo->id,
+            'user_id' => $userId,
+            'message' => $statusMessages[$request->status],
+            'attachments' => [],
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Memo status updated successfully',
+            'new_status' => $request->status,
+        ]);
+    }
+
+    /**
+     * Get chat messages for a memo (AJAX)
+     */
+    public function getChatMessages(EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is an active participant
+        if (!$memo->isActiveParticipant($userId)) {
+            abort(403, 'You are not an active participant in this memo conversation.');
+        }
+
+        $messages = $memo->chatMessages()->get();
+
+        return response()->json($messages);
+    }
 }
