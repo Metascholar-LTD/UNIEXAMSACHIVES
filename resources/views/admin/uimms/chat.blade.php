@@ -62,7 +62,7 @@
                             {{-- Bottom Section: Subject and Participants --}}
                             <div class="chat-header-bottom">
                                 <div class="chat-title">
-                                    <h4>{{ $memo->subject }}</h4>
+                                    Subject: <h4>{{ $memo->subject }}</h4>
                                 </div>
                                 <div class="chat-participants">
                                     @foreach($memo->recipients as $participant)
@@ -79,13 +79,6 @@
                         {{-- Memo Details Section --}}
                         <div class="memo-details-section">
                             <div class="memo-details-content">
-                                <div class="memo-details-row">
-                                    <div class="memo-detail-item">
-                                        <label>Subject:</label>
-                                        <span class="memo-subject">{{ $memo->subject }}</span>
-                                    </div>
-                                </div>
-                                
                                 <div class="memo-details-row">
                                     <div class="memo-detail-item">
                                         <label>From:</label>
