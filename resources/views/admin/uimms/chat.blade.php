@@ -670,7 +670,7 @@
 }
 
 .memo-detail-item-inline label {
-    display: inline;
+    display: inline-block;
     margin-bottom: 0;
     margin-right: 6px;
 }
@@ -686,19 +686,23 @@
 }
 
 .memo-detail-item label {
-    display: block;
+    display: inline-block; /* Badge style for all labels */
     font-weight: 600;
-    color: #555;
-    font-size: 0.85rem;
+    color: #2c3e50;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    font-size: 0.75rem;
     margin-bottom: 5px;
+    margin-right: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .memo-detail-item.inline-label label {
-    display: inline;
     margin-bottom: 0;
-    margin-right: 8px;
 }
 
 .memo-subject {
