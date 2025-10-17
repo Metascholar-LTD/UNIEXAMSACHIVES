@@ -20,8 +20,13 @@
                         {{-- Chat Header --}}
                         <div class="chat-header">
                             <div class="chat-header-left">
-                                <a href="{{ route('dashboard.uimms.portal') }}" class="btn btn-sm btn-outline-secondary">
-                                    <i class="icofont-arrow-left"></i> Back to Portal
+                                <a href="{{ route('dashboard.uimms.portal') }}" class="responsive-btn back-btn">
+                                    <div class="svgWrapper">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                            <path stroke="#fff" stroke-width="2" d="M19 12H5m7-7-7 7 7 7"></path>
+                                        </svg>
+                                        <div class="text">Back</div>
+                                    </div>
                                 </a>
                                 <div class="chat-title">
                                     <h4>{{ $memo->subject }}</h4>
@@ -320,17 +325,58 @@
     color: white;
 }
 
-/* Back Button */
-.btn-outline-secondary:not(.chat-actions .btn) {
-    background: #f8f9fa;
-    color: #6c757d;
-    border: 1px solid #dee2e6;
+/* Responsive Button Styling for Back Button */
+.responsive-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    min-width: 80px;
+    text-decoration: none;
 }
 
-.btn-outline-secondary:not(.chat-actions .btn):hover {
-    background: #e9ecef;
-    color: #495057;
-    border-color: #adb5bd;
+.responsive-btn:hover {
+    text-decoration: none;
+}
+
+.responsive-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+.responsive-btn .svgWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.responsive-btn .svgIcon {
+    width: 14px;
+    height: 14px;
+}
+
+.responsive-btn .text {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Back Button - Keep Current Grey Color */
+.back-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
 }
 
 .chat-container {
