@@ -939,7 +939,7 @@ class HomeController extends Controller
             });
 
             // Filter replies based on user visibility
-            $memo->replies = $memo->replies->filter(function ($reply) use ($userId, $isActiveParticipant) {
+            $memo->replies = $memo->replies->filter(function ($reply) use ($userId, $isActiveParticipant, $memo) {
                 // User can always see their own messages
                 if ($reply->user_id === $userId) {
                     return true;
