@@ -43,36 +43,17 @@
                         </svg>
                         My Profile</a>
                 </li>
-                {{-- Memos Section with Dropdown --}}
-                <li class="memo-dropdown">
-                    <a class="{{ request()->routeIs('dashboard.message') || request()->routeIs('dashboard.uimms.*') ? 'active' : '' }}" href="#" onclick="toggleMemoDropdown(event)" id="memo-dropdown-trigger">
+                {{-- Memos Portal - Single Link (No Dropdown) --}}
+                <li>
+                    <a class="{{ request()->routeIs('dashboard.uimms.*') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                             viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
                             class="feather feather-message-circle">
                             <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
                         </svg>
-                        📱 Memos Portal
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down dropdown-arrow">
-                            <polyline points="6,9 12,15 18,9"></polyline>
-                        </svg>
+                        💬 Memos Portal
                     </a>
-                    <ul class="memo-submenu" id="memo-submenu" style="display: none;">
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.uimms.portal') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
-                                <i class="icofont-chat"></i>
-                                💬 Chat-Based Memos
-                                <span class="badge bg-primary">NEW</span>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.message') ? 'active' : '' }}" href="{{route('dashboard.message')}}">
-                                <i class="icofont-book-open"></i>
-                                📋 Traditional Memos
-                                <span class="dashboard__label">{{$newMessagesCount}} / {{$totalMemosCount ?? 0}}</span>
-                            </a>
-                        </li>
-                    </ul>
                 </li>
 
                 <li>
@@ -648,8 +629,6 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, initializing sidebar...'); // Debug log
-    
     // Get all sidebar section headers
     const sectionHeaders = document.querySelectorAll('.sidebar-section-header');
     
@@ -682,257 +661,11 @@ document.addEventListener('DOMContentLoaded', function() {
     navSections.forEach(nav => {
         nav.style.transition = 'all 0.3s ease-in-out';
     });
-    
-    // Initialize memo dropdown
-    const memoDropdown = document.querySelector('.memo-dropdown');
-    if (memoDropdown) {
-        console.log('Memo dropdown found!'); // Debug log
-    } else {
-        console.error('Memo dropdown not found!'); // Debug log
-    }
 });
 
-// Memo dropdown functionality
-function toggleMemoDropdown(event) {
-    event.preventDefault();
-    event.stopPropagation();
-    
-    console.log('Dropdown clicked!'); // Debug log
-    
-    const trigger = event.currentTarget;
-    const submenu = document.getElementById('memo-submenu');
-    const arrow = trigger.querySelector('.dropdown-arrow');
-    const dropdown = trigger.closest('.memo-dropdown');
-    
-    if (!submenu) {
-        console.error('Submenu not found!');
-        return;
-    }
-    
-    if (!arrow) {
-        console.error('Arrow not found!');
-        return;
-    }
-    
-    const isVisible = submenu.style.display === 'block';
-    console.log('Current visibility:', isVisible); // Debug log
-    
-    // Close dropdown
-    if (isVisible) {
-        submenu.style.display = 'none';
-        arrow.style.transform = 'rotate(0deg)';
-        dropdown.classList.remove('open');
-        console.log('Dropdown closed!'); // Debug log
-        return;
-    }
-    
-    // Open dropdown
-    submenu.style.display = 'block';
-    arrow.style.transform = 'rotate(180deg)';
-    dropdown.classList.add('open');
-    
-    // Position dropdown using getBoundingClientRect for accurate placement
-    const rect = trigger.getBoundingClientRect();
-    submenu.style.left = rect.left + 'px';
-    submenu.style.top = (rect.bottom + 5) + 'px';
-    submenu.style.position = 'fixed';
-    
-    console.log('Dropdown opened at:', {
-        left: rect.left,
-        top: rect.bottom + 5,
-        width: submenu.offsetWidth
-    }); // Debug log
-}
-
-// Close dropdown when clicking outside
-document.addEventListener('click', function(event) {
-    const memoDropdown = document.querySelector('.memo-dropdown');
-    const submenu = document.getElementById('memo-submenu');
-    
-    if (memoDropdown && submenu && !memoDropdown.contains(event.target) && !submenu.contains(event.target)) {
-        if (submenu.style.display === 'block') {
-            submenu.style.display = 'none';
-            const arrow = memoDropdown.querySelector('.dropdown-arrow');
-            if (arrow) {
-                arrow.style.transform = 'rotate(0deg)';
-            }
-            memoDropdown.classList.remove('open');
-            console.log('Dropdown closed by outside click'); // Debug log
-        }
-    }
-});
-
-// Close dropdown on escape key
-document.addEventListener('keydown', function(event) {
-    if (event.key === 'Escape') {
-        const submenu = document.getElementById('memo-submenu');
-        const memoDropdown = document.querySelector('.memo-dropdown');
-        const arrow = memoDropdown?.querySelector('.dropdown-arrow');
-        
-        if (submenu && submenu.style.display === 'block') {
-            submenu.style.display = 'none';
-            if (arrow) {
-                arrow.style.transform = 'rotate(0deg)';
-            }
-            if (memoDropdown) {
-                memoDropdown.classList.remove('open');
-            }
-            console.log('Dropdown closed by Escape key'); // Debug log
-        }
-    }
-});
-
-// Reposition dropdown on window resize
-window.addEventListener('resize', function() {
-    const submenu = document.getElementById('memo-submenu');
-    const trigger = document.getElementById('memo-dropdown-trigger');
-    
-    if (submenu && submenu.style.display === 'block' && trigger) {
-        const rect = trigger.getBoundingClientRect();
-        submenu.style.left = rect.left + 'px';
-        submenu.style.top = (rect.bottom + 5) + 'px';
-    }
-});
+// Dropdown functionality removed - using direct link now
 </script>
 
 <style>
-/* Fix sidebar overflow to allow dropdown */
-.dashboard__nav {
-    overflow: visible !important;
-}
-
-.dashboard__inner {
-    overflow: visible !important;
-}
-
-/* Memo Dropdown Styles */
-.memo-dropdown {
-    position: relative;
-    z-index: 1000;
-    overflow: visible !important;
-}
-
-.memo-dropdown > a {
-    display: flex !important;
-    align-items: center;
-    justify-content: space-between;
-    position: relative;
-    z-index: 1001;
-    width: 100%;
-}
-
-.dropdown-arrow {
-    transition: transform 0.3s ease;
-    margin-left: 8px;
-    width: 16px !important;
-    height: 16px !important;
-    flex-shrink: 0;
-}
-
-.memo-submenu {
-    display: none;
-    position: fixed;
-    left: auto;
-    top: auto;
-    background: #fff;
-    border: 1px solid #e9ecef;
-    border-radius: 8px;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
-    min-width: 300px;
-    max-width: 350px;
-    z-index: 99999;
-    padding: 12px 0;
-    margin: 0;
-    overflow: visible;
-    list-style: none;
-}
-
-.memo-submenu li {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    border: none;
-}
-
-.memo-submenu a {
-    display: flex !important;
-    align-items: center;
-    gap: 12px;
-    padding: 14px 20px;
-    color: #333 !important;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: none !important;
-    border-radius: 0 !important;
-    width: 100%;
-    white-space: nowrap;
-}
-
-.memo-submenu a:hover {
-    background-color: #f8f9fa !important;
-    color: #007bff !important;
-    box-shadow: none !important;
-    transform: none !important;
-}
-
-.memo-submenu a.active {
-    background-color: #e3f2fd !important;
-    color: #1976d2 !important;
-}
-
-.memo-submenu a i {
-    font-size: 18px;
-    flex-shrink: 0;
-}
-
-.memo-submenu .badge {
-    font-size: 0.65rem;
-    padding: 3px 8px;
-    border-radius: 12px;
-    margin-left: auto;
-    background-color: #007bff !important;
-    color: white !important;
-}
-
-.memo-submenu .dashboard__label {
-    background: #007bff;
-    color: white;
-    padding: 3px 8px;
-    border-radius: 12px;
-    font-size: 0.65rem;
-    margin-left: auto;
-    flex-shrink: 0;
-}
-
-/* Show dropdown below trigger button */
-.memo-dropdown.open .memo-submenu {
-    display: block;
-}
-
-/* Ensure dropdown doesn't get cut off */
-body {
-    overflow-x: visible;
-}
-
-/* Mobile responsive */
-@media (max-width: 768px) {
-    .memo-submenu {
-        position: fixed;
-        left: 10px;
-        right: 10px;
-        top: auto;
-        bottom: auto;
-        min-width: auto;
-        max-width: none;
-    }
-}
-
-/* Additional fix for list item styling */
-.dashboard__nav ul li.memo-dropdown {
-    overflow: visible !important;
-}
-
-.dashboard__nav ul li.memo-dropdown:hover {
-    overflow: visible !important;
-}
+/* Dropdown styles removed - using direct link now */
 </style>
