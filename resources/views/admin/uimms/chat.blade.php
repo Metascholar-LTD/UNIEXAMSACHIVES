@@ -727,10 +727,7 @@
 }
 
 .recipients-dropdown-menu {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    position: fixed;
     background: white;
     border: 1px solid #e3f2fd;
     border-radius: 12px;
@@ -739,14 +736,12 @@
     overflow-y: auto;
     z-index: 9999;
     display: none;
-    margin-top: 4px;
+    min-width: 250px;
+    max-width: 350px;
 }
 
 .recipients-dropdown-menu.dropdown-up {
-    top: auto;
-    bottom: 100%;
-    margin-top: 0;
-    margin-bottom: 4px;
+    /* Positioning will be handled by JavaScript */
 }
 
 .recipients-dropdown.active .recipients-dropdown-menu {
@@ -1190,21 +1185,40 @@ function initializeDropdownFunctionality() {
     function positionDropdown() {
         const inputRect = searchInput.getBoundingClientRect();
         const viewportHeight = window.innerHeight;
+        const viewportWidth = window.innerWidth;
         const dropdownHeight = 200; // max-height from CSS
+        const dropdownWidth = Math.min(350, Math.max(250, inputRect.width)); // min/max width from CSS
         const spaceBelow = viewportHeight - inputRect.bottom;
         const spaceAbove = inputRect.top;
+        
+        // Calculate horizontal position (center align with input)
+        let left = inputRect.left;
+        let right = 'auto';
+        
+        // Adjust if dropdown would go off screen
+        if (left + dropdownWidth > viewportWidth) {
+            left = 'auto';
+            right = viewportWidth - inputRect.right;
+        }
         
         // Remove existing positioning classes
         dropdownMenu.classList.remove('dropdown-up');
         
+        // Set horizontal position
+        dropdownMenu.style.left = typeof left === 'number' ? left + 'px' : left;
+        dropdownMenu.style.right = right;
+        dropdownMenu.style.width = dropdownWidth + 'px';
+        
         // Check if there's enough space below
         if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
             // Position above the input
+            dropdownMenu.style.top = (inputRect.top - dropdownHeight - 4) + 'px';
             dropdownMenu.classList.add('dropdown-up');
-            console.log('Positioning dropdown above input');
+            console.log('Positioning dropdown above input at:', inputRect.top - dropdownHeight - 4);
         } else {
             // Position below the input (default)
-            console.log('Positioning dropdown below input');
+            dropdownMenu.style.top = (inputRect.bottom + 4) + 'px';
+            console.log('Positioning dropdown below input at:', inputRect.bottom + 4);
         }
     }
     
@@ -1224,6 +1238,13 @@ function initializeDropdownFunctionality() {
     
     // Reposition on window resize
     window.addEventListener('resize', function() {
+        if (dropdown.classList.contains('active')) {
+            positionDropdown();
+        }
+    });
+    
+    // Reposition on scroll (since we're using fixed positioning)
+    window.addEventListener('scroll', function() {
         if (dropdown.classList.contains('active')) {
             positionDropdown();
         }
