@@ -94,7 +94,7 @@
                                         <span class="memo-date">{{ $memo->created_at->format('M d, Y H:i') }}</span>
                                     </div>
                                     
-                                    @if($memo->workflow_history && count($memo->workflow_history) > 0)
+                                    @if($canParticipate && $memo->workflow_history && count($memo->workflow_history) > 0)
                                         @php
                                             $lastAssignment = collect($memo->workflow_history)
                                                 ->where('action', 'assigned')

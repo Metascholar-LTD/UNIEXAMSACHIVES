@@ -939,12 +939,25 @@ class HomeController extends Controller
             });
 
             // Filter replies based on user visibility
-            $memo->replies = $memo->replies->filter(function ($reply) use ($userId) {
+            $memo->replies = $memo->replies->filter(function ($reply) use ($userId, $isActiveParticipant) {
                 // User can always see their own messages
                 if ($reply->user_id === $userId) {
                     return true;
                 }
                 
+                // If user is not an active participant, only show messages from when they were active
+                if (!$isActiveParticipant) {
+                    // Check if this message was sent before the user became inactive
+                    $userRecipient = $memo->recipients->where('user_id', $userId)->first();
+                    if ($userRecipient && $userRecipient->last_activity_at) {
+                        // Only show messages sent before the user's last activity
+                        return $reply->created_at <= $userRecipient->last_activity_at;
+                    }
+                    // If no last_activity_at, show all messages (backward compatibility)
+                    return true;
+                }
+                
+                // For active participants, show all messages based on reply mode
                 // For 'all' replies, everyone can see them
                 if ($reply->reply_mode === 'all') {
                     return true;
