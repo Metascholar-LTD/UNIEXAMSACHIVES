@@ -330,21 +330,21 @@
                                         }
                                         
                                         .memos-badge {
-                                            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-                                            color: #1976d2;
+                                            background: linear-gradient(135deg, #1a4a9b 0%, #0f3a7a 100%);
+                                            color: white;
                                             padding: 8px 16px;
                                             border-radius: 20px;
                                             font-size: 0.9rem;
                                             font-weight: 600;
-                                            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
-                                            border: 2px solid rgba(33, 150, 243, 0.2);
+                                            box-shadow: 0 2px 8px rgba(26, 74, 155, 0.2);
+                                            border: 2px solid rgba(255, 255, 255, 0.1);
                                             display: inline-block;
                                             transition: all 0.3s ease;
                                         }
                                         
                                         .memos-badge:hover {
-                                            background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
-                                            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
+                                            background: linear-gradient(135deg, #0f3a7a 0%, #0a2d5c 100%);
+                                            box-shadow: 0 4px 12px rgba(26, 74, 155, 0.3);
                                         }
                                         
                                         .memo-item {
@@ -446,20 +446,20 @@
                                             font-size: 0.7rem;
                                         }
 
-                                        /* Compact Refresh Button Styling */
+                                        /* Text-based Refresh Button Styling */
                                         .responsive-btn {
                                             display: flex;
                                             align-items: center;
                                             justify-content: center;
-                                            width: 40px;
-                                            height: 40px;
+                                            padding: 8px 16px;
                                             border: none;
-                                            border-radius: 50%;
+                                            border-radius: 20px;
                                             cursor: pointer;
                                             box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
                                             background-color: #1a4a9b;
                                             transition: all 0.2s ease;
                                             flex-shrink: 0;
+                                            min-width: 80px;
                                         }
 
                                         .responsive-btn:hover {
@@ -476,17 +476,19 @@
                                             display: flex;
                                             align-items: center;
                                             justify-content: center;
-                                            width: 100%;
-                                            height: 100%;
+                                            gap: 6px;
                                         }
 
                                         .responsive-btn .svgIcon {
-                                            width: 16px;
-                                            height: 16px;
+                                            width: 14px;
+                                            height: 14px;
                                         }
 
                                         .responsive-btn .text {
-                                            display: none;
+                                            color: white;
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            white-space: nowrap;
                                         }
 
                                         .refresh-btn {
