@@ -676,6 +676,9 @@
 .memo-detail-item {
     flex: 1;
     min-width: 200px;
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
 }
 
 .memo-detail-item.full-width {
@@ -701,7 +704,7 @@
 }
 
 .memo-sender, .memo-assignee {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     gap: 8px;
     font-weight: 500;
