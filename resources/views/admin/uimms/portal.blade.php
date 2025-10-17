@@ -87,19 +87,22 @@
                                     <div class="dashboard__meessage">
                                         <div class="dashboard__meessage__chat memos-toolbar">
                                             <div class="memos-title-container">
-                                                <span class="memos-badge" id="section-badge">💬 Active Chats</span>
+                                                <h3 class="memos-title">Chat List</h3>
                                             </div>
-                                            <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
-                                                <div class="svgWrapper">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
-                                                        <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                                    </svg>
-                                                    <div class="text">Refresh</div>
-                                                </div>
-                                            </button>
+                                            <div class="memos-actions">
+                                                <span class="memos-badge" id="section-badge">💬 Active Chats</span>
+                                                <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
+                                                    <div class="svgWrapper">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                            <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                        </svg>
+                                                        <div class="text">Refresh</div>
+                                                    </div>
+                                                </button>
+                                            </div>
                                         </div>
 
-                                        <div class="dashboard__meessage__contact" id="memos-container">
+                                        <div class="dashboard__meessage__contact memos-list-container" id="memos-container">
                                             <div class="text-center py-5">
                                                 <i class="icofont-chat" style="font-size: 48px; color: #ddd;"></i>
                                                 <p class="text-muted mt-3">Click on a card above to load memos</p>
@@ -315,18 +318,38 @@
                                             display: flex;
                                             align-items: center;
                                             justify-content: space-between;
-                                            gap: 12px;
+                                            gap: 20px;
                                             position: sticky;
                                             top: 0;
                                             z-index: 5;
                                             background: #f8f9fa;
-                                            padding: 15px 20px;
+                                            padding: 20px 25px;
                                             border-bottom: 2px solid #eef2f7;
+                                            margin-bottom: 20px;
                                         }
                                         
                                         .memos-title-container {
                                             display: flex;
                                             align-items: center;
+                                        }
+                                        
+                                        .memos-title {
+                                            margin: 0;
+                                            color: #333;
+                                            font-size: 1.2rem;
+                                            font-weight: 600;
+                                        }
+                                        
+                                        .memos-actions {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 15px;
+                                        }
+                                        
+                                        .memos-list-container {
+                                            padding: 0 25px 25px 25px;
+                                            max-height: 70vh;
+                                            overflow-y: auto;
                                         }
                                         
                                         .memos-badge {
@@ -345,16 +368,22 @@
                                             border-bottom: 1px solid #eef2f7;
                                             transition: all 0.3s ease;
                                             cursor: pointer;
+                                            margin-bottom: 8px;
+                                            border-radius: 12px;
+                                            background: #ffffff;
+                                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
                                         }
                                         
                                         .memo-item:hover {
                                             background: #f8f9ff;
+                                            transform: translateY(-1px);
+                                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                                         }
                                         
                                         .dashboard__meessage__contact__wrap {
                                             display: flex;
-                                            gap: 15px;
-                                            padding: 15px 20px;
+                                            gap: 18px;
+                                            padding: 20px 25px;
                                             align-items: flex-start;
                                         }
                                         
