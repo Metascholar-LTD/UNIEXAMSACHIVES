@@ -999,12 +999,17 @@ class HomeController extends Controller
         }
 
         $request->validate([
-            'message' => 'required|string|max:5000',
+            'message' => 'nullable|string|max:5000',
             'attachments' => 'nullable|array|max:5',
             'attachments.*' => 'file|max:10240|mimes:pdf,doc,docx,txt,jpg,jpeg,png,gif',
             'reply_mode' => 'required|in:all,specific',
             'specific_recipients' => 'nullable|string',
         ]);
+        
+        // Ensure at least message or attachments are provided
+        if (empty($request->input('message')) && !$request->hasFile('attachments')) {
+            return response()->json(['error' => 'Message or attachments are required.'], 400);
+        }
 
         $attachments = [];
         if ($request->hasFile('attachments')) {
@@ -1026,10 +1031,17 @@ class HomeController extends Controller
             $specificRecipients = array_filter(array_map('trim', $specificRecipients));
         }
 
+        // Generate message content
+        $messageContent = $request->input('message', '');
+        if (empty($messageContent) && !empty($attachments)) {
+            $fileCount = count($attachments);
+            $messageContent = '📎 Sent ' . $fileCount . ' file' . ($fileCount > 1 ? 's' : '');
+        }
+        
         $reply = MemoReply::create([
             'campaign_id' => $memo->id,
             'user_id' => $userId,
-            'message' => $request->message,
+            'message' => $messageContent,
             'attachments' => $attachments,
             'reply_mode' => $request->reply_mode,
             'specific_recipients' => $specificRecipients,
