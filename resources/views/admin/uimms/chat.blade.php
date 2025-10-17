@@ -1671,7 +1671,7 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: #e9ecef;
+    background: #6c757d;
     border: none;
     display: flex;
     align-items: center;
