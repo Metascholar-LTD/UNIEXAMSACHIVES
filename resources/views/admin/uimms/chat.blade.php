@@ -75,6 +75,107 @@
                             </div>
                         </div>
 
+                        {{-- Memo Details Section --}}
+                        <div class="memo-details-section">
+                            <div class="memo-details-header">
+                                <h4>Memo Details</h4>
+                                <span class="memo-status-badge status-{{ $memo->memo_status ?? 'pending' }}">
+                                    {{ ucfirst($memo->memo_status ?? 'pending') }}
+                                </span>
+                            </div>
+                            
+                            <div class="memo-details-content">
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item">
+                                        <label>Subject:</label>
+                                        <span class="memo-subject">{{ $memo->subject }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item">
+                                        <label>From:</label>
+                                        <span class="memo-sender">
+                                            <img src="{{ $memo->creator->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                 alt="{{ $memo->creator->first_name }}" class="sender-avatar">
+                                            {{ $memo->creator->first_name }} {{ $memo->creator->last_name }}
+                                        </span>
+                                    </div>
+                                    <div class="memo-detail-item">
+                                        <label>Created:</label>
+                                        <span class="memo-date">{{ $memo->created_at->format('M d, Y H:i') }}</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item">
+                                        <label>Assigned To:</label>
+                                        <span class="memo-assignee">
+                                            @if($memo->currentAssignee)
+                                                <img src="{{ $memo->currentAssignee->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                     alt="{{ $memo->currentAssignee->first_name }}" class="assignee-avatar">
+                                                {{ $memo->currentAssignee->first_name }} {{ $memo->currentAssignee->last_name }}
+                                            @else
+                                                <span class="text-muted">Not assigned</span>
+                                            @endif
+                                        </span>
+                                    </div>
+                                    <div class="memo-detail-item">
+                                        <label>Recipients:</label>
+                                        <span class="memo-recipients-count">{{ $memo->recipients->count() }} people</span>
+                                    </div>
+                                </div>
+                                
+                                @if($memo->message)
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item full-width">
+                                        <label>Message:</label>
+                                        <div class="memo-message-content">
+                                            {!! nl2br(e($memo->message)) !!}
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                                
+                                @if($memo->attachments && count($memo->attachments) > 0)
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item full-width">
+                                        <label>Attachments:</label>
+                                        <div class="memo-attachments">
+                                            @foreach($memo->attachments as $attachment)
+                                                <div class="attachment-item">
+                                                    <div class="attachment-icon">
+                                                        @if(str_contains($attachment['type'], 'image'))
+                                                            <i class="icofont-image"></i>
+                                                        @elseif(str_contains($attachment['type'], 'pdf'))
+                                                            <i class="icofont-file-pdf"></i>
+                                                        @elseif(str_contains($attachment['type'], 'word'))
+                                                            <i class="icofont-file-document"></i>
+                                                        @elseif(str_contains($attachment['type'], 'excel') || str_contains($attachment['type'], 'spreadsheet'))
+                                                            <i class="icofont-file-excel"></i>
+                                                        @else
+                                                            <i class="icofont-file"></i>
+                                                        @endif
+                                                    </div>
+                                                    <div class="attachment-info">
+                                                        <span class="attachment-name">{{ $attachment['name'] }}</span>
+                                                        <span class="attachment-size">{{ number_format($attachment['size'] / 1024, 1) }} KB</span>
+                                                    </div>
+                                                    <a href="{{ asset('storage/' . $attachment['path']) }}" 
+                                                       class="attachment-download" 
+                                                       target="_blank" 
+                                                       title="Download {{ $attachment['name'] }}">
+                                                        <i class="icofont-download"></i>
+                                                    </a>
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
+                            </div>
+                        </div>
+
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
                             <div class="chat-messages" id="chat-messages">
@@ -529,11 +630,188 @@
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
 }
 
+/* Memo Details Section */
+.memo-details-section {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.memo-details-header {
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-bottom: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.memo-details-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.memo-details-content {
+    padding: 20px;
+}
+
+.memo-details-row {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.memo-details-row:last-child {
+    margin-bottom: 0;
+}
+
+.memo-detail-item {
+    flex: 1;
+    min-width: 200px;
+}
+
+.memo-detail-item.full-width {
+    flex: 100%;
+    min-width: 100%;
+}
+
+.memo-detail-item label {
+    display: block;
+    font-weight: 600;
+    color: #555;
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.memo-subject {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.4;
+}
+
+.memo-sender, .memo-assignee {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.sender-avatar, .assignee-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e9ecef;
+}
+
+.memo-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.memo-recipients-count {
+    color: #1976d2;
+    font-weight: 500;
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+}
+
+.memo-message-content {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 6px;
+    padding: 15px;
+    color: #333;
+    line-height: 1.6;
+    font-size: 0.95rem;
+}
+
+.memo-attachments {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.attachment-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.attachment-item:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.attachment-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #1976d2;
+    color: white;
+    border-radius: 8px;
+    font-size: 1.2rem;
+}
+
+.attachment-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.attachment-name {
+    display: block;
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.attachment-size {
+    display: block;
+    color: #666;
+    font-size: 0.8rem;
+    margin-top: 2px;
+}
+
+.attachment-download {
+    color: #1976d2;
+    font-size: 1.1rem;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.attachment-download:hover {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
 .chat-container {
     background: #fff;
     border: 1px solid #e9ecef;
     border-top: none;
-    height: 500px;
+    height: 400px;
     overflow-y: auto;
     padding: 20px;
 }
