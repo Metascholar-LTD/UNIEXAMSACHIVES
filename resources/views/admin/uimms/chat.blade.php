@@ -124,7 +124,7 @@
                                     <div class="memo-detail-item full-width">
                                         <label>Attachments:</label>
                                         <div class="memo-attachments">
-                                            @foreach($memo->attachments as $attachment)
+                                            @foreach($memo->attachments as $index => $attachment)
                                                 <div class="attachment-item">
                                                     <div class="attachment-icon">
                                                         @if(str_contains($attachment['type'], 'image'))
@@ -143,12 +143,19 @@
                                                         <span class="attachment-name">{{ $attachment['name'] }}</span>
                                                         <span class="attachment-size">{{ number_format($attachment['size'] / 1024, 1) }} KB</span>
                                                     </div>
-                                                    <a href="{{ asset('storage/' . $attachment['path']) }}" 
-                                                       class="attachment-download" 
-                                                       target="_blank" 
-                                                       title="Download {{ $attachment['name'] }}">
-                                                        <i class="icofont-download"></i>
-                                                    </a>
+                                                    <div class="attachment-actions">
+                                                        <a href="{{ route('dashboard.uimms.chat.attachment.view', ['memo' => $memo->id, 'index' => $index]) }}" 
+                                                           class="attachment-view" 
+                                                           target="_blank" 
+                                                           title="View {{ $attachment['name'] }}">
+                                                            <i class="icofont-eye"></i>
+                                                        </a>
+                                                        <a href="{{ route('dashboard.uimms.chat.attachment.download', ['memo' => $memo->id, 'index' => $index]) }}" 
+                                                           class="attachment-download" 
+                                                           title="Download {{ $attachment['name'] }}">
+                                                            <i class="icofont-download"></i>
+                                                        </a>
+                                                    </div>
                                                 </div>
                                             @endforeach
                                         </div>
@@ -818,6 +825,13 @@
     margin-top: 2px;
 }
 
+.attachment-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.attachment-view,
 .attachment-download {
     color: #1976d2;
     font-size: 1.1rem;
@@ -827,6 +841,7 @@
     text-decoration: none;
 }
 
+.attachment-view:hover,
 .attachment-download:hover {
     background: #e3f2fd;
     color: #1565c0;

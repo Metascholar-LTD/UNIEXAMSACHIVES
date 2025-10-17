@@ -1169,4 +1169,66 @@ class HomeController extends Controller
             return response()->json(['error' => 'Failed to load messages'], 500);
         }
     }
+
+    public function downloadUimmsMemoAttachment(EmailCampaign $memo, $index)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is a recipient of this memo
+        $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+        $isCreator = $memo->created_by === $userId;
+        
+        if (!$isRecipient && !$isCreator) {
+            abort(403, 'Unauthorized access to this attachment.');
+        }
+        
+        $attachments = $memo->attachments;
+        
+        // Check if the attachment index is valid
+        if (!isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+        
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on server.');
+        }
+        
+        // Return file download response
+        return response()->download($filePath, $attachment['name']);
+    }
+
+    public function viewUimmsMemoAttachment(EmailCampaign $memo, $index)
+    {
+        $userId = Auth::id();
+        
+        // Check if user is a recipient of this memo
+        $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+        $isCreator = $memo->created_by === $userId;
+        
+        if (!$isRecipient && !$isCreator) {
+            abort(403, 'Unauthorized access to this attachment.');
+        }
+        
+        $attachments = $memo->attachments;
+        
+        // Check if the attachment index is valid
+        if (!isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+        
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on server.');
+        }
+        
+        // Return file view response
+        return response()->file($filePath);
+    }
 }
