@@ -212,7 +212,7 @@
                         </div>
 
                         {{-- Chat Input --}}
-                        @if($memo->isActiveParticipant(auth()->id()))
+                        @if($canParticipate)
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
