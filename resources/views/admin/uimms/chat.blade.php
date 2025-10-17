@@ -1348,8 +1348,8 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
-    border: none;
+    background: #ffffff;
+    border: 2px solid #e9ecef;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1360,6 +1360,8 @@
 }
 
 .attachment-btn:hover {
+    background: #f8f9fa;
+    border-color: #007bff;
     transform: translateY(-2px);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
@@ -1367,9 +1369,14 @@
 .attachment-icon {
     width: 20px;
     height: 20px;
-    stroke: #1976d2;
+    stroke: #6c757d;
     stroke-width: 2;
     fill: none;
+    transition: stroke 0.3s ease;
+}
+
+.attachment-btn:hover .attachment-icon {
+    stroke: #007bff;
 }
 
 .input-field-wrapper {
