@@ -42,15 +42,21 @@
                                         <i class="icofont-user"></i> Assign
                                     </button>
                                     <div class="btn-group">
-                                        <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
-                                            <i class="icofont-check-circled"></i> Complete
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
-                                            <i class="icofont-pause"></i> Suspend
-                                        </button>
-                                        <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
-                                            <i class="icofont-archive"></i> Archive
-                                        </button>
+                                        @if($memo->memo_status !== 'completed')
+                                            <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
+                                                <i class="icofont-check-circled"></i> Complete
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
+                                                <i class="icofont-pause"></i> Suspend
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
+                                                <i class="icofont-archive"></i> Archive
+                                            </button>
+                                        @else
+                                            <span class="btn btn-sm btn-success disabled">
+                                                <i class="icofont-check-circled"></i> Completed
+                                            </span>
+                                        @endif
                                     </div>
                                     </div>
                                 </div>
@@ -277,7 +283,7 @@
                         </div>
 
                         {{-- Chat Input --}}
-                        @if($canParticipate)
+                        @if($canParticipate && $memo->memo_status !== 'completed')
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
@@ -355,16 +361,26 @@
                             </form>
                         </div>
                         @else
-                        {{-- Blocked Chat State for Inactive Participants --}}
+                        {{-- Blocked Chat State for Inactive Participants or Completed Memos --}}
                         <div class="chat-blocked-container">
                             <div class="chat-blocked-content">
                                 <div class="blocked-icon">
-                                    <i class="icofont-lock"></i>
+                                    @if($memo->memo_status === 'completed')
+                                        <i class="icofont-check-circled"></i>
+                                    @else
+                                        <i class="icofont-lock"></i>
+                                    @endif
                                 </div>
                                 <div class="blocked-message">
-                                    <h4>Chat Assigned</h4>
-                                    <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>
-                                    <p class="blocked-subtitle">You can no longer participate unless reassigned to you</p>
+                                    @if($memo->memo_status === 'completed')
+                                        <h4>Memo Completed</h4>
+                                        <p>This memo has been marked as <strong>completed</strong> and is now read-only.</p>
+                                        <p class="blocked-subtitle">No further actions or messages can be added to this memo</p>
+                                    @else
+                                        <h4>Chat Assigned</h4>
+                                        <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>
+                                        <p class="blocked-subtitle">You can no longer participate unless reassigned to you</p>
+                                    @endif
                                 </div>
                                 <div class="blocked-actions">
                                     <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
