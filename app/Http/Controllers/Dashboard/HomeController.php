@@ -776,29 +776,49 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         
-        // Get memo counts for each section
-        $pendingCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->where('memo_status', 'pending')->count();
-        
-        $suspendedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->where('memo_status', 'suspended')->count();
-        
-        $completedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->where('memo_status', 'completed')->count();
-        
-        $archivedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-            $query->where('user_id', $userId);
-        })->where('memo_status', 'archived')->count();
+        try {
+            // Get memo counts for each section using existing relationships
+            $pendingCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->where(function($query) {
+                $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
+            })->count();
+            
+            $suspendedCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->where('memo_status', 'suspended')->count();
+            
+            $completedCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->where('memo_status', 'completed')->count();
+            
+            $archivedCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+                $query->where('user_id', $userId);
+            })->where('memo_status', 'archived')->count();
 
-        return view('admin.uimms.portal', compact(
-            'pendingCount', 
-            'suspendedCount', 
-            'completedCount', 
-            'archivedCount'
-        ));
+            return view('admin.uimms.portal', compact(
+                'pendingCount', 
+                'suspendedCount', 
+                'completedCount', 
+                'archivedCount'
+            ));
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in uimmsPortal: ' . $e->getMessage());
+            
+            // Fallback counts
+            $pendingCount = 0;
+            $suspendedCount = 0;
+            $completedCount = 0;
+            $archivedCount = 0;
+            
+            return view('admin.uimms.portal', compact(
+                'pendingCount', 
+                'suspendedCount', 
+                'completedCount', 
+                'archivedCount'
+            ));
+        }
     }
 
     /**
@@ -808,15 +828,53 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         
-        $memos = EmailCampaign::with(['creator', 'currentAssignee', 'activeParticipants.user', 'lastMessage'])
-            ->whereHas('activeParticipants', function($query) use ($userId) {
-                $query->where('user_id', $userId);
-            })
-            ->where('memo_status', $status)
-            ->orderBy('updated_at', 'desc')
-            ->get();
+        try {
+            // First try to get memos with UIMMS data
+            $memos = EmailCampaign::with(['creator', 'currentAssignee', 'recipients.user', 'replies.user'])
+                ->whereHas('recipients', function($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })
+                ->where(function($query) use ($status) {
+                    if ($status === 'pending') {
+                        $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
+                    } else {
+                        $query->where('memo_status', $status);
+                    }
+                })
+                ->orderBy('updated_at', 'desc')
+                ->get();
 
-        return response()->json($memos);
+            // Transform the data to include UIMMS-specific information
+            $memos = $memos->map(function($memo) use ($userId) {
+                // Get active participants (recipients who are active)
+                $activeParticipants = $memo->recipients->filter(function($recipient) {
+                    return $recipient->is_active_participant ?? true; // Default to true if field doesn't exist
+                });
+                
+                // Get last message
+                $lastMessage = $memo->replies->sortByDesc('created_at')->first();
+                
+                return [
+                    'id' => $memo->id,
+                    'subject' => $memo->subject,
+                    'message' => $memo->message,
+                    'created_at' => $memo->created_at,
+                    'updated_at' => $memo->updated_at,
+                    'memo_status' => $memo->memo_status ?? 'pending',
+                    'creator' => $memo->creator,
+                    'current_assignee' => $memo->currentAssignee,
+                    'active_participants' => $activeParticipants->values(),
+                    'last_message' => $lastMessage,
+                    'attachments' => $memo->attachments,
+                ];
+            });
+
+            return response()->json($memos);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in getMemosByStatus: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to load memos'], 500);
+        }
     }
 
     /**
@@ -826,26 +884,33 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         
-        // Check if user is an active participant
-        if (!$memo->isActiveParticipant($userId)) {
-            abort(403, 'You are not an active participant in this memo conversation.');
+        try {
+            // Check if user is a recipient (fallback if isActiveParticipant doesn't work)
+            $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+            
+            if (!$isRecipient) {
+                abort(403, 'You are not a participant in this memo conversation.');
+            }
+
+            $memo->load([
+                'creator', 
+                'currentAssignee', 
+                'recipients.user',
+                'replies.user'
+            ]);
+
+            // Get all users for assignment dropdown
+            $users = User::where('is_approve', true)
+                ->where('id', '!=', $userId)
+                ->select('id', 'first_name', 'last_name', 'email')
+                ->get();
+
+            return view('admin.uimms.chat', compact('memo', 'users'));
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in memoChat: ' . $e->getMessage());
+            abort(500, 'Error loading memo chat.');
         }
-
-        $memo->load([
-            'creator', 
-            'currentAssignee', 
-            'activeParticipants.user',
-            'chatMessages.user',
-            'recipients.user'
-        ]);
-
-        // Get all users for assignment dropdown
-        $users = User::where('is_approve', true)
-            ->where('id', '!=', $userId)
-            ->select('id', 'first_name', 'last_name', 'email')
-            ->get();
-
-        return view('admin.uimms.chat', compact('memo', 'users'));
     }
 
     /**
@@ -1025,13 +1090,21 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         
-        // Check if user is an active participant
-        if (!$memo->isActiveParticipant($userId)) {
-            abort(403, 'You are not an active participant in this memo conversation.');
+        try {
+            // Check if user is a recipient
+            $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+            
+            if (!$isRecipient) {
+                abort(403, 'You are not a participant in this memo conversation.');
+            }
+
+            $messages = $memo->replies()->with('user')->orderBy('created_at', 'asc')->get();
+
+            return response()->json($messages);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in getChatMessages: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to load messages'], 500);
         }
-
-        $messages = $memo->chatMessages()->get();
-
-        return response()->json($messages);
     }
 }

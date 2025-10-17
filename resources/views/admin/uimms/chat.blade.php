@@ -26,7 +26,7 @@
                                 <div class="chat-title">
                                     <h4>{{ $memo->subject }}</h4>
                                     <div class="chat-participants">
-                                        @foreach($memo->activeParticipants as $participant)
+                                        @foreach($memo->recipients as $participant)
                                             <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
                                                  alt="{{ $participant->user->first_name }}" 
                                                  class="participant-avatar"
@@ -63,7 +63,7 @@
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
                             <div class="chat-messages" id="chat-messages">
-                                @foreach($memo->chatMessages as $message)
+                                @foreach($memo->replies as $message)
                                     <div class="message {{ $message->user_id === auth()->id() ? 'message-sent' : 'message-received' }}">
                                         <div class="message-avatar">
                                             <img src="{{ $message->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 

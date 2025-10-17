@@ -765,6 +765,7 @@ document.addEventListener('keydown', function(event) {
 .memo-dropdown {
     position: relative;
     z-index: 1000;
+    overflow: visible;
 }
 
 .memo-dropdown > a {
@@ -793,6 +794,8 @@ document.addEventListener('keydown', function(event) {
     z-index: 9999;
     padding: 8px 0;
     margin-top: 5px;
+    overflow: visible;
+    white-space: nowrap;
 }
 
 .memo-submenu li {
@@ -810,6 +813,9 @@ document.addEventListener('keydown', function(event) {
     transition: background-color 0.2s ease;
     border-radius: 0;
     border: none;
+    white-space: nowrap;
+    overflow: visible;
+    min-width: 100%;
 }
 
 .memo-submenu a:hover {
