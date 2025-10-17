@@ -330,21 +330,15 @@
                                         }
                                         
                                         .memos-badge {
-                                            background: linear-gradient(135deg, #1a4a9b 0%, #0f3a7a 100%);
-                                            color: white;
+                                            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                                            color: #1a4a9b;
                                             padding: 8px 16px;
                                             border-radius: 20px;
                                             font-size: 0.9rem;
                                             font-weight: 600;
-                                            box-shadow: 0 2px 8px rgba(26, 74, 155, 0.2);
-                                            border: 2px solid rgba(255, 255, 255, 0.1);
+                                            box-shadow: 0 2px 8px rgba(26, 74, 155, 0.15);
+                                            border: 2px solid rgba(26, 74, 155, 0.2);
                                             display: inline-block;
-                                            transition: all 0.3s ease;
-                                        }
-                                        
-                                        .memos-badge:hover {
-                                            background: linear-gradient(135deg, #0f3a7a 0%, #0a2d5c 100%);
-                                            box-shadow: 0 4px 12px rgba(26, 74, 155, 0.3);
                                         }
                                         
                                         .memo-item {
