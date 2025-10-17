@@ -666,7 +666,7 @@
                                             };
                                             document.getElementById('section-badge').textContent = badges[status];
                                             
-                                            // Show/hide bulk archive button and selection controls
+                                            // Show/hide bulk archive button and selection controls ONLY for completed memos
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                             const selectionControls = document.getElementById('selection-controls');
                                             if (status === 'completed') {
@@ -735,10 +735,12 @@
                                                         return `
                                                             <li class="memo-item">
                                                                 <div class="dashboard__meessage__contact__wrap">
-                                                                    <div class="memo-checkbox-container">
-                                                                        <input type="checkbox" class="memo-checkbox" id="memo-${memo.id}" value="${memo.id}" onchange="updateSelection()">
-                                                                        <label for="memo-${memo.id}" class="memo-checkbox-label"></label>
-                                                                    </div>
+                                                                    ${status === 'completed' ? `
+                                                                        <div class="memo-checkbox-container">
+                                                                            <input type="checkbox" class="memo-checkbox" id="memo-${memo.id}" value="${memo.id}" onchange="updateSelection()">
+                                                                            <label for="memo-${memo.id}" class="memo-checkbox-label"></label>
+                                                                        </div>
+                                                                    ` : ''}
                                                                     <div class="dashboard__meessage__chat__img" onclick="openMemoChat(${memo.id})">
                                                                         <img src="${creatorAvatar}" alt="${creatorName}">
                                                                     </div>
