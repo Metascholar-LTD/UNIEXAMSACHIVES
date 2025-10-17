@@ -1349,18 +1349,12 @@
     width: 320px;
 }
 
-.recipients-dropdown-menu.dropdown-up {
-    /* Positioning will be handled by JavaScript */
-}
 
 .recipients-dropdown.active .recipients-dropdown-menu {
     display: block;
     animation: slideDown 0.2s ease-out;
 }
 
-.recipients-dropdown.active .recipients-dropdown-menu.dropdown-up {
-    animation: slideUp 0.2s ease-out;
-}
 
 @keyframes slideDown {
     from {
@@ -1373,16 +1367,6 @@
     }
 }
 
-@keyframes slideUp {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
 
 .recipient-option {
     display: flex;
@@ -1924,15 +1908,11 @@ function initializeDropdownFunctionality() {
     const dropdown = document.querySelector('.recipients-dropdown');
     const dropdownMenu = document.getElementById('recipients-dropdown-menu');
     
-    // Smart positioning function
+    // Simple positioning function - only positions below
     function positionDropdown() {
         const inputRect = searchInput.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
-        const dropdownHeight = 200; // max-height from CSS
         const dropdownWidth = 320; // fixed width from CSS
-        const spaceBelow = viewportHeight - inputRect.bottom;
-        const spaceAbove = inputRect.top;
         
         // Calculate horizontal position (center align with input)
         let left = inputRect.left;
@@ -1944,23 +1924,13 @@ function initializeDropdownFunctionality() {
             right = viewportWidth - inputRect.right;
         }
         
-        // Remove existing positioning classes
-        dropdownMenu.classList.remove('dropdown-up');
-        
         // Set horizontal position
         dropdownMenu.style.left = typeof left === 'number' ? left + 'px' : left;
         dropdownMenu.style.right = right;
         dropdownMenu.style.width = dropdownWidth + 'px';
         
-        // Check if there's enough space below
-        if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
-            // Position above the input
-            dropdownMenu.style.top = (inputRect.top - dropdownHeight - 4) + 'px';
-            dropdownMenu.classList.add('dropdown-up');
-        } else {
-            // Position below the input (default)
-            dropdownMenu.style.top = (inputRect.bottom + 4) + 'px';
-        }
+        // Always position below the input
+        dropdownMenu.style.top = (inputRect.bottom + 4) + 'px';
     }
     
     // Toggle dropdown on input focus/click
