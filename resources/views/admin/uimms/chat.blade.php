@@ -734,10 +734,10 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     max-height: 200px;
     overflow-y: auto;
+    overflow-x: hidden;
     z-index: 9999;
     display: none;
-    min-width: 250px;
-    max-width: 350px;
+    width: 320px;
 }
 
 .recipients-dropdown-menu.dropdown-up {
@@ -783,6 +783,9 @@
     cursor: pointer;
     transition: all 0.2s ease;
     border-bottom: 1px solid #f5f5f5;
+    min-height: 50px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .recipient-option:last-child {
@@ -805,21 +808,32 @@
     object-fit: cover;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
 }
 
 .recipient-option .recipient-info {
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
 }
 
 .recipient-option .recipient-name {
     font-weight: 500;
     font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
 }
 
 .recipient-option .recipient-email {
     font-size: 0.75rem;
     color: #666;
-    margin-top: 1px;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
 }
 
 .recipient-option .recipient-check {
@@ -1170,7 +1184,7 @@ function initializeDropdownFunctionality() {
         const viewportHeight = window.innerHeight;
         const viewportWidth = window.innerWidth;
         const dropdownHeight = 200; // max-height from CSS
-        const dropdownWidth = Math.min(350, Math.max(250, inputRect.width)); // min/max width from CSS
+        const dropdownWidth = 320; // fixed width from CSS
         const spaceBelow = viewportHeight - inputRect.bottom;
         const spaceAbove = inputRect.top;
         
