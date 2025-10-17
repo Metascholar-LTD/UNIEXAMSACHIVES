@@ -139,8 +139,20 @@
                                         }
 
                                         .uimms-card.pending.active {
-                                            background: linear-gradient(135deg, #2196f3 0%, #1976d2 100%);
-                                            color: white;
+                                            border-width: 3px;
+                                            border-color: #007bff;
+                                            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                                            position: relative;
+                                        }
+
+                                        .uimms-card.pending.active::after {
+                                            content: '●';
+                                            position: absolute;
+                                            top: 10px;
+                                            right: 10px;
+                                            color: #007bff;
+                                            font-size: 16px;
+                                            font-weight: bold;
                                         }
 
                                         .uimms-card.suspended {
@@ -149,8 +161,20 @@
                                         }
 
                                         .uimms-card.suspended.active {
-                                            background: linear-gradient(135deg, #ffc107 0%, #ffa000 100%);
-                                            color: white;
+                                            border-width: 3px;
+                                            border-color: #ffc107;
+                                            background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);
+                                            position: relative;
+                                        }
+
+                                        .uimms-card.suspended.active::after {
+                                            content: '●';
+                                            position: absolute;
+                                            top: 10px;
+                                            right: 10px;
+                                            color: #ffc107;
+                                            font-size: 16px;
+                                            font-weight: bold;
                                         }
 
                                         .uimms-card.completed {
@@ -159,8 +183,20 @@
                                         }
 
                                         .uimms-card.completed.active {
-                                            background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
-                                            color: white;
+                                            border-width: 3px;
+                                            border-color: #28a745;
+                                            background: linear-gradient(135deg, #e8f5e8 0%, #c8e6c9 100%);
+                                            position: relative;
+                                        }
+
+                                        .uimms-card.completed.active::after {
+                                            content: '●';
+                                            position: absolute;
+                                            top: 10px;
+                                            right: 10px;
+                                            color: #28a745;
+                                            font-size: 16px;
+                                            font-weight: bold;
                                         }
 
                                         .uimms-card.archived {
@@ -169,8 +205,20 @@
                                         }
 
                                         .uimms-card.archived.active {
-                                            background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
-                                            color: white;
+                                            border-width: 3px;
+                                            border-color: #6c757d;
+                                            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+                                            position: relative;
+                                        }
+
+                                        .uimms-card.archived.active::after {
+                                            content: '●';
+                                            position: absolute;
+                                            top: 10px;
+                                            right: 10px;
+                                            color: #6c757d;
+                                            font-size: 16px;
+                                            font-weight: bold;
                                         }
 
                                         .dashboard__card__content {
