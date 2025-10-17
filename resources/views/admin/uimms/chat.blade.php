@@ -80,7 +80,7 @@
                         <div class="memo-details-section">
                             <div class="memo-details-content">
                                 <div class="memo-details-row">
-                                    <div class="memo-detail-item">
+                                    <div class="memo-detail-item inline-label">
                                         <label>From:</label>
                                         <span class="memo-sender">
                                             <img src="{{ $memo->creator->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
@@ -91,14 +91,14 @@
                                 </div>
                                 
                                 <div class="memo-details-row">
-                                    <div class="memo-detail-item">
+                                    <div class="memo-detail-item inline-label">
                                         <label>Created:</label>
                                         <span class="memo-date">{{ $memo->created_at->format('M d, Y H:i') }}</span>
                                     </div>
                                 </div>
                                 
                                 <div class="memo-details-row">
-                                    <div class="memo-detail-item">
+                                    <div class="memo-detail-item inline-label">
                                         <label>Assigned To:</label>
                                         <span class="memo-assignee">
                                             @if($memo->currentAssignee)
@@ -676,9 +676,6 @@
 .memo-detail-item {
     flex: 1;
     min-width: 200px;
-    display: flex;
-    align-items: center;
-    flex-wrap: nowrap;
 }
 
 .memo-detail-item.full-width {
@@ -687,13 +684,19 @@
 }
 
 .memo-detail-item label {
-    display: inline;
+    display: block;
     font-weight: 600;
     color: #555;
     font-size: 0.85rem;
-    margin-right: 8px;
+    margin-bottom: 5px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+}
+
+.memo-detail-item.inline-label label {
+    display: inline;
+    margin-bottom: 0;
+    margin-right: 8px;
 }
 
 .memo-subject {
@@ -704,7 +707,7 @@
 }
 
 .memo-sender, .memo-assignee {
-    display: inline-flex;
+    display: flex;
     align-items: center;
     gap: 8px;
     font-weight: 500;
