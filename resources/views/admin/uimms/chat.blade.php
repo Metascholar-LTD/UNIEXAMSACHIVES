@@ -287,7 +287,7 @@
                                 <div class="blocked-message">
                                     <h4>Chat Assigned</h4>
                                     <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>
-                                    <p class="blocked-subtitle">You can no longer participate in this conversation.</p>
+                                    <p class="blocked-subtitle">You can no longer participate unless reassigned to you</p>
                                 </div>
                                 <div class="blocked-actions">
                                     <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
