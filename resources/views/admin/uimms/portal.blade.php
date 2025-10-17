@@ -89,14 +89,24 @@
                                             <div class="memos-title-container">
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
                                             </div>
-                                            <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
-                                                <div class="svgWrapper">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
-                                                        <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                                    </svg>
-                                                    <div class="text">Refresh</div>
-                                                </div>
-                                            </button>
+                                            <div class="memos-actions">
+                                                <button class="responsive-btn bulk-archive-btn" id="bulk-archive-btn" onclick="bulkArchiveCompleted()" style="display: none;">
+                                                    <div class="svgWrapper">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                            <path stroke="#fff" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5zM10 11v6M14 11v6"></path>
+                                                        </svg>
+                                                        <div class="text">Archive All</div>
+                                                    </div>
+                                                </button>
+                                                <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
+                                                    <div class="svgWrapper">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                            <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                        </svg>
+                                                        <div class="text">Refresh</div>
+                                                    </div>
+                                                </button>
+                                            </div>
                                         </div>
 
                                         <div class="dashboard__meessage__contact" id="memos-container">
@@ -327,6 +337,20 @@
                                         .memos-title-container {
                                             display: flex;
                                             align-items: center;
+                                        }
+                                        
+                                        .memos-actions {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 12px;
+                                        }
+                                        
+                                        .bulk-archive-btn {
+                                            background-color: #dc3545;
+                                        }
+                                        
+                                        .bulk-archive-btn:hover {
+                                            background-color: #c82333;
                                         }
                                         
                                         .memos-badge {
@@ -587,6 +611,14 @@
                                             };
                                             document.getElementById('section-badge').textContent = badges[status];
                                             
+                                            // Show/hide bulk archive button
+                                            const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
+                                            if (status === 'completed') {
+                                                bulkArchiveBtn.style.display = 'flex';
+                                            } else {
+                                                bulkArchiveBtn.style.display = 'none';
+                                            }
+                                            
                                             // Show loading
                                             document.getElementById('memos-container').innerHTML = `
                                                 <div class="text-center py-5">
@@ -694,6 +726,55 @@
 
                                         function refreshMemos() {
                                             loadMemos(currentStatus);
+                                        }
+                                        
+                                        function bulkArchiveCompleted() {
+                                            if (confirm('Are you sure you want to archive all completed memos? This action cannot be undone.')) {
+                                                // Show loading state
+                                                const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
+                                                const originalText = bulkArchiveBtn.innerHTML;
+                                                bulkArchiveBtn.innerHTML = `
+                                                    <div class="svgWrapper">
+                                                        <div class="spinner-border spinner-border-sm text-white" role="status">
+                                                            <span class="visually-hidden">Loading...</span>
+                                                        </div>
+                                                        <div class="text">Archiving...</div>
+                                                    </div>
+                                                `;
+                                                bulkArchiveBtn.disabled = true;
+                                                
+                                                fetch('/dashboard/uimms/bulk-archive-completed', {
+                                                    method: 'POST',
+                                                    headers: {
+                                                        'Content-Type': 'application/json',
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                                    }
+                                                })
+                                                .then(response => response.json())
+                                                .then(data => {
+                                                    if (data.success) {
+                                                        alert(`Successfully archived ${data.archived_count} completed memos.`);
+                                                        // Refresh the completed memos list
+                                                        loadMemos('completed');
+                                                        // Update the counts
+                                                        if (data.counts) {
+                                                            document.getElementById('count-completed').textContent = data.counts.completed;
+                                                            document.getElementById('count-archived').textContent = data.counts.archived;
+                                                        }
+                                                    } else {
+                                                        alert('Error archiving memos: ' + (data.message || 'Unknown error'));
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                    alert('Error archiving memos. Please try again.');
+                                                })
+                                                .finally(() => {
+                                                    // Restore button state
+                                                    bulkArchiveBtn.innerHTML = originalText;
+                                                    bulkArchiveBtn.disabled = false;
+                                                });
+                                            }
                                         }
 
                                         // Auto-refresh every 30 seconds
