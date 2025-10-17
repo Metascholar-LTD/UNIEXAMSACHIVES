@@ -777,22 +777,22 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // Get memo counts for each section using existing relationships
-            $pendingCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+            // Get memo counts for each section using active participants
+            $pendingCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->where(function($query) {
                 $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
             })->count();
             
-            $suspendedCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+            $suspendedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->where('memo_status', 'suspended')->count();
             
-            $completedCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+            $completedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->where('memo_status', 'completed')->count();
             
-            $archivedCount = EmailCampaign::whereHas('recipients', function($query) use ($userId) {
+            $archivedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
                 $query->where('user_id', $userId);
             })->where('memo_status', 'archived')->count();
 
@@ -832,8 +832,8 @@ class HomeController extends Controller
             // First try to get memos with UIMMS data
             $memos = EmailCampaign::with(['creator', 'currentAssignee', 'recipients.user', 'replies.user'])
                 ->where(function($query) use ($userId) {
-                    // User is a recipient of the memo
-                    $query->whereHas('recipients', function($subQuery) use ($userId) {
+                    // User is an active participant in the memo
+                    $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
                         $subQuery->where('user_id', $userId);
                     })
                     // OR user has received specific replies in this memo
@@ -854,10 +854,8 @@ class HomeController extends Controller
 
             // Transform the data to include UIMMS-specific information
             $memos = $memos->map(function($memo) use ($userId) {
-                // Get active participants (recipients who are active)
-                $activeParticipants = $memo->recipients->filter(function($recipient) {
-                    return $recipient->is_active_participant ?? true; // Default to true if field doesn't exist
-                });
+                // Get active participants (only those with is_active_participant = true)
+                $activeParticipants = $memo->activeParticipants;
                 
                 // Get last message
                 $lastMessage = $memo->replies->sortByDesc('created_at')->first();
@@ -893,11 +891,9 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // Check if user is a recipient (fallback if isActiveParticipant doesn't work)
-            $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
-            
-            if (!$isRecipient) {
-                abort(403, 'You are not a participant in this memo conversation.');
+            // Check if user is an active participant (only active participants can access chat)
+            if (!$memo->isActiveParticipant($userId)) {
+                abort(403, 'You are not an active participant in this memo conversation.');
             }
 
             $memo->load([
@@ -907,11 +903,11 @@ class HomeController extends Controller
                 'replies.user'
             ]);
 
-            // Set up active participants for the view
-            $memo->active_participants = $memo->recipients->map(function($recipient) {
+            // Set up active participants for the view (only active participants)
+            $memo->active_participants = $memo->activeParticipants->map(function($recipient) {
                 return [
                     'user' => $recipient->user,
-                    'is_active_participant' => $recipient->is_active_participant ?? true
+                    'is_active_participant' => true
                 ];
             });
 

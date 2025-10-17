@@ -212,6 +212,7 @@
                         </div>
 
                         {{-- Chat Input --}}
+                        @if($memo->isActiveParticipant(auth()->id()))
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
@@ -276,6 +277,26 @@
                                 </div>
                             </form>
                         </div>
+                        @else
+                        {{-- Blocked Chat State for Inactive Participants --}}
+                        <div class="chat-blocked-container">
+                            <div class="chat-blocked-content">
+                                <div class="blocked-icon">
+                                    <i class="icofont-lock"></i>
+                                </div>
+                                <div class="blocked-message">
+                                    <h4>Chat Assigned</h4>
+                                    <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>
+                                    <p class="blocked-subtitle">You can no longer participate in this conversation.</p>
+                                </div>
+                                <div class="blocked-actions">
+                                    <button type="button" class="btn btn-outline-secondary" onclick="window.history.back()">
+                                        <i class="icofont-arrow-left"></i> Back to Portal
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -946,6 +967,63 @@
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="20" font-size="12" fill="rgba(0,0,0,0.03)">x² + y² = r²</text><text x="60" y="40" font-size="10" fill="rgba(0,0,0,0.02)">∫f(x)dx</text><text x="20" y="70" font-size="14" fill="rgba(0,0,0,0.02)">α + β = γ</text><text x="70" y="90" font-size="8" fill="rgba(0,0,0,0.01)">∂/∂x</text></svg>');
     opacity: 0.5;
     pointer-events: none;
+}
+
+/* Blocked Chat State Styles */
+.chat-blocked-container {
+    background: #f8f9fa;
+    border: none;
+    border-radius: 0 0 8px 8px;
+    padding: 40px 20px;
+    text-align: center;
+    border-top: 1px solid #e9ecef;
+}
+
+.chat-blocked-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.blocked-icon {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.blocked-message h4 {
+    color: #495057;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.blocked-message p {
+    color: #6c757d;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.blocked-subtitle {
+    font-size: 0.9rem;
+    color: #868e96;
+    font-style: italic;
+}
+
+.blocked-actions {
+    margin-top: 25px;
+}
+
+.blocked-actions .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.blocked-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 /* Reply Mode Selector */

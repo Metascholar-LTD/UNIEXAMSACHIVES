@@ -187,6 +187,23 @@ class EmailCampaign extends Model
             ]);
         }
 
+        // Ensure the assigner (person who made the assignment) is also an active participant
+        $assignerRecipient = $this->recipients()->where('user_id', $assignedBy)->first();
+        if (!$assignerRecipient) {
+            $assignerRecipient = $this->recipients()->create([
+                'user_id' => $assignedBy,
+                'status' => 'sent',
+                'is_active_participant' => true,
+                'assigned_at' => now(),
+                'last_activity_at' => now(),
+            ]);
+        } else {
+            $assignerRecipient->update([
+                'is_active_participant' => true,
+                'last_activity_at' => now(),
+            ]);
+        }
+
         // Update memo assignment
         $this->update([
             'current_assignee_id' => $userId,
