@@ -203,7 +203,7 @@
 
 <style>
 .chat-header {
-    background: #fff;
+    background: #f8f9fa;
     border-bottom: 1px solid #e9ecef;
     border-radius: 8px 8px 0 0;
     margin-bottom: 0;
