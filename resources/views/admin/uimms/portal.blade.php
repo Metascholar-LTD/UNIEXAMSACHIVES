@@ -99,7 +99,7 @@
                                             </button>
                                         </div>
 
-                                        <div class="dashboard__meessage__contact memos-scroll-container" id="memos-container">
+                                        <div class="dashboard__meessage__contact" id="memos-container">
                                             <div class="text-center py-5">
                                                 <i class="icofont-chat" style="font-size: 48px; color: #ddd;"></i>
                                                 <p class="text-muted mt-3">Click on a card above to load memos</p>
@@ -560,31 +560,6 @@
 
                                         .refresh-btn:hover {
                                             background-color: #0f3a7a;
-                                        }
-
-                                        /* Scroll Container */
-                                        .memos-scroll-container {
-                                            max-height: calc(100vh - 200px);
-                                            overflow-y: auto;
-                                            padding: 0 20px 20px 20px;
-                                        }
-
-                                        .memos-scroll-container::-webkit-scrollbar {
-                                            width: 6px;
-                                        }
-
-                                        .memos-scroll-container::-webkit-scrollbar-track {
-                                            background: #f1f1f1;
-                                            border-radius: 3px;
-                                        }
-
-                                        .memos-scroll-container::-webkit-scrollbar-thumb {
-                                            background: #c1c1c1;
-                                            border-radius: 3px;
-                                        }
-
-                                        .memos-scroll-container::-webkit-scrollbar-thumb:hover {
-                                            background: #a8a8a8;
                                         }
                                         </style>
 
