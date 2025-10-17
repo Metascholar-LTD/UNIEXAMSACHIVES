@@ -671,8 +671,18 @@
 
 .memo-detail-item-inline label {
     display: inline-block;
+    font-weight: 600;
+    color: #2c3e50;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    font-size: 0.75rem;
     margin-bottom: 0;
     margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
 }
 
 .memo-detail-item {
