@@ -71,6 +71,7 @@
                                              class="participant-avatar"
                                              title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
                                     @endforeach
+                                    <span class="recipients-count">{{ $memo->recipients->count() }} people</span>
                                 </div>
                             </div>
                         </div>
@@ -112,10 +113,6 @@
                                                 <span class="text-muted">Not assigned</span>
                                             @endif
                                         </span>
-                                    </div>
-                                    <div class="memo-detail-item">
-                                        <label>Recipients:</label>
-                                        <span class="memo-recipients-count">{{ $memo->recipients->count() }} people</span>
                                     </div>
                                 </div>
                                 
@@ -411,6 +408,17 @@
     object-fit: cover;
     border: 2px solid #fff;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.recipients-count {
+    color: #1976d2;
+    font-weight: 500;
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 8px;
+    white-space: nowrap;
 }
 
 .status-badge {
