@@ -926,6 +926,7 @@ class HomeController extends Controller
                 'creator', 
                 'currentAssignee', 
                 'recipients.user',
+                'activeParticipants.user',
                 'replies.user'
             ]);
 
