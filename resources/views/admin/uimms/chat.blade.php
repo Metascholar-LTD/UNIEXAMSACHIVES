@@ -63,14 +63,14 @@
                             <div class="chat-header-bottom">
                                 <div class="chat-title">
                                     <h4>{{ $memo->subject }}</h4>
-                                    <div class="chat-participants">
-                                        @foreach($memo->recipients as $participant)
-                                            <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
-                                                 alt="{{ $participant->user->first_name }}" 
-                                                 class="participant-avatar"
-                                                 title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
-                                        @endforeach
-                                    </div>
+                                </div>
+                                <div class="chat-participants">
+                                    @foreach($memo->recipients as $participant)
+                                        <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                             alt="{{ $participant->user->first_name }}" 
+                                             class="participant-avatar"
+                                             title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -237,22 +237,27 @@
 
 .chat-header-bottom {
     padding: 15px 20px 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .chat-title h4 {
     margin: 0;
     color: #333;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .chat-participants {
     display: flex;
-    gap: 5px;
-    margin-top: 5px;
+    gap: 6px;
+    align-items: center;
 }
 
 .participant-avatar {
-    width: 32px;
-    height: 32px;
+    width: 28px;
+    height: 28px;
     border-radius: 50%;
     object-fit: cover;
     border: 2px solid #fff;
