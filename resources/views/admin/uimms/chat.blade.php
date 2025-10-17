@@ -21,7 +21,7 @@
                         <div class="chat-header">
                             {{-- Top Section: Buttons --}}
                             <div class="chat-header-top">
-                                <div class="chat-header-left">
+                            <div class="chat-header-left">
                                     <a href="{{ route('dashboard.uimms.portal') }}" class="responsive-btn back-btn">
                                         <div class="svgWrapper">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
@@ -30,28 +30,28 @@
                                             <div class="text">Back</div>
                                         </div>
                                     </a>
+                            </div>
+                            <div class="chat-header-right">
+                                <div class="memo-status">
+                                    <span class="status-badge status-{{ $memo->memo_status ?? 'pending' }}">
+                                        {{ $memo->memo_status ?? 'pending' }}
+                                    </span>
                                 </div>
-                                <div class="chat-header-right">
-                                    <div class="memo-status">
-                                        <span class="status-badge status-{{ $memo->memo_status ?? 'pending' }}">
-                                            {{ $memo->memo_status ?? 'pending' }}
-                                        </span>
-                                    </div>
-                                    <div class="chat-actions">
-                                        <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
-                                            <i class="icofont-user"></i> Assign
+                                <div class="chat-actions">
+                                    <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
+                                        <i class="icofont-user"></i> Assign
+                                    </button>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
+                                            <i class="icofont-check-circled"></i> Complete
                                         </button>
-                                        <div class="btn-group">
-                                            <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
-                                                <i class="icofont-check-circled"></i> Complete
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
-                                                <i class="icofont-pause"></i> Suspend
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
-                                                <i class="icofont-archive"></i> Archive
-                                            </button>
-                                        </div>
+                                        <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
+                                            <i class="icofont-pause"></i> Suspend
+                                        </button>
+                                        <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
+                                            <i class="icofont-archive"></i> Archive
+                                        </button>
+                                    </div>
                                     </div>
                                 </div>
                             </div>
@@ -109,9 +109,33 @@
 
                         {{-- Chat Input --}}
                         <div class="chat-input-container">
+                    <!-- Reply Mode Selector -->
+                    <div class="reply-mode-selector">
+                        <button type="button" class="reply-mode-btn active" data-mode="all">
+                            <i class="icofont-users"></i>
+                            All
+                        </button>
+                        <button type="button" class="reply-mode-btn" data-mode="specific">
+                            <i class="icofont-user"></i>
+                            Reply-to
+                        </button>
+                    </div>
+                    
+                    <!-- Specific Recipients Selector (hidden by default) -->
+                    <div class="recipients-selector" id="recipients-selector" style="display: none;">
+                        <div class="recipients-header">
+                            <span>Select recipients:</span>
+                        </div>
+                        <div class="recipients-list" id="recipients-list">
+                            <!-- Recipients will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    
                             <form id="chat-form" enctype="multipart/form-data">
                                 @csrf
-                                <div class="telegram-style-input">
+                        <input type="hidden" name="reply_mode" id="reply-mode" value="all">
+                        <input type="hidden" name="specific_recipients" id="specific-recipients" value="">
+                        <div class="telegram-style-input">
                                     <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()">
                                         <svg viewBox="0 0 24 24" class="attachment-icon">
                                             <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
@@ -581,6 +605,115 @@
     pointer-events: none;
 }
 
+/* Reply Mode Selector */
+.reply-mode-selector {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 15px;
+    position: relative;
+    z-index: 2;
+}
+
+.reply-mode-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.reply-mode-btn:hover {
+    background: rgba(255, 255, 255, 0.3);
+    transform: translateY(-1px);
+}
+
+.reply-mode-btn.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: #1976d2;
+    border-color: rgba(255, 255, 255, 0.9);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reply-mode-btn i {
+    font-size: 0.9rem;
+}
+
+/* Recipients Selector */
+.recipients-selector {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 2;
+    backdrop-filter: blur(10px);
+}
+
+.recipients-header {
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.recipients-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.recipient-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.8rem;
+}
+
+.recipient-item:hover {
+    background: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.recipient-item.selected {
+    background: #e3f2fd;
+    border-color: #1976d2;
+    color: #1976d2;
+}
+
+.recipient-item img {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Reply-to Indicator */
+.reply-to-indicator {
+    background: #e3f2fd;
+    color: #1976d2;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin: 0 8px;
+    border: 1px solid #bbdefb;
+}
+
 .telegram-style-input {
     display: flex;
     align-items: center;
@@ -697,6 +830,93 @@ document.getElementById('message-input').addEventListener('input', function() {
     this.style.height = Math.min(this.scrollHeight, 120) + 'px';
 });
 
+// Reply Mode Functionality
+let selectedRecipients = [];
+let memoParticipants = [];
+
+// Initialize reply mode functionality
+function initializeReplyMode() {
+    // Get memo participants from the page data
+    memoParticipants = @json($memo->active_participants ?? []);
+    
+    // Set up reply mode button handlers
+    document.querySelectorAll('.reply-mode-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const mode = this.dataset.mode;
+            setReplyMode(mode);
+        });
+    });
+    
+    // Populate recipients list
+    populateRecipientsList();
+}
+
+function setReplyMode(mode) {
+    // Update button states
+    document.querySelectorAll('.reply-mode-btn').forEach(btn => {
+        btn.classList.remove('active');
+    });
+    document.querySelector(`[data-mode="${mode}"]`).classList.add('active');
+    
+    // Update hidden input
+    document.getElementById('reply-mode').value = mode;
+    
+    // Show/hide recipients selector
+    const recipientsSelector = document.getElementById('recipients-selector');
+    if (mode === 'specific') {
+        recipientsSelector.style.display = 'block';
+    } else {
+        recipientsSelector.style.display = 'none';
+        selectedRecipients = [];
+        updateSpecificRecipientsInput();
+    }
+}
+
+function populateRecipientsList() {
+    const recipientsList = document.getElementById('recipients-list');
+    recipientsList.innerHTML = '';
+    
+    memoParticipants.forEach(participant => {
+        if (participant.user && participant.user.id !== {{ Auth::id() }}) {
+            const recipientItem = document.createElement('div');
+            recipientItem.className = 'recipient-item';
+            recipientItem.dataset.userId = participant.user.id;
+            recipientItem.innerHTML = `
+                <img src="${participant.user.profile_picture_url || '/profile_pictures/default-profile.png'}" 
+                     alt="${participant.user.first_name}">
+                <span>${participant.user.first_name} ${participant.user.last_name}</span>
+            `;
+            
+            recipientItem.addEventListener('click', function() {
+                toggleRecipientSelection(participant.user.id, this);
+            });
+            
+            recipientsList.appendChild(recipientItem);
+        }
+    });
+}
+
+function toggleRecipientSelection(userId, element) {
+    const index = selectedRecipients.indexOf(userId);
+    if (index > -1) {
+        selectedRecipients.splice(index, 1);
+        element.classList.remove('selected');
+    } else {
+        selectedRecipients.push(userId);
+        element.classList.add('selected');
+    }
+    updateSpecificRecipientsInput();
+}
+
+function updateSpecificRecipientsInput() {
+    document.getElementById('specific-recipients').value = selectedRecipients.join(',');
+}
+
+// Initialize when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    initializeReplyMode();
+});
+
 // Send message
 document.getElementById('chat-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -735,6 +955,20 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
 // Add message to chat
 function addMessageToChat(message) {
     const messagesContainer = document.getElementById('chat-messages');
+    
+    // Determine reply mode display
+    let replyModeDisplay = '';
+    if (message.reply_mode === 'specific' && message.specific_recipients) {
+        const recipientIds = message.specific_recipients.split(',');
+        const recipientNames = recipientIds.map(id => {
+            const participant = memoParticipants.find(p => p.user && p.user.id == id);
+            return participant ? `${participant.user.first_name} ${participant.user.last_name}` : 'Unknown';
+        });
+        replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
+    } else if (message.reply_mode === 'all') {
+        replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
+    }
+    
     const messageHtml = `
         <div class="message message-sent">
             <div class="message-avatar">
@@ -744,6 +978,7 @@ function addMessageToChat(message) {
             <div class="message-content">
                 <div class="message-header">
                     <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
+                    ${replyModeDisplay}
                     <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
                 </div>
                 <div class="message-text">${message.message.replace(/\n/g, '<br>')}</div>
