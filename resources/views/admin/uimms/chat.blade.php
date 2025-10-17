@@ -232,7 +232,7 @@
                         </button>
                         <button type="button" class="reply-mode-btn" data-mode="specific">
                             <i class="icofont-user"></i>
-                            Reply-to
+                            Comment-to
                         </button>
                         
                         <!-- Inline Recipients Selector (hidden by default) -->
