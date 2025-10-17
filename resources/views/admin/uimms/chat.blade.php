@@ -381,6 +381,12 @@
     align-items: center;
 }
 
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
 .chat-title h4 {
     margin: 0;
     color: #333;
