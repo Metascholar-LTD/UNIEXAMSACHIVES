@@ -283,8 +283,10 @@
     align-items: center;
 }
 
-/* Modern Action Button Styling */
-.chat-actions .btn {
+/* Assign Button - Keep Original Style */
+.chat-actions .btn-outline-primary {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+    color: white;
     border: none;
     border-radius: 8px;
     font-size: 0.8rem;
@@ -296,62 +298,109 @@
     letter-spacing: 0.3px;
 }
 
-.chat-actions .btn:hover {
+.chat-actions .btn-outline-primary:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    color: white;
     transform: translateY(-1px);
     box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 }
 
-.chat-actions .btn:active {
+.chat-actions .btn-outline-primary:active {
     transform: translateY(0);
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
-/* Assign Button */
-.chat-actions .btn-outline-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+/* Neumorphic Button Styling for Complete, Suspend, Archive */
+.chat-actions .btn-outline-success,
+.chat-actions .btn-outline-warning,
+.chat-actions .btn-outline-secondary {
+    background-color: #e4e4e4;
     border: none;
+    border-radius: 10px;
+    box-shadow: inset 5px 5px 5px #c4c4c4,
+                inset -5px -5px 5px #ffffff;
+    color: #333;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 3px;
+    padding: 10px;
+    text-transform: uppercase;
+    transition: all 0.2s ease;
 }
 
-.chat-actions .btn-outline-primary:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-    color: white;
+.chat-actions .btn-outline-success:hover,
+.chat-actions .btn-outline-warning:hover,
+.chat-actions .btn-outline-secondary:hover {
+    box-shadow: none;
+}
+
+.chat-actions .btn-outline-success i,
+.chat-actions .btn-outline-warning i,
+.chat-actions .btn-outline-secondary i {
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    font-size: 16px;
 }
 
 /* Complete Button */
 .chat-actions .btn-outline-success {
-    background: linear-gradient(135deg, #28a745 0%, #1e7e34 100%);
-    color: white;
-    border: none;
+    color: #28a745;
 }
 
 .chat-actions .btn-outline-success:hover {
-    background: linear-gradient(135deg, #1e7e34 0%, #155724 100%);
-    color: white;
+    background-color: #28a745;
+    color: #e4e4e4;
+}
+
+.chat-actions .btn-outline-success i {
+    color: #28a745;
+}
+
+.chat-actions .btn-outline-success:hover i {
+    color: #e4e4e4;
 }
 
 /* Suspend Button */
 .chat-actions .btn-outline-warning {
-    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
-    color: #212529;
-    border: none;
+    color: #ffc107;
 }
 
 .chat-actions .btn-outline-warning:hover {
-    background: linear-gradient(135deg, #e0a800 0%, #d39e00 100%);
-    color: #212529;
+    background-color: #ffc107;
+    color: #e4e4e4;
+}
+
+.chat-actions .btn-outline-warning i {
+    color: #ffc107;
+}
+
+.chat-actions .btn-outline-warning:hover i {
+    color: #e4e4e4;
 }
 
 /* Archive Button */
 .chat-actions .btn-outline-secondary {
-    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
-    color: white;
-    border: none;
+    color: #6c757d;
 }
 
 .chat-actions .btn-outline-secondary:hover {
-    background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
-    color: white;
+    background-color: #6c757d;
+    color: #e4e4e4;
+}
+
+.chat-actions .btn-outline-secondary i {
+    color: #6c757d;
+}
+
+.chat-actions .btn-outline-secondary:hover i {
+    color: #e4e4e4;
 }
 
 /* Responsive Button Styling for Back Button */
