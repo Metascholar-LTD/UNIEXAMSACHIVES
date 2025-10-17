@@ -79,8 +79,8 @@
                         {{-- Memo Details Section --}}
                         <div class="memo-details-section">
                             <div class="memo-details-content">
-                                <div class="memo-details-single-row">
-                                    <div class="memo-detail-item-inline">
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item">
                                         <label>From:</label>
                                         <span class="memo-sender">
                                             <img src="{{ $memo->creator->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
@@ -88,13 +88,17 @@
                                             {{ $memo->creator->first_name }} {{ $memo->creator->last_name }}
                                         </span>
                                     </div>
-                                    
-                                    <div class="memo-detail-item-inline">
+                                </div>
+                                
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item">
                                         <label>Created:</label>
                                         <span class="memo-date">{{ $memo->created_at->format('M d, Y H:i') }}</span>
                                     </div>
-                                    
-                                    <div class="memo-detail-item-inline">
+                                </div>
+                                
+                                <div class="memo-details-row">
+                                    <div class="memo-detail-item">
                                         <label>Assigned To:</label>
                                         <span class="memo-assignee">
                                             @if($memo->currentAssignee)
@@ -680,11 +684,11 @@
 }
 
 .memo-detail-item label {
-    display: block;
+    display: inline;
     font-weight: 600;
     color: #555;
     font-size: 0.85rem;
-    margin-bottom: 5px;
+    margin-right: 8px;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
