@@ -777,23 +777,39 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // Get memo counts for each section using active participants
-            $pendingCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-                $query->where('user_id', $userId);
+            // Get memo counts for each section using active participants OR recipients (for backward compatibility)
+            $pendingCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
             })->where(function($query) {
                 $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
             })->count();
             
-            $suspendedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-                $query->where('user_id', $userId);
+            $suspendedCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
             })->where('memo_status', 'suspended')->count();
             
-            $completedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-                $query->where('user_id', $userId);
+            $completedCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
             })->where('memo_status', 'completed')->count();
             
-            $archivedCount = EmailCampaign::whereHas('activeParticipants', function($query) use ($userId) {
-                $query->where('user_id', $userId);
+            $archivedCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
             })->where('memo_status', 'archived')->count();
 
             return view('admin.uimms.portal', compact(
@@ -834,6 +850,10 @@ class HomeController extends Controller
                 ->where(function($query) use ($userId) {
                     // User is an active participant in the memo
                     $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    })
+                    // OR user is a recipient (for backward compatibility)
+                    ->orWhereHas('recipients', function($subQuery) use ($userId) {
                         $subQuery->where('user_id', $userId);
                     })
                     // OR user has received specific replies in this memo
