@@ -87,22 +87,19 @@
                                     <div class="dashboard__meessage">
                                         <div class="dashboard__meessage__chat memos-toolbar">
                                             <div class="memos-title-container">
-                                                <h3 class="memos-title">Chat List</h3>
-                                            </div>
-                                            <div class="memos-actions">
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
-                                                <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
-                                                    <div class="svgWrapper">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
-                                                            <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                                        </svg>
-                                                        <div class="text">Refresh</div>
-                                                    </div>
-                                                </button>
                                             </div>
+                                            <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
+                                                <div class="svgWrapper">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                        <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                    </svg>
+                                                    <div class="text">Refresh</div>
+                                                </div>
+                                            </button>
                                         </div>
 
-                                        <div class="dashboard__meessage__contact memos-list-container" id="memos-container">
+                                        <div class="dashboard__meessage__contact" id="memos-container">
                                             <div class="text-center py-5">
                                                 <i class="icofont-chat" style="font-size: 48px; color: #ddd;"></i>
                                                 <p class="text-muted mt-3">Click on a card above to load memos</p>
@@ -318,38 +315,18 @@
                                             display: flex;
                                             align-items: center;
                                             justify-content: space-between;
-                                            gap: 20px;
+                                            gap: 12px;
                                             position: sticky;
                                             top: 0;
                                             z-index: 5;
                                             background: #f8f9fa;
-                                            padding: 20px 25px;
+                                            padding: 15px 20px;
                                             border-bottom: 2px solid #eef2f7;
-                                            margin-bottom: 20px;
                                         }
                                         
                                         .memos-title-container {
                                             display: flex;
                                             align-items: center;
-                                        }
-                                        
-                                        .memos-title {
-                                            margin: 0;
-                                            color: #333;
-                                            font-size: 1.2rem;
-                                            font-weight: 600;
-                                        }
-                                        
-                                        .memos-actions {
-                                            display: flex;
-                                            align-items: center;
-                                            gap: 15px;
-                                        }
-                                        
-                                        .memos-list-container {
-                                            padding: 0 25px 25px 25px;
-                                            max-height: 70vh;
-                                            overflow-y: auto;
                                         }
                                         
                                         .memos-badge {
@@ -368,92 +345,129 @@
                                             border-bottom: 1px solid #eef2f7;
                                             transition: all 0.3s ease;
                                             cursor: pointer;
-                                            margin-bottom: 8px;
-                                            border-radius: 12px;
-                                            background: #ffffff;
-                                            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
                                         }
                                         
                                         .memo-item:hover {
                                             background: #f8f9ff;
-                                            transform: translateY(-1px);
-                                            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                                         }
                                         
                                         .dashboard__meessage__contact__wrap {
                                             display: flex;
-                                            gap: 18px;
+                                            gap: 20px;
                                             padding: 20px 25px;
                                             align-items: flex-start;
+                                            position: relative;
                                         }
                                         
                                         .dashboard__meessage__chat__img img {
-                                            width: 48px;
-                                            height: 48px;
+                                            width: 52px;
+                                            height: 52px;
                                             border-radius: 50%;
                                             object-fit: cover;
-                                            border: 2px solid #e9ecef;
+                                            border: 3px solid #e9ecef;
+                                            flex-shrink: 0;
                                         }
                                         
                                         .dashboard__meessage__meta {
                                             flex: 1;
+                                            min-width: 0;
+                                        }
+                                        
+                                        .memo-header {
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: space-between;
+                                            margin-bottom: 8px;
+                                        }
+                                        
+                                        .memo-sender-info {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 12px;
                                         }
                                         
                                         .dashboard__meessage__meta h5 {
-                                            margin: 0 0 5px 0;
-                                            font-size: 1rem;
+                                            margin: 0;
+                                            font-size: 1.1rem;
                                             font-weight: 600;
                                             color: #333;
                                         }
                                         
                                         .memo-subject {
-                                            font-weight: 500;
-                                            color: #555;
-                                            margin-bottom: 5px;
+                                            font-weight: 600;
+                                            color: #1a4a9b;
+                                            margin-bottom: 6px;
+                                            font-size: 1rem;
                                         }
                                         
                                         .memo-preview {
                                             color: #666;
                                             font-size: 0.9rem;
-                                            margin-bottom: 8px;
+                                            margin-bottom: 12px;
                                             display: -webkit-box;
                                             -webkit-line-clamp: 2;
                                             -webkit-box-orient: vertical;
                                             overflow: hidden;
+                                            line-height: 1.4;
                                         }
                                         
                                         .memo-footer {
                                             display: flex;
                                             align-items: center;
-                                            gap: 15px;
+                                            justify-content: space-between;
                                             flex-wrap: wrap;
+                                            gap: 10px;
+                                        }
+                                        
+                                        .memo-left-info {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 15px;
                                         }
                                         
                                         .chat__time {
                                             font-size: 0.85rem;
                                             color: #999;
+                                            font-weight: 500;
                                         }
                                         
                                         .memo-participants {
                                             display: flex;
                                             align-items: center;
-                                            gap: 5px;
+                                            gap: 6px;
+                                            background: #f8f9fa;
+                                            padding: 4px 8px;
+                                            border-radius: 12px;
+                                            border: 1px solid #e9ecef;
+                                        }
+                                        
+                                        .memo-participants i {
+                                            color: #6c757d;
+                                            font-size: 0.8rem;
                                         }
                                         
                                         .participant-avatar-small {
-                                            width: 24px;
-                                            height: 24px;
+                                            width: 22px;
+                                            height: 22px;
                                             border-radius: 50%;
                                             object-fit: cover;
                                             border: 2px solid #fff;
-                                            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                        }
+                                        
+                                        .memo-right-badges {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 8px;
                                         }
                                         
                                         .memo-status-badge {
-                                            padding: 4px 10px;
-                                            border-radius: 12px;
+                                            padding: 6px 12px;
+                                            border-radius: 15px;
                                             font-size: 0.75rem;
-                                            font-weight: 500;
+                                            font-weight: 600;
+                                            text-transform: uppercase;
+                                            letter-spacing: 0.5px;
                                         }
                                         
                                         .status-pending { background: #e3f2fd; color: #1976d2; }
@@ -609,25 +623,33 @@
                                                                         <img src="${creatorAvatar}" alt="${creatorName}">
                                                                     </div>
                                                                     <div class="dashboard__meessage__meta">
-                                                                        <h5>${creatorName}</h5>
+                                                                        <div class="memo-header">
+                                                                            <div class="memo-sender-info">
+                                                                                <h5>${creatorName}</h5>
+                                                                            </div>
+                                                                            <div class="memo-right-badges">
+                                                                                <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
+                                                                                ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
+                                                                            </div>
+                                                                        </div>
                                                                         <div class="memo-subject">${memo.subject}</div>
-                                                                        <div class="memo-preview">${memo.message ? memo.message.substring(0, 100) : 'No content'}...</div>
+                                                                        <div class="memo-preview">${memo.message ? memo.message.substring(0, 120) : 'No content'}...</div>
                                                                         <div class="memo-footer">
-                                                                            <span class="chat__time">${lastMessageTime}</span>
-                                                                            ${participants.length > 1 ? `
-                                                                                <div class="memo-participants">
-                                                                                    <i class="icofont-users" style="color: #999; font-size: 0.9rem;"></i>
-                                                                                    ${participants.slice(0, 3).map(p => `
-                                                                                        <img src="${p.user?.profile_picture_url || '/profile_pictures/default-profile.png'}" 
-                                                                                             alt="${p.user?.first_name || 'User'}" 
-                                                                                             class="participant-avatar-small"
-                                                                                             title="${p.user?.first_name || ''} ${p.user?.last_name || ''}">
-                                                                                    `).join('')}
-                                                                                    ${participants.length > 3 ? `<span style="font-size: 0.85rem; color: #999;">+${participants.length - 3}</span>` : ''}
-                                                                                </div>
-                                                                            ` : ''}
-                                                                            <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
-                                                                            ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
+                                                                            <div class="memo-left-info">
+                                                                                <span class="chat__time">${lastMessageTime}</span>
+                                                                                ${participants.length > 1 ? `
+                                                                                    <div class="memo-participants">
+                                                                                        <i class="icofont-users"></i>
+                                                                                        ${participants.slice(0, 3).map(p => `
+                                                                                            <img src="${p.user?.profile_picture_url || '/profile_pictures/default-profile.png'}" 
+                                                                                                 alt="${p.user?.first_name || 'User'}" 
+                                                                                                 class="participant-avatar-small"
+                                                                                                 title="${p.user?.first_name || ''} ${p.user?.last_name || ''}">
+                                                                                        `).join('')}
+                                                                                        ${participants.length > 3 ? `<span style="font-size: 0.75rem; color: #6c757d; font-weight: 500;">+${participants.length - 3}</span>` : ''}
+                                                                                    </div>
+                                                                                ` : ''}
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
