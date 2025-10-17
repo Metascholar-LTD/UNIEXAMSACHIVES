@@ -222,12 +222,52 @@
                                             <div class="message-text">{!! nl2br(e($message->message)) !!}</div>
                                             @if($message->attachments && count($message->attachments) > 0)
                                                 <div class="message-attachments">
-                                                    @foreach($message->attachments as $attachment)
-                                                        <a href="{{ asset('storage/' . $attachment['path']) }}" 
-                                                           class="attachment-link" 
-                                                           target="_blank">
-                                                            <i class="icofont-paperclip"></i> {{ $attachment['name'] }}
-                                                        </a>
+                                                    @foreach($message->attachments as $index => $attachment)
+                                                        @php
+                                                            $isImage = str_contains($attachment['type'] ?? '', 'image');
+                                                            $isPdf = str_contains($attachment['type'] ?? '', 'pdf');
+                                                            $isWord = str_contains($attachment['type'] ?? '', 'word') || str_contains($attachment['type'] ?? '', 'document');
+                                                            $isExcel = str_contains($attachment['type'] ?? '', 'excel') || str_contains($attachment['type'] ?? '', 'spreadsheet');
+                                                            $fileSize = isset($attachment['size']) ? number_format($attachment['size'] / 1024, 1) . ' KB' : 'Unknown size';
+                                                        @endphp
+                                                        
+                                                        @if($isImage)
+                                                            {{-- Image Attachment - Show preview --}}
+                                                            <div class="attachment-image-wrapper">
+                                                                <img src="{{ asset('storage/' . $attachment['path']) }}" 
+                                                                     alt="{{ $attachment['name'] }}"
+                                                                     class="attachment-image"
+                                                                     onclick="viewImage('{{ asset('storage/' . $attachment['path']) }}', '{{ $attachment['name'] }}')">
+                                                                <div class="image-overlay">
+                                                                    <i class="icofont-eye"></i>
+                                                                </div>
+                                                            </div>
+                                                        @else
+                                                            {{-- File Attachment - Show file card --}}
+                                                            <div class="attachment-file-card">
+                                                                <div class="file-icon">
+                                                                    @if($isPdf)
+                                                                        <i class="icofont-file-pdf"></i>
+                                                                    @elseif($isWord)
+                                                                        <i class="icofont-file-document"></i>
+                                                                    @elseif($isExcel)
+                                                                        <i class="icofont-file-excel"></i>
+                                                                    @else
+                                                                        <i class="icofont-file-alt"></i>
+                                                                    @endif
+                                                                </div>
+                                                                <div class="file-info">
+                                                                    <div class="file-name">{{ $attachment['name'] }}</div>
+                                                                    <div class="file-size">{{ $fileSize }}</div>
+                                                                </div>
+                                                                <a href="{{ asset('storage/' . $attachment['path']) }}" 
+                                                                   class="file-download-btn"
+                                                                   download="{{ $attachment['name'] }}"
+                                                                   title="Download">
+                                                                    <i class="icofont-download"></i>
+                                                                </a>
+                                                            </div>
+                                                        @endif
                                                     @endforeach
                                                 </div>
                                             @endif
@@ -939,8 +979,8 @@
 }
 
 .message-sent .message-content {
-    background: #007bff;
-    color: white;
+    background: #d1e7dd;
+    color: #333;
 }
 
 .message-header {
@@ -957,10 +997,146 @@
 }
 
 .message-attachments {
-    margin-top: 8px;
+    margin-top: 10px;
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 8px;
+}
+
+/* WhatsApp-style Image Attachment */
+.attachment-image-wrapper {
+    position: relative;
+    max-width: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.attachment-image-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.attachment-image-wrapper:hover .image-overlay {
+    opacity: 1;
+}
+
+.attachment-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.image-overlay i {
+    color: white;
+    font-size: 2rem;
+}
+
+/* WhatsApp-style File Attachment */
+.attachment-file-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    max-width: 300px;
+    transition: all 0.2s ease;
+}
+
+.message-sent .attachment-file-card {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.message-received .attachment-file-card {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.file-icon .icofont-file-pdf {
+    color: #dc3545;
+}
+
+.file-icon .icofont-file-document {
+    color: #0066cc;
+}
+
+.file-icon .icofont-file-excel {
+    color: #28a745;
+}
+
+.file-icon .icofont-file-alt {
+    color: #6c757d;
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
+}
+
+.file-size {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.file-download-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.file-download-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.file-download-btn i {
+    font-size: 1.1rem;
 }
 
 .attachment-link {
@@ -1884,5 +2060,169 @@ window.addEventListener('beforeunload', () => {
         clearInterval(messageInterval);
     }
 });
+
+// Image Viewer Function
+function viewImage(imageUrl, imageName) {
+    // Create modal
+    const modal = document.createElement('div');
+    modal.className = 'image-viewer-modal';
+    modal.innerHTML = `
+        <div class="image-viewer-overlay" onclick="closeImageViewer()"></div>
+        <div class="image-viewer-content">
+            <div class="image-viewer-header">
+                <span class="image-viewer-title">${imageName}</span>
+                <button onclick="closeImageViewer()" class="close-viewer-btn">
+                    <i class="icofont-close"></i>
+                </button>
+            </div>
+            <div class="image-viewer-body">
+                <img src="${imageUrl}" alt="${imageName}">
+            </div>
+            <div class="image-viewer-footer">
+                <a href="${imageUrl}" download="${imageName}" class="download-image-btn">
+                    <i class="icofont-download"></i> Download
+                </a>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(modal);
+    document.body.style.overflow = 'hidden';
+    
+    // Add fade-in animation
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeImageViewer() {
+    const modal = document.querySelector('.image-viewer-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.remove();
+            document.body.style.overflow = '';
+        }, 300);
+    }
+}
+
+// Close on ESC key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        closeImageViewer();
+    }
+});
 </script>
+
+<style>
+/* Image Viewer Modal */
+.image-viewer-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.image-viewer-modal.active {
+    opacity: 1;
+}
+
+.image-viewer-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.9);
+    cursor: pointer;
+}
+
+.image-viewer-content {
+    position: relative;
+    width: 90%;
+    max-width: 900px;
+    height: 90%;
+    margin: 5vh auto;
+    display: flex;
+    flex-direction: column;
+    z-index: 10001;
+}
+
+.image-viewer-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 8px 8px 0 0;
+}
+
+.image-viewer-title {
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.close-viewer-btn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.close-viewer-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.image-viewer-body {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.8);
+    overflow: hidden;
+}
+
+.image-viewer-body img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.image-viewer-footer {
+    padding: 15px 20px;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 0 0 8px 8px;
+    display: flex;
+    justify-content: center;
+}
+
+.download-image-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: #007bff;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.download-image-btn:hover {
+    background: #0056b3;
+    transform: translateY(-2px);
+}
+</style>
+
 @endsection
