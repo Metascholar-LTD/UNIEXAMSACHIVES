@@ -699,8 +699,10 @@ function toggleMemoDropdown(event) {
     
     console.log('Dropdown clicked!'); // Debug log
     
+    const trigger = event.currentTarget;
     const submenu = document.getElementById('memo-submenu');
-    const arrow = event.currentTarget.querySelector('.dropdown-arrow');
+    const arrow = trigger.querySelector('.dropdown-arrow');
+    const dropdown = trigger.closest('.memo-dropdown');
     
     if (!submenu) {
         console.error('Submenu not found!');
@@ -715,21 +717,31 @@ function toggleMemoDropdown(event) {
     const isVisible = submenu.style.display === 'block';
     console.log('Current visibility:', isVisible); // Debug log
     
-    // Close all other dropdowns first
-    document.querySelectorAll('.memo-submenu').forEach(menu => {
-        menu.style.display = 'none';
-    });
-    document.querySelectorAll('.dropdown-arrow').forEach(arr => {
-        arr.style.transform = 'rotate(0deg)';
-    });
-    
-    if (!isVisible) {
-        submenu.style.display = 'block';
-        arrow.style.transform = 'rotate(180deg)';
-        console.log('Dropdown opened!'); // Debug log
-    } else {
+    // Close dropdown
+    if (isVisible) {
+        submenu.style.display = 'none';
+        arrow.style.transform = 'rotate(0deg)';
+        dropdown.classList.remove('open');
         console.log('Dropdown closed!'); // Debug log
+        return;
     }
+    
+    // Open dropdown
+    submenu.style.display = 'block';
+    arrow.style.transform = 'rotate(180deg)';
+    dropdown.classList.add('open');
+    
+    // Position dropdown using getBoundingClientRect for accurate placement
+    const rect = trigger.getBoundingClientRect();
+    submenu.style.left = rect.left + 'px';
+    submenu.style.top = (rect.bottom + 5) + 'px';
+    submenu.style.position = 'fixed';
+    
+    console.log('Dropdown opened at:', {
+        left: rect.left,
+        top: rect.bottom + 5,
+        width: submenu.offsetWidth
+    }); // Debug log
 }
 
 // Close dropdown when clicking outside
@@ -737,11 +749,15 @@ document.addEventListener('click', function(event) {
     const memoDropdown = document.querySelector('.memo-dropdown');
     const submenu = document.getElementById('memo-submenu');
     
-    if (memoDropdown && submenu && !memoDropdown.contains(event.target)) {
-        submenu.style.display = 'none';
-        const arrow = memoDropdown.querySelector('.dropdown-arrow');
-        if (arrow) {
-            arrow.style.transform = 'rotate(0deg)';
+    if (memoDropdown && submenu && !memoDropdown.contains(event.target) && !submenu.contains(event.target)) {
+        if (submenu.style.display === 'block') {
+            submenu.style.display = 'none';
+            const arrow = memoDropdown.querySelector('.dropdown-arrow');
+            if (arrow) {
+                arrow.style.transform = 'rotate(0deg)';
+            }
+            memoDropdown.classList.remove('open');
+            console.log('Dropdown closed by outside click'); // Debug log
         }
     }
 });
@@ -750,120 +766,173 @@ document.addEventListener('click', function(event) {
 document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         const submenu = document.getElementById('memo-submenu');
-        const arrow = document.querySelector('.dropdown-arrow');
+        const memoDropdown = document.querySelector('.memo-dropdown');
+        const arrow = memoDropdown?.querySelector('.dropdown-arrow');
+        
         if (submenu && submenu.style.display === 'block') {
             submenu.style.display = 'none';
             if (arrow) {
                 arrow.style.transform = 'rotate(0deg)';
             }
+            if (memoDropdown) {
+                memoDropdown.classList.remove('open');
+            }
+            console.log('Dropdown closed by Escape key'); // Debug log
         }
+    }
+});
+
+// Reposition dropdown on window resize
+window.addEventListener('resize', function() {
+    const submenu = document.getElementById('memo-submenu');
+    const trigger = document.getElementById('memo-dropdown-trigger');
+    
+    if (submenu && submenu.style.display === 'block' && trigger) {
+        const rect = trigger.getBoundingClientRect();
+        submenu.style.left = rect.left + 'px';
+        submenu.style.top = (rect.bottom + 5) + 'px';
     }
 });
 </script>
 
 <style>
+/* Fix sidebar overflow to allow dropdown */
+.dashboard__nav {
+    overflow: visible !important;
+}
+
+.dashboard__inner {
+    overflow: visible !important;
+}
+
+/* Memo Dropdown Styles */
 .memo-dropdown {
     position: relative;
     z-index: 1000;
-    overflow: visible;
+    overflow: visible !important;
 }
 
 .memo-dropdown > a {
-    display: flex;
+    display: flex !important;
     align-items: center;
     justify-content: space-between;
     position: relative;
     z-index: 1001;
+    width: 100%;
 }
 
 .dropdown-arrow {
     transition: transform 0.3s ease;
-    margin-left: auto;
+    margin-left: 8px;
+    width: 16px !important;
+    height: 16px !important;
+    flex-shrink: 0;
 }
 
 .memo-submenu {
     display: none;
-    position: absolute;
-    left: 0;
-    top: 100%;
+    position: fixed;
+    left: auto;
+    top: auto;
     background: #fff;
     border: 1px solid #e9ecef;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    min-width: 280px;
-    z-index: 9999;
-    padding: 8px 0;
-    margin-top: 5px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+    min-width: 300px;
+    max-width: 350px;
+    z-index: 99999;
+    padding: 12px 0;
+    margin: 0;
     overflow: visible;
-    white-space: nowrap;
+    list-style: none;
 }
 
 .memo-submenu li {
     list-style: none;
     margin: 0;
+    padding: 0;
+    border: none;
 }
 
 .memo-submenu a {
-    display: flex;
+    display: flex !important;
     align-items: center;
-    justify-content: space-between;
-    padding: 12px 20px;
-    color: #333;
+    gap: 12px;
+    padding: 14px 20px;
+    color: #333 !important;
     text-decoration: none;
-    transition: background-color 0.2s ease;
-    border-radius: 0;
-    border: none;
+    transition: all 0.2s ease;
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100%;
     white-space: nowrap;
-    overflow: visible;
-    min-width: 100%;
 }
 
 .memo-submenu a:hover {
-    background-color: #f8f9fa;
-    color: #007bff;
+    background-color: #f8f9fa !important;
+    color: #007bff !important;
+    box-shadow: none !important;
+    transform: none !important;
 }
 
 .memo-submenu a.active {
-    background-color: #e3f2fd;
-    color: #1976d2;
+    background-color: #e3f2fd !important;
+    color: #1976d2 !important;
 }
 
 .memo-submenu a i {
-    margin-right: 10px;
-    width: 16px;
+    font-size: 18px;
+    flex-shrink: 0;
 }
 
-.badge {
-    font-size: 0.7rem;
-    padding: 2px 6px;
-    border-radius: 10px;
+.memo-submenu .badge {
+    font-size: 0.65rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    margin-left: auto;
+    background-color: #007bff !important;
+    color: white !important;
 }
 
-.dashboard__label {
+.memo-submenu .dashboard__label {
     background: #007bff;
     color: white;
-    padding: 2px 6px;
-    border-radius: 10px;
-    font-size: 0.7rem;
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.65rem;
     margin-left: auto;
+    flex-shrink: 0;
 }
 
-/* Ensure dropdown works on mobile */
+/* Show dropdown below trigger button */
+.memo-dropdown.open .memo-submenu {
+    display: block;
+}
+
+/* Ensure dropdown doesn't get cut off */
+body {
+    overflow-x: visible;
+}
+
+/* Mobile responsive */
 @media (max-width: 768px) {
     .memo-submenu {
         position: fixed;
         left: 10px;
         right: 10px;
         top: auto;
-        bottom: 10px;
+        bottom: auto;
         min-width: auto;
-        max-height: 200px;
-        overflow-y: auto;
+        max-width: none;
     }
 }
 
-/* Debug styles - remove after testing */
-.memo-dropdown:hover .memo-submenu {
-    /* Uncomment this line to debug: display: block !important; */
+/* Additional fix for list item styling */
+.dashboard__nav ul li.memo-dropdown {
+    overflow: visible !important;
+}
+
+.dashboard__nav ul li.memo-dropdown:hover {
+    overflow: visible !important;
 }
 </style>
