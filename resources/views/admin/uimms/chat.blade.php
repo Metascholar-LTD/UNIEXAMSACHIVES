@@ -1347,28 +1347,26 @@
 .attachment-btn {
     width: 40px;
     height: 40px;
-    border-radius: 50%;
-    background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
-    border: none;
+    border-radius: 8px;
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
     margin-right: 8px;
 }
 
 .attachment-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
-    background: linear-gradient(135deg, #495057 0%, #343a40 100%);
+    background: #e9ecef;
+    border-color: #dee2e6;
 }
 
 .attachment-icon {
     width: 20px;
     height: 20px;
-    stroke: white;
+    stroke: #6c757d;
     stroke-width: 2;
     fill: none;
 }
