@@ -64,14 +64,14 @@
                                 <div class="chat-title">
                                     <h4>{{ $memo->subject }}</h4>
                                 </div>
-                                <div class="chat-participants"> <span class="recipients-count">Participants:</span>
+                                <div class="chat-participants">
                                     @foreach($memo->recipients as $participant)
                                         <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
                                              alt="{{ $participant->user->first_name }}" 
                                              class="participant-avatar"
                                              title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
                                     @endforeach
-                                    <span class="recipients-count">{{ $memo->recipients->count() }} people</span>
+                                    <span class="recipients-count">{{ $memo->recipients->count() }} Recipients</span>
                                 </div>
                             </div>
                         </div>
