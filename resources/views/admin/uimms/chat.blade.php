@@ -66,7 +66,7 @@
                                 </div>
                                 <div class="chat-participants">
                                     @foreach($memo->recipients as $participant)
-                                        <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                        Recipients: <img src="{{ $participant->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
                                              alt="{{ $participant->user->first_name }}" 
                                              class="participant-avatar"
                                              title="{{ $participant->user->first_name }} {{ $participant->user->last_name }}">
