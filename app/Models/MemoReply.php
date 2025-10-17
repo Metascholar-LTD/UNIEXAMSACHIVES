@@ -17,12 +17,15 @@ class MemoReply extends Model
         'attachments',
         'is_read',
         'read_at',
+        'reply_mode',
+        'specific_recipients',
     ];
 
     protected $casts = [
         'attachments' => 'array',
         'is_read' => 'boolean',
         'read_at' => 'datetime',
+        'specific_recipients' => 'array',
     ];
 
     /**

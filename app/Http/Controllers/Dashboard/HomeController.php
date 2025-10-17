@@ -831,8 +831,16 @@ class HomeController extends Controller
         try {
             // First try to get memos with UIMMS data
             $memos = EmailCampaign::with(['creator', 'currentAssignee', 'recipients.user', 'replies.user'])
-                ->whereHas('recipients', function($query) use ($userId) {
-                    $query->where('user_id', $userId);
+                ->where(function($query) use ($userId) {
+                    // User is a recipient of the memo
+                    $query->whereHas('recipients', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    })
+                    // OR user has received specific replies in this memo
+                    ->orWhereHas('replies', function($subQuery) use ($userId) {
+                        $subQuery->where('reply_mode', 'specific')
+                                ->whereJsonContains('specific_recipients', (string)$userId);
+                    });
                 })
                 ->where(function($query) use ($status) {
                     if ($status === 'pending') {
@@ -899,6 +907,27 @@ class HomeController extends Controller
                 'replies.user'
             ]);
 
+            // Filter replies based on user visibility
+            $memo->replies = $memo->replies->filter(function ($reply) use ($userId) {
+                // User can always see their own messages
+                if ($reply->user_id === $userId) {
+                    return true;
+                }
+                
+                // For 'all' replies, everyone can see them
+                if ($reply->reply_mode === 'all') {
+                    return true;
+                }
+                
+                // For 'specific' replies, only the sender and specific recipients can see them
+                if ($reply->reply_mode === 'specific' && $reply->specific_recipients) {
+                    return in_array($userId, $reply->specific_recipients);
+                }
+                
+                // Default: show the message (fallback for old messages without reply_mode)
+                return true;
+            });
+
             // Get all users for assignment dropdown
             $users = User::where('is_approve', true)
                 ->where('id', '!=', $userId)
@@ -929,6 +958,8 @@ class HomeController extends Controller
             'message' => 'required|string|max:5000',
             'attachments' => 'nullable|array|max:5',
             'attachments.*' => 'file|max:10240|mimes:pdf,doc,docx,txt,jpg,jpeg,png,gif',
+            'reply_mode' => 'required|in:all,specific',
+            'specific_recipients' => 'nullable|string',
         ]);
 
         $attachments = [];
@@ -944,28 +975,51 @@ class HomeController extends Controller
             }
         }
 
+        // Process specific recipients
+        $specificRecipients = null;
+        if ($request->reply_mode === 'specific' && $request->specific_recipients) {
+            $specificRecipients = explode(',', $request->specific_recipients);
+            $specificRecipients = array_filter(array_map('trim', $specificRecipients));
+        }
+
         $reply = MemoReply::create([
             'campaign_id' => $memo->id,
             'user_id' => $userId,
             'message' => $request->message,
             'attachments' => $attachments,
+            'reply_mode' => $request->reply_mode,
+            'specific_recipients' => $specificRecipients,
         ]);
 
         // Update last activity for all active participants
         $memo->activeParticipants()->update(['last_activity_at' => now()]);
 
-        // Create notifications for other active participants
-        $otherParticipants = $memo->activeParticipants()
-            ->where('user_id', '!=', $userId)
-            ->with('user')
-            ->get();
+        // Create notifications based on reply mode
+        if ($request->reply_mode === 'all') {
+            // Notify all other active participants
+            $otherParticipants = $memo->activeParticipants()
+                ->where('user_id', '!=', $userId)
+                ->with('user')
+                ->get();
+        } else {
+            // Notify only specific recipients
+            $otherParticipants = $memo->activeParticipants()
+                ->where('user_id', '!=', $userId)
+                ->whereIn('user_id', $specificRecipients)
+                ->with('user')
+                ->get();
+        }
 
         foreach ($otherParticipants as $participant) {
+            $notificationMessage = $request->reply_mode === 'specific' 
+                ? Auth::user()->first_name . ' sent you a direct message in: ' . $memo->subject
+                : Auth::user()->first_name . ' sent a message in: ' . $memo->subject;
+                
             Notification::create([
                 'user_id' => $participant->user_id,
                 'type' => 'memo_message',
-                'title' => 'New Message in Memo',
-                'message' => Auth::user()->first_name . ' sent a message in: ' . $memo->subject,
+                'title' => $request->reply_mode === 'specific' ? 'Direct Message in Memo' : 'New Message in Memo',
+                'message' => $notificationMessage,
                 'url' => route('dashboard.uimms.chat', $memo->id),
                 'data' => [
                     'memo_id' => $memo->id,

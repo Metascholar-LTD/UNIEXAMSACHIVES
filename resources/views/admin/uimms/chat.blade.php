@@ -87,6 +87,20 @@
                                         <div class="message-content">
                                             <div class="message-header">
                                                 <span class="message-sender">{{ $message->user->first_name }} {{ $message->user->last_name }}</span>
+                                                @if($message->reply_mode === 'specific' && $message->specific_recipients)
+                                                    @php
+                                                        $recipientNames = [];
+                                                        foreach($message->specific_recipients as $recipientId) {
+                                                            $participant = $memo->active_participants->firstWhere('user.id', $recipientId);
+                                                            if($participant) {
+                                                                $recipientNames[] = $participant['user']['first_name'] . ' ' . $participant['user']['last_name'];
+                                                            }
+                                                        }
+                                                    @endphp
+                                                    <span class="reply-to-indicator">to {{ implode(', ', $recipientNames) }}</span>
+                                                @elseif($message->reply_mode === 'all')
+                                                    <span class="reply-to-indicator">to All</span>
+                                                @endif
                                                 <span class="message-time">{{ $message->created_at->format('M d, Y H:i') }}</span>
                                             </div>
                                             <div class="message-text">{!! nl2br(e($message->message)) !!}</div>
@@ -619,27 +633,30 @@
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 20px;
-    color: white;
+    color: #333;
     font-size: 0.85rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
     backdrop-filter: blur(10px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .reply-mode-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: #e3f2fd;
+    border-color: #1976d2;
     transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .reply-mode-btn.active {
-    background: rgba(255, 255, 255, 0.9);
-    color: #1976d2;
-    border-color: rgba(255, 255, 255, 0.9);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: #1976d2;
+    color: white;
+    border-color: #1976d2;
+    box-shadow: 0 4px 12px rgba(25, 118, 210, 0.3);
 }
 
 .reply-mode-btn i {
