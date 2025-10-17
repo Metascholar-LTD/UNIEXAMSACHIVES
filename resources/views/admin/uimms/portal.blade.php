@@ -431,34 +431,50 @@
                                             font-weight: 500;
                                         }
                                         
+                                        .memo-right-section {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 12px;
+                                        }
+                                        
                                         .memo-participants {
                                             display: flex;
                                             align-items: center;
-                                            gap: 6px;
+                                            gap: 4px;
                                             background: #f8f9fa;
-                                            padding: 4px 8px;
-                                            border-radius: 12px;
+                                            padding: 3px 6px;
+                                            border-radius: 10px;
                                             border: 1px solid #e9ecef;
                                         }
                                         
                                         .memo-participants i {
                                             color: #6c757d;
-                                            font-size: 0.8rem;
+                                            font-size: 0.7rem;
                                         }
                                         
                                         .participant-avatar-small {
-                                            width: 22px;
-                                            height: 22px;
+                                            width: 18px;
+                                            height: 18px;
                                             border-radius: 50%;
                                             object-fit: cover;
-                                            border: 2px solid #fff;
-                                            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                                            border: 1px solid #fff;
+                                            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+                                        }
+                                        
+                                        .participant-count {
+                                            font-size: 0.7rem;
+                                            color: #6c757d;
+                                            font-weight: 600;
+                                            background: #e9ecef;
+                                            padding: 2px 6px;
+                                            border-radius: 8px;
+                                            margin-left: 2px;
                                         }
                                         
                                         .memo-right-badges {
                                             display: flex;
                                             align-items: center;
-                                            gap: 8px;
+                                            gap: 6px;
                                         }
                                         
                                         .memo-status-badge {
@@ -627,9 +643,23 @@
                                                                             <div class="memo-sender-info">
                                                                                 <h5>${creatorName}</h5>
                                                                             </div>
-                                                                            <div class="memo-right-badges">
-                                                                                <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
-                                                                                ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
+                                                                            <div class="memo-right-section">
+                                                                                ${participants.length > 1 ? `
+                                                                                    <div class="memo-participants">
+                                                                                        <i class="icofont-users"></i>
+                                                                                        ${participants.slice(0, 4).map(p => `
+                                                                                            <img src="${p.user?.profile_picture_url || '/profile_pictures/default-profile.png'}" 
+                                                                                                 alt="${p.user?.first_name || 'User'}" 
+                                                                                                 class="participant-avatar-small"
+                                                                                                 title="${p.user?.first_name || ''} ${p.user?.last_name || ''}">
+                                                                                        `).join('')}
+                                                                                        ${participants.length > 4 ? `<span class="participant-count">+${participants.length - 4}</span>` : ''}
+                                                                                    </div>
+                                                                                ` : ''}
+                                                                                <div class="memo-right-badges">
+                                                                                    <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
+                                                                                    ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
+                                                                                </div>
                                                                             </div>
                                                                         </div>
                                                                         <div class="memo-subject">${memo.subject}</div>
@@ -637,18 +667,6 @@
                                                                         <div class="memo-footer">
                                                                             <div class="memo-left-info">
                                                                                 <span class="chat__time">${lastMessageTime}</span>
-                                                                                ${participants.length > 1 ? `
-                                                                                    <div class="memo-participants">
-                                                                                        <i class="icofont-users"></i>
-                                                                                        ${participants.slice(0, 3).map(p => `
-                                                                                            <img src="${p.user?.profile_picture_url || '/profile_pictures/default-profile.png'}" 
-                                                                                                 alt="${p.user?.first_name || 'User'}" 
-                                                                                                 class="participant-avatar-small"
-                                                                                                 title="${p.user?.first_name || ''} ${p.user?.last_name || ''}">
-                                                                                        `).join('')}
-                                                                                        ${participants.length > 3 ? `<span style="font-size: 0.75rem; color: #6c757d; font-weight: 500;">+${participants.length - 3}</span>` : ''}
-                                                                                    </div>
-                                                                                ` : ''}
                                                                             </div>
                                                                         </div>
                                                                     </div>
