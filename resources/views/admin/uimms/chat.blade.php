@@ -2108,10 +2108,16 @@ function clearAllFiles() {
 document.getElementById('chat-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
-    const formData = new FormData(this);
     const messageInput = document.getElementById('message-input');
     
     if (!messageInput.value.trim() && selectedFiles.length === 0) return;
+    
+    // Create FormData manually to avoid duplicate files
+    const formData = new FormData();
+    formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+    formData.append('message', messageInput.value);
+    formData.append('reply_mode', document.getElementById('reply-mode').value);
+    formData.append('specific_recipients', document.getElementById('specific-recipients').value);
     
     // Add selected files to formData
     selectedFiles.forEach((file, index) => {
