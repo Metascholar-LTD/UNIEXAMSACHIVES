@@ -1658,8 +1658,8 @@
 .telegram-style-input {
     display: flex;
     align-items: center;
-    background: #f0f8ff;
-    border: 2px solid #e3f2fd;
+    background: #f8f9fa;
+    border: 2px solid #e9ecef;
     border-radius: 25px;
     padding: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
