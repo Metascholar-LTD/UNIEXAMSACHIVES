@@ -166,8 +166,8 @@ class EmailCampaign extends Model
 
     public function assignTo($userId, $assignedBy, $office = null)
     {
-        // Deactivate current active participants
-        $this->activeParticipants()->update(['is_active_participant' => false]);
+        // Deactivate current active participants EXCEPT the assigner
+        $this->activeParticipants()->where('user_id', '!=', $assignedBy)->update(['is_active_participant' => false]);
         
         // Add new assignee as active participant
         $recipient = $this->recipients()->where('user_id', $userId)->first();
@@ -187,7 +187,7 @@ class EmailCampaign extends Model
             ]);
         }
 
-        // Ensure the assigner (person who made the assignment) is also an active participant
+        // Ensure the assigner (person who made the assignment) remains an active participant
         $assignerRecipient = $this->recipients()->where('user_id', $assignedBy)->first();
         if (!$assignerRecipient) {
             $assignerRecipient = $this->recipients()->create([
