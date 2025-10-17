@@ -1273,4 +1273,70 @@ class HomeController extends Controller
         // Return file view response
         return response()->file($filePath);
     }
+
+    public function downloadUimmsChatAttachment(MemoReply $reply, $index)
+    {
+        $userId = Auth::id();
+        
+        // Check if user has access to this chat reply
+        $memo = $reply->campaign;
+        $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+        $isCreator = $memo->created_by === $userId;
+        $isReplyAuthor = $reply->user_id === $userId;
+        
+        if (!$isRecipient && !$isCreator && !$isReplyAuthor) {
+            abort(403, 'Unauthorized access to this attachment.');
+        }
+        
+        $attachments = $reply->attachments;
+        
+        // Check if the attachment index is valid
+        if (!isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+        
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on server.');
+        }
+        
+        // Return file download response
+        return response()->download($filePath, $attachment['name']);
+    }
+
+    public function viewUimmsChatAttachment(MemoReply $reply, $index)
+    {
+        $userId = Auth::id();
+        
+        // Check if user has access to this chat reply
+        $memo = $reply->campaign;
+        $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+        $isCreator = $memo->created_by === $userId;
+        $isReplyAuthor = $reply->user_id === $userId;
+        
+        if (!$isRecipient && !$isCreator && !$isReplyAuthor) {
+            abort(403, 'Unauthorized access to this attachment.');
+        }
+        
+        $attachments = $reply->attachments;
+        
+        // Check if the attachment index is valid
+        if (!isset($attachments[$index])) {
+            abort(404, 'Attachment not found.');
+        }
+        
+        $attachment = $attachments[$index];
+        $filePath = storage_path('app/public/' . $attachment['path']);
+        
+        // Check if file exists
+        if (!file_exists($filePath)) {
+            abort(404, 'File not found on server.');
+        }
+        
+        // Return file view response
+        return response()->file($filePath);
+    }
 }

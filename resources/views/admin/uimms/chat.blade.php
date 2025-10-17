@@ -234,10 +234,10 @@
                                                         @if($isImage)
                                                             {{-- Image Attachment - Show preview --}}
                                                             <div class="attachment-image-wrapper">
-                                                                <img src="{{ asset('storage/' . $attachment['path']) }}" 
+                                                                <img src="{{ route('dashboard.uimms.chat.reply.attachment.view', ['reply' => $message->id, 'index' => $index]) }}" 
                                                                      alt="{{ $attachment['name'] }}"
                                                                      class="attachment-image"
-                                                                     onclick="viewImage('{{ asset('storage/' . $attachment['path']) }}', '{{ $attachment['name'] }}')">
+                                                                     onclick="viewImage('{{ route('dashboard.uimms.chat.reply.attachment.view', ['reply' => $message->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
                                                                 <div class="image-overlay">
                                                                     <i class="icofont-eye"></i>
                                                                 </div>
@@ -260,9 +260,8 @@
                                                                     <div class="file-name">{{ $attachment['name'] }}</div>
                                                                     <div class="file-size">{{ $fileSize }}</div>
                                                                 </div>
-                                                                <a href="{{ asset('storage/' . $attachment['path']) }}" 
+                                                                <a href="{{ route('dashboard.uimms.chat.reply.attachment.download', ['reply' => $message->id, 'index' => $index]) }}" 
                                                                    class="file-download-btn"
-                                                                   download="{{ $attachment['name'] }}"
                                                                    title="Download">
                                                                     <i class="icofont-download"></i>
                                                                 </a>
