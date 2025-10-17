@@ -737,9 +737,16 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
     max-height: 200px;
     overflow-y: auto;
-    z-index: 1000;
+    z-index: 9999;
     display: none;
     margin-top: 4px;
+}
+
+.recipients-dropdown-menu.dropdown-up {
+    top: auto;
+    bottom: 100%;
+    margin-top: 0;
+    margin-bottom: 4px;
 }
 
 .recipients-dropdown.active .recipients-dropdown-menu {
@@ -747,10 +754,25 @@
     animation: slideDown 0.2s ease-out;
 }
 
+.recipients-dropdown.active .recipients-dropdown-menu.dropdown-up {
+    animation: slideUp 0.2s ease-out;
+}
+
 @keyframes slideDown {
     from {
         opacity: 0;
         transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -1164,15 +1186,47 @@ function initializeDropdownFunctionality() {
     const dropdown = document.querySelector('.recipients-dropdown');
     const dropdownMenu = document.getElementById('recipients-dropdown-menu');
     
+    // Smart positioning function
+    function positionDropdown() {
+        const inputRect = searchInput.getBoundingClientRect();
+        const viewportHeight = window.innerHeight;
+        const dropdownHeight = 200; // max-height from CSS
+        const spaceBelow = viewportHeight - inputRect.bottom;
+        const spaceAbove = inputRect.top;
+        
+        // Remove existing positioning classes
+        dropdownMenu.classList.remove('dropdown-up');
+        
+        // Check if there's enough space below
+        if (spaceBelow < dropdownHeight && spaceAbove > spaceBelow) {
+            // Position above the input
+            dropdownMenu.classList.add('dropdown-up');
+            console.log('Positioning dropdown above input');
+        } else {
+            // Position below the input (default)
+            console.log('Positioning dropdown below input');
+        }
+    }
+    
     // Toggle dropdown on input focus/click
     searchInput.addEventListener('focus', function() {
         dropdown.classList.add('active');
         populateRecipientsList();
+        // Position dropdown after a short delay to ensure it's rendered
+        setTimeout(positionDropdown, 10);
     });
     
     searchInput.addEventListener('click', function() {
         dropdown.classList.add('active');
         populateRecipientsList();
+        setTimeout(positionDropdown, 10);
+    });
+    
+    // Reposition on window resize
+    window.addEventListener('resize', function() {
+        if (dropdown.classList.contains('active')) {
+            positionDropdown();
+        }
     });
     
     // Search functionality
