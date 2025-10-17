@@ -1671,14 +1671,14 @@
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    background: transparent;
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: none;
     margin-right: 8px;
 }
 
@@ -1690,7 +1690,7 @@
 .attachment-icon {
     width: 20px;
     height: 20px;
-    stroke: #1976d2;
+    stroke: white;
     stroke-width: 2;
     fill: none;
 }
