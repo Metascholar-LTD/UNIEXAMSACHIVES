@@ -655,13 +655,13 @@
                                                                                 ${participants.length > 1 ? `
                                                                                     <div class="memo-participants">
                                                                                         <i class="icofont-users"></i>
-                                                                                        ${participants.slice(0, 4).map(p => `
+                                                                                        ${participants.slice(0, 3).map(p => `
                                                                                             <img src="${p.user?.profile_picture_url || '/profile_pictures/default-profile.png'}" 
                                                                                                  alt="${p.user?.first_name || 'User'}" 
                                                                                                  class="participant-avatar-small"
                                                                                                  title="${p.user?.first_name || ''} ${p.user?.last_name || ''}">
                                                                                         `).join('')}
-                                                                                        ${participants.length > 4 ? `<span class="participant-count">+${participants.length - 4}</span>` : ''}
+                                                                                        ${participants.length > 3 ? `<span class="participant-count">+${participants.length - 3}</span>` : ''}
                                                                                     </div>
                                                                                 ` : ''}
                                                                                 <div class="memo-right-badges">
