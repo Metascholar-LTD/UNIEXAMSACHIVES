@@ -30,7 +30,7 @@
                                             <i class="icofont-chat"></i>
                                         </div>
                                         <div class="dashboard__card__text">
-                                            <h5>💬 Active Chats</h5>
+                                            <h5>💬 Pending Memos</h5>
                                             <h3 class="count" id="count-pending">{{ $pendingCount }}</h3>
                                             <p>Pending conversations</p>
                                         </div>
@@ -44,7 +44,7 @@
                                             <i class="icofont-pause"></i>
                                         </div>
                                         <div class="dashboard__card__text">
-                                            <h5>⏸️ Suspended</h5>
+                                            <h5>⏸️ Suspended Memos</h5>
                                             <h3 class="count" id="count-suspended">{{ $suspendedCount }}</h3>
                                             <p>Paused conversations</p>
                                         </div>
@@ -58,7 +58,7 @@
                                             <i class="icofont-check-circled"></i>
                                         </div>
                                         <div class="dashboard__card__text">
-                                            <h5>✅ Completed</h5>
+                                            <h5>✅ Completed Memos</h5>
                                             <h3 class="count" id="count-completed">{{ $completedCount }}</h3>
                                             <p>Finished conversations</p>
                                         </div>
@@ -72,7 +72,7 @@
                                             <i class="icofont-archive"></i>
                                         </div>
                                         <div class="dashboard__card__text">
-                                            <h5>📦 Archive</h5>
+                                            <h5>📦 Memos Archive</h5>
                                             <h3 class="count" id="count-archived">{{ $archivedCount }}</h3>
                                             <p>Old conversations</p>
                                         </div>
