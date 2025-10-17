@@ -86,10 +86,22 @@
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                     <div class="dashboard__meessage">
                                         <div class="dashboard__meessage__chat memos-toolbar">
-                                            <h3 class="memos-title" id="section-title">💬 Active Chats</h3>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="refreshMemos()">
-                                                <i class="icofont-refresh"></i> Refresh
-                                            </button>
+                                            <div class="memos-header-content">
+                                                <div class="memos-header-left">
+                                                    <div class="memos-icon-wrapper">
+                                                        <i class="icofont-chat"></i>
+                                                    </div>
+                                                    <div class="memos-header-text">
+                                                        <h3 class="memos-title" id="section-title">Active Chats</h3>
+                                                        <span class="memos-subtitle" id="section-subtitle">Manage your conversations</span>
+                                                    </div>
+                                                </div>
+                                                <div class="memos-header-right">
+                                                    <button class="btn btn-sm btn-outline-primary memos-refresh-btn" onclick="refreshMemos()">
+                                                        <i class="icofont-refresh"></i> Refresh
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </div>
 
                                         <div class="dashboard__meessage__contact" id="memos-container">
@@ -305,21 +317,142 @@
                                         }
                                         
                                         .memos-toolbar {
-                                            display: flex;
-                                            align-items: center;
-                                            justify-content: space-between;
-                                            gap: 12px;
                                             position: sticky;
                                             top: 0;
                                             z-index: 5;
-                                            background: #ffffff;
-                                            padding: 15px 20px;
-                                            border-bottom: 2px solid #eef2f7;
+                                            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                                            border-radius: 12px 12px 0 0;
+                                            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+                                            overflow: hidden;
+                                        }
+                                        
+                                        .memos-header-content {
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: space-between;
+                                            padding: 20px 25px;
+                                            gap: 20px;
+                                        }
+                                        
+                                        .memos-header-left {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 15px;
+                                        }
+                                        
+                                        .memos-icon-wrapper {
+                                            width: 50px;
+                                            height: 50px;
+                                            background: rgba(255, 255, 255, 0.2);
+                                            border-radius: 12px;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            backdrop-filter: blur(10px);
+                                            border: 1px solid rgba(255, 255, 255, 0.3);
+                                        }
+                                        
+                                        .memos-icon-wrapper i {
+                                            font-size: 24px;
+                                            color: white;
+                                        }
+                                        
+                                        .memos-header-text {
+                                            display: flex;
+                                            flex-direction: column;
+                                            gap: 2px;
                                         }
                                         
                                         .memos-title {
                                             margin: 0;
-                                            color: #333;
+                                            color: white;
+                                            font-size: 1.4rem;
+                                            font-weight: 600;
+                                            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+                                        }
+                                        
+                                        .memos-subtitle {
+                                            color: rgba(255, 255, 255, 0.8);
+                                            font-size: 0.9rem;
+                                            font-weight: 400;
+                                        }
+                                        
+                                        .memos-header-right {
+                                            display: flex;
+                                            align-items: center;
+                                        }
+                                        
+                                        .memos-refresh-btn {
+                                            background: rgba(255, 255, 255, 0.15);
+                                            border: 1px solid rgba(255, 255, 255, 0.3);
+                                            color: white;
+                                            backdrop-filter: blur(10px);
+                                            transition: all 0.3s ease;
+                                            border-radius: 8px;
+                                            padding: 8px 16px;
+                                            font-weight: 500;
+                                        }
+                                        
+                                        .memos-refresh-btn:hover {
+                                            background: rgba(255, 255, 255, 0.25);
+                                            border-color: rgba(255, 255, 255, 0.5);
+                                            color: white;
+                                            transform: translateY(-1px);
+                                            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                                        }
+                                        
+                                        .memos-refresh-btn i {
+                                            margin-right: 6px;
+                                        }
+                                        
+                                        /* Responsive Design for Header */
+                                        @media (max-width: 768px) {
+                                            .memos-header-content {
+                                                padding: 15px 20px;
+                                                gap: 15px;
+                                            }
+                                            
+                                            .memos-header-left {
+                                                gap: 12px;
+                                            }
+                                            
+                                            .memos-icon-wrapper {
+                                                width: 45px;
+                                                height: 45px;
+                                            }
+                                            
+                                            .memos-icon-wrapper i {
+                                                font-size: 20px;
+                                            }
+                                            
+                                            .memos-title {
+                                                font-size: 1.2rem;
+                                            }
+                                            
+                                            .memos-subtitle {
+                                                font-size: 0.8rem;
+                                            }
+                                            
+                                            .memos-refresh-btn {
+                                                padding: 6px 12px;
+                                                font-size: 0.85rem;
+                                            }
+                                        }
+                                        
+                                        @media (max-width: 480px) {
+                                            .memos-header-content {
+                                                flex-direction: column;
+                                                align-items: flex-start;
+                                                gap: 12px;
+                                            }
+                                            
+                                            .memos-header-right {
+                                                align-self: flex-end;
+                                            }
+                                            
+                                            .memos-header-left {
+                                                width: 100%;
+                                            }
                                         }
                                         
                                         .memo-item {
@@ -439,14 +572,23 @@
                                             });
                                             document.querySelector(`.uimms-card[data-status="${status}"]`).classList.add('active');
                                             
-                                            // Update section title
+                                            // Update section title and subtitle
                                             const titles = {
-                                                'pending': '💬 Active Chats',
-                                                'suspended': '⏸️ Suspended Conversations',
-                                                'completed': '✅ Completed Conversations',
-                                                'archived': '📦 Archived Conversations'
+                                                'pending': 'Active Chats',
+                                                'suspended': 'Suspended Conversations',
+                                                'completed': 'Completed Conversations',
+                                                'archived': 'Archived Conversations'
                                             };
+                                            
+                                            const subtitles = {
+                                                'pending': 'Manage your active conversations',
+                                                'suspended': 'View paused conversations',
+                                                'completed': 'Review finished conversations',
+                                                'archived': 'Browse old conversations'
+                                            };
+                                            
                                             document.getElementById('section-title').textContent = titles[status];
+                                            document.getElementById('section-subtitle').textContent = subtitles[status];
                                             
                                             // Show loading
                                             document.getElementById('memos-container').innerHTML = `
