@@ -316,6 +316,18 @@
                                 @csrf
                         <input type="hidden" name="reply_mode" id="reply-mode" value="all">
                         <input type="hidden" name="specific_recipients" id="specific-recipients" value="">
+                        
+                        {{-- File Preview Area --}}
+                        <div id="file-preview-area" class="file-preview-area" style="display: none;">
+                            <div class="file-preview-header">
+                                <span class="preview-title">Selected Files</span>
+                                <button type="button" class="clear-all-files-btn" onclick="clearAllFiles()">
+                                    <i class="icofont-close-line"></i> Clear All
+                                </button>
+                            </div>
+                            <div id="file-preview-list" class="file-preview-list"></div>
+                        </div>
+                        
                         <div class="telegram-style-input">
                                     <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()">
                                         <svg viewBox="0 0 24 24" class="attachment-icon">
@@ -1507,6 +1519,142 @@
     border: 1px solid #bbdefb;
 }
 
+/* File Preview Area */
+.file-preview-area {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.file-preview-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.preview-title {
+    font-weight: 600;
+    color: #495057;
+    font-size: 0.9rem;
+}
+
+.clear-all-files-btn {
+    background: #dc3545;
+    color: white;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    transition: all 0.2s ease;
+}
+
+.clear-all-files-btn:hover {
+    background: #c82333;
+    transform: scale(1.05);
+}
+
+.file-preview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.file-preview-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #e9ecef;
+}
+
+.file-preview-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    border-radius: 8px;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.file-preview-icon.image {
+    background: #e7f3ff;
+    color: #0066cc;
+}
+
+.file-preview-icon.pdf {
+    background: #ffe7e7;
+    color: #dc3545;
+}
+
+.file-preview-icon.document {
+    background: #e7f0ff;
+    color: #0066cc;
+}
+
+.file-preview-icon.spreadsheet {
+    background: #e7ffe7;
+    color: #28a745;
+}
+
+.file-preview-icon.other {
+    background: #f0f0f0;
+    color: #6c757d;
+}
+
+.file-preview-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-preview-name {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.file-preview-size {
+    font-size: 0.75rem;
+    color: #6c757d;
+}
+
+.file-preview-remove {
+    width: 28px;
+    height: 28px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(220, 53, 69, 0.1);
+    border: none;
+    border-radius: 50%;
+    color: #dc3545;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.file-preview-remove:hover {
+    background: #dc3545;
+    color: white;
+    transform: scale(1.1);
+}
+
 .telegram-style-input {
     display: flex;
     align-items: center;
@@ -1873,13 +2021,101 @@ function initializeDropdownFunctionality() {
 }
 
 // Send message
+// File Handling
+let selectedFiles = [];
+
+document.getElementById('file-input').addEventListener('change', function(e) {
+    const files = Array.from(e.target.files);
+    files.forEach(file => {
+        if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+            selectedFiles.push(file);
+        }
+    });
+    updateFilePreview();
+});
+
+function updateFilePreview() {
+    const previewArea = document.getElementById('file-preview-area');
+    const previewList = document.getElementById('file-preview-list');
+    
+    if (selectedFiles.length === 0) {
+        previewArea.style.display = 'none';
+        return;
+    }
+    
+    previewArea.style.display = 'block';
+    previewList.innerHTML = '';
+    
+    selectedFiles.forEach((file, index) => {
+        const fileType = getFileType(file);
+        const fileSize = formatFileSize(file.size);
+        
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-preview-item';
+        fileItem.innerHTML = `
+            <div class="file-preview-icon ${fileType}">
+                ${getFileIcon(fileType)}
+            </div>
+            <div class="file-preview-info">
+                <div class="file-preview-name">${file.name}</div>
+                <div class="file-preview-size">${fileSize}</div>
+            </div>
+            <button type="button" class="file-preview-remove" onclick="removeFile(${index})">
+                <i class="icofont-close"></i>
+            </button>
+        `;
+        previewList.appendChild(fileItem);
+    });
+}
+
+function getFileType(file) {
+    if (file.type.startsWith('image/')) return 'image';
+    if (file.type.includes('pdf')) return 'pdf';
+    if (file.type.includes('word') || file.type.includes('document')) return 'document';
+    if (file.type.includes('sheet') || file.type.includes('excel')) return 'spreadsheet';
+    return 'other';
+}
+
+function getFileIcon(type) {
+    const icons = {
+        image: '<i class="icofont-image"></i>',
+        pdf: '<i class="icofont-file-pdf"></i>',
+        document: '<i class="icofont-file-document"></i>',
+        spreadsheet: '<i class="icofont-file-excel"></i>',
+        other: '<i class="icofont-file-alt"></i>'
+    };
+    return icons[type] || icons.other;
+}
+
+function formatFileSize(bytes) {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
+}
+
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    updateFilePreview();
+}
+
+function clearAllFiles() {
+    selectedFiles = [];
+    document.getElementById('file-input').value = '';
+    updateFilePreview();
+}
+
 document.getElementById('chat-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
     const formData = new FormData(this);
     const messageInput = document.getElementById('message-input');
     
-    if (!messageInput.value.trim()) return;
+    if (!messageInput.value.trim() && selectedFiles.length === 0) return;
+    
+    // Add selected files to formData
+    selectedFiles.forEach((file, index) => {
+        formData.append('attachments[]', file);
+    });
     
     // Show typing indicator
     showTypingIndicator();
@@ -1897,6 +2133,7 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
             addMessageToChat(data.message);
             messageInput.value = '';
             messageInput.style.height = 'auto';
+            clearAllFiles();
             hideTypingIndicator();
         }
     })
