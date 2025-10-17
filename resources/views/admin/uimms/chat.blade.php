@@ -300,9 +300,11 @@
     font-size: 13px;
     font-weight: bold;
     margin: 3px;
-    padding: 10px;
+    padding: 10px 15px;
     text-transform: uppercase;
     transition: all 0.2s ease;
+    text-align: center;
+    min-width: 80px;
 }
 
 .chat-actions .btn-outline-primary:hover {
@@ -342,9 +344,11 @@
     font-size: 13px;
     font-weight: bold;
     margin: 3px;
-    padding: 10px;
+    padding: 10px 15px;
     text-transform: uppercase;
     transition: all 0.2s ease;
+    text-align: center;
+    min-width: 80px;
 }
 
 .chat-actions .btn-outline-success:hover,
