@@ -89,8 +89,13 @@
                                             <div class="memos-title-container">
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
                                             </div>
-                                            <button class="btn btn-sm btn-outline-primary" onclick="refreshMemos()">
-                                                <i class="icofont-refresh"></i> Refresh
+                                            <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
+                                                <div class="svgWrapper">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                        <path stroke="#fff" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                                    </svg>
+                                                    <div class="text">Refresh</div>
+                                                </div>
                                             </button>
                                         </div>
 
@@ -325,21 +330,21 @@
                                         }
                                         
                                         .memos-badge {
-                                            background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-                                            color: white;
+                                            background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+                                            color: #1976d2;
                                             padding: 8px 16px;
                                             border-radius: 20px;
                                             font-size: 0.9rem;
                                             font-weight: 600;
-                                            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-                                            border: 2px solid rgba(255, 255, 255, 0.2);
+                                            box-shadow: 0 2px 8px rgba(33, 150, 243, 0.15);
+                                            border: 2px solid rgba(33, 150, 243, 0.2);
                                             display: inline-block;
                                             transition: all 0.3s ease;
                                         }
                                         
                                         .memos-badge:hover {
-                                            transform: translateY(-1px);
-                                            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
+                                            background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+                                            box-shadow: 0 4px 12px rgba(33, 150, 243, 0.2);
                                         }
                                         
                                         .memo-item {
@@ -439,6 +444,83 @@
                                             padding: 4px 8px;
                                             border-radius: 10px;
                                             font-size: 0.7rem;
+                                        }
+
+                                        /* Responsive Button Styling */
+                                        .responsive-btn {
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: flex-start;
+                                            width: 45px;
+                                            height: 45px;
+                                            border: none;
+                                            border-radius: 50%;
+                                            cursor: pointer;
+                                            position: relative;
+                                            overflow: hidden;
+                                            transition-duration: 0.3s;
+                                            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.199);
+                                            background-color: #1a4a9b;
+                                            text-decoration: none;
+                                            flex-shrink: 0;
+                                        }
+
+                                        .responsive-btn:hover {
+                                            width: 160px;
+                                            border-radius: 40px;
+                                            transition-duration: 0.3s;
+                                            text-decoration: none;
+                                        }
+
+                                        .responsive-btn .svgWrapper {
+                                            width: 100%;
+                                            transition-duration: 0.3s;
+                                            display: flex;
+                                            align-items: center;
+                                            justify-content: center;
+                                            flex-shrink: 0;
+                                        }
+
+                                        .responsive-btn .svgIcon {
+                                            width: 17px;
+                                            flex-shrink: 0;
+                                        }
+
+                                        .responsive-btn .text {
+                                            position: absolute;
+                                            left: 50px;
+                                            width: 100px;
+                                            opacity: 0;
+                                            color: white;
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            transition-duration: 0.3s;
+                                            white-space: nowrap;
+                                            text-align: left;
+                                            padding-right: 10px;
+                                        }
+
+                                        .responsive-btn:hover .svgWrapper {
+                                            width: 45px;
+                                            transition-duration: 0.3s;
+                                            padding-left: 0;
+                                        }
+
+                                        .responsive-btn:hover .text {
+                                            opacity: 1;
+                                            transition-duration: 0.3s;
+                                        }
+
+                                        .responsive-btn:active {
+                                            transform: translate(2px, 2px);
+                                        }
+
+                                        .refresh-btn {
+                                            background-color: #1a4a9b;
+                                        }
+
+                                        .refresh-btn:hover {
+                                            background-color: #1a4a9b;
                                         }
                                         </style>
 
