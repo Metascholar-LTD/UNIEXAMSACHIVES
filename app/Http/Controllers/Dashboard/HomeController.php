@@ -907,6 +907,14 @@ class HomeController extends Controller
                 'replies.user'
             ]);
 
+            // Set up active participants for the view
+            $memo->active_participants = $memo->recipients->map(function($recipient) {
+                return [
+                    'user' => $recipient->user,
+                    'is_active_participant' => $recipient->is_active_participant ?? true
+                ];
+            });
+
             // Filter replies based on user visibility
             $memo->replies = $memo->replies->filter(function ($reply) use ($userId) {
                 // User can always see their own messages
