@@ -2110,7 +2110,6 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
     const formData = new FormData(this);
     const messageInput = document.getElementById('message-input');
     
-    // Allow sending if there's either text or files
     if (!messageInput.value.trim() && selectedFiles.length === 0) return;
     
     // Add selected files to formData
