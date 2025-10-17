@@ -1023,7 +1023,6 @@ function initializeReplyMode() {
     
     // Fallback: if active_participants is empty, try to get from recipients
     if (!memoParticipants || memoParticipants.length === 0) {
-        console.log('No active_participants found, trying recipients...');
         memoParticipants = @json($memo->recipients ?? []);
         
         // Transform recipients to match expected format
@@ -1035,9 +1034,6 @@ function initializeReplyMode() {
         }
     }
     
-    // Debug logging
-    console.log('Memo participants loaded:', memoParticipants);
-    console.log('Number of participants:', memoParticipants.length);
     
     // Set up reply mode button handlers
     document.querySelectorAll('.reply-mode-btn').forEach(btn => {
@@ -1081,16 +1077,8 @@ function populateRecipientsList() {
     const dropdownMenu = document.getElementById('recipients-dropdown-menu');
     dropdownMenu.innerHTML = '';
     
-    console.log('Populating recipients list...');
-    console.log('Available participants:', memoParticipants);
-    
-    let addedCount = 0;
     memoParticipants.forEach(participant => {
-        console.log('Processing participant:', participant);
-        
         if (participant.user && participant.user.id !== {{ Auth::id() }}) {
-            console.log('Adding participant to dropdown:', participant.user.first_name, participant.user.last_name);
-            
             const recipientOption = document.createElement('div');
             recipientOption.className = 'recipient-option';
             recipientOption.dataset.userId = participant.user.id;
@@ -1109,13 +1097,8 @@ function populateRecipientsList() {
             });
             
             dropdownMenu.appendChild(recipientOption);
-            addedCount++;
-        } else {
-            console.log('Skipping participant (no user data or current user):', participant);
         }
     });
-    
-    console.log(`Added ${addedCount} recipients to dropdown`);
 }
 
 function toggleRecipientSelection(userId, element) {
@@ -1214,11 +1197,9 @@ function initializeDropdownFunctionality() {
             // Position above the input
             dropdownMenu.style.top = (inputRect.top - dropdownHeight - 4) + 'px';
             dropdownMenu.classList.add('dropdown-up');
-            console.log('Positioning dropdown above input at:', inputRect.top - dropdownHeight - 4);
         } else {
             // Position below the input (default)
             dropdownMenu.style.top = (inputRect.bottom + 4) + 'px';
-            console.log('Positioning dropdown below input at:', inputRect.bottom + 4);
         }
     }
     
