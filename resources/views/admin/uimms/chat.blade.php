@@ -570,7 +570,7 @@
 }
 
 .chat-input-container {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #f8f9fa;
     border: none;
     border-radius: 0 0 8px 8px;
     padding: 20px;
@@ -585,8 +585,8 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="20" font-size="12" fill="rgba(255,255,255,0.1)">x² + y² = r²</text><text x="60" y="40" font-size="10" fill="rgba(255,255,255,0.08)">∫f(x)dx</text><text x="20" y="70" font-size="14" fill="rgba(255,255,255,0.06)">α + β = γ</text><text x="70" y="90" font-size="8" fill="rgba(255,255,255,0.05)">∂/∂x</text></svg>');
-    opacity: 0.3;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text x="10" y="20" font-size="12" fill="rgba(0,0,0,0.03)">x² + y² = r²</text><text x="60" y="40" font-size="10" fill="rgba(0,0,0,0.02)">∫f(x)dx</text><text x="20" y="70" font-size="14" fill="rgba(0,0,0,0.02)">α + β = γ</text><text x="70" y="90" font-size="8" fill="rgba(0,0,0,0.01)">∂/∂x</text></svg>');
+    opacity: 0.5;
     pointer-events: none;
 }
 
