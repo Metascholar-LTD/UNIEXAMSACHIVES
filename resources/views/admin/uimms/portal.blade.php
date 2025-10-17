@@ -318,12 +318,10 @@
                                             gap: 12px;
                                             position: sticky;
                                             top: 0;
-                                            z-index: 100;
+                                            z-index: 5;
                                             background: #f8f9fa;
                                             padding: 15px 20px;
                                             border-bottom: 2px solid #eef2f7;
-                                            backdrop-filter: blur(10px);
-                                            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
                                         }
                                         
                                         .memos-title-container {
