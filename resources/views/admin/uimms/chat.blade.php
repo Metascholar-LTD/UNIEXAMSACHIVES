@@ -283,31 +283,44 @@
     align-items: center;
 }
 
-/* Assign Button - Keep Original Style */
+/* Assign Button - Neumorphic Style */
 .chat-actions .btn-outline-primary {
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    color: white;
+    background-color: #e4e4e4;
     border: none;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 6px 12px;
+    border-radius: 10px;
+    box-shadow: inset 5px 5px 5px #c4c4c4,
+                inset -5px -5px 5px #ffffff;
+    color: #007bff;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-size: 13px;
+    font-weight: bold;
+    margin: 3px;
+    padding: 10px;
+    text-transform: uppercase;
     transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-    text-transform: none;
-    letter-spacing: 0.3px;
 }
 
 .chat-actions .btn-outline-primary:hover {
-    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
-    color: white;
-    transform: translateY(-1px);
-    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    background-color: #007bff;
+    color: #e4e4e4;
+    box-shadow: none;
 }
 
-.chat-actions .btn-outline-primary:active {
-    transform: translateY(0);
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+.chat-actions .btn-outline-primary i {
+    color: #007bff;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    font-size: 16px;
+}
+
+.chat-actions .btn-outline-primary:hover i {
+    color: #e4e4e4;
 }
 
 /* Neumorphic Button Styling for Complete, Suspend, Archive */
