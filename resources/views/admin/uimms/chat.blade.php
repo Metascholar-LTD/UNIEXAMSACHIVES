@@ -299,7 +299,8 @@
                                         </svg>
                                     </button>
                                     
-                                    <input type="file" id="file-input" name="attachments[]" multiple style="display: none;">
+                                    <input type="file" id="file-input" name="attachments[]" multiple style="display: none;" onchange="showSelectedFiles(this)">
+                                    <div id="selected-files" class="selected-files" style="display: none;"></div>
                                 </div>
                             </form>
                         </div>
@@ -1348,7 +1349,7 @@
     width: 40px;
     height: 40px;
     border-radius: 8px;
-    background: #f8f9fa;
+    background: #ffffff;
     border: 1px solid #e9ecef;
     display: flex;
     align-items: center;
@@ -1359,16 +1360,68 @@
 }
 
 .attachment-btn:hover {
-    background: #e9ecef;
+    background: #f8f9fa;
     border-color: #dee2e6;
 }
 
 .attachment-icon {
     width: 20px;
     height: 20px;
-    stroke: #6c757d;
+    stroke: #000000;
     stroke-width: 2;
     fill: none;
+}
+
+/* Selected Files Display */
+.selected-files {
+    margin-top: 8px;
+    padding: 8px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.selected-file-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 4px 8px;
+    margin: 2px 0;
+    background: #ffffff;
+    border-radius: 4px;
+    border: 1px solid #e9ecef;
+    font-size: 0.85rem;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #333;
+    flex: 1;
+    margin-right: 8px;
+}
+
+.file-size {
+    color: #666;
+    font-size: 0.8rem;
+    margin-right: 8px;
+}
+
+.remove-file {
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-file:hover {
+    background: #c82333;
 }
 
 .input-field-wrapper {
@@ -1696,6 +1749,46 @@ function initializeDropdownFunctionality() {
     });
 }
 
+// Show selected files
+function showSelectedFiles(input) {
+    const selectedFilesDiv = document.getElementById('selected-files');
+    const files = input.files;
+    
+    if (files.length > 0) {
+        selectedFilesDiv.innerHTML = '';
+        selectedFilesDiv.style.display = 'block';
+        
+        for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const fileItem = document.createElement('div');
+            fileItem.className = 'selected-file-item';
+            fileItem.innerHTML = `
+                <span class="file-name">${file.name}</span>
+                <span class="file-size">(${(file.size / 1024).toFixed(1)} KB)</span>
+                <button type="button" class="remove-file" onclick="removeFile(${i})">×</button>
+            `;
+            selectedFilesDiv.appendChild(fileItem);
+        }
+    } else {
+        selectedFilesDiv.style.display = 'none';
+    }
+}
+
+// Remove file from selection
+function removeFile(index) {
+    const fileInput = document.getElementById('file-input');
+    const dt = new DataTransfer();
+    
+    for (let i = 0; i < fileInput.files.length; i++) {
+        if (i !== index) {
+            dt.items.add(fileInput.files[i]);
+        }
+    }
+    
+    fileInput.files = dt.files;
+    showSelectedFiles(fileInput);
+}
+
 // Send message
 document.getElementById('chat-form').addEventListener('submit', function(e) {
     e.preventDefault();
@@ -1721,6 +1814,12 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
             addMessageToChat(data.message);
             messageInput.value = '';
             messageInput.style.height = 'auto';
+            
+            // Clear selected files
+            document.getElementById('file-input').value = '';
+            document.getElementById('selected-files').style.display = 'none';
+            document.getElementById('selected-files').innerHTML = '';
+            
             hideTypingIndicator();
         }
     })
