@@ -90,23 +90,12 @@
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
                                             </div>
                                             <div class="memos-actions">
-                                                <div class="selection-controls" id="selection-controls" style="display: none;">
-                                                    <button class="responsive-btn select-all-btn" onclick="toggleSelectAll()">
-                                                        <div class="svgWrapper">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
-                                                                <path stroke="#fff" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                            </svg>
-                                                            <div class="text" id="select-all-text">Select All</div>
-                                                        </div>
-                                                    </button>
-                                                    <span class="selected-count" id="selected-count">0 selected</span>
-                                                </div>
-                                                <button class="responsive-btn bulk-archive-btn" id="bulk-archive-btn" onclick="archiveSelected()" style="display: none;">
+                                                <button class="responsive-btn bulk-archive-btn" id="bulk-archive-btn" onclick="bulkArchiveCompleted()" style="display: none;">
                                                     <div class="svgWrapper">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
                                                             <path stroke="#fff" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5zM10 11v6M14 11v6"></path>
                                                         </svg>
-                                                        <div class="text" id="archive-btn-text">Archive All</div>
+                                                        <div class="text">Archive All</div>
                                                     </div>
                                                 </button>
                                                 <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
@@ -362,50 +351,6 @@
                                         
                                         .bulk-archive-btn:hover {
                                             background-color: #c82333;
-                                        }
-                                        
-                                        .selection-controls {
-                                            display: flex;
-                                            align-items: center;
-                                            gap: 12px;
-                                        }
-                                        
-                                        .select-all-btn {
-                                            background-color: #28a745;
-                                        }
-                                        
-                                        .select-all-btn:hover {
-                                            background-color: #218838;
-                                        }
-                                        
-                                        .selected-count {
-                                            color: #6c757d;
-                                            font-size: 0.9rem;
-                                            font-weight: 500;
-                                            padding: 4px 8px;
-                                            background: #f8f9fa;
-                                            border-radius: 12px;
-                                            border: 1px solid #e9ecef;
-                                        }
-                                        
-                                        .memo-checkbox-container {
-                                            display: flex;
-                                            align-items: center;
-                                            margin-right: 12px;
-                                        }
-                                        
-                                        .memo-checkbox {
-                                            width: 18px;
-                                            height: 18px;
-                                            margin: 0;
-                                            cursor: pointer;
-                                        }
-                                        
-                                        .memo-checkbox-label {
-                                            margin-left: 8px;
-                                            cursor: pointer;
-                                            font-size: 0.9rem;
-                                            color: #6c757d;
                                         }
                                         
                                         .memos-badge {
@@ -666,17 +611,12 @@
                                             };
                                             document.getElementById('section-badge').textContent = badges[status];
                                             
-                                            // Show/hide bulk archive button and selection controls ONLY for completed memos
+                                            // Show/hide bulk archive button
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
-                                            const selectionControls = document.getElementById('selection-controls');
                                             if (status === 'completed') {
                                                 bulkArchiveBtn.style.display = 'flex';
-                                                selectionControls.style.display = 'flex';
                                             } else {
                                                 bulkArchiveBtn.style.display = 'none';
-                                                selectionControls.style.display = 'none';
-                                                // Reset selection when switching away from completed
-                                                resetSelection();
                                             }
                                             
                                             // Show loading
@@ -733,15 +673,9 @@
                                                         const isUnread = false; // You can add unread logic here
                                                         
                                                         return `
-                                                            <li class="memo-item">
+                                                            <li class="memo-item" onclick="openMemoChat(${memo.id})">
                                                                 <div class="dashboard__meessage__contact__wrap">
-                                                                    ${status === 'completed' ? `
-                                                                        <div class="memo-checkbox-container">
-                                                                            <input type="checkbox" class="memo-checkbox" id="memo-${memo.id}" value="${memo.id}" onchange="updateSelection()">
-                                                                            <label for="memo-${memo.id}" class="memo-checkbox-label"></label>
-                                                                        </div>
-                                                                    ` : ''}
-                                                                    <div class="dashboard__meessage__chat__img" onclick="openMemoChat(${memo.id})">
+                                                                    <div class="dashboard__meessage__chat__img">
                                                                         <img src="${creatorAvatar}" alt="${creatorName}">
                                                                     </div>
                                                                     <div class="dashboard__meessage__meta">
@@ -794,85 +728,8 @@
                                             loadMemos(currentStatus);
                                         }
                                         
-                                        function resetSelection() {
-                                            selectedMemos = [];
-                                            allMemosSelected = false;
-                                            document.getElementById('selected-count').textContent = '0 selected';
-                                            document.getElementById('archive-btn-text').textContent = 'Archive All';
-                                            document.getElementById('select-all-text').textContent = 'Select All';
-                                        }
-                                        
-                                        // Selection management
-                                        let selectedMemos = [];
-                                        let allMemosSelected = false;
-                                        
-                                        function updateSelection() {
-                                            const checkboxes = document.querySelectorAll('.memo-checkbox');
-                                            selectedMemos = Array.from(checkboxes)
-                                                .filter(cb => cb.checked)
-                                                .map(cb => cb.value);
-                                            
-                                            const selectedCount = selectedMemos.length;
-                                            const totalCount = checkboxes.length;
-                                            
-                                            // Update selected count display
-                                            document.getElementById('selected-count').textContent = `${selectedCount} selected`;
-                                            
-                                            // Update archive button text
-                                            const archiveBtnText = document.getElementById('archive-btn-text');
-                                            if (selectedCount === 0) {
-                                                archiveBtnText.textContent = 'Archive All';
-                                            } else if (selectedCount === totalCount) {
-                                                archiveBtnText.textContent = 'Archive All';
-                                            } else {
-                                                archiveBtnText.textContent = `Archive Selected (${selectedCount})`;
-                                            }
-                                            
-                                            // Update select all button
-                                            const selectAllText = document.getElementById('select-all-text');
-                                            if (selectedCount === 0) {
-                                                selectAllText.textContent = 'Select All';
-                                                allMemosSelected = false;
-                                            } else if (selectedCount === totalCount) {
-                                                selectAllText.textContent = 'Deselect All';
-                                                allMemosSelected = true;
-                                            } else {
-                                                selectAllText.textContent = 'Select All';
-                                                allMemosSelected = false;
-                                            }
-                                        }
-                                        
-                                        function toggleSelectAll() {
-                                            const checkboxes = document.querySelectorAll('.memo-checkbox');
-                                            
-                                            if (allMemosSelected) {
-                                                // Deselect all
-                                                checkboxes.forEach(cb => cb.checked = false);
-                                                allMemosSelected = false;
-                                            } else {
-                                                // Select all
-                                                checkboxes.forEach(cb => cb.checked = true);
-                                                allMemosSelected = true;
-                                            }
-                                            
-                                            updateSelection();
-                                        }
-                                        
-                                        function archiveSelected() {
-                                            const checkboxes = document.querySelectorAll('.memo-checkbox');
-                                            const selectedCount = selectedMemos.length;
-                                            const totalCount = checkboxes.length;
-                                            
-                                            let confirmMessage;
-                                            if (selectedCount === 0) {
-                                                confirmMessage = 'Are you sure you want to archive ALL completed memos? This action cannot be undone.';
-                                            } else if (selectedCount === totalCount) {
-                                                confirmMessage = 'Are you sure you want to archive ALL completed memos? This action cannot be undone.';
-                                            } else {
-                                                confirmMessage = `Are you sure you want to archive ${selectedCount} selected memos? This action cannot be undone.`;
-                                            }
-                                            
-                                            if (confirm(confirmMessage)) {
+                                        function bulkArchiveCompleted() {
+                                            if (confirm('Are you sure you want to archive all completed memos? This action cannot be undone.')) {
                                                 // Show loading state
                                                 const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                                 const originalText = bulkArchiveBtn.innerHTML;
@@ -886,17 +743,12 @@
                                                 `;
                                                 bulkArchiveBtn.disabled = true;
                                                 
-                                                const requestData = {
-                                                    memo_ids: selectedCount > 0 ? selectedMemos : null // null means archive all
-                                                };
-                                                
                                                 fetch('/dashboard/uimms/bulk-archive-completed', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json',
                                                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                                    },
-                                                    body: JSON.stringify(requestData)
+                                                    }
                                                 })
                                                 .then(response => response.json())
                                                 .then(data => {

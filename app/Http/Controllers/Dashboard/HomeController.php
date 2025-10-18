@@ -1348,23 +1348,14 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            $memoIds = $request->input('memo_ids');
-            
-            // Build query for completed memos where user is a participant
-            $query = EmailCampaign::where(function($query) use ($userId) {
+            // Get all completed memos where user is a participant
+            $completedMemos = EmailCampaign::where(function($query) use ($userId) {
                 $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
                 });
-            })->where('memo_status', 'completed');
-            
-            // If specific memo IDs are provided, filter by them
-            if ($memoIds && is_array($memoIds) && count($memoIds) > 0) {
-                $query->whereIn('id', $memoIds);
-            }
-            
-            $completedMemos = $query->get();
+            })->where('memo_status', 'completed')->get();
             
             $archivedCount = 0;
             
@@ -1374,15 +1365,12 @@ class HomeController extends Controller
                 
                 // Add to workflow history
                 $workflowHistory = $memo->workflow_history ?? [];
-                $action = $memoIds ? 'selected_archived' : 'bulk_archived';
-                $reason = $memoIds ? 'Selected memos archived from completed status' : 'Bulk archived from completed status';
-                
                 $workflowHistory[] = [
-                    'action' => $action,
+                    'action' => 'bulk_archived',
                     'user_id' => $userId,
                     'timestamp' => now()->toISOString(),
                     'status' => 'archived',
-                    'reason' => $reason
+                    'reason' => 'Bulk archived from completed status'
                 ];
                 $memo->update(['workflow_history' => $workflowHistory]);
                 
