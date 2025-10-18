@@ -993,6 +993,11 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         
+        // Check if memo is completed or archived - these are read-only
+        if (in_array($memo->memo_status, ['completed', 'archived'])) {
+            abort(403, 'This memo is ' . $memo->memo_status . ' and cannot receive new messages.');
+        }
+        
         // Check if user is an active participant (only active participants can send messages)
         if (!$memo->isActiveParticipant($userId)) {
             abort(403, 'You are not an active participant in this memo conversation.');
@@ -1140,6 +1145,11 @@ class HomeController extends Controller
     public function updateMemoStatus(Request $request, EmailCampaign $memo)
     {
         $userId = Auth::id();
+        
+        // Check if memo is archived - archived memos cannot have status changes
+        if ($memo->memo_status === 'archived') {
+            abort(403, 'This memo is archived and cannot have its status changed.');
+        }
         
         // Check if user is an active participant OR a recipient (for backward compatibility)
         $isActiveParticipant = $memo->isActiveParticipant($userId);

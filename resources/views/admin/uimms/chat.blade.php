@@ -42,7 +42,7 @@
                                         <i class="icofont-user"></i> Assign
                                     </button>
                                     <div class="btn-group">
-                                        @if($memo->memo_status !== 'completed')
+                                        @if(!in_array($memo->memo_status, ['completed', 'archived']))
                                             <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
                                                 <i class="icofont-check-circled"></i> Complete
                                             </button>
@@ -53,9 +53,15 @@
                                                 <i class="icofont-archive"></i> Archive
                                             </button>
                                         @else
-                                            <span class="btn btn-sm btn-success disabled">
-                                                <i class="icofont-check-circled"></i> Completed
-                                            </span>
+                                            @if($memo->memo_status === 'completed')
+                                                <span class="btn btn-sm btn-success disabled">
+                                                    <i class="icofont-check-circled"></i> Completed
+                                                </span>
+                                            @elseif($memo->memo_status === 'archived')
+                                                <span class="btn btn-sm btn-secondary disabled">
+                                                    <i class="icofont-archive"></i> Archived
+                                                </span>
+                                            @endif
                                         @endif
                                     </div>
                                     </div>
@@ -283,7 +289,7 @@
                         </div>
 
                         {{-- Chat Input --}}
-                        @if($canParticipate && $memo->memo_status !== 'completed')
+                        @if($canParticipate && !in_array($memo->memo_status, ['completed', 'archived']))
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
@@ -367,6 +373,8 @@
                                 <div class="blocked-icon">
                                     @if($memo->memo_status === 'completed')
                                         <i class="icofont-check-circled"></i>
+                                    @elseif($memo->memo_status === 'archived')
+                                        <i class="icofont-archive"></i>
                                     @else
                                         <i class="icofont-lock"></i>
                                     @endif
@@ -375,6 +383,10 @@
                                     @if($memo->memo_status === 'completed')
                                         <h4>Memo Completed</h4>
                                         <p>This memo has been marked as <strong>completed</strong> and is now read-only.</p>
+                                        <p class="blocked-subtitle">No further actions or messages can be added to this memo</p>
+                                    @elseif($memo->memo_status === 'archived')
+                                        <h4>Memo Archived</h4>
+                                        <p>This memo has been <strong>archived</strong> and is now read-only.</p>
                                         <p class="blocked-subtitle">No further actions or messages can be added to this memo</p>
                                     @else
                                         <h4>Chat Assigned</h4>
