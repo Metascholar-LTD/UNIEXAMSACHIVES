@@ -935,11 +935,17 @@
                                                     },
                                                     credentials: 'same-origin',
                                                     body: JSON.stringify({
-                                                        memo_ids: Array.from(selectedMemos)
+                                                        memo_ids: Array.from(selectedMemos).map(id => parseInt(id))
                                                     })
                                                 })
                                                 .then(response => {
                                                     if (!response.ok) {
+                                                        // For 422 errors, try to get the validation error details
+                                                        if (response.status === 422) {
+                                                            return response.json().then(errorData => {
+                                                                throw new Error(`Validation Error: ${JSON.stringify(errorData)}`);
+                                                            });
+                                                        }
                                                         throw new Error(`HTTP error! status: ${response.status}`);
                                                     }
                                                     return response.json();

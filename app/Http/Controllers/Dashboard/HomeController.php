@@ -1418,11 +1418,17 @@ class HomeController extends Controller
         
         $request->validate([
             'memo_ids' => 'required|array',
-            'memo_ids.*' => 'integer|exists:email_campaigns,id'
+            'memo_ids.*' => 'integer'
         ]);
         
         try {
             $memoIds = $request->memo_ids;
+            
+            // Debug: Log the memo IDs being processed
+            \Log::info('Processing bulk archive for memos:', [
+                'user_id' => $userId,
+                'memo_ids' => $memoIds
+            ]);
             
             // Get selected memos where user is a participant and status is completed
             $selectedMemos = EmailCampaign::whereIn('id', $memoIds)
@@ -1434,6 +1440,12 @@ class HomeController extends Controller
                         $subQuery->where('user_id', $userId);
                     });
                 })->get();
+            
+            // Debug: Log how many memos were found
+            \Log::info('Found memos to archive:', [
+                'count' => $selectedMemos->count(),
+                'memo_ids_found' => $selectedMemos->pluck('id')->toArray()
+            ]);
             
             $archivedCount = 0;
             
