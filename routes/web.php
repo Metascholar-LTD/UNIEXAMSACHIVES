@@ -133,6 +133,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/uimms/chat/{memo}/assign', [HomeController::class, 'assignMemo'])->name('dashboard.uimms.chat.assign');
     Route::post('/dashboard/uimms/chat/{memo}/status', [HomeController::class, 'updateMemoStatus'])->name('dashboard.uimms.chat.status');
     Route::post('/dashboard/uimms/bulk-archive-completed', [HomeController::class, 'bulkArchiveCompleted'])->name('dashboard.uimms.bulkArchiveCompleted');
+    Route::post('/dashboard/uimms/bulk-archive-selected', [HomeController::class, 'bulkArchiveSelected'])->name('dashboard.uimms.bulkArchiveSelected');
     Route::get('/dashboard/uimms/chat/{memo}/attachment/{index}/download', [HomeController::class, 'downloadUimmsMemoAttachment'])->name('dashboard.uimms.chat.attachment.download');
     Route::get('/dashboard/uimms/chat/{memo}/attachment/{index}/view', [HomeController::class, 'viewUimmsMemoAttachment'])->name('dashboard.uimms.chat.attachment.view');
     Route::get('/dashboard/uimms/chat/{memo}/messages', [HomeController::class, 'getChatMessages'])->name('dashboard.uimms.chat.messages');

@@ -1408,4 +1408,82 @@ class HomeController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to archive completed memos'], 500);
         }
     }
+
+    /**
+     * Bulk archive selected completed memos
+     */
+    public function bulkArchiveSelected(Request $request)
+    {
+        $userId = Auth::id();
+        
+        $request->validate([
+            'memo_ids' => 'required|array',
+            'memo_ids.*' => 'integer|exists:email_campaigns,id'
+        ]);
+        
+        try {
+            $memoIds = $request->memo_ids;
+            
+            // Get selected memos where user is a participant and status is completed
+            $selectedMemos = EmailCampaign::whereIn('id', $memoIds)
+                ->where('memo_status', 'completed')
+                ->where(function($query) use ($userId) {
+                    $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    });
+                })->get();
+            
+            $archivedCount = 0;
+            
+            foreach ($selectedMemos as $memo) {
+                // Update memo status to archived
+                $memo->update(['memo_status' => 'archived']);
+                
+                // Add to workflow history
+                $workflowHistory = $memo->workflow_history ?? [];
+                $workflowHistory[] = [
+                    'action' => 'bulk_archived_selected',
+                    'user_id' => $userId,
+                    'timestamp' => now()->toISOString(),
+                    'status' => 'archived',
+                    'reason' => 'Bulk archived selected memos from completed status'
+                ];
+                $memo->update(['workflow_history' => $workflowHistory]);
+                
+                $archivedCount++;
+            }
+            
+            // Get updated counts
+            $completedCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
+            })->where('memo_status', 'completed')->count();
+            
+            $archivedCountTotal = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
+            })->where('memo_status', 'archived')->count();
+            
+            return response()->json([
+                'success' => true,
+                'archived_count' => $archivedCount,
+                'counts' => [
+                    'completed' => $completedCount,
+                    'archived' => $archivedCountTotal
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in bulkArchiveSelected: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to archive selected memos'], 500);
+        }
+    }
 }

@@ -90,12 +90,19 @@
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
                                             </div>
                                             <div class="memos-actions">
-                                                <button class="responsive-btn bulk-archive-btn" id="bulk-archive-btn" onclick="bulkArchiveCompleted()" style="display: none;">
+                                                <div class="selection-controls" id="selection-controls" style="display: none;">
+                                                    <div class="select-all-container">
+                                                        <input type="checkbox" id="select-all-checkbox" onchange="toggleSelectAll()">
+                                                        <label for="select-all-checkbox" class="select-all-label">Select All</label>
+                                                    </div>
+                                                    <span class="selection-counter" id="selection-counter">0 selected</span>
+                                                </div>
+                                                <button class="responsive-btn bulk-archive-btn" id="bulk-archive-btn" onclick="bulkArchiveSelected()" style="display: none;">
                                                     <div class="svgWrapper">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
                                                             <path stroke="#fff" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V7M8 5a2 2 0 012-2h4a2 2 0 012 2v2H8V5zM10 11v6M14 11v6"></path>
                                                         </svg>
-                                                        <div class="text">Archive All</div>
+                                                        <div class="text">Archive Selected</div>
                                                     </div>
                                                 </button>
                                                 <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
@@ -583,6 +590,66 @@
                                         .refresh-btn:hover {
                                             background-color: #0f3a7a;
                                         }
+
+                                        /* Selection Controls Styles */
+                                        .selection-controls {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 16px;
+                                            background: #f8f9fa;
+                                            padding: 8px 16px;
+                                            border-radius: 20px;
+                                            border: 2px solid #e9ecef;
+                                        }
+
+                                        .select-all-container {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 8px;
+                                        }
+
+                                        .select-all-container input[type="checkbox"] {
+                                            width: 18px;
+                                            height: 18px;
+                                            cursor: pointer;
+                                            accent-color: #1a4a9b;
+                                        }
+
+                                        .select-all-label {
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            color: #1a4a9b;
+                                            cursor: pointer;
+                                            margin: 0;
+                                        }
+
+                                        .selection-counter {
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            color: #6c757d;
+                                            background: #e9ecef;
+                                            padding: 4px 12px;
+                                            border-radius: 12px;
+                                        }
+
+                                        .memo-checkbox {
+                                            width: 18px;
+                                            height: 18px;
+                                            cursor: pointer;
+                                            accent-color: #1a4a9b;
+                                            margin-right: 12px;
+                                            flex-shrink: 0;
+                                        }
+
+                                        .memo-item.selected {
+                                            background: #e3f2fd;
+                                            border-color: #1a4a9b;
+                                            box-shadow: 0 2px 8px rgba(26, 74, 155, 0.15);
+                                        }
+
+                                        .memo-item.selected:hover {
+                                            background: #bbdefb;
+                                        }
                                         </style>
 
                                         <script>
@@ -611,12 +678,17 @@
                                             };
                                             document.getElementById('section-badge').textContent = badges[status];
                                             
-                                            // Show/hide bulk archive button
+                                            // Show/hide selection controls and bulk archive button
+                                            const selectionControls = document.getElementById('selection-controls');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                             if (status === 'completed') {
+                                                selectionControls.style.display = 'flex';
                                                 bulkArchiveBtn.style.display = 'flex';
                                             } else {
+                                                selectionControls.style.display = 'none';
                                                 bulkArchiveBtn.style.display = 'none';
+                                                // Clear selections when switching away from completed
+                                                clearSelections();
                                             }
                                             
                                             // Show loading
@@ -673,12 +745,15 @@
                                                         const isUnread = false; // You can add unread logic here
                                                         
                                                         return `
-                                                            <li class="memo-item" onclick="openMemoChat(${memo.id})">
+                                                            <li class="memo-item" data-memo-id="${memo.id}">
                                                                 <div class="dashboard__meessage__contact__wrap">
-                                                                    <div class="dashboard__meessage__chat__img">
+                                                                    ${currentStatus === 'completed' ? `
+                                                                        <input type="checkbox" class="memo-checkbox" id="memo-${memo.id}" onchange="toggleMemoSelection(${memo.id})" onclick="event.stopPropagation()">
+                                                                    ` : ''}
+                                                                    <div class="dashboard__meessage__chat__img" onclick="openMemoChat(${memo.id})">
                                                                         <img src="${creatorAvatar}" alt="${creatorName}">
                                                                     </div>
-                                                                    <div class="dashboard__meessage__meta">
+                                                                    <div class="dashboard__meessage__meta" onclick="openMemoChat(${memo.id})">
                                                                         <div class="memo-header">
                                                                             <div class="memo-sender-info">
                                                                                 <h5>${creatorName}</h5>
@@ -728,8 +803,99 @@
                                             loadMemos(currentStatus);
                                         }
                                         
-                                        function bulkArchiveCompleted() {
-                                            if (confirm('Are you sure you want to archive all completed memos? This action cannot be undone.')) {
+                                        // Selection management
+                                        let selectedMemos = new Set();
+
+                                        function toggleMemoSelection(memoId) {
+                                            const memoItem = document.querySelector(`[data-memo-id="${memoId}"]`);
+                                            const checkbox = document.getElementById(`memo-${memoId}`);
+                                            
+                                            if (checkbox.checked) {
+                                                selectedMemos.add(memoId);
+                                                memoItem.classList.add('selected');
+                                            } else {
+                                                selectedMemos.delete(memoId);
+                                                memoItem.classList.remove('selected');
+                                            }
+                                            
+                                            updateSelectionUI();
+                                        }
+
+                                        function toggleSelectAll() {
+                                            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+                                            const memoCheckboxes = document.querySelectorAll('.memo-checkbox');
+                                            
+                                            if (selectAllCheckbox.checked) {
+                                                // Select all
+                                                memoCheckboxes.forEach(checkbox => {
+                                                    const memoId = parseInt(checkbox.id.replace('memo-', ''));
+                                                    selectedMemos.add(memoId);
+                                                    checkbox.checked = true;
+                                                    const memoItem = document.querySelector(`[data-memo-id="${memoId}"]`);
+                                                    memoItem.classList.add('selected');
+                                                });
+                                            } else {
+                                                // Deselect all
+                                                clearSelections();
+                                            }
+                                            
+                                            updateSelectionUI();
+                                        }
+
+                                        function clearSelections() {
+                                            selectedMemos.clear();
+                                            document.querySelectorAll('.memo-checkbox').forEach(checkbox => {
+                                                checkbox.checked = false;
+                                            });
+                                            document.querySelectorAll('.memo-item').forEach(item => {
+                                                item.classList.remove('selected');
+                                            });
+                                            document.getElementById('select-all-checkbox').checked = false;
+                                            updateSelectionUI();
+                                        }
+
+                                        function updateSelectionUI() {
+                                            const selectedCount = selectedMemos.size;
+                                            const totalCount = document.querySelectorAll('.memo-checkbox').length;
+                                            const selectionCounter = document.getElementById('selection-counter');
+                                            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+                                            const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
+                                            
+                                            // Update counter
+                                            selectionCounter.textContent = `${selectedCount} selected`;
+                                            
+                                            // Update select all checkbox state
+                                            if (selectedCount === 0) {
+                                                selectAllCheckbox.checked = false;
+                                                selectAllCheckbox.indeterminate = false;
+                                            } else if (selectedCount === totalCount) {
+                                                selectAllCheckbox.checked = true;
+                                                selectAllCheckbox.indeterminate = false;
+                                            } else {
+                                                selectAllCheckbox.checked = false;
+                                                selectAllCheckbox.indeterminate = true;
+                                            }
+                                            
+                                            // Update bulk archive button
+                                            if (selectedCount > 0) {
+                                                bulkArchiveBtn.style.display = 'flex';
+                                                bulkArchiveBtn.querySelector('.text').textContent = `Archive Selected (${selectedCount})`;
+                                            } else {
+                                                bulkArchiveBtn.style.display = 'none';
+                                            }
+                                        }
+
+                                        function bulkArchiveSelected() {
+                                            if (selectedMemos.size === 0) {
+                                                alert('Please select at least one memo to archive.');
+                                                return;
+                                            }
+                                            
+                                            const confirmMessage = selectedMemos.size === 1 
+                                                ? 'Are you sure you want to archive the selected memo? This action cannot be undone.'
+                                                : `Are you sure you want to archive ${selectedMemos.size} selected memos? This action cannot be undone.`;
+                                            
+                                            if (confirm(confirmMessage)) {
                                                 // Show loading state
                                                 const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                                 const originalText = bulkArchiveBtn.innerHTML;
@@ -743,18 +909,22 @@
                                                 `;
                                                 bulkArchiveBtn.disabled = true;
                                                 
-                                                fetch('/dashboard/uimms/bulk-archive-completed', {
+                                                fetch('/dashboard/uimms/bulk-archive-selected', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json',
                                                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                                                    }
+                                                    },
+                                                    body: JSON.stringify({
+                                                        memo_ids: Array.from(selectedMemos)
+                                                    })
                                                 })
                                                 .then(response => response.json())
                                                 .then(data => {
                                                     if (data.success) {
-                                                        alert(`Successfully archived ${data.archived_count} completed memos.`);
-                                                        // Refresh the completed memos list
+                                                        alert(`Successfully archived ${data.archived_count} selected memos.`);
+                                                        // Clear selections and refresh the completed memos list
+                                                        clearSelections();
                                                         loadMemos('completed');
                                                         // Update the counts
                                                         if (data.counts) {
