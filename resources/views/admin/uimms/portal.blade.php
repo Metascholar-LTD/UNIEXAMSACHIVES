@@ -810,6 +810,8 @@
                                             const memoItem = document.querySelector(`[data-memo-id="${memoId}"]`);
                                             const checkbox = document.getElementById(`memo-${memoId}`);
                                             
+                                            if (!checkbox || !memoItem) return;
+                                            
                                             if (checkbox.checked) {
                                                 selectedMemos.add(memoId);
                                                 memoItem.classList.add('selected');
@@ -825,6 +827,8 @@
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const memoCheckboxes = document.querySelectorAll('.memo-checkbox');
                                             
+                                            if (!selectAllCheckbox) return;
+                                            
                                             if (selectAllCheckbox.checked) {
                                                 // Select all
                                                 memoCheckboxes.forEach(checkbox => {
@@ -832,7 +836,9 @@
                                                     selectedMemos.add(memoId);
                                                     checkbox.checked = true;
                                                     const memoItem = document.querySelector(`[data-memo-id="${memoId}"]`);
-                                                    memoItem.classList.add('selected');
+                                                    if (memoItem) {
+                                                        memoItem.classList.add('selected');
+                                                    }
                                                 });
                                             } else {
                                                 // Deselect all
@@ -850,8 +856,10 @@
                                             document.querySelectorAll('.memo-item').forEach(item => {
                                                 item.classList.remove('selected');
                                             });
-                                            document.getElementById('select-all-checkbox').checked = false;
-                                            updateSelectionUI();
+                                            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+                                            if (selectAllCheckbox) {
+                                                selectAllCheckbox.checked = false;
+                                            }
                                         }
 
                                         function updateSelectionUI() {
@@ -861,6 +869,11 @@
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                             
+                                            // Only update if elements exist (i.e., we're on completed memos view)
+                                            if (!selectionCounter || !selectAllCheckbox || !bulkArchiveBtn) {
+                                                return;
+                                            }
+                                            
                                             // Update counter
                                             selectionCounter.textContent = `${selectedCount} selected`;
                                             
@@ -868,7 +881,7 @@
                                             if (selectedCount === 0) {
                                                 selectAllCheckbox.checked = false;
                                                 selectAllCheckbox.indeterminate = false;
-                                            } else if (selectedCount === totalCount) {
+                                            } else if (selectedCount === totalCount && totalCount > 0) {
                                                 selectAllCheckbox.checked = true;
                                                 selectAllCheckbox.indeterminate = false;
                                             } else {
@@ -879,7 +892,10 @@
                                             // Update bulk archive button
                                             if (selectedCount > 0) {
                                                 bulkArchiveBtn.style.display = 'flex';
-                                                bulkArchiveBtn.querySelector('.text').textContent = `Archive Selected (${selectedCount})`;
+                                                const textElement = bulkArchiveBtn.querySelector('.text');
+                                                if (textElement) {
+                                                    textElement.textContent = `Archive Selected (${selectedCount})`;
+                                                }
                                             } else {
                                                 bulkArchiveBtn.style.display = 'none';
                                             }
@@ -919,7 +935,12 @@
                                                         memo_ids: Array.from(selectedMemos)
                                                     })
                                                 })
-                                                .then(response => response.json())
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                                    }
+                                                    return response.json();
+                                                })
                                                 .then(data => {
                                                     if (data.success) {
                                                         alert(`Successfully archived ${data.archived_count} selected memos.`);
@@ -937,7 +958,7 @@
                                                 })
                                                 .catch(error => {
                                                     console.error('Error:', error);
-                                                    alert('Error archiving memos. Please try again.');
+                                                    alert('Error archiving memos. Please check the console and try clearing the cache (run: php artisan route:clear).');
                                                 })
                                                 .finally(() => {
                                                     // Restore button state
