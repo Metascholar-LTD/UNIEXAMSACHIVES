@@ -925,17 +925,15 @@
                                                 `;
                                                 bulkArchiveBtn.disabled = true;
                                                 
-                                                // Debug: Log the request details
-                                                console.log('Making request to:', '/dashboard/uimms/bulk-archive-selected');
-                                                console.log('Selected memos:', Array.from(selectedMemos));
-                                                console.log('CSRF Token:', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-                                                
                                                 fetch('/dashboard/uimms/bulk-archive-selected', {
                                                     method: 'POST',
                                                     headers: {
                                                         'Content-Type': 'application/json',
-                                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                                                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                                        'Accept': 'application/json',
+                                                        'X-Requested-With': 'XMLHttpRequest'
                                                     },
+                                                    credentials: 'same-origin',
                                                     body: JSON.stringify({
                                                         memo_ids: Array.from(selectedMemos)
                                                     })

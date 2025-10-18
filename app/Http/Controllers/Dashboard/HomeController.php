@@ -1414,13 +1414,6 @@ class HomeController extends Controller
      */
     public function bulkArchiveSelected(Request $request)
     {
-        // Debug: Log that the method was called
-        \Log::info('bulkArchiveSelected method called', [
-            'user_id' => Auth::id(),
-            'request_data' => $request->all(),
-            'headers' => $request->headers->all()
-        ]);
-        
         $userId = Auth::id();
         
         $request->validate([
