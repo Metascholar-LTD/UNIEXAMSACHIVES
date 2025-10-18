@@ -810,12 +810,16 @@
                                             const memoItem = document.querySelector(`[data-memo-id="${memoId}"]`);
                                             const checkbox = document.getElementById(`memo-${memoId}`);
                                             
-                                            if (checkbox.checked) {
+                                            if (checkbox && checkbox.checked) {
                                                 selectedMemos.add(memoId);
-                                                memoItem.classList.add('selected');
+                                                if (memoItem) {
+                                                    memoItem.classList.add('selected');
+                                                }
                                             } else {
                                                 selectedMemos.delete(memoId);
-                                                memoItem.classList.remove('selected');
+                                                if (memoItem) {
+                                                    memoItem.classList.remove('selected');
+                                                }
                                             }
                                             
                                             updateSelectionUI();
@@ -825,14 +829,16 @@
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const memoCheckboxes = document.querySelectorAll('.memo-checkbox');
                                             
-                                            if (selectAllCheckbox.checked) {
+                                            if (selectAllCheckbox && selectAllCheckbox.checked) {
                                                 // Select all
                                                 memoCheckboxes.forEach(checkbox => {
                                                     const memoId = parseInt(checkbox.id.replace('memo-', ''));
                                                     selectedMemos.add(memoId);
                                                     checkbox.checked = true;
                                                     const memoItem = document.querySelector(`[data-memo-id="${memoId}"]`);
-                                                    memoItem.classList.add('selected');
+                                                    if (memoItem) {
+                                                        memoItem.classList.add('selected');
+                                                    }
                                                 });
                                             } else {
                                                 // Deselect all
@@ -850,7 +856,10 @@
                                             document.querySelectorAll('.memo-item').forEach(item => {
                                                 item.classList.remove('selected');
                                             });
-                                            document.getElementById('select-all-checkbox').checked = false;
+                                            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+                                            if (selectAllCheckbox) {
+                                                selectAllCheckbox.checked = false;
+                                            }
                                             updateSelectionUI();
                                         }
 
@@ -861,27 +870,36 @@
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                             
-                                            // Update counter
-                                            selectionCounter.textContent = `${selectedCount} selected`;
-                                            
-                                            // Update select all checkbox state
-                                            if (selectedCount === 0) {
-                                                selectAllCheckbox.checked = false;
-                                                selectAllCheckbox.indeterminate = false;
-                                            } else if (selectedCount === totalCount) {
-                                                selectAllCheckbox.checked = true;
-                                                selectAllCheckbox.indeterminate = false;
-                                            } else {
-                                                selectAllCheckbox.checked = false;
-                                                selectAllCheckbox.indeterminate = true;
+                                            // Check if elements exist before updating
+                                            if (selectionCounter) {
+                                                selectionCounter.textContent = `${selectedCount} selected`;
                                             }
                                             
-                                            // Update bulk archive button
-                                            if (selectedCount > 0) {
-                                                bulkArchiveBtn.style.display = 'flex';
-                                                bulkArchiveBtn.querySelector('.text').textContent = `Archive Selected (${selectedCount})`;
-                                            } else {
-                                                bulkArchiveBtn.style.display = 'none';
+                                            if (selectAllCheckbox) {
+                                                // Update select all checkbox state
+                                                if (selectedCount === 0) {
+                                                    selectAllCheckbox.checked = false;
+                                                    selectAllCheckbox.indeterminate = false;
+                                                } else if (selectedCount === totalCount) {
+                                                    selectAllCheckbox.checked = true;
+                                                    selectAllCheckbox.indeterminate = false;
+                                                } else {
+                                                    selectAllCheckbox.checked = false;
+                                                    selectAllCheckbox.indeterminate = true;
+                                                }
+                                            }
+                                            
+                                            if (bulkArchiveBtn) {
+                                                // Update bulk archive button
+                                                if (selectedCount > 0) {
+                                                    bulkArchiveBtn.style.display = 'flex';
+                                                    const textElement = bulkArchiveBtn.querySelector('.text');
+                                                    if (textElement) {
+                                                        textElement.textContent = `Archive Selected (${selectedCount})`;
+                                                    }
+                                                } else {
+                                                    bulkArchiveBtn.style.display = 'none';
+                                                }
                                             }
                                         }
 
