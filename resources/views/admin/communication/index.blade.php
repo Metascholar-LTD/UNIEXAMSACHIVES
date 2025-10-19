@@ -849,27 +849,16 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   min-width: 180px;
   z-index: 99999;
-  display: none;
+  display: none !important;
+  opacity: 0;
+  visibility: hidden;
   overflow: hidden;
 }
 
 .dropdown-menu.show {
   display: block !important;
-  animation: dropdownFadeIn 0.2s ease-out forwards;
-  animation-fill-mode: forwards;
   opacity: 1 !important;
-  visibility: visible;
-}
-
-@keyframes dropdownFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  visibility: visible !important;
 }
 
 .dropdown-item {
@@ -1421,64 +1410,34 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dropdown functionality
 function toggleDropdown(campaignId) {
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
-    if (!dropdown) {
-        console.error('Dropdown not found:', `dropdown-${campaignId}`);
-        return;
-    }
+    if (!dropdown) return;
     
     const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
-    if (!toggle) {
-        console.error('Toggle button not found');
-        return;
-    }
+    if (!toggle) return;
     
     const isOpen = dropdown.classList.contains('show');
-    console.log('Dropdown current state - isOpen:', isOpen);
     
     // Close all other dropdowns first
     closeAllDropdowns();
     
     // Toggle current dropdown
     if (!isOpen) {
-        // Calculate position for fixed dropdown
         const toggleRect = toggle.getBoundingClientRect();
-        console.log('Toggle button position:', toggleRect);
-        
-        // Position dropdown below the toggle button
         const topPos = toggleRect.bottom + 5;
         const leftPos = toggleRect.right - 180;
         
-        dropdown.style.position = 'fixed';
-        dropdown.style.top = topPos + 'px';
-        dropdown.style.left = leftPos + 'px';
-        dropdown.style.display = 'block';
-        dropdown.style.visibility = 'visible';
-        dropdown.style.zIndex = '99999';
+        // Set all styles directly
+        dropdown.style.cssText = `
+            position: fixed !important;
+            top: ${topPos}px !important;
+            left: ${leftPos}px !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            z-index: 99999 !important;
+        `;
+        
         dropdown.classList.add('show');
-        
-        // Force opacity after a tiny delay to override animation
-        setTimeout(() => {
-            dropdown.style.opacity = '1';
-        }, 10);
-        
-        console.log('Dropdown styles set:', {
-            position: dropdown.style.position,
-            top: dropdown.style.top,
-            left: dropdown.style.left,
-            display: dropdown.style.display,
-            opacity: dropdown.style.opacity,
-            visibility: dropdown.style.visibility,
-            zIndex: dropdown.style.zIndex,
-            classes: dropdown.className
-        });
-        
-        // Check if dropdown is actually visible in DOM
-        const computedStyle = window.getComputedStyle(dropdown);
-        console.log('Computed display:', computedStyle.display);
-        console.log('Computed visibility:', computedStyle.visibility);
-        console.log('Computed opacity:', computedStyle.opacity);
-        console.log('Dropdown offsetWidth:', dropdown.offsetWidth);
-        console.log('Dropdown offsetHeight:', dropdown.offsetHeight);
     }
 }
 

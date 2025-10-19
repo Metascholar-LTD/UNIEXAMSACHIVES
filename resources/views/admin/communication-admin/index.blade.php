@@ -849,27 +849,16 @@
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   min-width: 180px;
   z-index: 99999;
-  display: none;
+  display: none !important;
+  opacity: 0;
+  visibility: hidden;
   overflow: hidden;
 }
 
 .dropdown-menu.show {
   display: block !important;
-  animation: dropdownFadeIn 0.2s ease-out forwards;
-  animation-fill-mode: forwards;
   opacity: 1 !important;
-  visibility: visible;
-}
-
-@keyframes dropdownFadeIn {
-  0% {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  visibility: visible !important;
 }
 
 .dropdown-item {
@@ -1421,14 +1410,10 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dropdown functionality
 function toggleDropdown(campaignId) {
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
-    if (!dropdown) {
-        return;
-    }
+    if (!dropdown) return;
     
     const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
-    if (!toggle) {
-        return;
-    }
+    if (!toggle) return;
     
     const isOpen = dropdown.classList.contains('show');
     
@@ -1437,25 +1422,22 @@ function toggleDropdown(campaignId) {
     
     // Toggle current dropdown
     if (!isOpen) {
-        // Calculate position for fixed dropdown
         const toggleRect = toggle.getBoundingClientRect();
-        
-        // Position dropdown below the toggle button
         const topPos = toggleRect.bottom + 5;
         const leftPos = toggleRect.right - 180;
         
-        dropdown.style.position = 'fixed';
-        dropdown.style.top = topPos + 'px';
-        dropdown.style.left = leftPos + 'px';
-        dropdown.style.display = 'block';
-        dropdown.style.visibility = 'visible';
-        dropdown.style.zIndex = '99999';
-        dropdown.classList.add('show');
+        // Set all styles directly
+        dropdown.style.cssText = `
+            position: fixed !important;
+            top: ${topPos}px !important;
+            left: ${leftPos}px !important;
+            display: block !important;
+            opacity: 1 !important;
+            visibility: visible !important;
+            z-index: 99999 !important;
+        `;
         
-        // Force opacity after a tiny delay to override animation
-        setTimeout(() => {
-            dropdown.style.opacity = '1';
-        }, 10);
+        dropdown.classList.add('show');
     }
 }
 
