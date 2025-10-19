@@ -1418,7 +1418,15 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dropdown functionality
 function toggleDropdown(campaignId) {
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
+    if (!dropdown) {
+        return;
+    }
+    
     const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
+    if (!toggle) {
+        return;
+    }
+    
     const isOpen = dropdown.classList.contains('show');
     
     // Close all other dropdowns first
@@ -1431,7 +1439,7 @@ function toggleDropdown(campaignId) {
         
         // Position dropdown below the toggle button
         dropdown.style.top = (toggleRect.bottom + 5) + 'px';
-        dropdown.style.left = (toggleRect.right - 180) + 'px'; // Align to right edge
+        dropdown.style.left = (toggleRect.right - 180) + 'px';
         
         // Check if dropdown goes off screen and adjust
         const viewportWidth = window.innerWidth;
@@ -1440,6 +1448,10 @@ function toggleDropdown(campaignId) {
             dropdown.style.left = (toggleRect.left) + 'px';
         }
         
+        // Force show the dropdown
+        dropdown.style.display = 'block';
+        dropdown.style.opacity = '1';
+        dropdown.style.visibility = 'visible';
         dropdown.classList.add('show');
     }
 }
@@ -1447,6 +1459,9 @@ function toggleDropdown(campaignId) {
 function closeAllDropdowns() {
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         menu.classList.remove('show');
+        menu.style.display = 'none';
+        menu.style.opacity = '0';
+        menu.style.visibility = 'hidden';
     });
 }
 

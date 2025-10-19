@@ -1419,17 +1419,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Dropdown functionality
 function toggleDropdown(campaignId) {
-    alert('Function called for campaign: ' + campaignId);
-    
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
     if (!dropdown) {
-        alert('Dropdown not found for ID: dropdown-' + campaignId);
         return;
     }
     
     const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
     if (!toggle) {
-        alert('Toggle button not found');
         return;
     }
     
@@ -1454,14 +1450,20 @@ function toggleDropdown(campaignId) {
             dropdown.style.left = (toggleRect.left) + 'px';
         }
         
+        // Force show the dropdown
+        dropdown.style.display = 'block';
+        dropdown.style.opacity = '1';
+        dropdown.style.visibility = 'visible';
         dropdown.classList.add('show');
-        alert('Show class added. Classes: ' + dropdown.className);
     }
 }
 
 function closeAllDropdowns() {
     document.querySelectorAll('.dropdown-menu').forEach(menu => {
         menu.classList.remove('show');
+        menu.style.display = 'none';
+        menu.style.opacity = '0';
+        menu.style.visibility = 'hidden';
     });
 }
 
