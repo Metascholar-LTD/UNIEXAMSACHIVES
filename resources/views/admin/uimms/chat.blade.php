@@ -1775,6 +1775,18 @@
 </style>
 
 <script>
+// Function to escape HTML content to prevent XSS and display HTML tags as text
+function escapeHtml(text) {
+    const map = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#039;'
+    };
+    return text.replace(/[&<>"']/g, function(m) { return map[m]; });
+}
+
 const memoId = {{ $memo->id }};
 let messageInterval;
 
@@ -2178,7 +2190,7 @@ function addMessageToChat(message) {
                     ${replyModeDisplay}
                     <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
                 </div>
-                <div class="message-text">${message.message.replace(/\n/g, '<br>')}</div>
+                <div class="message-text">${escapeHtml(message.message).replace(/\n/g, '<br>')}</div>
             </div>
         </div>
     `;
