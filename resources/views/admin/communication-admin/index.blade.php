@@ -298,6 +298,18 @@
 </div>
 
 <style>
+/* Force all containers to allow dropdown overflow */
+.dashboard__content__wraper,
+.dashboard__content__wraper *,
+.col-xl-9,
+.col-lg-9,
+.col-md-12,
+.row,
+.container-fluid,
+.full__width__padding {
+  overflow: visible !important;
+}
+
 /* Modern Statistics Page Styles */
 * {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -830,18 +842,15 @@
 }
 
 .dropdown-menu {
-  position: absolute;
-  top: 100%;
-  right: 0;
+  position: fixed;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   min-width: 180px;
-  z-index: 9999;
+  z-index: 99999;
   display: none;
   overflow: hidden;
-  margin-top: 5px;
 }
 
 .dropdown-menu.show {
@@ -1409,6 +1418,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dropdown functionality
 function toggleDropdown(campaignId) {
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
+    const toggle = dropdown.previousElementSibling;
     const isOpen = dropdown.classList.contains('show');
     
     // Close all other dropdowns first
@@ -1416,6 +1426,20 @@ function toggleDropdown(campaignId) {
     
     // Toggle current dropdown
     if (!isOpen) {
+        // Calculate position for fixed dropdown
+        const toggleRect = toggle.getBoundingClientRect();
+        
+        // Position dropdown below the toggle button
+        dropdown.style.top = (toggleRect.bottom + 5) + 'px';
+        dropdown.style.left = (toggleRect.right - 180) + 'px'; // Align to right edge
+        
+        // Check if dropdown goes off screen and adjust
+        const viewportWidth = window.innerWidth;
+        const dropdownLeft = toggleRect.right - 180;
+        if (dropdownLeft < 10) {
+            dropdown.style.left = (toggleRect.left) + 'px';
+        }
+        
         dropdown.classList.add('show');
     }
 }
