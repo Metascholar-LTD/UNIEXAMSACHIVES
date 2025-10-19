@@ -854,16 +854,19 @@
 }
 
 .dropdown-menu.show {
-  display: block;
-  animation: dropdownFadeIn 0.2s ease-out;
+  display: block !important;
+  animation: dropdownFadeIn 0.2s ease-out forwards;
+  animation-fill-mode: forwards;
+  opacity: 1 !important;
+  visibility: visible;
 }
 
 @keyframes dropdownFadeIn {
-  from {
+  0% {
     opacity: 0;
     transform: translateY(-10px);
   }
-  to {
+  100% {
     opacity: 1;
     transform: translateY(0);
   }
@@ -1438,21 +1441,21 @@ function toggleDropdown(campaignId) {
         const toggleRect = toggle.getBoundingClientRect();
         
         // Position dropdown below the toggle button
-        dropdown.style.top = (toggleRect.bottom + 5) + 'px';
-        dropdown.style.left = (toggleRect.right - 180) + 'px';
+        const topPos = toggleRect.bottom + 5;
+        const leftPos = toggleRect.right - 180;
         
-        // Check if dropdown goes off screen and adjust
-        const viewportWidth = window.innerWidth;
-        const dropdownLeft = toggleRect.right - 180;
-        if (dropdownLeft < 10) {
-            dropdown.style.left = (toggleRect.left) + 'px';
-        }
-        
-        // Force show the dropdown
+        dropdown.style.position = 'fixed';
+        dropdown.style.top = topPos + 'px';
+        dropdown.style.left = leftPos + 'px';
         dropdown.style.display = 'block';
-        dropdown.style.opacity = '1';
         dropdown.style.visibility = 'visible';
+        dropdown.style.zIndex = '99999';
         dropdown.classList.add('show');
+        
+        // Force opacity after a tiny delay to override animation
+        setTimeout(() => {
+            dropdown.style.opacity = '1';
+        }, 10);
     }
 }
 
