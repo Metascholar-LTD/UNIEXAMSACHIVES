@@ -116,7 +116,7 @@
                                         </div>
                                         
                                         <div class="reply-content mb-3">
-                                            {!! sanitize_memo_html($reply->message) !!}
+                                            {!! nl2br(e($reply->message)) !!}
                                         </div>
                                         
                                         @if($reply->attachments && count($reply->attachments) > 0)
