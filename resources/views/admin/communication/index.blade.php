@@ -225,10 +225,10 @@
                                                 </span>
                                             </td>
                                             <td class="created-date">{{ $campaign->created_at->format('M j, Y') }}</td>
-                                            <td>
+                                            <td class="actions-cell">
                                                 <div class="action-dropdown">
                                                     <button class="dropdown-toggle" onclick="toggleDropdown({{ $campaign->id }})" title="Actions">
-                                                        <i class="icofont-dots-vertical"></i>
+                                                        <span class="dots-icon">⋮</span>
                                                     </button>
                                                     <div class="dropdown-menu" id="dropdown-{{ $campaign->id }}">
                                                         <a href="{{ route('admin.communication.show', $campaign) }}" class="dropdown-item">
@@ -625,6 +625,7 @@
 /* Table Styling */
 .table-container {
   overflow-x: auto;
+  overflow-y: visible;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
 }
@@ -633,6 +634,7 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
+  overflow: visible;
 }
 
 .email-table th {
@@ -774,6 +776,11 @@
 }
 
 /* Action Dropdown */
+.actions-cell {
+  position: relative;
+  overflow: visible !important;
+}
+
 .action-dropdown {
   position: relative;
   display: inline-block;
@@ -789,7 +796,6 @@
   justify-content: center;
   background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
   color: white;
-  font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
 }
@@ -800,14 +806,23 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.dots-icon {
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 1;
+  letter-spacing: 1px;
+}
+
 .dropdown-menu {
-  position: fixed;
+  position: absolute;
+  top: 100%;
+  right: 0;
   background: white;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   min-width: 180px;
-  z-index: 9999;
+  z-index: 1000;
   display: none;
   overflow: hidden;
 }
@@ -1259,6 +1274,7 @@
   
   .dropdown-menu {
     min-width: 160px;
+    right: -10px;
   }
   
   .dropdown-item {
@@ -1376,7 +1392,6 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dropdown functionality
 function toggleDropdown(campaignId) {
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
-    const toggle = dropdown.previousElementSibling;
     const isOpen = dropdown.classList.contains('show');
     
     // Close all other dropdowns first
@@ -1384,21 +1399,6 @@ function toggleDropdown(campaignId) {
     
     // Toggle current dropdown
     if (!isOpen) {
-        // Calculate position
-        const toggleRect = toggle.getBoundingClientRect();
-        const dropdownRect = dropdown.getBoundingClientRect();
-        
-        // Position dropdown below the toggle button
-        dropdown.style.top = (toggleRect.bottom + 5) + 'px';
-        dropdown.style.left = (toggleRect.right - 180) + 'px'; // Align to right edge
-        
-        // Check if dropdown goes off screen and adjust
-        const viewportWidth = window.innerWidth;
-        const dropdownLeft = toggleRect.right - 180;
-        if (dropdownLeft < 10) {
-            dropdown.style.left = (toggleRect.left) + 'px';
-        }
-        
         dropdown.classList.add('show');
     }
 }
