@@ -225,47 +225,47 @@
                                                 </span>
                                             </td>
                                             <td class="created-date">{{ $campaign->created_at->format('M j, Y') }}</td>
-                                            <td class="actions-cell">
-                                                <div class="action-dropdown">
-                                                    <button class="dropdown-toggle" onclick="toggleDropdown({{ $campaign->id }})" title="Actions">
-                                                        <span class="dots-icon">⋮</span>
-                                                    </button>
-                                                    <div class="dropdown-menu" id="dropdown-{{ $campaign->id }}">
-                                                        <a href="{{ route('admin.communication.show', $campaign) }}" class="dropdown-item">
-                                                            <i class="icofont-eye"></i> View Details
+                                            <td>
+                                                <div class="action-buttons">
+                                                    <a href="{{ route('admin.communication.show', $campaign) }}" 
+                                                       class="action-btn view-btn" title="View Details">
+                                                        <i class="icofont-eye"></i>
+                                                    </a>
+                                                    
+                                                    @if($campaign->status === 'sent')
+                                                        <a href="{{ route('admin.communication.replies', $campaign) }}" 
+                                                           class="action-btn replies-btn" title="View Replies ({{ $campaign->replies_count }})">
+                                                            <i class="icofont-chat"></i>
                                                         </a>
-                                                        
-                                                        @if($campaign->status === 'sent')
-                                                            <a href="{{ route('admin.communication.replies', $campaign) }}" class="dropdown-item">
-                                                                <i class="icofont-chat"></i> View Replies ({{ $campaign->replies_count }})
-                                                            </a>
-                                                        @endif
-                                                        
-                                                        @if($campaign->status === 'draft')
-                                                            <a href="{{ route('admin.communication.edit', $campaign) }}" class="dropdown-item">
-                                                                <i class="icofont-edit"></i> Edit
-                                                            </a>
-                                                        @endif
+                                                    @endif
+                                                    
+                                                    @if($campaign->status === 'draft')
+                                                        <a href="{{ route('admin.communication.edit', $campaign) }}" 
+                                                           class="action-btn edit-btn" title="Edit">
+                                                            <i class="icofont-edit"></i>
+                                                        </a>
+                                                    @endif
 
-                                                        @if(in_array($campaign->status, ['draft', 'scheduled']))
-                                                            <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
-                                                                  onsubmit="return confirm('Are you sure you want to send this memo?')">
-                                                                @csrf
-                                                                <button type="submit" class="dropdown-item">
-                                                                    <i class="icofont-send-mail"></i> Send Now
-                                                                </button>
-                                                            </form>
-                                                        @endif
-
-                                                        <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
-                                                              onsubmit="return confirm('Are you sure you want to delete this memo?')">
+                                                    @if(in_array($campaign->status, ['draft', 'scheduled']))
+                                                        <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
+                                                              style="display: inline-block;" 
+                                                              onsubmit="return confirm('Are you sure you want to send this memo?')">
                                                             @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="dropdown-item delete-item">
-                                                                <i class="icofont-trash"></i> Delete
+                                                            <button type="submit" class="action-btn send-btn" title="Send Now">
+                                                                <i class="icofont-send-mail"></i>
                                                             </button>
                                                         </form>
-                                                    </div>
+                                                    @endif
+
+                                                    <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
+                                                          style="display: inline-block;" 
+                                                          onsubmit="return confirm('Are you sure you want to delete this memo?')">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="action-btn delete-btn" title="Delete">
+                                                            <i class="icofont-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                             </td>
                                         </tr>
@@ -298,18 +298,6 @@
 </div>
 
 <style>
-/* Force all containers to allow dropdown overflow */
-.dashboard__content__wraper,
-.dashboard__content__wraper *,
-.col-xl-9,
-.col-lg-9,
-.col-md-12,
-.row,
-.container-fluid,
-.full__width__padding {
-  overflow: visible !important;
-}
-
 /* Modern Statistics Page Styles */
 * {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
@@ -435,7 +423,6 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid #f1f5f9;
   height: 100%;
-  overflow: visible !important;
 }
 
 .panel-header {
@@ -638,7 +625,6 @@
 /* Table Styling */
 .table-container {
   overflow-x: auto;
-  overflow-y: visible;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
 }
@@ -647,7 +633,6 @@
   width: 100%;
   border-collapse: collapse;
   background: white;
-  overflow: visible;
 }
 
 .email-table th {
@@ -670,7 +655,6 @@
 
 .email-table tbody tr {
   transition: all 0.3s ease;
-  overflow: visible;
 }
 
 .email-table tbody tr:hover {
@@ -789,18 +773,14 @@
   font-size: 14px;
 }
 
-/* Action Dropdown */
-.actions-cell {
-  position: relative;
-  overflow: visible !important;
+/* Action Buttons */
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
-.action-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.dropdown-toggle {
+.action-btn {
   width: 36px;
   height: 36px;
   border: none;
@@ -808,91 +788,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
   color: white;
+  font-size: 14px;
   cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
-  z-index: 1;
+  text-decoration: none;
 }
 
-.dropdown-toggle::before,
-.dropdown-toggle::after {
-  content: none !important;
-  display: none !important;
-}
-
-.dropdown-toggle:hover {
-  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
-  transform: translateY(-1px);
+.action-btn:hover {
+  transform: translateY(-2px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.dropdown-toggle i,
-.dropdown-toggle [class^="icofont-"] {
-  display: none !important;
-}
-
-.dots-icon {
-  font-size: 24px;
-  font-weight: bold;
-  line-height: 1;
-  letter-spacing: 0;
-  font-family: Arial, sans-serif;
-}
-
-.dropdown-menu {
-  position: fixed;
-  background: white;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
-  min-width: 180px;
-  z-index: 99999;
-  display: none !important;
-  opacity: 0;
-  visibility: hidden;
-  overflow: hidden;
-}
-
-.dropdown-menu.show {
-  display: block !important;
-  opacity: 1 !important;
-  visibility: visible !important;
-}
-
-.dropdown-item {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  color: #374151;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.2s ease;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-  cursor: pointer;
-}
-
-.dropdown-item:hover {
-  background: #f3f4f6;
-  color: #1f2937;
-}
-
-.dropdown-item.delete-item:hover {
-  background: #fef2f2;
-  color: #dc2626;
-}
-
-.dropdown-item i {
-  font-size: 16px;
-  width: 16px;
-  text-align: center;
-}
+.view-btn { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
+.edit-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+.send-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+.delete-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+.replies-btn { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
 
 /* Memo Success Popup Styles */
 .memo-success-popup {
@@ -1284,20 +1196,15 @@
     padding: 12px 16px;
   }
   
-  .dropdown-toggle {
+  .action-buttons {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .action-btn {
     width: 32px;
     height: 32px;
-    font-size: 14px;
-  }
-  
-  .dropdown-menu {
-    min-width: 160px;
-    right: -10px;
-  }
-  
-  .dropdown-item {
-    padding: 10px 14px;
-    font-size: 13px;
+    font-size: 12px;
   }
   
   .search-form {
@@ -1398,57 +1305,7 @@ document.addEventListener('DOMContentLoaded', function() {
             location.reload();
         }, 30000);
     }
-    
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(event) {
-        if (!event.target.closest('.action-dropdown')) {
-            closeAllDropdowns();
-        }
-    });
 });
-
-// Dropdown functionality
-function toggleDropdown(campaignId) {
-    const dropdown = document.getElementById(`dropdown-${campaignId}`);
-    if (!dropdown) return;
-    
-    const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
-    if (!toggle) return;
-    
-    const isOpen = dropdown.classList.contains('show');
-    
-    // Close all other dropdowns first
-    closeAllDropdowns();
-    
-    // Toggle current dropdown
-    if (!isOpen) {
-        const toggleRect = toggle.getBoundingClientRect();
-        const topPos = toggleRect.bottom + 5;
-        const leftPos = toggleRect.right - 180;
-        
-        // Set all styles directly
-        dropdown.style.cssText = `
-            position: fixed !important;
-            top: ${topPos}px !important;
-            left: ${leftPos}px !important;
-            display: block !important;
-            opacity: 1 !important;
-            visibility: visible !important;
-            z-index: 99999 !important;
-        `;
-        
-        dropdown.classList.add('show');
-    }
-}
-
-function closeAllDropdowns() {
-    document.querySelectorAll('.dropdown-menu').forEach(menu => {
-        menu.classList.remove('show');
-        menu.style.display = 'none';
-        menu.style.opacity = '0';
-        menu.style.visibility = 'hidden';
-    });
-}
 
 // Memo Success Popup Functions
 function closeMemoPopup() {
