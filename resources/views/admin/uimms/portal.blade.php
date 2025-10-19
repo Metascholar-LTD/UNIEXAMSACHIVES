@@ -653,18 +653,6 @@
                                         </style>
 
                                         <script>
-                                        // Function to escape HTML content to prevent XSS and display HTML tags as text
-                                        function escapeHtml(text) {
-                                            const map = {
-                                                '&': '&amp;',
-                                                '<': '&lt;',
-                                                '>': '&gt;',
-                                                '"': '&quot;',
-                                                "'": '&#039;'
-                                            };
-                                            return text.replace(/[&<>"']/g, function(m) { return map[m]; });
-                                        }
-
                                         let currentStatus = 'pending';
 
                                         // Load memos on page load
@@ -790,7 +778,7 @@
                                                                             </div>
                                                                         </div>
                                                                         <div class="memo-subject">${memo.subject}</div>
-                                                                        <div class="memo-preview">${memo.message ? escapeHtml(memo.message.substring(0, 120)) : 'No content'}...</div>
+                                                                        <div class="memo-preview">${memo.message ? memo.message.substring(0, 120) : 'No content'}...</div>
                                                                         <div class="memo-footer">
                                                                             <div class="memo-left-info">
                                                                                 <span class="chat__time">${lastMessageTime}</span>
