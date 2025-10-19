@@ -151,7 +151,7 @@
                                     <div class="memo-detail-item full-width">
                                         <label>Message:</label>
                                         <div class="memo-message-content">
-                                            {!! nl2br(e($memo->message)) !!}
+                                            {!! $memo->message !!}
                                         </div>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@
                                                 @endif
                                                 <span class="message-time">{{ $message->created_at->format('M d, Y H:i') }}</span>
                                             </div>
-                                            <div class="message-text">{!! nl2br(e($message->message)) !!}</div>
+                                            <div class="message-text">{!! $message->message !!}</div>
                                             @if($message->attachments && count($message->attachments) > 0)
                                                 <div class="message-attachments">
                                                     @foreach($message->attachments as $index => $attachment)
@@ -2178,7 +2178,7 @@ function addMessageToChat(message) {
                     ${replyModeDisplay}
                     <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
                 </div>
-                <div class="message-text">${message.message.replace(/\n/g, '<br>')}</div>
+                <div class="message-text">${message.message}</div>
             </div>
         </div>
     `;
