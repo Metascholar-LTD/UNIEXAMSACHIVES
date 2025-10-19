@@ -226,46 +226,46 @@
                                             </td>
                                             <td class="created-date">{{ $campaign->created_at->format('M j, Y') }}</td>
                                             <td>
-                                                <div class="action-buttons">
-                                                    <a href="{{ route('admin.communication-admin.show', $campaign) }}" 
-                                                       class="action-btn view-btn" title="View Details">
-                                                        <i class="icofont-eye"></i>
-                                                    </a>
-                                                    
-                                                    @if($campaign->status === 'sent')
-                                                        <a href="{{ route('admin.communication-admin.replies', $campaign) }}" 
-                                                           class="action-btn replies-btn" title="View Replies ({{ $campaign->replies_count }})">
-                                                            <i class="icofont-chat"></i>
+                                                <div class="action-dropdown">
+                                                    <button class="dropdown-toggle" onclick="toggleDropdown({{ $campaign->id }})" title="Actions">
+                                                        <i class="icofont-dots-vertical"></i>
+                                                    </button>
+                                                    <div class="dropdown-menu" id="dropdown-{{ $campaign->id }}">
+                                                        <a href="{{ route('admin.communication-admin.show', $campaign) }}" class="dropdown-item">
+                                                            <i class="icofont-eye"></i> View Details
                                                         </a>
-                                                    @endif
-                                                    
-                                                    @if($campaign->status === 'draft')
-                                                        <a href="{{ route('admin.communication-admin.edit', $campaign) }}" 
-                                                           class="action-btn edit-btn" title="Edit">
-                                                            <i class="icofont-edit"></i>
-                                                        </a>
-                                                    @endif
+                                                        
+                                                        @if($campaign->status === 'sent')
+                                                            <a href="{{ route('admin.communication-admin.replies', $campaign) }}" class="dropdown-item">
+                                                                <i class="icofont-chat"></i> View Replies ({{ $campaign->replies_count }})
+                                                            </a>
+                                                        @endif
+                                                        
+                                                        @if($campaign->status === 'draft')
+                                                            <a href="{{ route('admin.communication-admin.edit', $campaign) }}" class="dropdown-item">
+                                                                <i class="icofont-edit"></i> Edit
+                                                            </a>
+                                                        @endif
 
-                                                    @if(in_array($campaign->status, ['draft', 'scheduled']))
-                                                        <form method="POST" action="{{ route('admin.communication-admin.send', $campaign) }}" 
-                                                              style="display: inline-block;" 
-                                                              onsubmit="return confirm('Are you sure you want to send this memo?')">
+                                                        @if(in_array($campaign->status, ['draft', 'scheduled']))
+                                                            <form method="POST" action="{{ route('admin.communication-admin.send', $campaign) }}" 
+                                                                  onsubmit="return confirm('Are you sure you want to send this memo?')">
+                                                                @csrf
+                                                                <button type="submit" class="dropdown-item">
+                                                                    <i class="icofont-send-mail"></i> Send Now
+                                                                </button>
+                                                            </form>
+                                                        @endif
+
+                                                        <form method="POST" action="{{ route('admin.communication-admin.destroy', $campaign) }}" 
+                                                              onsubmit="return confirm('Are you sure you want to delete this memo?')">
                                                             @csrf
-                                                            <button type="submit" class="action-btn send-btn" title="Send Now">
-                                                                <i class="icofont-send-mail"></i>
+                                                            @method('DELETE')
+                                                            <button type="submit" class="dropdown-item delete-item">
+                                                                <i class="icofont-trash"></i> Delete
                                                             </button>
                                                         </form>
-                                                    @endif
-
-                                                    <form method="POST" action="{{ route('admin.communication-admin.destroy', $campaign) }}" 
-                                                          style="display: inline-block;" 
-                                                          onsubmit="return confirm('Are you sure you want to delete this memo?')">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit" class="action-btn delete-btn" title="Delete">
-                                                            <i class="icofont-trash"></i>
-                                                        </button>
-                                                    </form>
+                                                    </div>
                                                 </div>
                                             </td>
                                         </tr>
@@ -773,14 +773,13 @@
   font-size: 14px;
 }
 
-/* Action Buttons */
-.action-buttons {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
+/* Action Dropdown */
+.action-dropdown {
+  position: relative;
+  display: inline-block;
 }
 
-.action-btn {
+.dropdown-toggle {
   width: 36px;
   height: 36px;
   border: none;
@@ -788,23 +787,81 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
   color: white;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   transition: all 0.3s ease;
-  text-decoration: none;
 }
 
-.action-btn:hover {
-  transform: translateY(-2px);
+.dropdown-toggle:hover {
+  background: linear-gradient(135deg, #4b5563 0%, #374151 100%);
+  transform: translateY(-1px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-.view-btn { background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%); }
-.edit-btn { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
-.send-btn { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-.delete-btn { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
-.replies-btn { background: linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%); }
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+  min-width: 180px;
+  z-index: 1000;
+  display: none;
+  overflow: hidden;
+}
+
+.dropdown-menu.show {
+  display: block;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  color: #374151;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+
+.dropdown-item:hover {
+  background: #f3f4f6;
+  color: #1f2937;
+}
+
+.dropdown-item.delete-item:hover {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.dropdown-item i {
+  font-size: 16px;
+  width: 16px;
+  text-align: center;
+}
 
 /* Memo Success Popup Styles */
 .memo-success-popup {
@@ -1196,15 +1253,20 @@
     padding: 12px 16px;
   }
   
-  .action-buttons {
-    flex-direction: column;
-    gap: 4px;
-  }
-  
-  .action-btn {
+  .dropdown-toggle {
     width: 32px;
     height: 32px;
-    font-size: 12px;
+    font-size: 14px;
+  }
+  
+  .dropdown-menu {
+    min-width: 160px;
+    right: -10px;
+  }
+  
+  .dropdown-item {
+    padding: 10px 14px;
+    font-size: 13px;
   }
   
   .search-form {
@@ -1305,7 +1367,34 @@ document.addEventListener('DOMContentLoaded', function() {
             location.reload();
         }, 30000);
     }
+    
+    // Close dropdowns when clicking outside
+    document.addEventListener('click', function(event) {
+        if (!event.target.closest('.action-dropdown')) {
+            closeAllDropdowns();
+        }
+    });
 });
+
+// Dropdown functionality
+function toggleDropdown(campaignId) {
+    const dropdown = document.getElementById(`dropdown-${campaignId}`);
+    const isOpen = dropdown.classList.contains('show');
+    
+    // Close all other dropdowns first
+    closeAllDropdowns();
+    
+    // Toggle current dropdown
+    if (!isOpen) {
+        dropdown.classList.add('show');
+    }
+}
+
+function closeAllDropdowns() {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('show');
+    });
+}
 
 // Memo Success Popup Functions
 function closeMemoPopup() {
