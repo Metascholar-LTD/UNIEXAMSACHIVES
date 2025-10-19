@@ -423,6 +423,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid #f1f5f9;
   height: 100%;
+  overflow: visible !important;
 }
 
 .panel-header {
@@ -657,6 +658,7 @@
 
 .email-table tbody tr {
   transition: all 0.3s ease;
+  overflow: visible;
 }
 
 .email-table tbody tr:hover {
@@ -798,6 +800,14 @@
   color: white;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
+  z-index: 1;
+}
+
+.dropdown-toggle::before,
+.dropdown-toggle::after {
+  content: none !important;
+  display: none !important;
 }
 
 .dropdown-toggle:hover {
@@ -806,11 +816,17 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.dropdown-toggle i,
+.dropdown-toggle [class^="icofont-"] {
+  display: none !important;
+}
+
 .dots-icon {
-  font-size: 22px;
+  font-size: 24px;
   font-weight: bold;
   line-height: 1;
-  letter-spacing: 1px;
+  letter-spacing: 0;
+  font-family: Arial, sans-serif;
 }
 
 .dropdown-menu {
@@ -822,9 +838,10 @@
   border-radius: 8px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
   min-width: 180px;
-  z-index: 1000;
+  z-index: 9999;
   display: none;
   overflow: hidden;
+  margin-top: 5px;
 }
 
 .dropdown-menu.show {
