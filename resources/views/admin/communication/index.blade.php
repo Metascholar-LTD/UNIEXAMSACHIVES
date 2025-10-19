@@ -1418,7 +1418,7 @@ document.addEventListener('DOMContentLoaded', function() {
 // Dropdown functionality
 function toggleDropdown(campaignId) {
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
-    const toggle = dropdown.previousElementSibling;
+    const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
     const isOpen = dropdown.classList.contains('show');
     
     // Close all other dropdowns first
