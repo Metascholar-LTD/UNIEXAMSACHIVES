@@ -151,7 +151,7 @@
                                     <div class="memo-detail-item full-width">
                                         <label>Message:</label>
                                         <div class="memo-message-content">
-                                            {!! nl2br(e($memo->message)) !!}
+                                            {!! sanitize_memo_html($memo->message) !!}
                                         </div>
                                     </div>
                                 </div>
@@ -231,7 +231,7 @@
                                                 @endif
                                                 <span class="message-time">{{ $message->created_at->format('M d, Y H:i') }}</span>
                                             </div>
-                                            <div class="message-text">{!! nl2br(e($message->message)) !!}</div>
+                                            <div class="message-text">{!! sanitize_memo_html($message->message) !!}</div>
                                             @if($message->attachments && count($message->attachments) > 0)
                                                 <div class="message-attachments">
                                                     @foreach($message->attachments as $index => $attachment)
@@ -1778,6 +1778,32 @@
 const memoId = {{ $memo->id }};
 let messageInterval;
 
+// Simple HTML sanitization function for client-side
+function sanitizeHtml(html) {
+    // Create a temporary div to parse HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = html;
+    
+    // Remove script tags and dangerous attributes
+    const scripts = temp.querySelectorAll('script');
+    scripts.forEach(script => script.remove());
+    
+    // Remove dangerous attributes
+    const allElements = temp.querySelectorAll('*');
+    allElements.forEach(element => {
+        // Remove event handlers
+        Array.from(element.attributes).forEach(attr => {
+            if (attr.name.startsWith('on') || 
+                attr.name === 'href' && attr.value.startsWith('javascript:') ||
+                attr.name === 'src' && attr.value.startsWith('javascript:')) {
+                element.removeAttribute(attr.name);
+            }
+        });
+    });
+    
+    return temp.innerHTML;
+}
+
 // Auto-resize textarea
 document.getElementById('message-input').addEventListener('input', function() {
     this.style.height = 'auto';
@@ -2178,7 +2204,7 @@ function addMessageToChat(message) {
                     ${replyModeDisplay}
                     <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
                 </div>
-                <div class="message-text">${message.message.replace(/\n/g, '<br>')}</div>
+                <div class="message-text">${sanitizeHtml(message.message)}</div>
             </div>
         </div>
     `;
