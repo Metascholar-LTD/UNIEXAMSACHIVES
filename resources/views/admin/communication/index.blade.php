@@ -854,8 +854,10 @@
 }
 
 .dropdown-menu.show {
-  display: block;
+  display: block !important;
   animation: dropdownFadeIn 0.2s ease-out;
+  opacity: 1;
+  visibility: visible;
 }
 
 @keyframes dropdownFadeIn {
@@ -1417,8 +1419,20 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Dropdown functionality
 function toggleDropdown(campaignId) {
+    alert('Function called for campaign: ' + campaignId);
+    
     const dropdown = document.getElementById(`dropdown-${campaignId}`);
+    if (!dropdown) {
+        alert('Dropdown not found for ID: dropdown-' + campaignId);
+        return;
+    }
+    
     const toggle = dropdown.parentElement.querySelector('.dropdown-toggle');
+    if (!toggle) {
+        alert('Toggle button not found');
+        return;
+    }
+    
     const isOpen = dropdown.classList.contains('show');
     
     // Close all other dropdowns first
@@ -1431,7 +1445,7 @@ function toggleDropdown(campaignId) {
         
         // Position dropdown below the toggle button
         dropdown.style.top = (toggleRect.bottom + 5) + 'px';
-        dropdown.style.left = (toggleRect.right - 180) + 'px'; // Align to right edge
+        dropdown.style.left = (toggleRect.right - 180) + 'px';
         
         // Check if dropdown goes off screen and adjust
         const viewportWidth = window.innerWidth;
@@ -1441,6 +1455,7 @@ function toggleDropdown(campaignId) {
         }
         
         dropdown.classList.add('show');
+        alert('Show class added. Classes: ' + dropdown.className);
     }
 }
 
