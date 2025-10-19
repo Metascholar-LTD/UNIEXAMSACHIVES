@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Mail\Approval;
-use App\Mail\MemoAssignmentNotification;
-use App\Mail\MemoAssignmentConfirmation;
 use App\Models\Academic;
 use App\Models\Department;
 use App\Models\File;
@@ -1133,34 +1131,6 @@ class HomeController extends Controller
                 'assigned_by' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
             ]
         ]);
-
-        // Send email notifications
-        try {
-            // Send notification email to the assignee
-            Mail::to($assignee->email)->send(new MemoAssignmentNotification(
-                $memo, 
-                $assignee, 
-                Auth::user(), 
-                $request->message
-            ));
-
-            // Send confirmation email to the assigner
-            Mail::to(Auth::user()->email)->send(new MemoAssignmentConfirmation(
-                $memo, 
-                $assignee, 
-                Auth::user(), 
-                $request->message
-            ));
-
-        } catch (\Exception $e) {
-            // Log the error but don't fail the assignment
-            \Log::error('Failed to send memo assignment emails', [
-                'memo_id' => $memo->id,
-                'assignee_id' => $assignee->id,
-                'assigner_id' => Auth::id(),
-                'error' => $e->getMessage()
-            ]);
-        }
 
         return response()->json([
             'success' => true,
