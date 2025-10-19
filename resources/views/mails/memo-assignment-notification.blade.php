@@ -5,148 +5,293 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Memo Assigned to You</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-            color: #333;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            line-height: 1.5;
+            color: #202124;
+            background-color: #f8f9fa;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .email-container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(60,64,67,0.3), 0 4px 8px 3px rgba(60,64,67,0.15);
         }
+        
         .header {
+            background: linear-gradient(135deg, #1a73e8 0%, #4285f4 100%);
+            color: white;
+            padding: 24px;
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #007bff;
         }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 10px;
-        }
-        .title {
-            color: #007bff;
+        
+        .header h1 {
             font-size: 20px;
-            margin-bottom: 20px;
+            font-weight: 500;
+            margin: 0;
+            letter-spacing: 0.25px;
         }
+        
         .content {
-            margin-bottom: 30px;
+            padding: 24px;
         }
-        .memo-details {
+        
+        .greeting {
+            font-size: 16px;
+            margin-bottom: 16px;
+            color: #202124;
+        }
+        
+        .main-message {
+            font-size: 14px;
+            color: #5f6368;
+            margin-bottom: 24px;
+            line-height: 1.6;
+        }
+        
+        .memo-card {
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+            background-color: #fafafa;
+        }
+        
+        .memo-subject {
+            font-size: 16px;
+            font-weight: 500;
+            color: #1a73e8;
+            margin-bottom: 8px;
+            text-decoration: none;
+        }
+        
+        .memo-subject:hover {
+            text-decoration: underline;
+        }
+        
+        .memo-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            font-size: 13px;
+            color: #5f6368;
+            margin-bottom: 12px;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 8px;
+            background-color: #fef7e0;
+            color: #b06000;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .assigner-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
             background-color: #f8f9fa;
-            padding: 20px;
-            border-left: 4px solid #007bff;
-            margin: 20px 0;
-            border-radius: 5px;
+            border-radius: 6px;
+            margin-bottom: 16px;
         }
-        .assignment-info {
-            background-color: #e3f2fd;
-            padding: 15px;
-            border-left: 4px solid #2196f3;
-            margin: 20px 0;
-            border-radius: 5px;
-        }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
+        
+        .assigner-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: #1a73e8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 500;
             font-size: 14px;
         }
-        .button {
+        
+        .assigner-info h4 {
+            font-size: 14px;
+            font-weight: 500;
+            color: #202124;
+            margin: 0 0 2px 0;
+        }
+        
+        .assigner-info p {
+            font-size: 12px;
+            color: #5f6368;
+            margin: 0;
+        }
+        
+        .assignment-message {
+            background-color: #e8f0fe;
+            border-left: 3px solid #1a73e8;
+            padding: 12px 16px;
+            margin-bottom: 16px;
+            border-radius: 0 4px 4px 0;
+        }
+        
+        .assignment-message p {
+            font-size: 14px;
+            color: #1a73e8;
+            margin: 0;
+            font-style: italic;
+        }
+        
+        .action-button {
             display: inline-block;
-            padding: 12px 24px;
-            background-color: #007bff;
-            color: #ffffff;
+            background-color: #1a73e8;
+            color: white;
             text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
+            padding: 12px 24px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            text-align: center;
+            transition: background-color 0.2s;
         }
-        .button:hover {
-            background-color: #0056b3;
+        
+        .action-button:hover {
+            background-color: #1557b0;
+            text-decoration: none;
+            color: white;
         }
-        .assignment-icon {
-            font-size: 48px;
-            color: #007bff;
-            margin-bottom: 20px;
+        
+        .action-section {
+            text-align: center;
+            margin: 24px 0;
         }
-        .assigner-info {
-            background-color: #fff3cd;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
-            margin: 20px 0;
-            border-radius: 5px;
+        
+        .footer {
+            background-color: #f8f9fa;
+            padding: 16px 24px;
+            border-top: 1px solid #dadce0;
+            text-align: center;
+        }
+        
+        .footer p {
+            font-size: 12px;
+            color: #5f6368;
+            margin: 0 0 4px 0;
+        }
+        
+        .footer p:last-child {
+            margin-bottom: 0;
+        }
+        
+        .divider {
+            height: 1px;
+            background-color: #dadce0;
+            margin: 16px 0;
+        }
+        
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0;
+                border-radius: 0;
+            }
+            
+            .content {
+                padding: 16px;
+            }
+            
+            .header {
+                padding: 16px;
+            }
+            
+            .memo-meta {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="email-container">
         <div class="header">
-            <div class="logo">University Advanced Communication System</div>
-            <div class="title">📋 Memo Assigned to You</div>
+            <h1>📋 Memo Assigned to You</h1>
         </div>
         
         <div class="content">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <div class="assignment-icon">📋</div>
+            <div class="greeting">
+                Hello <strong>{{ $assignee->first_name }} {{ $assignee->last_name }}</strong>,
             </div>
             
-            <p>Dear <strong>{{ $assignee->first_name }} {{ $assignee->last_name }}</strong>,</p>
-            
-            <p>A memo has been assigned to you and requires your attention. Please log in to the system to review and respond.</p>
-            
-            <div class="memo-details">
-                <h3 style="margin-top: 0; color: #007bff;">📄 Memo Details</h3>
-                <p><strong>Subject:</strong> {{ $memo->subject }}</p>
-                <p><strong>Reference:</strong> {{ $memo->reference ?? 'N/A' }}</p>
-                <p><strong>Status:</strong> <span style="color: #ffc107; font-weight: bold;">Pending</span></p>
-                <p><strong>Assigned Date:</strong> {{ now()->format('F j, Y \a\t g:i A') }}</p>
+            <div class="main-message">
+                A memo has been assigned to you and requires your attention. Please review the details below and take the necessary action.
             </div>
             
-            <div class="assigner-info">
-                <h4 style="margin-top: 0; color: #856404;">👤 Assigned By</h4>
-                <p><strong>{{ $assigner->first_name }} {{ $assigner->last_name }}</strong></p>
-                <p><em>{{ $assigner->department->name ?? 'Department not specified' }}</em></p>
+            <div class="memo-card">
+                <a href="{{ route('dashboard.uimms.chat', $memo->id) }}" class="memo-subject">
+                    {{ $memo->subject }}
+                </a>
+                
+                <div class="memo-meta">
+                    <div class="meta-item">
+                        <span>📄</span>
+                        <span>Reference: {{ $memo->reference ?? 'N/A' }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span>🕒</span>
+                        <span>{{ now()->format('M j, Y \a\t g:i A') }}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="status-badge">Pending</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="assigner-section">
+                <div class="assigner-avatar">
+                    {{ strtoupper(substr($assigner->first_name, 0, 1)) }}{{ strtoupper(substr($assigner->last_name, 0, 1)) }}
+                </div>
+                <div class="assigner-info">
+                    <h4>{{ $assigner->first_name }} {{ $assigner->last_name }}</h4>
+                    <p>{{ $assigner->department->name ?? 'Department not specified' }}</p>
+                </div>
             </div>
             
             @if($assignmentMessage)
-                <div class="assignment-info">
-                    <h4 style="margin-top: 0; color: #1976d2;">💬 Assignment Message</h4>
-                    <p style="margin-bottom: 0;">{{ $assignmentMessage }}</p>
+                <div class="assignment-message">
+                    <p>"{{ $assignmentMessage }}"</p>
                 </div>
             @endif
             
-            <div style="background-color: #d1ecf1; padding: 15px; border-left: 4px solid #17a2b8; margin: 20px 0; border-radius: 5px;">
-                <h4 style="margin-top: 0; color: #0c5460;">⚠️ Action Required</h4>
-                <p style="margin-bottom: 0;">Please log in to the system to:</p>
-                <ul style="margin-bottom: 0;">
-                    <li>Review the full memo content and any attachments</li>
-                    <li>Respond to the memo if required</li>
-                    <li>Update the memo status as needed</li>
-                    <li>Communicate with other participants</li>
-                </ul>
+            <div class="divider"></div>
+            
+            <div class="action-section">
+                <a href="{{ route('dashboard.uimms.chat', $memo->id) }}" class="action-button">
+                    View Memo in System
+                </a>
             </div>
             
-            <div style="text-align: center;">
-                <a href="{{ route('dashboard.uimms.chat', $memo->id) }}" class="button">View Memo in System</a>
+            <div style="font-size: 12px; color: #5f6368; text-align: center; margin-top: 16px;">
+                This is an automated notification. Please do not reply to this email.
             </div>
-            
-            <p style="margin-top: 30px;"><strong>Note:</strong> This is an automated notification. Please do not reply to this email. Use the system to communicate about this memo.</p>
         </div>
         
         <div class="footer">
-            <p>This is an automated message from the University Advanced Communication System.</p>
-            <p>Please do not reply to this email.</p>
-            <p>&copy; {{ date('Y') }} University Advanced Communication System. All rights reserved.</p>
+            <p>University Advanced Communication System</p>
+            <p>&copy; {{ date('Y') }} All rights reserved.</p>
         </div>
     </div>
 </body>
