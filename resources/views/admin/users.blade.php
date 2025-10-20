@@ -597,10 +597,10 @@
                                                     </form>
                                                 @endif
 
-                                                <form action="{{ route('users.destroy', $user->id) }}" method="post" style="display: inline;">
+                                                <form action="{{ route('users.destroy', $user->id) }}" method="post" style="display: inline;" id="delete-user-form-{{ $user->id }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="action-btn delete" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                    <button type="button" class="action-btn delete" onclick="confirmDeleteUser({{ $user->id }}, '{{ $user->first_name }} {{ $user->last_name }}')">
                                                         <i class="fas fa-trash"></i>
                                                         Delete
                                                     </button>
@@ -660,10 +660,10 @@
                                                             </button>
                                                         </form>
                                                         @endif
-                                                        <form action="{{ route('users.destroy', $user->id) }}" method="post" style="display: inline;">
+                                                        <form action="{{ route('users.destroy', $user->id) }}" method="post" style="display: inline;" id="delete-user-table-form-{{ $user->id }}">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="action-btn delete" style="min-width:auto; padding:8px 12px;" onclick="return confirm('Are you sure you want to delete this user? This action cannot be undone.')">
+                                                            <button type="button" class="action-btn delete" style="min-width:auto; padding:8px 12px;" onclick="confirmDeleteUser({{ $user->id }}, '{{ $user->first_name }} {{ $user->last_name }}')">
                                                                 <i class="fas fa-trash"></i>
                                                             </button>
                                                         </form>
@@ -777,5 +777,23 @@ document.addEventListener('DOMContentLoaded', function() {
 function performSearch() {
     const event = new Event('input');
     document.getElementById('searchInput').dispatchEvent(event);
+}
+
+// Confirmation modal function for user deletion
+function confirmDeleteUser(userId, userName) {
+    confirmDelete(
+        `Are you sure you want to delete "${userName}"?`,
+        function() {
+            // Try both possible form IDs (card view and table view)
+            const cardForm = document.getElementById('delete-user-form-' + userId);
+            const tableForm = document.getElementById('delete-user-table-form-' + userId);
+            
+            if (cardForm) {
+                cardForm.submit();
+            } else if (tableForm) {
+                tableForm.submit();
+            }
+        }
+    );
 }
 </script>
