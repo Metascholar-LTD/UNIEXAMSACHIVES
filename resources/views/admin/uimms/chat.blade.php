@@ -43,7 +43,7 @@
                                     </button>
                                     <div class="btn-group">
                                         @if(!in_array($memo->memo_status, ['completed', 'archived']))
-                                            <button class="btn btn-sm btn-outline-success" onclick="updateMemoStatus('completed')">
+                                            <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
                                                 <i class="icofont-check-circled"></i> Complete
                                             </button>
                                             <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
@@ -2279,6 +2279,23 @@ function updateMemoStatus(status, reason = null) {
         console.error('Error updating status:', error);
         alert('Error updating memo status. Please try again.');
     });
+}
+
+// Confirmation function for completing memo
+function confirmCompleteMemo() {
+    confirmAction(
+        'Are you sure you want to mark this memo as completed?',
+        function() {
+            updateMemoStatus('completed');
+        },
+        null,
+        {
+            title: 'Complete Memo',
+            type: 'success',
+            confirmText: 'Complete',
+            subtitle: 'This will mark the memo as finished and prevent further messages.'
+        }
+    );
 }
 
 // Auto-refresh messages every 5 seconds
