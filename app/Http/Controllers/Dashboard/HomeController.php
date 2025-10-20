@@ -1110,14 +1110,17 @@ class HomeController extends Controller
         $memo->assignTo($request->assignee_id, $userId, $request->office);
 
         // Send a system message about the assignment
+        $assignmentMessage = "<em>📋 Memo Assigned by " . Auth::user()->first_name . " " . Auth::user()->last_name . " to " . $assignee->first_name . " " . $assignee->last_name . "</em>";
         if ($request->message) {
-            MemoReply::create([
-                'campaign_id' => $memo->id,
-                'user_id' => $userId,
-                'message' => "📋 **Assigned to " . $assignee->first_name . " " . $assignee->last_name . "**\n\n" . $request->message,
-                'attachments' => [],
-            ]);
+            $assignmentMessage .= "\n\n" . $request->message;
         }
+        
+        MemoReply::create([
+            'campaign_id' => $memo->id,
+            'user_id' => $userId,
+            'message' => $assignmentMessage,
+            'attachments' => [],
+        ]);
 
         // Create notification for new assignee
         Notification::create([
