@@ -1511,4 +1511,93 @@ class HomeController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to archive selected memos'], 500);
         }
     }
+
+    /**
+     * Bulk unarchive selected memos
+     */
+    public function bulkUnarchiveSelected(Request $request)
+    {
+        $userId = Auth::id();
+        
+        $request->validate([
+            'memo_ids' => 'required|string'
+        ]);
+        
+        try {
+            $memoIds = json_decode($request->memo_ids, true);
+            
+            // Debug: Log the memo IDs being processed
+            \Log::info('Processing bulk unarchive for memos:', [
+                'user_id' => $userId,
+                'memo_ids' => $memoIds
+            ]);
+            
+            // Get selected memos where user is a participant and status is archived
+            $selectedMemos = EmailCampaign::whereIn('id', $memoIds)
+                ->where('memo_status', 'archived')
+                ->where(function($query) use ($userId) {
+                    $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    });
+                })->get();
+            
+            // Debug: Log how many memos were found
+            \Log::info('Found memos to unarchive:', [
+                'count' => $selectedMemos->count(),
+                'memo_ids_found' => $selectedMemos->pluck('id')->toArray()
+            ]);
+            
+            $unarchivedCount = 0;
+            
+            foreach ($selectedMemos as $memo) {
+                // Update memo status to completed (unarchive)
+                $memo->update(['memo_status' => 'completed']);
+                
+                // Add to workflow history
+                $workflowHistory = $memo->workflow_history ?? [];
+                $workflowHistory[] = [
+                    'action' => 'bulk_unarchived',
+                    'user_id' => $userId,
+                    'timestamp' => now()->toISOString(),
+                    'status' => 'completed',
+                    'reason' => 'Bulk unarchived from archived status'
+                ];
+                $memo->update(['workflow_history' => $workflowHistory]);
+                
+                $unarchivedCount++;
+            }
+            
+            // Get updated counts
+            $completedCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
+            })->where('memo_status', 'completed')->count();
+            
+            $archivedCountTotal = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
+            })->where('memo_status', 'archived')->count();
+            
+            return response()->json([
+                'success' => true,
+                'unarchived_count' => $unarchivedCount,
+                'counts' => [
+                    'completed' => $completedCount,
+                    'archived' => $archivedCountTotal
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in bulkUnarchiveSelected: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to unarchive selected memos'], 500);
+        }
+    }
 }

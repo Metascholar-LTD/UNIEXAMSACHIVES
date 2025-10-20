@@ -105,6 +105,14 @@
                                                         <div class="text">Archive Selected</div>
                                                     </div>
                                                 </button>
+                                                <button class="responsive-btn bulk-unarchive-btn" id="bulk-unarchive-btn" onclick="bulkUnarchiveSelected()" style="display: none;">
+                                                    <div class="svgWrapper">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                            <path stroke="#fff" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                                                        </svg>
+                                                        <div class="text">Unarchive Selected</div>
+                                                    </div>
+                                                </button>
                                                 <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
                                                     <div class="svgWrapper">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
@@ -678,16 +686,24 @@
                                             };
                                             document.getElementById('section-badge').textContent = badges[status];
                                             
-                                            // Show/hide selection controls and bulk archive button
+                                            // Show/hide selection controls and bulk action buttons
                                             const selectionControls = document.getElementById('selection-controls');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
+                                            const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
+                                            
                                             if (status === 'completed') {
                                                 selectionControls.style.display = 'flex';
                                                 bulkArchiveBtn.style.display = 'flex';
+                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
+                                            } else if (status === 'archived') {
+                                                selectionControls.style.display = 'flex';
+                                                bulkArchiveBtn.style.display = 'none';
+                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'flex';
                                             } else {
                                                 selectionControls.style.display = 'none';
                                                 bulkArchiveBtn.style.display = 'none';
-                                                // Clear selections when switching away from completed
+                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
+                                                // Clear selections when switching away from selectable sections
                                                 clearSelections();
                                             }
                                             
@@ -747,7 +763,7 @@
                                                         return `
                                                             <li class="memo-item" data-memo-id="${memo.id}">
                                                                 <div class="dashboard__meessage__contact__wrap">
-                                                                    ${currentStatus === 'completed' ? `
+                                                                    ${currentStatus === 'completed' || currentStatus === 'archived' ? `
                                                                         <input type="checkbox" class="memo-checkbox" id="memo-${memo.id}" onchange="toggleMemoSelection(${memo.id})" onclick="event.stopPropagation()">
                                                                     ` : ''}
                                                                     <div class="dashboard__meessage__chat__img" onclick="openMemoChat(${memo.id})">
@@ -774,6 +790,11 @@
                                                                                 <div class="memo-right-badges">
                                                                                     <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
                                                                                     ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
+                                                                                    ${memo.memo_status === 'archived' ? `
+                                                                                        <button class="btn btn-sm btn-outline-primary unarchive-btn" onclick="confirmUnarchiveMemo(${memo.id})" title="Unarchive Memo">
+                                                                                            <i class="icofont-undo"></i>
+                                                                                        </button>
+                                                                                    ` : ''}
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -983,6 +1004,126 @@
                                                 loadMemos(currentStatus);
                                             }
                                         }, 30000);
+
+                                        // Confirmation function for unarchiving memo
+                                        function confirmUnarchiveMemo(memoId) {
+                                            confirmAction(
+                                                'Are you sure you want to unarchive this memo?',
+                                                function() {
+                                                    unarchiveMemo(memoId);
+                                                },
+                                                null,
+                                                {
+                                                    title: 'Unarchive Memo',
+                                                    type: 'primary',
+                                                    confirmText: 'Unarchive',
+                                                    subtitle: 'This will move the memo back to completed status.'
+                                                }
+                                            );
+                                        }
+
+                                        // Function to unarchive memo
+                                        function unarchiveMemo(memoId) {
+                                            const formData = new FormData();
+                                            formData.append('status', 'completed');
+                                            formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                                            
+                                            fetch(`/dashboard/uimms/chat/${memoId}/status`, {
+                                                method: 'POST',
+                                                body: formData
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    // Refresh the current view
+                                                    loadMemos(currentStatus);
+                                                } else {
+                                                    alert('Error unarchiving memo. Please try again.');
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error unarchiving memo:', error);
+                                                alert('Error unarchiving memo. Please try again.');
+                                            });
+                                        }
+
+                                        // Bulk unarchive selected memos
+                                        function bulkUnarchiveSelected() {
+                                            if (selectedMemos.size === 0) {
+                                                alert('Please select at least one memo to unarchive.');
+                                                return;
+                                            }
+                                            
+                                            const confirmMessage = selectedMemos.size === 1 
+                                                ? 'Are you sure you want to unarchive the selected memo?'
+                                                : `Are you sure you want to unarchive ${selectedMemos.size} selected memos?`;
+                                            
+                                            confirmAction(confirmMessage, function() {
+                                                // Show loading state
+                                                const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
+                                                const originalText = bulkUnarchiveBtn.innerHTML;
+                                                bulkUnarchiveBtn.innerHTML = `
+                                                    <div class="svgWrapper">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                            <path stroke="#fff" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                                                        </svg>
+                                                        <div class="text">Unarchiving...</div>
+                                                    </div>
+                                                `;
+                                                bulkUnarchiveBtn.disabled = true;
+                                                
+                                                // Prepare form data
+                                                const formData = new FormData();
+                                                formData.append('memo_ids', JSON.stringify(Array.from(selectedMemos)));
+                                                formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+                                                
+                                                // Send bulk unarchive request
+                                                fetch('/dashboard/uimms/bulk-unarchive', {
+                                                    method: 'POST',
+                                                    body: formData
+                                                })
+                                                .then(response => {
+                                                    if (!response.ok) {
+                                                        if (response.status === 422) {
+                                                            return response.json().then(errorData => {
+                                                                throw new Error(`Validation Error: ${JSON.stringify(errorData)}`);
+                                                            });
+                                                        }
+                                                        throw new Error(`HTTP error! status: ${response.status}`);
+                                                    }
+                                                    return response.json();
+                                                })
+                                                .then(data => {
+                                                    if (data.success) {
+                                                        alert(`Successfully unarchived ${data.unarchived_count} selected memos.`);
+                                                        // Clear selections and refresh the archived memos list
+                                                        clearSelections();
+                                                        loadMemos('archived');
+                                                        // Update the counts
+                                                        if (data.counts) {
+                                                            document.getElementById('count-completed').textContent = data.counts.completed;
+                                                            document.getElementById('count-archived').textContent = data.counts.archived;
+                                                        }
+                                                    } else {
+                                                        alert('Error unarchiving memos. Please try again.');
+                                                    }
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                    alert('Error unarchiving memos. Please check the console and try again.');
+                                                })
+                                                .finally(() => {
+                                                    // Restore button state
+                                                    bulkUnarchiveBtn.innerHTML = originalText;
+                                                    bulkUnarchiveBtn.disabled = false;
+                                                });
+                                            }, null, {
+                                                title: 'Unarchive Memos',
+                                                type: 'primary',
+                                                confirmText: 'Unarchive',
+                                                subtitle: 'This will move the selected memos back to completed status.'
+                                            });
+                                        }
                                         </script>
 
                                     </div>
