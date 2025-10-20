@@ -884,15 +884,15 @@
                                             const selectionCounter = document.getElementById('selection-counter');
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
-                                            
-                                            // Only update if elements exist (i.e., we're on completed memos view)
-                                            if (!selectionCounter || !selectAllCheckbox || !bulkArchiveBtn) {
+                                            const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
+
+                                            if (!selectionCounter || !selectAllCheckbox) {
                                                 return;
                                             }
-                                            
+
                                             // Update counter
                                             selectionCounter.textContent = `${selectedCount} selected`;
-                                            
+
                                             // Update select all checkbox state
                                             if (selectedCount === 0) {
                                                 selectAllCheckbox.checked = false;
@@ -904,16 +904,39 @@
                                                 selectAllCheckbox.checked = false;
                                                 selectAllCheckbox.indeterminate = true;
                                             }
-                                            
-                                            // Update bulk archive button
-                                            if (selectedCount > 0) {
-                                                bulkArchiveBtn.style.display = 'flex';
-                                                const textElement = bulkArchiveBtn.querySelector('.text');
-                                                if (textElement) {
-                                                    textElement.textContent = `Archive Selected (${selectedCount})`;
+
+                                            // Toggle bulk action buttons based on current section
+                                            if (typeof currentStatus !== 'undefined') {
+                                                if (currentStatus === 'completed') {
+                                                    if (bulkArchiveBtn) {
+                                                        if (selectedCount > 0) {
+                                                            bulkArchiveBtn.style.display = 'flex';
+                                                            const textElement = bulkArchiveBtn.querySelector('.text');
+                                                            if (textElement) {
+                                                                textElement.textContent = `Archive Selected (${selectedCount})`;
+                                                            }
+                                                        } else {
+                                                            bulkArchiveBtn.style.display = 'none';
+                                                        }
+                                                    }
+                                                    if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
+                                                } else if (currentStatus === 'archived') {
+                                                    if (bulkUnarchiveBtn) {
+                                                        if (selectedCount > 0) {
+                                                            bulkUnarchiveBtn.style.display = 'flex';
+                                                            const textElement = bulkUnarchiveBtn.querySelector('.text');
+                                                            if (textElement) {
+                                                                textElement.textContent = `Unarchive Selected (${selectedCount})`;
+                                                            }
+                                                        } else {
+                                                            bulkUnarchiveBtn.style.display = 'none';
+                                                        }
+                                                    }
+                                                    if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
+                                                } else {
+                                                    if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
+                                                    if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 }
-                                            } else {
-                                                bulkArchiveBtn.style.display = 'none';
                                             }
                                         }
 
