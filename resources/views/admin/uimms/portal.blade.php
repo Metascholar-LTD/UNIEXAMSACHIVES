@@ -686,6 +686,11 @@
                                             };
                                             document.getElementById('section-badge').textContent = badges[status];
                                             
+                                            // Reset selection state on tab change
+                                            if (typeof selectedMemos !== 'undefined' && selectedMemos) {
+                                                selectedMemos.clear();
+                                            }
+
                                             // Show/hide selection controls and bulk action buttons
                                             const selectionControls = document.getElementById('selection-controls');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
@@ -706,6 +711,17 @@
                                                 // Clear selections when switching away from selectable sections
                                                 clearSelections();
                                             }
+
+                                            // Reset selection UI counters/buttons on tab change
+                                            const selectionCounter = document.getElementById('selection-counter');
+                                            const selectAllCheckbox = document.getElementById('select-all-checkbox');
+                                            if (selectionCounter) selectionCounter.textContent = '0 selected';
+                                            if (selectAllCheckbox) {
+                                                selectAllCheckbox.checked = false;
+                                                selectAllCheckbox.indeterminate = false;
+                                            }
+                                            if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
+                                            if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                             
                                             // Show loading
                                             document.getElementById('memos-container').innerHTML = `
@@ -722,6 +738,9 @@
                                                 .then(response => response.json())
                                                 .then(memos => {
                                                     displayMemos(memos);
+                                                    // After rendering, ensure selection UI is clean
+                                                    clearSelections();
+                                                    updateSelectionUI();
                                                 })
                                                 .catch(error => {
                                                     console.error('Error loading memos:', error);
@@ -816,6 +835,8 @@
                                         }
 
                                         function refreshMemos() {
+                                            // Reset selection state before refresh
+                                            clearSelections();
                                             loadMemos(currentStatus);
                                         }
                                         
