@@ -310,10 +310,10 @@
                                                 <a href="{{ route('dashboard.folders.edit', $folder) }}" class="action-btn edit" title="Edit Folder">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
-                                                <form action="{{ route('dashboard.folders.destroy', $folder) }}" method="post" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this folder?')">
+                                                <form action="{{ route('dashboard.folders.destroy', $folder) }}" method="post" style="display: inline;" id="delete-folder-form-{{ $folder->id }}">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button type="submit" class="action-btn delete" title="Delete Folder">
+                                                    <button type="button" class="action-btn delete" title="Delete Folder" onclick="confirmDeleteFolder({{ $folder->id }}, '{{ addslashes($folder->name) }}')">
                                                         <i class="fas fa-trash"></i>
                                                     </button>
                                                 </form>
@@ -337,3 +337,16 @@
     </div>
 </div>
 @endsection
+@push('scripts')
+<script>
+function confirmDeleteFolder(folderId, folderName) {
+    confirmDelete(
+        `Are you sure you want to delete the folder "${folderName}"?`,
+        function() {
+            const form = document.getElementById('delete-folder-form-' + folderId);
+            if (form) form.submit();
+        }
+    );
+}
+</script>
+@endpush
