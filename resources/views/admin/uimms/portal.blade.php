@@ -908,10 +908,10 @@
                                             }
                                             
                                             const confirmMessage = selectedMemos.size === 1 
-                                                ? 'Are you sure you want to archive the selected memo? This action cannot be undone.'
-                                                : `Are you sure you want to archive ${selectedMemos.size} selected memos? This action cannot be undone.`;
+                                                ? 'Are you sure you want to archive the selected memo?'
+                                                : `Are you sure you want to archive ${selectedMemos.size} selected memos?`;
                                             
-                                            if (confirm(confirmMessage)) {
+                                            confirmDelete(confirmMessage, function() {
                                                 // Show loading state
                                                 const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                                 const originalText = bulkArchiveBtn.innerHTML;
@@ -974,7 +974,7 @@
                                                     bulkArchiveBtn.innerHTML = originalText;
                                                     bulkArchiveBtn.disabled = false;
                                                 });
-                                            }
+                                            });
                                         }
 
                                         // Auto-refresh every 30 seconds

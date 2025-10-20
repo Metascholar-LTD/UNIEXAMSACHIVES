@@ -52,6 +52,9 @@
     
     {{-- modern notifications --}}
     @include('components.modern-notifications')
+    
+    {{-- confirmation modal --}}
+    @include('components.confirmation-modal')
 
     <main class="main_wrapper overflow-hidden">
         @include('components.password-reminder')

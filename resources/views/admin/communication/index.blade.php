@@ -249,9 +249,9 @@
                                                     @if(in_array($campaign->status, ['draft', 'scheduled']))
                                                         <form method="POST" action="{{ route('admin.communication.send', $campaign) }}" 
                                                               style="display: inline-block;" 
-                                                              onsubmit="return confirm('Are you sure you want to send this memo?')">
+                                                              id="send-form-{{ $campaign->id }}">
                                                             @csrf
-                                                            <button type="submit" class="action-btn send-btn" title="Send Now">
+                                                            <button type="button" class="action-btn send-btn" title="Send Now" onclick="confirmSendMemo({{ $campaign->id }})">
                                                                 <i class="icofont-send-mail"></i>
                                                             </button>
                                                         </form>
@@ -259,10 +259,10 @@
 
                                                     <form method="POST" action="{{ route('admin.communication.destroy', $campaign) }}" 
                                                           style="display: inline-block;" 
-                                                          onsubmit="return confirm('Are you sure you want to delete this memo?')">
+                                                          id="delete-form-{{ $campaign->id }}">
                                                         @csrf
                                                         @method('DELETE')
-                                                        <button type="submit" class="action-btn delete-btn" title="Delete">
+                                                        <button type="button" class="action-btn delete-btn" title="Delete" onclick="confirmDeleteMemo({{ $campaign->id }})">
                                                             <i class="icofont-trash"></i>
                                                         </button>
                                                     </form>
@@ -1402,5 +1402,30 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
+
+// Confirmation modal functions
+function confirmSendMemo(campaignId) {
+    confirmAction(
+        'Are you sure you want to send this memo?',
+        function() {
+            document.getElementById('send-form-' + campaignId).submit();
+        },
+        null,
+        {
+            title: 'Send Memo',
+            type: 'primary',
+            confirmText: 'Send'
+        }
+    );
+}
+
+function confirmDeleteMemo(campaignId) {
+    confirmDelete(
+        'Are you sure you want to delete this memo?',
+        function() {
+            document.getElementById('delete-form-' + campaignId).submit();
+        }
+    );
+}
 </script>
 @endsection
