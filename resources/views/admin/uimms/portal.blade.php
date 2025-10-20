@@ -790,11 +790,6 @@
                                                                                 <div class="memo-right-badges">
                                                                                     <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
                                                                                     ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
-                                                                                    ${memo.memo_status === 'archived' ? `
-                                                                                        <button class="btn btn-sm btn-outline-primary unarchive-btn" onclick="confirmUnarchiveMemo(${memo.id})" title="Unarchive Memo">
-                                                                                            <i class="icofont-undo"></i>
-                                                                                        </button>
-                                                                                    ` : ''}
                                                                                 </div>
                                                                             </div>
                                                                         </div>
