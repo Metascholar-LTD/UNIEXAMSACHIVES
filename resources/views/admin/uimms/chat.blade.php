@@ -49,7 +49,7 @@
                                             <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
                                                 <i class="icofont-pause"></i> Suspend
                                             </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="updateMemoStatus('archived')">
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="confirmArchiveMemo()">
                                                 <i class="icofont-archive"></i> Archive
                                             </button>
                                         @else
@@ -2294,6 +2294,23 @@ function confirmCompleteMemo() {
             type: 'success',
             confirmText: 'Complete',
             subtitle: 'This will mark the memo as finished and prevent further messages.'
+        }
+    );
+}
+
+// Confirmation function for archiving memo
+function confirmArchiveMemo() {
+    confirmAction(
+        'Are you sure you want to archive this memo?',
+        function() {
+            updateMemoStatus('archived');
+        },
+        null,
+        {
+            title: 'Archive Memo',
+            type: 'warning',
+            confirmText: 'Archive',
+            subtitle: 'This will move the memo to the archive and make it read-only.'
         }
     );
 }
