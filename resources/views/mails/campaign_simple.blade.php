@@ -5,97 +5,193 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $subject }}</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
             line-height: 1.6;
-            color: #333;
+            -webkit-text-size-adjust: 100%;
+        }
+        .email-container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .header {
+            background-color: #f0f4f8;
+            padding: 15px 20px;
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #007bff;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .logo-section {
+            margin-bottom: 0;
         }
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0;
         }
-        .subject {
-            color: #495057;
-            font-size: 18px;
-            margin-bottom: 20px;
-            font-weight: 600;
+        .logo-image {
+            height: 40px;
+            width: auto;
+            max-width: 200px;
+        }
+        .tagline {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-top: 5px;
         }
         .content {
-            margin-bottom: 30px;
+            background-color: #f8fafc;
+            padding: 0 30px 30px 30px;
         }
-        .message {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-left: 4px solid #007bff;
+        .content-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
             margin: 20px 0;
-            border-radius: 5px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
-        .message p { margin: 0 0 12px 0; }
-        .message ul { margin: 12px 0; padding-left: 20px; }
-        .message ol { margin: 12px 0; padding-left: 20px; }
-        .message h1, .message h2, .message h3 { margin: 16px 0 8px 0; }
-        .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
-            font-size: 14px;
+        .greeting {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #000000;
+            margin-bottom: 15px;
+            font-weight: bold;
         }
+        .message-title {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 20px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        .message-content {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #1a1a1a;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+        .message-content p { margin: 0 0 12px 0; }
+        .message-content ul { margin: 12px 0; padding-left: 20px; }
+        .message-content ol { margin: 12px 0; padding-left: 20px; }
+        .message-content h1, .message-content h2, .message-content h3 { margin: 16px 0 8px 0; }
         .attachments {
-            background-color: #fff3cd;
-            padding: 15px;
-            border-left: 4px solid #ffc107;
+            background-color: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 20px;
             margin: 20px 0;
-            border-radius: 5px;
+            border-left: 4px solid #f59e0b;
+        }
+        .attachments-title {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .attachments-message {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+        .footer {
+            background-color: #f5f5f5;
+            padding: 20px;
+            text-align: left;
+            border-top: none;
+        }
+        .footer-disclaimer {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #333333;
+            margin-top: 10px;
+            line-height: 1.4;
+        }
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .header {
+                padding: 10px 15px;
+            }
+            .content, .footer {
+                padding: 20px;
+            }
+            .content-card {
+                padding: 15px !important;
+                margin: 10px 0;
+            }
+            .logo-image {
+                height: 35px;
+                max-width: 180px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="email-container">
+        <!-- Header -->
         <div class="header">
-            <div class="logo">University Advanced Communication System</div>
-            <div class="subject">{{ $subject }}</div>
-        </div>
-        
-        <div class="content">
-            <p>Dear <strong>{{ $user->first_name }} {{ $user->last_name }}</strong>,</p>
-            
-            <p>You have received an important message from the University Advanced Communication System.</p>
-            
-            <div class="message">{!! $message !!}</div>
-            
-            @if($campaign->attachments && count($campaign->attachments) > 0)
-                <div class="attachments">
-                                                    <strong>📎 This memo includes {{ count($campaign->attachments) }} attachment(s)</strong>
+            <div class="logo-section">
+                <div class="logo">
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
                 </div>
-            @endif
-            
-            <p>If you have any questions about this message, please contact our support team.</p>
+                <div class="tagline">Excellence in Academic Digital Archiving</div>
+            </div>
         </div>
         
+        <!-- Content -->
+        <div class="content">
+            <div class="content-card">
+                <div class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</div>
+                
+                <div class="message-title">{{ $subject }}</div>
+                
+                <div class="message-content">
+                    {!! $message !!}
+                </div>
+                
+                @if($campaign->attachments && count($campaign->attachments) > 0)
+                    <div class="attachments">
+                        <div class="attachments-title">
+                            📎 Attachments Included
+                        </div>
+                        <div class="attachments-message">
+                            This message includes {{ count($campaign->attachments) }} attachment(s) that have been sent with this communication.
+                        </div>
+                    </div>
+                @endif
+                
+                <div style="text-align: left; margin: 15px 0;">
+                    <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
+                        If you have any questions about this message, please contact our support team.
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Footer -->
         <div class="footer">
-            <p>This is an automated message from the University Advanced Communication System.</p>
-                                        <p>Please do not reply to this memo.</p>
-            <p>&copy; {{ date('Y') }} University Advanced Communication System. All rights reserved.</p>
+            <div class="footer-disclaimer">
+                This is an automated message from the University Exams Archive System. 
+                Please do not reply to this email.
+            </div>
         </div>
     </div>
 </body>

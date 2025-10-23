@@ -3,131 +3,290 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Approved</title>
+    <title>Account Successfully Approved - University Exams Archive System</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: Arial, sans-serif;
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            background-color: #ffffff;
+            color: #1a1a1a;
             line-height: 1.6;
-            color: #333;
+            -webkit-text-size-adjust: 100%;
+        }
+        .email-container {
             max-width: 600px;
             margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-        .container {
             background-color: #ffffff;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .header {
+            background-color: #f0f4f8;
+            padding: 15px 20px;
             text-align: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #28a745;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .logo-section {
+            margin-bottom: 0;
         }
         .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #007bff;
-            margin-bottom: 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 0;
         }
-        .title {
-            color: #28a745;
-            font-size: 20px;
-            margin-bottom: 20px;
+        .logo-image {
+            height: 40px;
+            width: auto;
+            max-width: 200px;
+        }
+        .tagline {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 12px;
+            color: #6b7280;
+            font-weight: 500;
+            margin-top: 5px;
         }
         .content {
-            margin-bottom: 30px;
+            background-color: #f8fafc;
+            padding: 0 30px 30px 30px;
         }
-        .highlight {
-            background-color: #d4edda;
-            padding: 15px;
-            border-left: 4px solid #28a745;
+        .content-card {
+            background-color: #f8fafc;
+            border: none;
+            border-radius: 0;
+            padding: 20px 0;
+            margin: 0;
+            box-shadow: none;
+        }
+        .greeting {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #000000;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .message {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #000000;
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+        .approval-box {
+            background-color: #f0fdf4;
+            border: 1px solid #bbf7d0;
+            border-radius: 8px;
+            padding: 20px;
             margin: 20px 0;
-            border-radius: 5px;
+            border-left: 4px solid #22c55e;
+        }
+        .approval-title {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 18px;
+            font-weight: bold;
+            color: #166534;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .approval-message {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #166534;
+            line-height: 1.5;
+        }
+        .credentials-box {
+            background-color: #fef3c7;
+            border: 1px solid #fbbf24;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            border-left: 4px solid #f59e0b;
+        }
+        .credentials-title {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #92400e;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .credentials-message {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #92400e;
+            line-height: 1.5;
+        }
+        .next-steps {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 20px 0;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        .steps-title {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 10px;
+            display: block;
+        }
+        .steps-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .steps-list li {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            display: block;
+            margin-bottom: 8px;
+            font-size: 16px;
+            color: #000000;
+            line-height: 1.4;
+            padding-left: 0;
+            position: relative;
+        }
+        .steps-list li:last-child {
+            margin-bottom: 0;
+        }
+        .steps-list li::before {
+            content: "• ";
+            position: static;
+            font-weight: bold;
+            color: #000000;
+            font-size: 16px;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: #059669;
+            color: #ffffff;
+            padding: 12px 24px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            margin: 20px 0;
+            font-family: Georgia, Times, 'Times New Roman', serif;
         }
         .footer {
-            text-align: center;
-            margin-top: 30px;
-            padding-top: 20px;
-            border-top: 1px solid #dee2e6;
-            color: #6c757d;
-            font-size: 14px;
+            background-color: #f5f5f5;
+            padding: 20px;
+            text-align: left;
+            border-top: none;
         }
-        .button {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #28a745;
-            color: #ffffff;
-            text-decoration: none;
-            border-radius: 5px;
-            margin: 20px 0;
+        .footer-disclaimer {
+            font-family: Georgia, Times, 'Times New Roman', serif;
+            font-size: 16px;
+            color: #333333;
+            margin-top: 10px;
+            line-height: 1.4;
         }
-        .button:hover {
-            background-color: #218838;
-        }
-        .success-icon {
-            font-size: 48px;
-            color: #28a745;
-            margin-bottom: 20px;
+        @media (max-width: 600px) {
+            .email-container {
+                margin: 0 !important;
+                max-width: 100% !important;
+                width: 100% !important;
+            }
+            .header {
+                padding: 10px 15px;
+            }
+            .content, .footer {
+                padding: 20px;
+            }
+            .content-card {
+                padding: 20px;
+                margin: 10px 0;
+            }
+            .logo-image {
+                height: 35px;
+                max-width: 180px;
+            }
+            .cta-button {
+                display: block;
+                width: 100%;
+                text-align: center;
+                margin: 15px 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="email-container">
+        <!-- Header -->
         <div class="header">
-            <div class="logo">University Digital Archival System</div>
-            <div class="title">Account Successfully Approved!</div>
+            <div class="logo-section">
+                <div class="logo">
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
+                </div>
+                <div class="tagline">Excellence in Academic Digital Archiving</div>
+            </div>
         </div>
         
+        <!-- Content -->
         <div class="content">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <div class="success-icon">✅</div>
-            </div>
-            
-            <p>Dear <strong>{{ $firstname }}</strong>,</p>
-            
-            <p>Great news! Your account has been successfully approved by our administrators.</p>
-            
-            <div class="highlight">
-                <strong>Account Status: APPROVED</strong><br>
-                <strong>Your Login Credentials:</strong><br>
-                Email: <strong>{{ $email }}</strong><br>
-                Temporary Password: <strong>{{ $temporaryPassword }}</strong><br>
-                <br>
-                <span style="color: #856404; background-color: #fff3cd; padding: 5px; border-radius: 3px; display: inline-block;">
-                    ⚠️ Please change your password after your first login for security.
-                </span>
-            </div>
-            
-            <p><strong>Important Security Note:</strong></p>
-            <ul>
-                <li>Your temporary password is your first name + 5 numbers (easy to remember!)</li>
-                <li>You must change your password immediately after your first login</li>
-                <li>Keep your credentials secure and don't share them with anyone</li>
-            </ul>
-            
-            <p>You can now:</p>
-            <ul>
-                <li>Log in to your account using the credentials above</li>
-                <li>Access the dashboard</li>
-                <li>Upload and manage exam materials</li>
-                <li>Use all system features</li>
-                <li>Change your password for security</li>
-            </ul>
-            
-            <p>Welcome to the University Exams Archive System! We're excited to have you on board.</p>
-            
-            <div style="text-align: center;">
-                <a href="{{ url('/login') }}" class="button">Login to Your Account</a>
+            <div class="content-card">
+                <div class="greeting">Hi {{ $firstname }},</div>
+                
+                <div class="message">
+                    Great news! Your account has been approved and you now have full access to our University Exams Archive System.
+                </div>
+                
+                <div class="approval-box">
+                    <div class="approval-title">
+                        🎉 Account Approved!
+                    </div>
+                    <div class="approval-message">
+                        Your account has been successfully approved and activated. You can now log in and start using all the features of our digital archival system.
+                    </div>
+                </div>
+                
+                <div class="credentials-box">
+                    <div class="credentials-title">
+                        🔑 Your Login Credentials
+                    </div>
+                    <div class="credentials-message">
+                        <strong>Email:</strong> {{ $email }}<br>
+                        <strong>Temporary Password:</strong> {{ $temporaryPassword }}<br><br>
+                        <span style="color: #92400e; background-color: #fef3c7; padding: 5px; border-radius: 3px; display: inline-block;">
+                            ⚠️ Please change your password after your first login for security.
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="next-steps">
+                    <div class="steps-title">
+                        Getting Started
+                    </div>
+                    <ul class="steps-list">
+                        <li>Log in to the system using your registered email and temporary password</li>
+                        <li>Explore your dashboard to see available features and options</li>
+                        <li>Change your password for security (recommended)</li>
+                        <li>Upload and manage exam materials as needed</li>
+                        <li>Contact support if you have any questions or need assistance</li>
+                    </ul>
+                </div>
+                
+                <div style="text-align: center;">
+                    <a href="{{ url('/login') }}" class="cta-button">Login to Your Account</a>
+                </div>
+                
+                <div style="text-align: left; margin: 15px 0;">
+                    <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
+                        Welcome to the University Exams Archive System! We're excited to work with you and look forward to your contributions to our digital archive.
+                    </p>
+                </div>
             </div>
         </div>
         
+        <!-- Footer -->
         <div class="footer">
-            <p>This is an automated message from the University Digital Archival System.</p>
-            <p>Please do not reply to this email.</p>
-            <p>&copy; {{ date('Y') }} University Digital Archival System. All rights reserved.</p>
+            <div class="footer-disclaimer">
+                This email was sent to {{ $email }} because your account has been approved for our University Exams Archive System. 
+                If you didn't expect this approval, please contact us immediately.
+            </div>
         </div>
     </div>
 </body>
