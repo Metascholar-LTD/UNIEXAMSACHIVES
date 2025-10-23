@@ -777,12 +777,15 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // Get memo counts for each section using active participants OR recipients (for backward compatibility)
+            // Get memo counts for each section using active participants OR recipients OR specific replies (for backward compatibility)
             $pendingCount = EmailCampaign::where(function($query) use ($userId) {
                 $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
+                })->orWhereHas('replies', function($subQuery) use ($userId) {
+                    $subQuery->where('reply_mode', 'specific')
+                            ->whereJsonContains('specific_recipients', (string)$userId);
                 });
             })->where(function($query) {
                 $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
@@ -793,6 +796,9 @@ class HomeController extends Controller
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
+                })->orWhereHas('replies', function($subQuery) use ($userId) {
+                    $subQuery->where('reply_mode', 'specific')
+                            ->whereJsonContains('specific_recipients', (string)$userId);
                 });
             })->where('memo_status', 'suspended')->count();
             
@@ -801,6 +807,9 @@ class HomeController extends Controller
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
+                })->orWhereHas('replies', function($subQuery) use ($userId) {
+                    $subQuery->where('reply_mode', 'specific')
+                            ->whereJsonContains('specific_recipients', (string)$userId);
                 });
             })->where('memo_status', 'completed')->count();
             
@@ -809,6 +818,9 @@ class HomeController extends Controller
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
+                })->orWhereHas('replies', function($subQuery) use ($userId) {
+                    $subQuery->where('reply_mode', 'specific')
+                            ->whereJsonContains('specific_recipients', (string)$userId);
                 });
             })->where('memo_status', 'archived')->count();
 
@@ -1663,6 +1675,9 @@ class HomeController extends Controller
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
+                })->orWhereHas('replies', function($subQuery) use ($userId) {
+                    $subQuery->where('reply_mode', 'specific')
+                            ->whereJsonContains('specific_recipients', (string)$userId);
                 });
             })->where('memo_status', 'pending')->count();
             
@@ -1671,6 +1686,9 @@ class HomeController extends Controller
                     $subQuery->where('user_id', $userId);
                 })->orWhereHas('recipients', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
+                })->orWhereHas('replies', function($subQuery) use ($userId) {
+                    $subQuery->where('reply_mode', 'specific')
+                            ->whereJsonContains('specific_recipients', (string)$userId);
                 });
             })->where('memo_status', 'completed')->count();
             
