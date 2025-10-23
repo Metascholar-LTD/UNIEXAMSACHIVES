@@ -105,20 +105,20 @@
                                                         <div class="text">Archive Selected</div>
                                                     </div>
                                                 </button>
+                                                <button class="responsive-btn bulk-resume-btn" id="bulk-resume-btn" onclick="bulkResumeSelected()" style="display: none;">
+                                                    <div class="svgWrapper">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                            <path stroke="#fff" stroke-width="2" d="M8 3v3a2 2 0 002 2h4a2 2 0 002-2V3M8 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-2M8 3h8"></path>
+                                                        </svg>
+                                                        <div class="text">Resume Selected</div>
+                                                    </div>
+                                                </button>
                                                 <button class="responsive-btn bulk-unarchive-btn" id="bulk-unarchive-btn" onclick="bulkUnarchiveSelected()" style="display: none;">
                                                     <div class="svgWrapper">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
                                                             <path stroke="#fff" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
                                                         </svg>
                                                         <div class="text">Unarchive Selected</div>
-                                                    </div>
-                                                </button>
-                                                <button class="responsive-btn bulk-resume-btn" id="bulk-resume-btn" onclick="bulkResumeSelected()" style="display: none;">
-                                                    <div class="svgWrapper">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
-                                                            <path stroke="#fff" stroke-width="2" d="M8 3v3a2 2 0 002 2h4a2 2 0 002-2V3M8 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-2M8 3h8"></path>
-                                                        </svg>
-                                                        <div class="text">Reactivate Selected</div>
                                                     </div>
                                                 </button>
                                                 <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
@@ -710,24 +710,23 @@
                                             // Show/hide selection controls and bulk action buttons
                                             const selectionControls = document.getElementById('selection-controls');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
-                                            const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
                                             const bulkResumeBtn = document.getElementById('bulk-resume-btn');
+                                            const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
                                             
                                             if (status === 'completed') {
                                                 selectionControls.style.display = 'flex';
-                                                bulkArchiveBtn.style.display = 'none';
-                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
+                                                bulkArchiveBtn.style.display = 'flex';
                                                 if (bulkResumeBtn) bulkResumeBtn.style.display = 'flex';
+                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                             } else if (status === 'archived') {
                                                 selectionControls.style.display = 'flex';
                                                 bulkArchiveBtn.style.display = 'none';
                                                 if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'flex';
-                                                if (bulkResumeBtn) bulkResumeBtn.style.display = 'none';
                                             } else {
                                                 selectionControls.style.display = 'none';
                                                 bulkArchiveBtn.style.display = 'none';
-                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 if (bulkResumeBtn) bulkResumeBtn.style.display = 'none';
+                                                if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 // Clear selections when switching away from selectable sections
                                                 clearSelections();
                                             }
@@ -925,8 +924,8 @@
                                             const selectionCounter = document.getElementById('selection-counter');
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
-                                            const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
                                             const bulkResumeBtn = document.getElementById('bulk-resume-btn');
+                                            const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
 
                                             if (!selectionCounter || !selectAllCheckbox) {
                                                 return;
@@ -950,6 +949,17 @@
                                             // Toggle bulk action buttons based on current section
                                             if (typeof currentStatus !== 'undefined') {
                                                 if (currentStatus === 'completed') {
+                                                    if (bulkArchiveBtn) {
+                                                        if (selectedCount > 0) {
+                                                            bulkArchiveBtn.style.display = 'flex';
+                                                            const textElement = bulkArchiveBtn.querySelector('.text');
+                                                            if (textElement) {
+                                                                textElement.textContent = `Archive Selected (${selectedCount})`;
+                                                            }
+                                                        } else {
+                                                            bulkArchiveBtn.style.display = 'none';
+                                                        }
+                                                    }
                                                     if (bulkResumeBtn) {
                                                         if (selectedCount > 0) {
                                                             bulkResumeBtn.style.display = 'flex';
@@ -961,7 +971,6 @@
                                                             bulkResumeBtn.style.display = 'none';
                                                         }
                                                     }
-                                                    if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
                                                     if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 } else if (currentStatus === 'archived') {
                                                     if (bulkUnarchiveBtn) {
@@ -976,11 +985,10 @@
                                                         }
                                                     }
                                                     if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
-                                                    if (bulkResumeBtn) bulkResumeBtn.style.display = 'none';
                                                 } else {
                                                     if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
-                                                    if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                     if (bulkResumeBtn) bulkResumeBtn.style.display = 'none';
+                                                    if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 }
                                             }
                                         }
