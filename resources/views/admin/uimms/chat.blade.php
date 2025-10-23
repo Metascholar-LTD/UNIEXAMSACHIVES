@@ -245,11 +245,10 @@
                                                         
                                                         @if($isImage)
                                                             {{-- Image Attachment - Show preview --}}
-                                                            <div class="attachment-image-wrapper">
+                                                            <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.uimms.chat.reply.attachment.download', ['reply' => $message->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
                                                                 <img src="{{ route('dashboard.uimms.chat.reply.attachment.view', ['reply' => $message->id, 'index' => $index]) }}" 
                                                                      alt="{{ $attachment['name'] }}"
-                                                                     class="attachment-image"
-                                                                     onclick="downloadImage('{{ route('dashboard.uimms.chat.reply.attachment.download', ['reply' => $message->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
+                                                                     class="attachment-image">
                                                                 <div class="image-overlay">
                                                                     <i class="icofont-download"></i>
                                                                 </div>
@@ -2195,11 +2194,10 @@ function addMessageToChat(message) {
             
             if (isImage) {
                 attachmentsHtml += `
-                    <div class="attachment-image-wrapper">
+                    <div class="attachment-image-wrapper" onclick="downloadImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download', '${attachment.name}')">
                         <img src="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view" 
                              alt="${attachment.name}"
-                             class="attachment-image"
-                             onclick="downloadImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download', '${attachment.name}')">
+                             class="attachment-image">
                         <div class="image-overlay">
                             <i class="icofont-download"></i>
                         </div>
@@ -2283,11 +2281,10 @@ function addNewMessageToChat(message) {
             
             if (isImage) {
                 attachmentsHtml += `
-                    <div class="attachment-image-wrapper">
+                    <div class="attachment-image-wrapper" onclick="downloadImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download', '${attachment.name}')">
                         <img src="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view" 
                              alt="${attachment.name}"
-                             class="attachment-image"
-                             onclick="downloadImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download', '${attachment.name}')">
+                             class="attachment-image">
                         <div class="image-overlay">
                             <i class="icofont-download"></i>
                         </div>
@@ -2605,23 +2602,55 @@ function playNotificationSound() {
 
 // Download image function
 function downloadImage(downloadUrl, fileName) {
-    console.log('Attempting to download:', downloadUrl, fileName);
+    console.log('Download function called with:', downloadUrl, fileName);
+    
+    // Prevent event bubbling
+    event.preventDefault();
+    event.stopPropagation();
+    
     try {
-        // Create a temporary link element
+        // Method 1: Try direct download
         const link = document.createElement('a');
         link.href = downloadUrl;
-        link.download = fileName;
+        link.download = fileName || 'image';
         link.style.display = 'none';
+        link.target = '_blank';
         
-        // Append to body, click, and remove
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         
-        console.log('Download initiated successfully');
+        console.log('Download method 1 completed');
+        
+        // Method 2: Fallback - try fetch and blob download
+        setTimeout(() => {
+            fetch(downloadUrl)
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.blob();
+                })
+                .then(blob => {
+                    const url = window.URL.createObjectURL(blob);
+                    const link2 = document.createElement('a');
+                    link2.href = url;
+                    link2.download = fileName || 'image';
+                    link2.style.display = 'none';
+                    document.body.appendChild(link2);
+                    link2.click();
+                    document.body.removeChild(link2);
+                    window.URL.revokeObjectURL(url);
+                    console.log('Download method 2 completed');
+                })
+                .catch(error => {
+                    console.error('Fetch download failed:', error);
+                    // Final fallback: open in new tab
+                    window.open(downloadUrl, '_blank');
+                });
+        }, 100);
+        
     } catch (e) {
-        console.error('Error downloading image:', e);
-        // Fallback: open in new tab
+        console.error('Error in download function:', e);
+        // Final fallback: open in new tab
         window.open(downloadUrl, '_blank');
     }
 }
