@@ -2110,6 +2110,12 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
     
     if (!messageInput.value.trim() && selectedFiles.length === 0) return;
     
+    // Prevent double submission
+    if (isSendingMessage) return;
+    
+    // Set flag to prevent auto-refresh during message sending
+    isSendingMessage = true;
+    
     // Create FormData manually to avoid duplicate files
     const formData = new FormData();
     formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
@@ -2140,12 +2146,22 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
             messageInput.style.height = 'auto';
             clearAllFiles();
             hideTypingIndicator();
+            
+            // Update counters to prevent duplicate detection
+            lastMessageCount++;
+            lastMessageId = data.message.id;
         }
     })
     .catch(error => {
         console.error('Error sending message:', error);
         hideTypingIndicator();
         alert('Error sending message. Please try again.');
+    })
+    .finally(() => {
+        // Re-enable auto-refresh after a short delay
+        setTimeout(() => {
+            isSendingMessage = false;
+        }, 2000);
     });
 });
 
@@ -2425,10 +2441,11 @@ function confirmArchiveMemo() {
 let lastMessageCount = {{ $memo->replies->count() }};
 let lastMessageId = {{ $memo->replies->last() ? $memo->replies->last()->id : 0 }};
 let isPolling = true;
+let isSendingMessage = false; // Flag to prevent auto-refresh during message sending
 
 // Auto-refresh messages every 3 seconds
 messageInterval = setInterval(() => {
-    if (!isPolling || isUserTyping) return;
+    if (!isPolling || isUserTyping || isSendingMessage) return;
     
     fetch(`/dashboard/uimms/chat/${memoId}/messages`)
         .then(response => response.json())
@@ -2438,7 +2455,11 @@ messageInterval = setInterval(() => {
                 const newMessages = messages.slice(lastMessageCount);
                 newMessages.forEach(message => {
                     if (message.id > lastMessageId) {
-                        addNewMessageToChat(message);
+                        const currentUserId = {{ Auth::id() }};
+                        // Only add messages from other users (not our own messages)
+                        if (message.user_id !== currentUserId) {
+                            addNewMessageToChat(message);
+                        }
                         lastMessageId = message.id;
                     }
                 });
