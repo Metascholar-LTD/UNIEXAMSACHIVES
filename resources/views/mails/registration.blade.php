@@ -231,8 +231,11 @@
                 <div class="greeting">Hi {{ $firstname }},</div>
                 
                 <div class="message">
-                    Welcome to the University Exams Archive System! 
+                    Welcome to the University Archival System! 
                     We're excited to have you join our digital archival community and look forward to collaborating with you.
+                    1. You will enjoy seamless access to our Digital Archival System once approved.
+                    2. You will enjoy seamless access to our Advanced Communication System once approved.
+                    3. You will enjoy seamless access to our University Internal Memo Management System once approved.
                 </div>
                 
                 <div class="success-box">
@@ -271,7 +274,7 @@
                 
                 <div style="text-align: left; margin: 15px 0;">
                     <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
-                        Thank you for choosing the University Exams Archive System. We're committed to providing you with the best tools and support for your academic archival needs.
+                        Thank you for choosing the University Archival System. We're committed to providing you with the best tools and support for your academic archival needs.
                     </p>
                 </div>
             </div>
@@ -280,7 +283,7 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-disclaimer">
-                This email was sent to {{ $email }} because you registered for our University Exams Archive System. 
+                This email was sent to {{ $email }} because you registered for on the University Archival System. 
                 If you didn't create this account, please contact us immediately.
             </div>
         </div>
