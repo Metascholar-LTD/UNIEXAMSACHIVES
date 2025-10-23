@@ -38,17 +38,24 @@
                                     </span>
                                 </div>
                                 <div class="chat-actions">
-                                    @if(!in_array($memo->memo_status, ['completed', 'archived']))
+                                    @php
+                                        $userId = auth()->id();
+                                        $isCurrentAssignee = $memo->current_assignee_id == $userId;
+                                        $isActiveParticipant = $memo->isActiveParticipant($userId);
+                                        $canManageMemo = $isCurrentAssignee || $isActiveParticipant;
+                                    @endphp
+                                    
+                                    @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
                                         <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
                                             <i class="icofont-user"></i> Assign
                                         </button>
                                     @else
-                                        <span class="btn btn-sm btn-outline-primary disabled">
+                                        <span class="btn btn-sm btn-outline-primary disabled" title="{{ !$canManageMemo ? 'Only assignee or active participants can assign' : 'Memo is completed/archived' }}">
                                             <i class="icofont-user"></i> Assign
                                         </span>
                                     @endif
                                     <div class="btn-group">
-                                        @if(!in_array($memo->memo_status, ['completed', 'archived']))
+                                        @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
                                             <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
                                                 <i class="icofont-check-circled"></i> Complete
                                             </button>
@@ -66,6 +73,16 @@
                                             @elseif($memo->memo_status === 'archived')
                                                 <span class="btn btn-sm btn-secondary disabled">
                                                     <i class="icofont-archive"></i> Archived
+                                                </span>
+                                            @elseif(!$canManageMemo)
+                                                <span class="btn btn-sm btn-outline-success disabled" title="Only assignee or active participants can manage memo">
+                                                    <i class="icofont-check-circled"></i> Complete
+                                                </span>
+                                                <span class="btn btn-sm btn-outline-warning disabled" title="Only assignee or active participants can manage memo">
+                                                    <i class="icofont-pause"></i> Suspend
+                                                </span>
+                                                <span class="btn btn-sm btn-outline-secondary disabled" title="Only assignee or active participants can manage memo">
+                                                    <i class="icofont-archive"></i> Archive
                                                 </span>
                                             @endif
                                         @endif

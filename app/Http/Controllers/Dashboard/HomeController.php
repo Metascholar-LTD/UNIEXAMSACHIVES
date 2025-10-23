@@ -1112,9 +1112,13 @@ class HomeController extends Controller
         $isActiveParticipant = $memo->isActiveParticipant($userId);
         $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
         $isCreator = $memo->created_by === $userId;
+        $isCurrentAssignee = $memo->current_assignee_id == $userId;
         
-        if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
-            abort(403, 'You are not a participant in this memo conversation.');
+        // Only current assignee or active participants can assign
+        $canManageMemo = $isCurrentAssignee || $isActiveParticipant;
+        
+        if (!$canManageMemo) {
+            abort(403, 'Only the current assignee or active participants can manage this memo.');
         }
 
         $request->validate([
@@ -1199,9 +1203,13 @@ class HomeController extends Controller
         $isActiveParticipant = $memo->isActiveParticipant($userId);
         $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
         $isCreator = $memo->created_by === $userId;
+        $isCurrentAssignee = $memo->current_assignee_id == $userId;
         
-        if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
-            abort(403, 'You are not a participant in this memo conversation.');
+        // Only current assignee or active participants can manage memo status
+        $canManageMemo = $isCurrentAssignee || $isActiveParticipant;
+        
+        if (!$canManageMemo) {
+            abort(403, 'Only the current assignee or active participants can manage this memo.');
         }
 
         $request->validate([
