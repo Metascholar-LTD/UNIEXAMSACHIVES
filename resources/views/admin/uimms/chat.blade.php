@@ -249,9 +249,9 @@
                                                                 <img src="{{ route('dashboard.uimms.chat.reply.attachment.view', ['reply' => $message->id, 'index' => $index]) }}" 
                                                                      alt="{{ $attachment['name'] }}"
                                                                      class="attachment-image"
-                                                                     onclick="viewImage('{{ route('dashboard.uimms.chat.reply.attachment.view', ['reply' => $message->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
+                                                                     onclick="downloadImage('{{ route('dashboard.uimms.chat.reply.attachment.download', ['reply' => $message->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
                                                                 <div class="image-overlay">
-                                                                    <i class="icofont-eye"></i>
+                                                                    <i class="icofont-download"></i>
                                                                 </div>
                                                             </div>
                                                         @else
@@ -2605,17 +2605,20 @@ function playNotificationSound() {
 
 // Download image function
 function downloadImage(downloadUrl, fileName) {
+    console.log('Attempting to download:', downloadUrl, fileName);
     try {
         // Create a temporary link element
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = fileName;
-        link.target = '_blank';
+        link.style.display = 'none';
         
         // Append to body, click, and remove
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        
+        console.log('Download initiated successfully');
     } catch (e) {
         console.error('Error downloading image:', e);
         // Fallback: open in new tab
