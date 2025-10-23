@@ -1135,6 +1135,28 @@ class HomeController extends Controller
             ]
         ]);
 
+        // Send email notifications
+        try {
+            // Send success email to assigner
+            Mail::to(Auth::user()->email)->send(new \App\Mail\MemoAssignmentSuccess(
+                $memo, 
+                Auth::user(), 
+                $assignee, 
+                $request->office
+            ));
+
+            // Send notification email to assignee
+            Mail::to($assignee->email)->send(new \App\Mail\MemoAssignedNotification(
+                $memo, 
+                Auth::user(), 
+                $assignee, 
+                $request->office
+            ));
+        } catch (\Exception $e) {
+            // Log the error but don't fail the assignment
+            \Log::error('Failed to send memo assignment emails: ' . $e->getMessage());
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Memo assigned successfully',
