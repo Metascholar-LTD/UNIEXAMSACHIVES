@@ -36,15 +36,15 @@
                                             </svg>
                                             <div class="text">Back</div>
                                         </div>
-                                </a>
-                            </div>
+                                    </a>
+                                </div>
                                 <div class="chat-header-right">
                                     <div class="memo-stats">
-                                        <span class="stat-badge">{{ $replies->count() }} Replies</span>
-                        </div>
-                    </div>
-                </div>
-
+                                        <span class="stat-badge">{{ $replies->total() }} Replies</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
                             {{-- Separator Line --}}
                             <div class="chat-header-separator"></div>
                             
@@ -52,7 +52,7 @@
                             <div class="chat-header-bottom">
                                 <div class="chat-title">
                                     Subject: <h4>{{ $campaign->subject }}</h4>
-                    </div>
+                                </div>
                                 <div class="chat-details">
                                     <div class="detail-item">
                                         <i class="icofont-user"></i>
@@ -65,16 +65,16 @@
                                     <div class="detail-item">
                                         <i class="icofont-tag"></i>
                                         <span>Ref: {{ $campaign->reference }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
                             <div class="chat-messages" id="chat-messages">
-                        @if($replies->count() > 0)
-                                @foreach($replies as $reply)
+                                @if($replies->count() > 0)
+                                    @foreach($replies as $reply)
                                         <div class="message message-received">
                                             <div class="message-avatar">
                                                 <img src="{{ $reply->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
@@ -117,7 +117,7 @@
                                                                             <i class="icofont-file-document"></i>
                                                                         @elseif($isExcel)
                                                                             <i class="icofont-file-excel"></i>
-                                                @else
+                                                                        @else
                                                                             <i class="icofont-file-alt"></i>
                                                                         @endif
                                                                     </div>
@@ -145,10 +145,10 @@
                                         </div>
                                         <h4>No replies yet</h4>
                                         <p>No one has replied to this memo yet.</p>
+                                    </div>
+                                @endif
                             </div>
-                        @endif
-    </div>
-</div>
+                        </div>
 
 <style>
 /* Chat Header Styles - Exact match to chat page */
@@ -518,150 +518,6 @@ function downloadImage(url, filename) {
     link.click();
     document.body.removeChild(link);
 }
-
-// Auto-refresh system - EXACT copy from chat portal
-const campaignId = {{ $campaign->id }};
-let lastMessageCount = {{ $replies->count() }};
-let lastMessageId = {{ $replies->last() ? $replies->last()->id : 0 }};
-let isPolling = true;
-let messageInterval;
-
-// Test the API endpoint immediately
-console.log('Testing API endpoint...');
-console.log('Campaign ID:', campaignId);
-console.log('Initial message count:', lastMessageCount);
-console.log('Initial last message ID:', lastMessageId);
-console.log('API URL:', `{{ route('admin.communication.replies.messages', $campaign->id) }}`);
-
-// Make a test call immediately to see if API works
-fetch(`{{ route('admin.communication.replies.messages', $campaign->id) }}`)
-    .then(response => {
-        console.log('API Response Status:', response.status);
-        return response.json();
-    })
-    .then(messages => {
-        console.log('API Test Success! Received', messages.length, 'messages');
-        console.log('Messages:', messages);
-    })
-    .catch(error => {
-        console.error('API Test Failed:', error);
-    });
-
-// Add new message to chat (for received messages)
-function addNewMessageToChat(message) {
-    const messagesContainer = document.getElementById('chat-messages');
-    const currentUserId = {{ Auth::id() }};
-    const isOwnMessage = message.user_id === currentUserId;
-    
-    // Build attachments HTML if any
-    let attachmentsHtml = '';
-    if (message.attachments && message.attachments.length > 0) {
-        attachmentsHtml = '<div class="message-attachments">';
-        message.attachments.forEach((attachment, index) => {
-            const isImage = attachment.type && attachment.type.includes('image');
-            const isPdf = attachment.type && attachment.type.includes('pdf');
-            const isWord = attachment.type && (attachment.type.includes('word') || attachment.type.includes('document'));
-            const isExcel = attachment.type && (attachment.type.includes('excel') || attachment.type.includes('spreadsheet'));
-            const fileSize = attachment.size ? (attachment.size / 1024).toFixed(1) + ' KB' : 'Unknown size';
-            
-            if (isImage) {
-                attachmentsHtml += `
-                    <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => '__REPLY_ID__', 'index' => '__INDEX__']) }}'.replace('__REPLY_ID__', message.id).replace('__INDEX__', index), '${attachment.name}')">
-                        <img src="{{ route('dashboard.memo.reply.download-attachment', ['reply' => '__REPLY_ID__', 'index' => '__INDEX__']) }}".replace('__REPLY_ID__', message.id).replace('__INDEX__', index)
-                             alt="${attachment.name}"
-                             class="attachment-image">
-                        <div class="image-overlay">
-                            <i class="icofont-download"></i>
-                        </div>
-                    </div>
-                `;
-            } else {
-                attachmentsHtml += `
-                    <div class="attachment-file-card">
-                        <div class="file-icon">
-                            ${isPdf ? '<i class="icofont-file-pdf"></i>' : 
-                              isWord ? '<i class="icofont-file-document"></i>' :
-                              isExcel ? '<i class="icofont-file-excel"></i>' : 
-                              '<i class="icofont-file-alt"></i>'}
-                        </div>
-                        <div class="file-info">
-                            <div class="file-name">${attachment.name}</div>
-                            <div class="file-size">${fileSize}</div>
-                        </div>
-                        <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => '__REPLY_ID__', 'index' => '__INDEX__']) }}".replace('__REPLY_ID__', message.id).replace('__INDEX__', index)
-                           class="file-download-btn" title="Download">
-                            <i class="icofont-download"></i>
-                        </a>
-                    </div>
-                `;
-            }
-        });
-        attachmentsHtml += '</div>';
-    }
-    
-    const messageClass = isOwnMessage ? 'message-sent' : 'message-received';
-    const messageHtml = `
-        <div class="message ${messageClass}">
-            <div class="message-avatar">
-                <img src="${message.user.profile_picture_url || '/profile_pictures/default-profile.png'}" 
-                     alt="${message.user.first_name}">
-            </div>
-            <div class="message-content">
-                <div class="message-header">
-                    <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
-                    <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
-                </div>
-                <div class="message-text">${message.message}</div>
-                ${attachmentsHtml}
-            </div>
-        </div>
-    `;
-    
-    messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
-    scrollToBottom();
-}
-
-// Auto-refresh messages every 3 seconds - EXACT same as chat portal
-messageInterval = setInterval(() => {
-    if (!isPolling) return;
-    
-    console.log('Checking for new messages... Current count:', lastMessageCount);
-    fetch(`{{ route('admin.communication.replies.messages', $campaign->id) }}`)
-        .then(response => response.json())
-        .then(messages => {
-            console.log('Fetched messages:', messages.length, 'messages');
-            if (messages.length > lastMessageCount) {
-                console.log('New messages detected!', messages.length - lastMessageCount, 'new messages');
-                // New messages detected
-                const newMessages = messages.slice(lastMessageCount);
-                newMessages.forEach(message => {
-                    if (message.id > lastMessageId) {
-                        console.log('Adding new message:', message);
-                        addNewMessageToChat(message);
-                        lastMessageId = message.id;
-                    }
-                });
-                lastMessageCount = messages.length;
-            }
-        })
-        .catch(error => {
-            console.error('Error refreshing messages:', error);
-            isPolling = false;
-            setTimeout(() => {
-                isPolling = true;
-            }, 10000);
-        });
-}, 3000);
-
-// Scroll to bottom on load - EXACT same as chat portal
-function scrollToBottom() {
-    const container = document.querySelector('.chat-container');
-    if (container) {
-        container.scrollTop = container.scrollHeight;
-    }
-}
-
-window.addEventListener('load', scrollToBottom);
 </style>
                                 </div>
                             </div>

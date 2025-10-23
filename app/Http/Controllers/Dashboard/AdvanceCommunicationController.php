@@ -646,24 +646,10 @@ class AdvanceCommunicationController extends Controller
         
         $replies = $campaign->replies()
             ->with('user')
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('admin.communication.replies', compact('campaign', 'replies'));
-    }
-
-    public function getRepliesMessages(EmailCampaign $campaign)
-    {
-        $this->checkAdminAccess();
-        
-        // Ensure user can only view replies to their own campaigns
-        if ($campaign->created_by !== auth()->id()) {
-            abort(403, 'Unauthorized access to this memo.');
-        }
-
-        $messages = $campaign->replies()->with('user')->orderBy('created_at', 'asc')->get();
-
-        return response()->json($messages);
     }
 
     // ==================== ADMIN METHODS ====================
@@ -1324,24 +1310,10 @@ class AdvanceCommunicationController extends Controller
         
         $replies = $campaign->replies()
             ->with('user')
-            ->orderBy('created_at', 'asc')
-            ->get();
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
 
         return view('admin.communication-admin.replies', compact('campaign', 'replies'));
-    }
-
-    public function adminGetRepliesMessages(EmailCampaign $campaign)
-    {
-        $this->checkAdminOnlyAccess();
-        
-        // Ensure admin can only view replies to their own campaigns
-        if ($campaign->created_by !== auth()->id()) {
-            abort(403, 'Unauthorized access to this memo.');
-        }
-
-        $messages = $campaign->replies()->with('user')->orderBy('created_at', 'asc')->get();
-
-        return response()->json($messages);
     }
 
     public function adminDownloadAttachment(EmailCampaign $campaign, $index)
