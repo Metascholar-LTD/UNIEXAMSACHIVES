@@ -65,12 +65,12 @@
             font-family: Georgia, Times, 'Times New Roman', serif;
             font-size: 16px;
             color: #000000;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             font-weight: bold;
         }
         .message-title {
             font-family: Georgia, Times, 'Times New Roman', serif;
-            font-size: 20px;
+            font-size: 18px;
             color: #1a1a1a;
             margin-bottom: 20px;
             font-weight: bold;
@@ -196,7 +196,7 @@
                 <div class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</div>
                 <p>You have received an important message from the University Advanced Communication System.</p>
                 <br>
-                <div class="message-title">Subject: {{ $subject }}</div>
+                <div class="message-title">{{ $subject }}</div>
                 <p>Memo Message:</p>
                 <div class="message-content">
                     {!! $message !!}
