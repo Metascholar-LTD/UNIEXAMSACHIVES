@@ -26,7 +26,7 @@
                         
                         {{-- Chat Header --}}
                         <div class="chat-header">
-                            {{-- Top Section: Back Button --}}
+                            {{-- Top Section: Buttons --}}
                             <div class="chat-header-top">
                                 <div class="chat-header-left">
                                     <a href="{{ route('admin.communication-admin.index') }}" class="responsive-btn back-btn">
@@ -157,38 +157,26 @@
                         </div>
 
 <style>
-/* Chat Header Styles */
+/* Chat Header Styles - Exact match to chat page */
 .chat-header {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    margin-bottom: 20px;
-    overflow: hidden;
+    background: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    border-radius: 8px 8px 0 0;
+    margin-bottom: 0;
+    padding: 0;
 }
 
 .chat-header-top {
+    padding: 20px 20px 15px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 15px 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.chat-header-left .responsive-btn {
+.chat-header-left {
     display: flex;
     align-items: center;
-    gap: 8px;
-    color: white;
-    text-decoration: none;
-    padding: 8px 16px;
-    border-radius: 8px;
-    background: rgba(255,255,255,0.2);
-    transition: all 0.3s ease;
-}
-
-.chat-header-left .responsive-btn:hover {
-    background: rgba(255,255,255,0.3);
-    color: white;
+    gap: 15px;
 }
 
 .chat-header-right {
@@ -197,56 +185,58 @@
     gap: 15px;
 }
 
-.stat-badge {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
 .chat-header-separator {
     height: 1px;
-    background: rgba(255,255,255,0.2);
+    background: #e9ecef;
+    margin: 0 20px;
 }
 
 .chat-header-bottom {
-    padding: 20px;
-    background: #f8f9fa;
+    padding: 15px 20px 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .chat-title h4 {
     margin: 0;
     color: #333;
-    font-size: 1.25rem;
+    font-size: 1.1rem;
+    font-weight: 600;
 }
 
 .chat-details {
     display: flex;
     flex-wrap: wrap;
-    gap: 20px;
-    margin-top: 10px;
+    gap: 15px;
+    align-items: center;
 }
 
 .detail-item {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     color: #666;
     font-size: 0.9rem;
 }
 
 .detail-item i {
     color: #007bff;
+    font-size: 0.8rem;
 }
 
-/* Chat Container Styles */
+/* Chat Container Styles - Exact match to chat page */
 .chat-container {
     background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    overflow: hidden;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #e9ecef;
+    border-top: none;
     height: 600px;
     display: flex;
     flex-direction: column;
@@ -257,88 +247,101 @@
     padding: 20px;
     overflow-y: auto;
     background: #f8f9fa;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-/* Message Styles */
+/* Message Styles - Exact match to chat page */
 .message {
     display: flex;
-    margin-bottom: 20px;
-    align-items: flex-start;
     gap: 12px;
+    max-width: 70%;
 }
 
-.message-avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    overflow: hidden;
-    flex-shrink: 0;
+.message-sent {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-received {
+    align-self: flex-start;
 }
 
 .message-avatar img {
-    width: 100%;
-    height: 100%;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     object-fit: cover;
 }
 
 .message-content {
-    flex: 1;
-    background: white;
-    border-radius: 12px;
+    background: #f8f9fa;
     padding: 12px 16px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    max-width: 70%;
+    border-radius: 18px;
+    position: relative;
+}
+
+.message-sent .message-content {
+    background: #d1e7dd;
+    color: #333;
 }
 
 .message-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
-}
-
-.message-sender {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.9rem;
-}
-
-.message-time {
-    color: #999;
+    margin-bottom: 5px;
     font-size: 0.8rem;
+    opacity: 0.8;
 }
 
 .message-text {
-    color: #333;
-    line-height: 1.5;
-    word-wrap: break-word;
+    line-height: 1.4;
 }
 
-/* Attachment Styles */
 .message-attachments {
-    margin-top: 12px;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
+/* Attachment Styles - Exact match to chat page */
 .attachment-file-card {
     display: flex;
     align-items: center;
-    background: #f8f9fa;
-    border: 1px solid #dee2e6;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 8px;
-    transition: all 0.3s ease;
+    padding: 8px 12px;
+    transition: all 0.2s ease;
 }
 
 .attachment-file-card:hover {
-    background: #e9ecef;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.message-sent .attachment-file-card {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.message-received .attachment-file-card {
+    background: rgba(0, 0, 0, 0.05);
 }
 
 .file-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 8px;
+    margin-right: 12px;
     font-size: 1.5rem;
     color: #007bff;
-    margin-right: 12px;
 }
 
 .file-info {
@@ -349,6 +352,7 @@
     font-weight: 500;
     color: #333;
     font-size: 0.9rem;
+    margin-bottom: 2px;
 }
 
 .file-size {
@@ -359,9 +363,14 @@
 .file-download-btn {
     color: #007bff;
     text-decoration: none;
-    padding: 6px;
-    border-radius: 4px;
-    transition: all 0.3s ease;
+    padding: 8px;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
 }
 
 .file-download-btn:hover {
@@ -403,9 +412,10 @@
     .chat-details {
         flex-direction: column;
         gap: 10px;
+        align-items: flex-start;
     }
     
-    .message-content {
+    .message {
         max-width: 85%;
     }
     
