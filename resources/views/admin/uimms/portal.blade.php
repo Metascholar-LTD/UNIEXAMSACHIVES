@@ -739,8 +739,7 @@
                                                 selectAllCheckbox.checked = false;
                                                 selectAllCheckbox.indeterminate = false;
                                             }
-                                            if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
-                                            if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
+                                            // Note: Button visibility is already set above based on status
                                             
                                             // Show loading
                                             document.getElementById('memos-container').innerHTML = `
