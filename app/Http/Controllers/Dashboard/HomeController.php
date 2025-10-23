@@ -778,6 +778,7 @@ class HomeController extends Controller
         
         try {
             // Get memo counts for each section using active participants OR recipients (for backward compatibility)
+            // Pending memos: ALL received/assigned memos that are NOT suspended or completed
             $pendingCount = EmailCampaign::where(function($query) use ($userId) {
                 $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
                     $subQuery->where('user_id', $userId);
@@ -785,7 +786,9 @@ class HomeController extends Controller
                     $subQuery->where('user_id', $userId);
                 });
             })->where(function($query) {
-                $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
+                $query->whereNull('memo_status')
+                      ->orWhere('memo_status', 'pending')
+                      ->orWhereNotIn('memo_status', ['suspended', 'completed', 'archived']);
             })->count();
             
             $suspendedCount = EmailCampaign::where(function($query) use ($userId) {
@@ -864,7 +867,10 @@ class HomeController extends Controller
                 })
                 ->where(function($query) use ($status) {
                     if ($status === 'pending') {
-                        $query->whereNull('memo_status')->orWhere('memo_status', 'pending');
+                        // Pending memos: ALL received/assigned memos that are NOT suspended or completed
+                        $query->whereNull('memo_status')
+                              ->orWhere('memo_status', 'pending')
+                              ->orWhereNotIn('memo_status', ['suspended', 'completed', 'archived']);
                     } else {
                         $query->where('memo_status', $status);
                     }
