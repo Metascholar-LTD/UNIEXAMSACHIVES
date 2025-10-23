@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__message__content__main">
                         <div class="dashboard__message__content__main__title dashboard__message__content__main__title__2">
-                            <h3 style="text-align: center;">University Internal Memo Management System</h3>
+                            <h3 style="text-align: center; margin-bottom: 20px;">University Internal Memo Management System</h3>
                         </div>
                         
                         {{-- Status Cards --}}
