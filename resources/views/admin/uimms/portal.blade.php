@@ -105,12 +105,12 @@
                                                         <div class="text">Archive Selected</div>
                                                     </div>
                                                 </button>
-                                                <button class="responsive-btn bulk-resume-btn" id="bulk-resume-btn" onclick="bulkResumeSelected()" style="display: none;">
+                                                <button class="responsive-btn bulk-reactivate-btn" id="bulk-reactivate-btn" onclick="bulkReactivateSelected()" style="display: none;">
                                                     <div class="svgWrapper">
                                                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
                                                             <path stroke="#fff" stroke-width="2" d="M8 3v3a2 2 0 002 2h4a2 2 0 002-2V3M8 3H6a2 2 0 00-2 2v14a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2h-2M8 3h8"></path>
                                                         </svg>
-                                                        <div class="text">Resume Selected</div>
+                                                        <div class="text">Reactivate Selected</div>
                                                     </div>
                                                 </button>
                                                 <button class="responsive-btn bulk-unarchive-btn" id="bulk-unarchive-btn" onclick="bulkUnarchiveSelected()" style="display: none;">
@@ -376,11 +376,11 @@
                                             background-color: #c82333;
                                         }
                                         
-                                        .bulk-resume-btn {
+                                        .bulk-reactivate-btn {
                                             background-color: #28a745;
                                         }
                                         
-                                        .bulk-resume-btn:hover {
+                                        .bulk-reactivate-btn:hover {
                                             background-color: #218838;
                                         }
                                         
@@ -710,13 +710,13 @@
                                             // Show/hide selection controls and bulk action buttons
                                             const selectionControls = document.getElementById('selection-controls');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
-                                            const bulkResumeBtn = document.getElementById('bulk-resume-btn');
+                                            const bulkReactivateBtn = document.getElementById('bulk-reactivate-btn');
                                             const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
                                             
                                             if (status === 'completed') {
                                                 selectionControls.style.display = 'flex';
                                                 bulkArchiveBtn.style.display = 'flex';
-                                                if (bulkResumeBtn) bulkResumeBtn.style.display = 'flex';
+                                                if (bulkReactivateBtn) bulkReactivateBtn.style.display = 'flex';
                                                 if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                             } else if (status === 'archived') {
                                                 selectionControls.style.display = 'flex';
@@ -725,7 +725,7 @@
                                             } else {
                                                 selectionControls.style.display = 'none';
                                                 bulkArchiveBtn.style.display = 'none';
-                                                if (bulkResumeBtn) bulkResumeBtn.style.display = 'none';
+                                                if (bulkReactivateBtn) bulkReactivateBtn.style.display = 'none';
                                                 if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 // Clear selections when switching away from selectable sections
                                                 clearSelections();
@@ -924,7 +924,7 @@
                                             const selectionCounter = document.getElementById('selection-counter');
                                             const selectAllCheckbox = document.getElementById('select-all-checkbox');
                                             const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
-                                            const bulkResumeBtn = document.getElementById('bulk-resume-btn');
+                                            const bulkReactivateBtn = document.getElementById('bulk-reactivate-btn');
                                             const bulkUnarchiveBtn = document.getElementById('bulk-unarchive-btn');
 
                                             if (!selectionCounter || !selectAllCheckbox) {
@@ -960,15 +960,15 @@
                                                             bulkArchiveBtn.style.display = 'none';
                                                         }
                                                     }
-                                                    if (bulkResumeBtn) {
+                                                    if (bulkReactivateBtn) {
                                                         if (selectedCount > 0) {
-                                                            bulkResumeBtn.style.display = 'flex';
-                                                            const textElement = bulkResumeBtn.querySelector('.text');
+                                                            bulkReactivateBtn.style.display = 'flex';
+                                                            const textElement = bulkReactivateBtn.querySelector('.text');
                                                             if (textElement) {
-                                                                textElement.textContent = `Resume Selected (${selectedCount})`;
+                                                                textElement.textContent = `Reactivate Selected (${selectedCount})`;
                                                             }
                                                         } else {
-                                                            bulkResumeBtn.style.display = 'none';
+                                                            bulkReactivateBtn.style.display = 'none';
                                                         }
                                                     }
                                                     if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
@@ -987,7 +987,7 @@
                                                     if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
                                                 } else {
                                                     if (bulkArchiveBtn) bulkArchiveBtn.style.display = 'none';
-                                                    if (bulkResumeBtn) bulkResumeBtn.style.display = 'none';
+                                                    if (bulkReactivateBtn) bulkReactivateBtn.style.display = 'none';
                                                     if (bulkUnarchiveBtn) bulkUnarchiveBtn.style.display = 'none';
                                                 }
                                             }
@@ -1196,22 +1196,22 @@
                                             });
                                         }
 
-                                        // Bulk resume selected memos (move from completed to pending)
-                                        function bulkResumeSelected() {
+                                        // Bulk reactivate selected memos (move from completed to pending)
+                                        function bulkReactivateSelected() {
                                             if (selectedMemos.size === 0) {
-                                                alert('Please select at least one memo to resume.');
+                                                alert('Please select at least one memo to reactivate.');
                                                 return;
                                             }
                                             
                                             const confirmMessage = selectedMemos.size === 1 
-                                                ? 'Are you sure you want to resume the selected memo?'
-                                                : `Are you sure you want to resume ${selectedMemos.size} selected memos?`;
+                                                ? 'Are you sure you want to reactivate the selected memo?'
+                                                : `Are you sure you want to reactivate ${selectedMemos.size} selected memos?`;
                                             
                                             confirmAction(confirmMessage, function() {
                                                 // Show loading state
-                                                const bulkResumeBtn = document.getElementById('bulk-resume-btn');
-                                                const originalText = bulkResumeBtn.innerHTML;
-                                                bulkResumeBtn.innerHTML = `
+                                                const bulkReactivateBtn = document.getElementById('bulk-reactivate-btn');
+                                                const originalText = bulkReactivateBtn.innerHTML;
+                                                bulkReactivateBtn.innerHTML = `
                                                     <div class="svgWrapper">
                                                         <div class="spinner-border spinner-border-sm text-white" role="status">
                                                             <span class="visually-hidden">Loading...</span>
@@ -1219,15 +1219,15 @@
                                                         <div class="text">Resuming...</div>
                                                     </div>
                                                 `;
-                                                bulkResumeBtn.disabled = true;
+                                                bulkReactivateBtn.disabled = true;
                                                 
                                                 // Prepare form data
                                                 const formData = new FormData();
                                                 formData.append('memo_ids', JSON.stringify(Array.from(selectedMemos)));
                                                 formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
                                                 
-                                                // Send bulk resume request
-                                                fetch('/dashboard/uimms/bulk-resume', {
+                                                // Send bulk reactivate request
+                                                fetch('/dashboard/uimms/bulk-reactivate', {
                                                     method: 'POST',
                                                     body: formData
                                                 })
@@ -1244,7 +1244,7 @@
                                                 })
                                                 .then(data => {
                                                     if (data.success) {
-                                                        alert(`Successfully resumed ${data.resumed_count} selected memos.`);
+                                                        alert(`Successfully reactivated ${data.reactivated_count} selected memos.`);
                                                         // Clear selections and refresh the completed memos list
                                                         clearSelections();
                                                         loadMemos('completed');
@@ -1263,14 +1263,14 @@
                                                 })
                                                 .finally(() => {
                                                     // Restore button state
-                                                    bulkResumeBtn.innerHTML = originalText;
-                                                    bulkResumeBtn.disabled = false;
+                                                    bulkReactivateBtn.innerHTML = originalText;
+                                                    bulkReactivateBtn.disabled = false;
                                                 });
                                             }, null, {
-                                                title: 'Resume Memos',
+                                                title: 'Reactivate Memos',
                                                 type: 'primary',
-                                                confirmText: 'Resume',
-                                                subtitle: 'This will move the selected memos back to pending status to resume conversations.'
+                                                confirmText: 'Reactivate',
+                                                subtitle: 'This will move the selected memos back to pending status to reactivate conversations.'
                                             });
                                         }
                                         </script>

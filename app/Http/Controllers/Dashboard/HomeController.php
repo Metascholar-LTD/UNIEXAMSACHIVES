@@ -1600,4 +1600,92 @@ class HomeController extends Controller
             return response()->json(['success' => false, 'message' => 'Failed to unarchive selected memos'], 500);
         }
     }
+
+    /**
+     * Bulk reactivate selected completed memos (move from completed to pending)
+     */
+    public function bulkReactivateSelected(Request $request)
+    {
+        $userId = Auth::id();
+        
+        $request->validate([
+            'memo_ids' => 'required|string'
+        ]);
+        
+        try {
+            $memoIds = json_decode($request->memo_ids, true);
+            
+            // Debug: Log the memo IDs being processed
+            \Log::info('Processing bulk reactivate for memos:', [
+                'user_id' => $userId,
+                'memo_ids' => $memoIds
+            ]);
+            
+            // Get selected memos where user is a participant and status is completed
+            $selectedMemos = EmailCampaign::whereIn('id', $memoIds)
+                ->where('memo_status', 'completed')
+                ->where(function($query) use ($userId) {
+                    $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                        $subQuery->where('user_id', $userId);
+                    });
+                })->get();
+            
+            // Debug: Log how many memos were found
+            \Log::info('Found memos to reactivate:', [
+                'count' => $selectedMemos->count(),
+                'memo_ids_found' => $selectedMemos->pluck('id')->toArray()
+            ]);
+            
+            $reactivatedCount = 0;
+            
+            foreach ($selectedMemos as $memo) {
+                $memo->update(['memo_status' => 'pending']);
+                
+                // Add to workflow history
+                $workflowHistory = $memo->workflow_history ?? [];
+                $workflowHistory[] = [
+                    'action' => 'bulk_reactivated_selected',
+                    'user_id' => $userId,
+                    'timestamp' => now()->toISOString(),
+                    'status' => 'pending',
+                    'reason' => 'Bulk reactivated selected memos from completed status'
+                ];
+                $memo->update(['workflow_history' => $workflowHistory]);
+                
+                $reactivatedCount++;
+            }
+            
+            // Get updated counts
+            $pendingCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
+            })->where('memo_status', 'pending')->count();
+            
+            $completedCount = EmailCampaign::where(function($query) use ($userId) {
+                $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                })->orWhereHas('recipients', function($subQuery) use ($userId) {
+                    $subQuery->where('user_id', $userId);
+                });
+            })->where('memo_status', 'completed')->count();
+            
+            return response()->json([
+                'success' => true,
+                'reactivated_count' => $reactivatedCount,
+                'counts' => [
+                    'pending' => $pendingCount,
+                    'completed' => $completedCount
+                ]
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in bulkReactivateSelected: ' . $e->getMessage());
+            return response()->json(['success' => false, 'message' => 'Failed to reactivate selected memos'], 500);
+        }
+    }
 }
