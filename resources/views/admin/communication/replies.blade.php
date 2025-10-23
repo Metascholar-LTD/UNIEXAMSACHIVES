@@ -37,6 +37,18 @@
                                             <div class="text">Back</div>
                                         </div>
                                     </a>
+                                    
+                                    {{-- Only show "Involve Yourself" button if current user is the memo composer --}}
+                                    @if(auth()->id() == $campaign->created_by)
+                                        <a href="{{ route('dashboard.uimms.chat', $campaign->id) }}" class="responsive-btn involve-btn">
+                                            <div class="svgWrapper">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                    <path stroke="#fff" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                                <div class="text">Involve Yourself</div>
+                                            </div>
+                                        </a>
+                                    @endif
                                 </div>
                                 <div class="chat-header-right">
                                     <div class="memo-stats">
@@ -225,6 +237,16 @@
 .back-btn:hover {
     background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Involve Yourself Button - Blue Color */
+.involve-btn {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.involve-btn:hover {
+    background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
+    box-shadow: 2px 2px 12px rgba(0, 123, 255, 0.3);
 }
 
 .chat-header-right {

@@ -911,16 +911,18 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // Check if user is an active participant OR a recipient (for backward compatibility)
+            // Check if user is an active participant, recipient, or the creator
             $isActiveParticipant = $memo->isActiveParticipant($userId);
             $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+            $isCreator = $memo->created_by === $userId;
             
-            if (!$isActiveParticipant && !$isRecipient) {
+            if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
                 abort(403, 'You are not a participant in this memo conversation.');
             }
             
             // If user is a recipient but not an active participant, they can view but not participate
-            $canParticipate = $isActiveParticipant;
+            // Creator can always participate
+            $canParticipate = $isActiveParticipant || $isCreator;
 
             $memo->load([
                 'creator', 
@@ -998,8 +1000,11 @@ class HomeController extends Controller
             abort(403, 'This memo is ' . $memo->memo_status . ' and cannot receive new messages.');
         }
         
-        // Check if user is an active participant (only active participants can send messages)
-        if (!$memo->isActiveParticipant($userId)) {
+        // Check if user is an active participant or the creator (only these can send messages)
+        $isActiveParticipant = $memo->isActiveParticipant($userId);
+        $isCreator = $memo->created_by === $userId;
+        
+        if (!$isActiveParticipant && !$isCreator) {
             abort(403, 'You are not an active participant in this memo conversation.');
         }
 
@@ -1090,11 +1095,12 @@ class HomeController extends Controller
     {
         $userId = Auth::id();
         
-        // Check if user is an active participant OR a recipient (for backward compatibility)
+        // Check if user is an active participant, recipient, or the creator
         $isActiveParticipant = $memo->isActiveParticipant($userId);
         $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+        $isCreator = $memo->created_by === $userId;
         
-        if (!$isActiveParticipant && !$isRecipient) {
+        if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
             abort(403, 'You are not a participant in this memo conversation.');
         }
 
@@ -1176,11 +1182,12 @@ class HomeController extends Controller
             abort(403, 'This memo is archived and cannot have its status changed.');
         }
         
-        // Check if user is an active participant OR a recipient (for backward compatibility)
+        // Check if user is an active participant, recipient, or the creator
         $isActiveParticipant = $memo->isActiveParticipant($userId);
         $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+        $isCreator = $memo->created_by === $userId;
         
-        if (!$isActiveParticipant && !$isRecipient) {
+        if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
             abort(403, 'You are not a participant in this memo conversation.');
         }
 
@@ -1230,10 +1237,11 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // Check if user is a recipient
+            // Check if user is a recipient or the creator
             $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+            $isCreator = $memo->created_by === $userId;
             
-            if (!$isRecipient) {
+            if (!$isRecipient && !$isCreator) {
                 abort(403, 'You are not a participant in this memo conversation.');
             }
 
