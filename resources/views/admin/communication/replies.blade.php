@@ -40,7 +40,7 @@
                             </div>
                                 <div class="chat-header-right">
                                     <div class="memo-stats">
-                                        <span class="stat-badge">{{ $replies->total() }} Replies</span>
+                                        <span class="stat-badge">{{ $replies->count() }} Replies</span>
                         </div>
                     </div>
                 </div>
@@ -145,8 +145,8 @@
                                         </div>
                                         <h4>No replies yet</h4>
                                         <p>No one has replied to this memo yet.</p>
-                                    </div>
-                                @endif
+                            </div>
+                        @endif
     </div>
 </div>
 
