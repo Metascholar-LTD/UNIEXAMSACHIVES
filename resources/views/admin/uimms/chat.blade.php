@@ -2608,49 +2608,38 @@ function downloadImage(downloadUrl, fileName) {
     event.preventDefault();
     event.stopPropagation();
     
+    // Prevent multiple simultaneous downloads
+    if (window.downloadInProgress) {
+        console.log('Download already in progress, ignoring click');
+        return;
+    }
+    
+    window.downloadInProgress = true;
+    
     try {
-        // Method 1: Try direct download
+        // Create a temporary link element for download
         const link = document.createElement('a');
         link.href = downloadUrl;
         link.download = fileName || 'image';
         link.style.display = 'none';
-        link.target = '_blank';
         
+        // Append to body, click, and remove
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
         
-        console.log('Download method 1 completed');
+        console.log('Download initiated successfully');
         
-        // Method 2: Fallback - try fetch and blob download
+        // Reset the flag after a short delay
         setTimeout(() => {
-            fetch(downloadUrl)
-                .then(response => {
-                    if (!response.ok) throw new Error('Network response was not ok');
-                    return response.blob();
-                })
-                .then(blob => {
-                    const url = window.URL.createObjectURL(blob);
-                    const link2 = document.createElement('a');
-                    link2.href = url;
-                    link2.download = fileName || 'image';
-                    link2.style.display = 'none';
-                    document.body.appendChild(link2);
-                    link2.click();
-                    document.body.removeChild(link2);
-                    window.URL.revokeObjectURL(url);
-                    console.log('Download method 2 completed');
-                })
-                .catch(error => {
-                    console.error('Fetch download failed:', error);
-                    // Final fallback: open in new tab
-                    window.open(downloadUrl, '_blank');
-                });
-        }, 100);
+            window.downloadInProgress = false;
+        }, 1000);
         
     } catch (e) {
-        console.error('Error in download function:', e);
-        // Final fallback: open in new tab
+        console.error('Error downloading image:', e);
+        // Reset the flag immediately on error
+        window.downloadInProgress = false;
+        // Fallback: open in new tab
         window.open(downloadUrl, '_blank');
     }
 }
