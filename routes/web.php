@@ -204,6 +204,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'removeAttachment'])->name('remove-attachment');
         Route::get('/ajax/users', [AdvanceCommunicationController::class, 'getUsersAjax'])->name('users.ajax');
         Route::get('/{campaign}/replies', [AdvanceCommunicationController::class, 'viewReplies'])->name('replies');
+        Route::get('/{campaign}/replies/messages', [AdvanceCommunicationController::class, 'getRepliesMessages'])->name('replies.messages');
     });
 
     #Advanced Communication System (Admin Only)
@@ -221,6 +222,7 @@ Route::middleware(['auth'])->group(function () {
         Route::delete('/{campaign}/attachment/{index}', [AdvanceCommunicationController::class, 'adminRemoveAttachment'])->name('remove-attachment');
         Route::get('/ajax/users', [AdvanceCommunicationController::class, 'adminGetUsersAjax'])->name('users.ajax');
         Route::get('/{campaign}/replies', [AdvanceCommunicationController::class, 'adminViewReplies'])->name('replies');
+        Route::get('/{campaign}/replies/messages', [AdvanceCommunicationController::class, 'adminGetRepliesMessages'])->name('replies.messages');
     });
 
     #logout
