@@ -519,64 +519,48 @@ function downloadImage(url, filename) {
     document.body.removeChild(link);
 }
 
-// Auto-refresh system for real-time updates - Silent refresh like chat portal
+// Auto-refresh system - EXACT copy from chat portal
 let lastMessageCount = {{ $replies->count() }};
 let lastMessageId = {{ $replies->last() ? $replies->last()->id : 0 }};
 let isPolling = true;
 let messageInterval;
 
-// Auto-refresh messages every 3 seconds
-function startAutoRefresh() {
-    messageInterval = setInterval(() => {
-        if (!isPolling) return;
-        
-        fetch(`{{ route('admin.communication.replies', $campaign->id) }}?ajax=1`)
-            .then(response => response.text())
-            .then(html => {
-                // Parse the new HTML and extract new messages
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, 'text/html');
-                const newMessages = doc.querySelectorAll('.message');
-                
-                if (newMessages.length > lastMessageCount) {
-                    // New messages detected, add them silently
-                    const messagesContainer = document.getElementById('chat-messages');
-                    const newMessagesToAdd = Array.from(newMessages).slice(lastMessageCount);
-                    
-                    newMessagesToAdd.forEach(messageElement => {
-                        // Clone the message element and add it to the container
-                        const clonedMessage = messageElement.cloneNode(true);
-                        messagesContainer.appendChild(clonedMessage);
-                    });
-                    
-                    lastMessageCount = newMessages.length;
-                    
-                    // Scroll to bottom to show new messages
-                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
-                }
-            })
-            .catch(error => {
-                console.error('Error refreshing messages:', error);
-                // If there's an error, stop polling temporarily
-                isPolling = false;
-                setTimeout(() => {
-                    isPolling = true;
-                }, 10000); // Resume polling after 10 seconds
-            });
-    }, 3000);
+// Auto-refresh messages every 3 seconds - EXACT same as chat portal
+messageInterval = setInterval(() => {
+    if (!isPolling) return;
+    
+    // Simple approach: just reload the page silently like chat portal does
+    fetch(`{{ route('admin.communication.replies', $campaign->id) }}`)
+        .then(response => response.text())
+        .then(html => {
+            // Check if there are new messages by comparing with current count
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            const newMessages = doc.querySelectorAll('.message');
+            
+            if (newMessages.length > lastMessageCount) {
+                // New messages detected, reload silently
+                location.reload();
+            }
+        })
+        .catch(error => {
+            console.error('Error refreshing messages:', error);
+            isPolling = false;
+            setTimeout(() => {
+                isPolling = true;
+            }, 10000);
+        });
+}, 3000);
+
+// Scroll to bottom on load - EXACT same as chat portal
+function scrollToBottom() {
+    const container = document.querySelector('.chat-container');
+    if (container) {
+        container.scrollTop = container.scrollHeight;
+    }
 }
 
-// Start auto-refresh when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    startAutoRefresh();
-});
-
-// Stop auto-refresh when page is about to unload
-window.addEventListener('beforeunload', function() {
-    if (messageInterval) {
-        clearInterval(messageInterval);
-    }
-});
+window.addEventListener('load', scrollToBottom);
 </style>
                                 </div>
                             </div>
