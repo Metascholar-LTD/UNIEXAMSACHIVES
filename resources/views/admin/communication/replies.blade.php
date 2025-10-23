@@ -526,6 +526,27 @@ let lastMessageId = {{ $replies->last() ? $replies->last()->id : 0 }};
 let isPolling = true;
 let messageInterval;
 
+// Test the API endpoint immediately
+console.log('Testing API endpoint...');
+console.log('Campaign ID:', campaignId);
+console.log('Initial message count:', lastMessageCount);
+console.log('Initial last message ID:', lastMessageId);
+console.log('API URL:', `{{ route('admin.communication.replies.messages', $campaign->id) }}`);
+
+// Make a test call immediately to see if API works
+fetch(`{{ route('admin.communication.replies.messages', $campaign->id) }}`)
+    .then(response => {
+        console.log('API Response Status:', response.status);
+        return response.json();
+    })
+    .then(messages => {
+        console.log('API Test Success! Received', messages.length, 'messages');
+        console.log('Messages:', messages);
+    })
+    .catch(error => {
+        console.error('API Test Failed:', error);
+    });
+
 // Add new message to chat (for received messages)
 function addNewMessageToChat(message) {
     const messagesContainer = document.getElementById('chat-messages');
