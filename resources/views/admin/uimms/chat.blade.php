@@ -38,9 +38,15 @@
                                     </span>
                                 </div>
                                 <div class="chat-actions">
-                                    <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
-                                        <i class="icofont-user"></i> Assign
-                                    </button>
+                                    @if(!in_array($memo->memo_status, ['completed', 'archived']))
+                                        <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
+                                            <i class="icofont-user"></i> Assign
+                                        </button>
+                                    @else
+                                        <span class="btn btn-sm btn-outline-primary disabled">
+                                            <i class="icofont-user"></i> Assign
+                                        </span>
+                                    @endif
                                     <div class="btn-group">
                                         @if(!in_array($memo->memo_status, ['completed', 'archived']))
                                             <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
