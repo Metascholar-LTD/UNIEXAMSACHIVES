@@ -81,11 +81,45 @@
             color: #1a1a1a;
             margin-bottom: 20px;
             line-height: 1.6;
+            background-color: #f0f8ff;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e6f3ff;
         }
-        .message-content p { margin: 0 0 12px 0; }
-        .message-content ul { margin: 12px 0; padding-left: 20px; }
-        .message-content ol { margin: 12px 0; padding-left: 20px; }
-        .message-content h1, .message-content h2, .message-content h3 { margin: 16px 0 8px 0; }
+        .message-content p { 
+            margin: 0 0 12px 0; 
+            color: #1a1a1a;
+        }
+        .message-content ul { 
+            margin: 12px 0; 
+            padding-left: 20px; 
+            color: #1a1a1a;
+        }
+        .message-content ol { 
+            margin: 12px 0; 
+            padding-left: 20px; 
+            color: #1a1a1a;
+        }
+        .message-content h1, .message-content h2, .message-content h3 { 
+            margin: 16px 0 8px 0; 
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+        .message-content strong, .message-content b {
+            color: #1a1a1a;
+            font-weight: bold;
+        }
+        .message-content em, .message-content i {
+            color: #1a1a1a;
+            font-style: italic;
+        }
+        .message-content a {
+            color: #1e40af;
+            text-decoration: underline;
+        }
+        .message-content a:hover {
+            color: #1d4ed8;
+        }
         .attachments {
             background-color: #fef3c7;
             border: 1px solid #fbbf24;
@@ -160,11 +194,9 @@
         <div class="content">
             <div class="content-card">
                 <div class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</div>
-                <br>
                 <p>You have received an important message from the University Advanced Communication System.</p>
-                
-                <div class="message-title">Subject: {{ $subject }}</div>
                 <br>
+                <div class="message-title">Subject: {{ $subject }}</div>
                 <p>Memo Message:</p>
                 <div class="message-content">
                     {!! $message !!}
