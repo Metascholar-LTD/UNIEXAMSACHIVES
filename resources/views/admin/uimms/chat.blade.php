@@ -2199,9 +2199,9 @@ function addMessageToChat(message) {
                         <img src="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view" 
                              alt="${attachment.name}"
                              class="attachment-image"
-                             onclick="viewImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view', '${attachment.name}')">
+                             onclick="downloadImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download', '${attachment.name}')">
                         <div class="image-overlay">
-                            <i class="icofont-eye"></i>
+                            <i class="icofont-download"></i>
                         </div>
                     </div>
                 `;
@@ -2287,9 +2287,9 @@ function addNewMessageToChat(message) {
                         <img src="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view" 
                              alt="${attachment.name}"
                              class="attachment-image"
-                             onclick="viewImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view', '${attachment.name}')">
+                             onclick="downloadImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download', '${attachment.name}')">
                         <div class="image-overlay">
-                            <i class="icofont-eye"></i>
+                            <i class="icofont-download"></i>
                         </div>
                     </div>
                 `;
@@ -2600,6 +2600,26 @@ function playNotificationSound() {
         });
     } catch (e) {
         console.log('Notification sound not available:', e);
+    }
+}
+
+// Download image function
+function downloadImage(downloadUrl, fileName) {
+    try {
+        // Create a temporary link element
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = fileName;
+        link.target = '_blank';
+        
+        // Append to body, click, and remove
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } catch (e) {
+        console.error('Error downloading image:', e);
+        // Fallback: open in new tab
+        window.open(downloadUrl, '_blank');
     }
 }
 
