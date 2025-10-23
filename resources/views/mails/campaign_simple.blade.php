@@ -160,8 +160,10 @@
         <div class="content">
             <div class="content-card">
                 <div class="greeting">Dear {{ $user->first_name }} {{ $user->last_name }},</div>
+                <br>
+                <p>You have received an important message from the University Advanced Communication System.</p>
                 
-                <div class="message-title">{{ $subject }}</div>
+                <div class="message-title">Subject: {{ $subject }}</div>
                 
                 <div class="message-content">
                     {!! $message !!}
@@ -189,7 +191,7 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-disclaimer">
-                This is an automated message from the University Exams Archive System. 
+                This is an automated message from the University Advanced Communication System. 
                 Please do not reply to this email.
             </div>
         </div>
