@@ -38,6 +38,9 @@
                                         </div>
                                     </a>
                                     
+                                    {{-- Separator line between buttons --}}
+                                    <div class="button-separator"></div>
+                                    
                                     {{-- Only show "Involve Yourself" button if current user is the memo composer --}}
                                     @if(auth()->id() == $campaign->created_by)
                                         <a href="{{ route('dashboard.uimms.chat', $campaign->id) }}" class="responsive-btn involve-btn">
@@ -247,6 +250,15 @@
 .involve-btn:hover {
     background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
     box-shadow: 2px 2px 12px rgba(0, 123, 255, 0.3);
+}
+
+/* Button Separator */
+.button-separator {
+    width: 1px;
+    height: 30px;
+    background: #dee2e6;
+    margin: 0 10px;
+    flex-shrink: 0;
 }
 
 .chat-header-right {
