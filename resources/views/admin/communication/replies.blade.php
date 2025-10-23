@@ -68,21 +68,34 @@
                                 <div class="chat-title">
                                     Subject: <h4>{{ $campaign->subject }}</h4>
                                 </div>
-                                <div class="chat-details">
-                                    <div class="detail-item">
-                                        <i class="icofont-user"></i>
-                                        <span>From: {{ $campaign->creator->first_name }} {{ $campaign->creator->last_name }}</span>
+                            </div>
+                        </div>
+
+                        {{-- Memo Details Section --}}
+                        <div class="memo-details-section">
+                            <div class="memo-details-content">
+                                <div class="memo-details-single-row">
+                                    <div class="memo-detail-item-inline">
+                                        <label>From:</label>
+                                        <span class="memo-sender">
+                                            <img src="{{ $campaign->creator->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                 alt="{{ $campaign->creator->first_name }}" class="sender-avatar">
+                                            {{ $campaign->creator->first_name }} {{ $campaign->creator->last_name }}
+                                        </span>
                                     </div>
-                                    <div class="detail-item">
-                                        <i class="icofont-calendar"></i>
-                                        <span>{{ $campaign->created_at->format('M d, Y \a\t h:i A') }}</span>
+                                    
+                                    <div class="memo-detail-item-inline">
+                                        <label>Created:</label>
+                                        <span class="memo-date">{{ $campaign->created_at->format('M d, Y H:i') }}</span>
                                     </div>
-                                    <div class="detail-item">
-                                        <i class="icofont-tag"></i>
-                                        <span>Ref: {{ $campaign->reference }}</span>
+                                    
+                                    <div class="memo-detail-item-inline">
+                                        <label>Ref:</label>
+                                        <span class="memo-reference">{{ $campaign->reference }}</span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
                         </div>
 
                         {{-- Chat Messages Container --}}
@@ -259,6 +272,81 @@
     background: #dee2e6;
     margin: 0 10px;
     flex-shrink: 0;
+}
+
+/* Memo Details Section - Exact match to chat blade */
+.memo-details-section {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-top: none;
+    padding: 20px;
+    margin-bottom: 0;
+}
+
+.memo-details-content {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.memo-details-single-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    align-items: center;
+}
+
+.memo-detail-item-inline {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.memo-detail-item-inline label {
+    display: inline-block;
+    font-weight: 600;
+    color: #2c3e50;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    font-size: 0.75rem;
+    margin-bottom: 0;
+    margin-right: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+}
+
+.memo-sender {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 500;
+    color: #333;
+}
+
+.sender-avatar {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #e9ecef;
+}
+
+.memo-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.memo-reference {
+    color: #1976d2;
+    font-weight: 500;
+    background: #e3f2fd;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9rem;
 }
 
 .chat-header-right {
