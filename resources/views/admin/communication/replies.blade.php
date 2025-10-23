@@ -519,7 +519,7 @@ function downloadImage(url, filename) {
     document.body.removeChild(link);
 }
 
-// Auto-refresh system for real-time updates
+// Auto-refresh system for real-time updates - Silent refresh like chat portal
 let lastMessageCount = {{ $replies->count() }};
 let lastMessageId = {{ $replies->last() ? $replies->last()->id : 0 }};
 let isPolling = true;
@@ -533,14 +533,26 @@ function startAutoRefresh() {
         fetch(`{{ route('admin.communication.replies', $campaign->id) }}?ajax=1`)
             .then(response => response.text())
             .then(html => {
-                // Parse the new HTML and extract message count
+                // Parse the new HTML and extract new messages
                 const parser = new DOMParser();
                 const doc = parser.parseFromString(html, 'text/html');
                 const newMessages = doc.querySelectorAll('.message');
                 
                 if (newMessages.length > lastMessageCount) {
-                    // New messages detected, reload the page to show them
-                    location.reload();
+                    // New messages detected, add them silently
+                    const messagesContainer = document.getElementById('chat-messages');
+                    const newMessagesToAdd = Array.from(newMessages).slice(lastMessageCount);
+                    
+                    newMessagesToAdd.forEach(messageElement => {
+                        // Clone the message element and add it to the container
+                        const clonedMessage = messageElement.cloneNode(true);
+                        messagesContainer.appendChild(clonedMessage);
+                    });
+                    
+                    lastMessageCount = newMessages.length;
+                    
+                    // Scroll to bottom to show new messages
+                    messagesContainer.scrollTop = messagesContainer.scrollHeight;
                 }
             })
             .catch(error => {
