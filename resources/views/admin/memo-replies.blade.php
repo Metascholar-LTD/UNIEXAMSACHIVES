@@ -24,18 +24,6 @@
                             </div>
                         @endif
                         
-                        <div class="dashboard__section__title">
-                            <h4>💬 Memo Replies: {{ $recipient->campaign->subject }}</h4>
-                            <p class="text-muted mb-3">
-                                <i class="icofont-users"></i> All recipients can see these replies
-                            </p>
-                            <div style="margin-top:8px; display: flex; gap: 8px; align-items: center;">
-                                <a href="{{ route('dashboard.message') }}" class="btn btn-sm btn-primary">
-                                    <i class="icofont-arrow-left"></i> Back to Memos
-                                </a>
-                            </div>
-                        </div>
-                        
                         <div class="row">
                             <div class="col-lg-12 col-md-12">
                                 <div class="dashboard__form">
