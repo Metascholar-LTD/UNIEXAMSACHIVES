@@ -2182,6 +2182,53 @@ function addMessageToChat(message) {
         replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
     }
     
+    // Build attachments HTML if any
+    let attachmentsHtml = '';
+    if (message.attachments && message.attachments.length > 0) {
+        attachmentsHtml = '<div class="message-attachments">';
+        message.attachments.forEach((attachment, index) => {
+            const isImage = attachment.type && attachment.type.includes('image');
+            const isPdf = attachment.type && attachment.type.includes('pdf');
+            const isWord = attachment.type && (attachment.type.includes('word') || attachment.type.includes('document'));
+            const isExcel = attachment.type && (attachment.type.includes('excel') || attachment.type.includes('spreadsheet'));
+            const fileSize = attachment.size ? (attachment.size / 1024).toFixed(1) + ' KB' : 'Unknown size';
+            
+            if (isImage) {
+                attachmentsHtml += `
+                    <div class="attachment-image-wrapper">
+                        <img src="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view" 
+                             alt="${attachment.name}"
+                             class="attachment-image"
+                             onclick="viewImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view', '${attachment.name}')">
+                        <div class="image-overlay">
+                            <i class="icofont-eye"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                attachmentsHtml += `
+                    <div class="attachment-file-card">
+                        <div class="file-icon">
+                            ${isPdf ? '<i class="icofont-file-pdf"></i>' : 
+                              isWord ? '<i class="icofont-file-document"></i>' :
+                              isExcel ? '<i class="icofont-file-excel"></i>' : 
+                              '<i class="icofont-file-alt"></i>'}
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">${attachment.name}</div>
+                            <div class="file-size">${fileSize}</div>
+                        </div>
+                        <a href="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download" 
+                           class="file-download-btn" title="Download">
+                            <i class="icofont-download"></i>
+                        </a>
+                    </div>
+                `;
+            }
+        });
+        attachmentsHtml += '</div>';
+    }
+    
     const messageHtml = `
         <div class="message message-sent">
             <div class="message-avatar">
@@ -2195,6 +2242,7 @@ function addMessageToChat(message) {
                     <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
                 </div>
                 <div class="message-text">${message.message}</div>
+                ${attachmentsHtml}
             </div>
         </div>
     `;
