@@ -604,14 +604,18 @@ function addNewMessageToChat(message) {
 messageInterval = setInterval(() => {
     if (!isPolling) return;
     
+    console.log('Checking for new messages... Current count:', lastMessageCount);
     fetch(`{{ route('admin.communication.replies.messages', $campaign->id) }}`)
         .then(response => response.json())
         .then(messages => {
+            console.log('Fetched messages:', messages.length, 'messages');
             if (messages.length > lastMessageCount) {
+                console.log('New messages detected!', messages.length - lastMessageCount, 'new messages');
                 // New messages detected
                 const newMessages = messages.slice(lastMessageCount);
                 newMessages.forEach(message => {
                     if (message.id > lastMessageId) {
+                        console.log('Adding new message:', message);
                         addNewMessageToChat(message);
                         lastMessageId = message.id;
                     }

@@ -36,15 +36,15 @@
                                             </svg>
                                             <div class="text">Back</div>
                                         </div>
-                                    </a>
-                                </div>
+                                </a>
+                            </div>
                                 <div class="chat-header-right">
                                     <div class="memo-stats">
                                         <span class="stat-badge">{{ $replies->count() }} Replies</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
+                        </div>
+                    </div>
+                </div>
+
                             {{-- Separator Line --}}
                             <div class="chat-header-separator"></div>
                             
@@ -52,7 +52,7 @@
                             <div class="chat-header-bottom">
                                 <div class="chat-title">
                                     Subject: <h4>{{ $campaign->subject }}</h4>
-                                </div>
+                    </div>
                                 <div class="chat-details">
                                     <div class="detail-item">
                                         <i class="icofont-user"></i>
@@ -65,16 +65,16 @@
                                     <div class="detail-item">
                                         <i class="icofont-tag"></i>
                                         <span>Ref: {{ $campaign->reference }}</span>
-                                    </div>
-                                </div>
                             </div>
                         </div>
+                    </div>
+                </div>
 
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
                             <div class="chat-messages" id="chat-messages">
-                                @if($replies->count() > 0)
-                                    @foreach($replies as $reply)
+                        @if($replies->count() > 0)
+                                @foreach($replies as $reply)
                                         <div class="message message-received">
                                             <div class="message-avatar">
                                                 <img src="{{ $reply->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
@@ -117,7 +117,7 @@
                                                                             <i class="icofont-file-document"></i>
                                                                         @elseif($isExcel)
                                                                             <i class="icofont-file-excel"></i>
-                                                                        @else
+                                                @else
                                                                             <i class="icofont-file-alt"></i>
                                                                         @endif
                                                                     </div>
@@ -147,8 +147,8 @@
                                         <p>No one has replied to this memo yet.</p>
                                     </div>
                                 @endif
-                            </div>
-                        </div>
+    </div>
+</div>
 
 <style>
 /* Chat Header Styles - Exact match to chat page */
@@ -604,14 +604,18 @@ function addNewMessageToChat(message) {
 messageInterval = setInterval(() => {
     if (!isPolling) return;
     
+    console.log('Checking for new messages... Current count:', lastMessageCount);
     fetch(`{{ route('admin.communication-admin.replies.messages', $campaign->id) }}`)
         .then(response => response.json())
         .then(messages => {
+            console.log('Fetched messages:', messages.length, 'messages');
             if (messages.length > lastMessageCount) {
+                console.log('New messages detected!', messages.length - lastMessageCount, 'new messages');
                 // New messages detected
                 const newMessages = messages.slice(lastMessageCount);
                 newMessages.forEach(message => {
                     if (message.id > lastMessageId) {
+                        console.log('Adding new message:', message);
                         addNewMessageToChat(message);
                         lastMessageId = message.id;
                     }
