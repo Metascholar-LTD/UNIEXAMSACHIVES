@@ -52,6 +52,7 @@
         .content {
             background-color: #f8fafc;
             padding: 0 30px 30px 30px;
+            font-family: Georgia, Times, 'Times New Roman', serif;
         }
         .content-card {
             background-color: #ffffff;
