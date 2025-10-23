@@ -917,9 +917,7 @@ class HomeController extends Controller
             $isCreator = $memo->created_by === $userId;
             
             // If creator, check if memo is assigned to someone else
-            if ($isCreator && $memo->current_assignee_id && $memo->current_assignee_id != $userId) {
-                abort(403, 'This memo has been assigned to another user. You cannot participate until it is reassigned to you.');
-            }
+            $isAssignedToSomeoneElse = $isCreator && $memo->current_assignee_id && $memo->current_assignee_id != $userId;
             
             if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
                 abort(403, 'You are not a participant in this memo conversation.');
@@ -927,7 +925,7 @@ class HomeController extends Controller
             
             // If user is a recipient but not an active participant, they can view but not participate
             // Creator can participate only if memo is not assigned to someone else
-            $canParticipate = $isActiveParticipant || ($isCreator && (!$memo->current_assignee_id || $memo->current_assignee_id == $userId));
+            $canParticipate = $isActiveParticipant || ($isCreator && !$isAssignedToSomeoneElse);
 
             $memo->load([
                 'creator', 
@@ -985,7 +983,7 @@ class HomeController extends Controller
                 ->select('id', 'first_name', 'last_name', 'email')
                 ->get();
 
-            return view('admin.uimms.chat', compact('memo', 'users', 'canParticipate'));
+            return view('admin.uimms.chat', compact('memo', 'users', 'canParticipate', 'isAssignedToSomeoneElse'));
             
         } catch (\Exception $e) {
             \Log::error('Error in memoChat: ' . $e->getMessage());
@@ -1010,8 +1008,13 @@ class HomeController extends Controller
         $isCreator = $memo->created_by === $userId;
         
         // If creator, check if memo is assigned to someone else
-        if ($isCreator && $memo->current_assignee_id && $memo->current_assignee_id != $userId) {
-            abort(403, 'This memo has been assigned to another user. You cannot send messages until it is reassigned to you.');
+        $isAssignedToSomeoneElse = $isCreator && $memo->current_assignee_id && $memo->current_assignee_id != $userId;
+        
+        if ($isAssignedToSomeoneElse) {
+            return response()->json([
+                'success' => false,
+                'message' => 'This memo has been assigned to another user. You cannot send messages until it is reassigned to you.'
+            ], 403);
         }
         
         if (!$isActiveParticipant && !$isCreator) {

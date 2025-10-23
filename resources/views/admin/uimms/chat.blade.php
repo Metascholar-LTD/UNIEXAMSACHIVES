@@ -294,7 +294,7 @@
                         </div>
 
                         {{-- Chat Input --}}
-                        @if($canParticipate && !in_array($memo->memo_status, ['completed', 'archived']))
+                        @if($canParticipate && !in_array($memo->memo_status, ['completed', 'archived']) && !$isAssignedToSomeoneElse)
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
@@ -393,10 +393,14 @@
                                         <h4>Memo Archived</h4>
                                         <p>This memo has been <strong>archived</strong> and is now read-only.</p>
                                         <p class="blocked-subtitle">No further actions or messages can be added to this memo</p>
-                                    @else
-                                        <h4>Chat Assigned</h4>
+                                    @elseif($isAssignedToSomeoneElse)
+                                        <h4>Memo Assigned</h4>
                                         <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>
-                                        <p class="blocked-subtitle">You can no longer participate unless reassigned to you</p>
+                                        <p class="blocked-subtitle">You can no longer participate until it is reassigned to you</p>
+                                    @else
+                                        <h4>Chat Locked</h4>
+                                        <p>You are not an active participant in this memo conversation.</p>
+                                        <p class="blocked-subtitle">Contact the memo creator or assignee for access</p>
                                     @endif
                                 </div>
                                 <div class="blocked-actions">
