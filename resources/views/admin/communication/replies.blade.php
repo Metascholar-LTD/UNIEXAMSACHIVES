@@ -103,84 +103,109 @@
                         </div>
 
                         {{-- Chat Messages Container --}}
-                        <div class="chat-container">
-                            <div class="chat-messages" id="chat-messages">
-                                @if($replies->count() > 0)
-                                    @foreach($replies as $reply)
-                                        <div class="message message-received">
-                                            <div class="message-avatar">
-                                                <img src="{{ $reply->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
-                                                     alt="{{ $reply->user->first_name }}">
-                                            </div>
-                                            <div class="message-content">
-                                                <div class="message-header">
-                                                    <span class="message-sender">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
-                                                    <span class="message-time">{{ $reply->created_at->format('M d, Y H:i') }}</span>
-                                                </div>
-                                                <div class="message-text">{!! nl2br(e($reply->message)) !!}</div>
-                                                @if($reply->attachments && count($reply->attachments) > 0)
-                                                    <div class="message-attachments">
-                                                        @foreach($reply->attachments as $index => $attachment)
-                                                            @php
-                                                                $isImage = str_contains($attachment['type'] ?? '', 'image');
-                                                                $isPdf = str_contains($attachment['type'] ?? '', 'pdf');
-                                                                $isWord = str_contains($attachment['type'] ?? '', 'word') || str_contains($attachment['type'] ?? '', 'document');
-                                                                $isExcel = str_contains($attachment['type'] ?? '', 'excel') || str_contains($attachment['type'] ?? '', 'spreadsheet');
-                                                                $fileSize = isset($attachment['size']) ? number_format($attachment['size'] / 1024, 1) . ' KB' : 'Unknown size';
-                                                            @endphp
-                                                            
-                                                            @if($isImage)
-                                                                {{-- Image Attachment - Show preview --}}
-                                                                <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
-                                                                    <img src="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
-                                                                         alt="{{ $attachment['name'] }}"
-                                                                         class="attachment-image">
-                                                                    <div class="image-overlay">
-                                                                        <i class="icofont-download"></i>
-                                                                    </div>
-                                                                </div>
-                                                            @else
-                                                                {{-- File Attachment - Show file card --}}
-                                                                <div class="attachment-file-card">
-                                                                    <div class="file-icon">
-                                                                        @if($isPdf)
-                                                                            <i class="icofont-file-pdf"></i>
-                                                                        @elseif($isWord)
-                                                                            <i class="icofont-file-document"></i>
-                                                                        @elseif($isExcel)
-                                                                            <i class="icofont-file-excel"></i>
-                                                                        @else
-                                                                            <i class="icofont-file-alt"></i>
-                                                                        @endif
-                                                                    </div>
-                                                                    <div class="file-info">
-                                                                        <div class="file-name">{{ $attachment['name'] }}</div>
-                                                                        <div class="file-size">{{ $fileSize }}</div>
-                                                                    </div>
-                                                                    <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
-                                                                       class="file-download-btn"
-                                                                       title="Download">
-                                                                        <i class="icofont-download"></i>
-                                                                    </a>
-                                                                </div>
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-                                    @endforeach
-                                @else
-                                    <div class="no-messages">
-                                        <div class="no-messages-icon">
-                                            <i class="icofont-chat"></i>
-                                        </div>
-                                        <h4>No replies yet</h4>
-                                        <p>No one has replied to this memo yet.</p>
+                        @php
+                            $isAssignedToSomeoneElse = auth()->id() == $campaign->created_by && $campaign->current_assignee_id && $campaign->current_assignee_id != auth()->id();
+                        @endphp
+                        
+                        @if($isAssignedToSomeoneElse)
+                            {{-- Locked State for Assigned Memo --}}
+                            <div class="chat-blocked-container">
+                                <div class="chat-blocked-content">
+                                    <div class="blocked-icon">
+                                        <i class="icofont-lock"></i>
                                     </div>
-                                @endif
+                                    <div class="blocked-message">
+                                        <h4>Memo Assigned</h4>
+                                        <p>This memo has been assigned to <strong>{{ $campaign->currentAssignee ? $campaign->currentAssignee->first_name . ' ' . $campaign->currentAssignee->last_name : 'another user' }}</strong>.</p>
+                                        <p class="blocked-subtitle">You can no longer view replies until it is reassigned to you</p>
+                                    </div>
+                                    <div class="blocked-actions">
+                                        <a href="{{ route('admin.communication.index') }}" class="btn btn-outline-secondary">
+                                            <i class="icofont-arrow-left"></i> Back to Communication
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @else
+                            <div class="chat-container">
+                                <div class="chat-messages" id="chat-messages">
+                                    @if($replies->count() > 0)
+                                        @foreach($replies as $reply)
+                                            <div class="message message-received">
+                                                <div class="message-avatar">
+                                                    <img src="{{ $reply->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                         alt="{{ $reply->user->first_name }}">
+                                                </div>
+                                                <div class="message-content">
+                                                    <div class="message-header">
+                                                        <span class="message-sender">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
+                                                        <span class="message-time">{{ $reply->created_at->format('M d, Y H:i') }}</span>
+                                                    </div>
+                                                    <div class="message-text">{!! nl2br(e($reply->message)) !!}</div>
+                                                    @if($reply->attachments && count($reply->attachments) > 0)
+                                                        <div class="message-attachments">
+                                                            @foreach($reply->attachments as $index => $attachment)
+                                                                @php
+                                                                    $isImage = str_contains($attachment['type'] ?? '', 'image');
+                                                                    $isPdf = str_contains($attachment['type'] ?? '', 'pdf');
+                                                                    $isWord = str_contains($attachment['type'] ?? '', 'word') || str_contains($attachment['type'] ?? '', 'document');
+                                                                    $isExcel = str_contains($attachment['type'] ?? '', 'excel') || str_contains($attachment['type'] ?? '', 'spreadsheet');
+                                                                    $fileSize = isset($attachment['size']) ? number_format($attachment['size'] / 1024, 1) . ' KB' : 'Unknown size';
+                                                                @endphp
+                                                                
+                                                                @if($isImage)
+                                                                    {{-- Image Attachment - Show preview --}}
+                                                                    <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
+                                                                        <img src="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                             alt="{{ $attachment['name'] }}"
+                                                                             class="attachment-image">
+                                                                        <div class="image-overlay">
+                                                                            <i class="icofont-download"></i>
+                                                                        </div>
+                                                                    </div>
+                                                                @else
+                                                                    {{-- File Attachment - Show file card --}}
+                                                                    <div class="attachment-file-card">
+                                                                        <div class="file-icon">
+                                                                            @if($isPdf)
+                                                                                <i class="icofont-file-pdf"></i>
+                                                                            @elseif($isWord)
+                                                                                <i class="icofont-file-document"></i>
+                                                                            @elseif($isExcel)
+                                                                                <i class="icofont-file-excel"></i>
+                                                                            @else
+                                                                                <i class="icofont-file-alt"></i>
+                                                                            @endif
+                                                                        </div>
+                                                                        <div class="file-info">
+                                                                            <div class="file-name">{{ $attachment['name'] }}</div>
+                                                                            <div class="file-size">{{ $fileSize }}</div>
+                                                                        </div>
+                                                                        <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                           class="file-download-btn"
+                                                                           title="Download">
+                                                                            <i class="icofont-download"></i>
+                                                                        </a>
+                                                                    </div>
+                                                                @endif
+                                                            @endforeach
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        @endforeach
+                                    @else
+                                        <div class="no-messages">
+                                            <div class="no-messages-icon">
+                                                <i class="icofont-chat"></i>
+                                            </div>
+                                            <h4>No replies yet</h4>
+                                            <p>No one has replied to this memo yet.</p>
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endif
 
 <style>
 /* Chat Header Styles - Exact match to chat page */
@@ -364,6 +389,65 @@
     padding: 4px 8px;
     border-radius: 12px;
     font-size: 0.9rem;
+}
+
+/* Blocked Chat State Styles - Same as chat blade */
+.chat-blocked-container {
+    background: #f8f9fa;
+    border: 1px solid #e9ecef;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.chat-blocked-content {
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.blocked-icon {
+    font-size: 3rem;
+    color: #6c757d;
+    margin-bottom: 20px;
+}
+
+.blocked-message h4 {
+    color: #495057;
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+}
+
+.blocked-message p {
+    color: #6c757d;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+.blocked-subtitle {
+    font-size: 0.9rem;
+    color: #868e96;
+    font-style: italic;
+}
+
+.blocked-actions {
+    margin-top: 25px;
+}
+
+.blocked-actions .btn {
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    text-decoration: none;
+}
+
+.blocked-actions .btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-decoration: none;
 }
 
 .chat-header-right {
