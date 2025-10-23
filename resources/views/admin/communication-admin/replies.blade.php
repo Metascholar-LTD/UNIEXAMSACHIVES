@@ -98,14 +98,20 @@
                                                             @endphp
                                                             
                                                             @if($isImage)
-                                                                {{-- Image Attachment - Show preview --}}
-                                                                <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
-                                                                    <img src="{{ route('dashboard.memo.reply.view-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
-                                                                         alt="{{ $attachment['name'] }}"
-                                                                         class="attachment-image">
-                                                                    <div class="image-overlay">
-                                                                        <i class="icofont-download"></i>
+                                                                {{-- Image Attachment - Show as file card with download --}}
+                                                                <div class="attachment-file-card">
+                                                                    <div class="file-icon">
+                                                                        <i class="icofont-image"></i>
                                                                     </div>
+                                                                    <div class="file-info">
+                                                                        <div class="file-name">{{ $attachment['name'] }}</div>
+                                                                        <div class="file-size">{{ $fileSize }}</div>
+                                                                    </div>
+                                                                    <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                       class="file-download-btn"
+                                                                       title="Download">
+                                                                        <i class="icofont-download"></i>
+                                                                    </a>
                                                                 </div>
                                                             @else
                                                                 {{-- File Attachment - Show file card --}}
@@ -311,44 +317,6 @@
 /* Attachment Styles */
 .message-attachments {
     margin-top: 12px;
-}
-
-.attachment-image-wrapper {
-    position: relative;
-    cursor: pointer;
-    border-radius: 8px;
-    overflow: hidden;
-    max-width: 200px;
-    margin-bottom: 8px;
-}
-
-.attachment-image {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-}
-
-.image-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.attachment-image-wrapper:hover .image-overlay {
-    opacity: 1;
-}
-
-.image-overlay i {
-    color: white;
-    font-size: 1.5rem;
 }
 
 .attachment-file-card {
