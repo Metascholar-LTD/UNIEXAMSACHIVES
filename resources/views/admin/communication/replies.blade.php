@@ -518,6 +518,53 @@ function downloadImage(url, filename) {
     link.click();
     document.body.removeChild(link);
 }
+
+// Auto-refresh system for real-time updates
+let lastMessageCount = {{ $replies->count() }};
+let lastMessageId = {{ $replies->last() ? $replies->last()->id : 0 }};
+let isPolling = true;
+let messageInterval;
+
+// Auto-refresh messages every 3 seconds
+function startAutoRefresh() {
+    messageInterval = setInterval(() => {
+        if (!isPolling) return;
+        
+        fetch(`{{ route('admin.communication.replies', $campaign->id) }}?ajax=1`)
+            .then(response => response.text())
+            .then(html => {
+                // Parse the new HTML and extract message count
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(html, 'text/html');
+                const newMessages = doc.querySelectorAll('.message');
+                
+                if (newMessages.length > lastMessageCount) {
+                    // New messages detected, reload the page to show them
+                    location.reload();
+                }
+            })
+            .catch(error => {
+                console.error('Error refreshing messages:', error);
+                // If there's an error, stop polling temporarily
+                isPolling = false;
+                setTimeout(() => {
+                    isPolling = true;
+                }, 10000); // Resume polling after 10 seconds
+            });
+    }, 3000);
+}
+
+// Start auto-refresh when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    startAutoRefresh();
+});
+
+// Stop auto-refresh when page is about to unload
+window.addEventListener('beforeunload', function() {
+    if (messageInterval) {
+        clearInterval(messageInterval);
+    }
+});
 </style>
                                 </div>
                             </div>
