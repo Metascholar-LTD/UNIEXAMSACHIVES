@@ -41,8 +41,8 @@
                                     {{-- Separator line between buttons --}}
                                     <div class="button-separator"></div>
                                     
-                                    {{-- Only show "Involve Yourself" button if current user is the memo composer --}}
-                                    @if(auth()->id() == $campaign->created_by)
+                                    {{-- Only show "Involve Yourself" button if current user is the memo composer AND memo is not assigned to someone else --}}
+                                    @if(auth()->id() == $campaign->created_by && (!$campaign->current_assignee_id || $campaign->current_assignee_id == auth()->id()))
                                         <a href="{{ route('dashboard.uimms.chat', $campaign->id) }}" class="responsive-btn involve-btn">
                                             <div class="svgWrapper">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
@@ -51,6 +51,16 @@
                                                 <div class="text">Involve Yourself</div>
                                             </div>
                                         </a>
+                                    @elseif(auth()->id() == $campaign->created_by && $campaign->current_assignee_id && $campaign->current_assignee_id != auth()->id())
+                                        {{-- Show disabled button when memo is assigned to someone else --}}
+                                        <span class="responsive-btn involve-btn disabled-btn" title="Memo is assigned to {{ $campaign->currentAssignee->first_name ?? 'another user' }}">
+                                            <div class="svgWrapper">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                    <path stroke="#fff" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
+                                                </svg>
+                                                <div class="text">Involve Yourself</div>
+                                            </div>
+                                        </span>
                                     @endif
                                 </div>
                                 <div class="chat-header-right">
@@ -257,6 +267,19 @@
 .involve-btn:hover {
     background: linear-gradient(135deg, #0056b3 0%, #004085 100%);
     box-shadow: 2px 2px 12px rgba(0, 123, 255, 0.3);
+}
+
+/* Disabled Involve Yourself Button */
+.disabled-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%) !important;
+    cursor: not-allowed !important;
+    opacity: 0.6;
+}
+
+.disabled-btn:hover {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%) !important;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15) !important;
+    transform: none !important;
 }
 
 /* Button Separator */

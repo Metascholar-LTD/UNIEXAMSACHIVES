@@ -916,13 +916,18 @@ class HomeController extends Controller
             $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
             $isCreator = $memo->created_by === $userId;
             
+            // If creator, check if memo is assigned to someone else
+            if ($isCreator && $memo->current_assignee_id && $memo->current_assignee_id != $userId) {
+                abort(403, 'This memo has been assigned to another user. You cannot participate until it is reassigned to you.');
+            }
+            
             if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
                 abort(403, 'You are not a participant in this memo conversation.');
             }
             
             // If user is a recipient but not an active participant, they can view but not participate
-            // Creator can always participate
-            $canParticipate = $isActiveParticipant || $isCreator;
+            // Creator can participate only if memo is not assigned to someone else
+            $canParticipate = $isActiveParticipant || ($isCreator && (!$memo->current_assignee_id || $memo->current_assignee_id == $userId));
 
             $memo->load([
                 'creator', 
@@ -1003,6 +1008,11 @@ class HomeController extends Controller
         // Check if user is an active participant or the creator (only these can send messages)
         $isActiveParticipant = $memo->isActiveParticipant($userId);
         $isCreator = $memo->created_by === $userId;
+        
+        // If creator, check if memo is assigned to someone else
+        if ($isCreator && $memo->current_assignee_id && $memo->current_assignee_id != $userId) {
+            abort(403, 'This memo has been assigned to another user. You cannot send messages until it is reassigned to you.');
+        }
         
         if (!$isActiveParticipant && !$isCreator) {
             abort(403, 'You are not an active participant in this memo conversation.');
