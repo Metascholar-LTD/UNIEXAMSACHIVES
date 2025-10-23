@@ -204,7 +204,7 @@
     <div class="email-container">
         <div class="header">
             <div style="margin-bottom: 15px;">
-                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" style="height: 35px; width: auto; max-width: 180px;" />
+                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" style="height: 50px; width: auto; max-width: 250px;" />
             </div>
             <h1>🚨 New Contact Form Submission</h1>
             <p>University Exams Archive System Website</p>

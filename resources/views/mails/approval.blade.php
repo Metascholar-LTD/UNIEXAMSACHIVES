@@ -38,9 +38,9 @@
             margin-bottom: 0;
         }
         .logo-image {
-            height: 40px;
+            height: 50px;
             width: auto;
-            max-width: 200px;
+            max-width: 250px;
         }
         .tagline {
             font-family: Georgia, Times, 'Times New Roman', serif;
@@ -201,8 +201,8 @@
                 margin: 10px 0;
             }
             .logo-image {
-                height: 35px;
-                max-width: 180px;
+                height: 45px;
+                max-width: 220px;
             }
             .cta-button {
                 display: block;
