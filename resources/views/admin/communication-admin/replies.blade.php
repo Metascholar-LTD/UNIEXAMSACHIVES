@@ -234,19 +234,14 @@
 /* Chat Container Styles - Exact match to chat page */
 .chat-container {
     background: #fff;
-    border-radius: 0 0 8px 8px;
     border: 1px solid #e9ecef;
     border-top: none;
-    height: 600px;
-    display: flex;
-    flex-direction: column;
+    height: 400px;
+    overflow-y: auto;
+    padding: 20px;
 }
 
 .chat-messages {
-    flex: 1;
-    padding: 20px;
-    overflow-y: auto;
-    background: #f8f9fa;
     display: flex;
     flex-direction: column;
     gap: 15px;
@@ -311,16 +306,12 @@
 .attachment-file-card {
     display: flex;
     align-items: center;
-    background: rgba(255, 255, 255, 0.8);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    padding: 8px 12px;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    max-width: 300px;
     transition: all 0.2s ease;
-}
-
-.attachment-file-card:hover {
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .message-sent .attachment-file-card {
@@ -338,10 +329,9 @@
     align-items: center;
     justify-content: center;
     background: #fff;
-    border-radius: 8px;
-    margin-right: 12px;
+    border-radius: 50%;
     font-size: 1.5rem;
-    color: #007bff;
+    flex-shrink: 0;
 }
 
 .file-info {
@@ -371,6 +361,7 @@
     justify-content: center;
     width: 36px;
     height: 36px;
+    flex-shrink: 0;
 }
 
 .file-download-btn:hover {
