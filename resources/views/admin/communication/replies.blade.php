@@ -68,13 +68,7 @@
                                 <div class="chat-title">
                                     Subject: <h4>{{ $campaign->subject }}</h4>
                                 </div>
-                            </div>
-                        </div>
-
-                        {{-- Memo Details Section --}}
-                        <div class="memo-details-section">
-                            <div class="memo-details-content">
-                                <div class="memo-details-single-row">
+                                <div class="chat-details">
                                     <div class="memo-detail-item-inline">
                                         <label>From:</label>
                                         <span class="memo-sender">
@@ -384,21 +378,8 @@
 .chat-details {
     display: flex;
     flex-wrap: wrap;
-    gap: 15px;
+    gap: 20px;
     align-items: center;
-}
-
-.detail-item {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    color: #666;
-    font-size: 0.9rem;
-}
-
-.detail-item i {
-    color: #007bff;
-    font-size: 0.8rem;
 }
 
 /* Chat Container Styles - Exact match to chat page */
