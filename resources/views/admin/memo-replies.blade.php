@@ -120,7 +120,7 @@
                     </div>
                 </div>
 
-                <!-- Replies List -->
+                <!-- Chat-style Replies List -->
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title mb-0">
@@ -130,62 +130,79 @@
                             <i class="icofont-users"></i> All recipients can see these replies
                         </p>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         @if($replies->count() > 0)
-                            <div class="replies-list">
-                                @foreach($replies as $reply)
-                                    <div class="reply-item mb-4 p-3 border rounded">
-                                        <div class="reply-header d-flex justify-content-between align-items-start mb-2">
-                                            <div class="reply-author">
-                                                <h6 class="mb-1">
-                                                    <i class="icofont-user"></i> {{ $reply->user->first_name }} {{ $reply->user->last_name }}
-                                                </h6>
-                                                <small class="text-muted">
-                                                    <i class="icofont-calendar"></i> {{ $reply->created_at->format('M d, Y \a\t h:i A') }}
-                                                </small>
+                            <div class="chat-container">
+                                <div class="chat-messages">
+                                    @foreach($replies as $reply)
+                                        <div class="message {{ $reply->user_id === auth()->id() ? 'message-sent' : 'message-received' }}">
+                                            <div class="message-avatar">
+                                                <img src="{{ $reply->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                     alt="{{ $reply->user->first_name }}">
                                             </div>
-                                            <div class="reply-status">
-                                                @if($reply->is_read)
-                                                    <span class="badge bg-success">Read</span>
-                                                @else
-                                                    <span class="badge bg-warning">Unread</span>
+                                            <div class="message-content">
+                                                <div class="message-header">
+                                                    <span class="message-sender">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
+                                                    <span class="message-time">{{ $reply->created_at->format('M d, Y H:i') }}</span>
+                                                </div>
+                                                <div class="message-text">{!! nl2br(e($reply->message)) !!}</div>
+                                                @if($reply->attachments && count($reply->attachments) > 0)
+                                                    <div class="message-attachments">
+                                                        @foreach($reply->attachments as $index => $attachment)
+                                                            @php
+                                                                $isImage = str_contains($attachment['type'] ?? '', 'image');
+                                                                $isPdf = str_contains($attachment['type'] ?? '', 'pdf');
+                                                                $isWord = str_contains($attachment['type'] ?? '', 'word') || str_contains($attachment['type'] ?? '', 'document');
+                                                                $isExcel = str_contains($attachment['type'] ?? '', 'excel') || str_contains($attachment['type'] ?? '', 'spreadsheet');
+                                                                $fileSize = isset($attachment['size']) ? number_format($attachment['size'] / 1024, 1) . ' KB' : 'Unknown size';
+                                                            @endphp
+                                                            
+                                                            @if($isImage)
+                                                                {{-- Image Attachment - Show preview --}}
+                                                                <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
+                                                                    <img src="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                         alt="{{ $attachment['name'] }}"
+                                                                         class="attachment-image">
+                                                                    <div class="image-overlay">
+                                                                        <i class="icofont-download"></i>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                {{-- File Attachment - Show file card --}}
+                                                                <div class="attachment-file-card">
+                                                                    <div class="file-icon">
+                                                                        @if($isPdf)
+                                                                            <i class="icofont-file-pdf"></i>
+                                                                        @elseif($isWord)
+                                                                            <i class="icofont-file-document"></i>
+                                                                        @elseif($isExcel)
+                                                                            <i class="icofont-file-excel"></i>
+                                                                        @else
+                                                                            <i class="icofont-file-alt"></i>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="file-info">
+                                                                        <div class="file-name">{{ $attachment['name'] }}</div>
+                                                                        <div class="file-size">{{ $fileSize }}</div>
+                                                                    </div>
+                                                                    <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                       class="file-download-btn"
+                                                                       title="Download">
+                                                                        <i class="icofont-download"></i>
+                                                                    </a>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
-                                        
-                                        <div class="reply-content mb-3">
-                                            {!! nl2br(e($reply->message)) !!}
-                                        </div>
-                                        
-                                        @if($reply->attachments && count($reply->attachments) > 0)
-                                            <div class="reply-attachments">
-                                                <h6 class="mb-2">Attachments:</h6>
-                                                <div class="attachments-list">
-                                                    @foreach($reply->attachments as $index => $attachment)
-                                                        <div class="attachment-item d-flex align-items-center justify-content-between mb-2 p-2 border rounded">
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="icofont-file me-2"></i>
-                                                                <div>
-                                                                    <span class="attachment-name">{{ $attachment['name'] }}</span>
-                                                                    <br>
-                                                                    <small class="attachment-size text-muted">({{ number_format($attachment['size'] / 1024, 1) }} KB)</small>
-                                                                </div>
-                                                            </div>
-                                                            <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
-                                                               class="btn btn-sm btn-primary">
-                                                                <i class="icofont-download"></i> Download
-                                                            </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endif
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                </div>
                             </div>
                             
                             <!-- Pagination -->
-                            <div class="d-flex justify-content-center">
+                            <div class="d-flex justify-content-center p-3">
                                 {{ $replies->links() }}
                             </div>
                         @else
@@ -232,52 +249,223 @@
     color: #007bff;
 }
 
-.reply-item {
+/* Chat-style Replies Styling */
+.chat-container {
+    background: #fff;
+    border: 1px solid #e9ecef;
+    border-top: none;
+    height: 500px;
+    overflow-y: auto;
+    padding: 20px;
+}
+
+.chat-messages {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    display: flex;
+    gap: 12px;
+    max-width: 70%;
+}
+
+.message-sent {
+    align-self: flex-end;
+    flex-direction: row-reverse;
+}
+
+.message-received {
+    align-self: flex-start;
+}
+
+.message-avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.message-content {
     background: #f8f9fa;
-    border-left: 4px solid #28a745 !important;
+    padding: 12px 16px;
+    border-radius: 18px;
+    position: relative;
 }
 
-.reply-header {
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 10px;
+.message-sent .message-content {
+    background: #d1e7dd;
+    color: #333;
 }
 
-.reply-content {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid #dee2e6;
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 5px;
+    font-size: 0.8rem;
+    opacity: 0.8;
 }
 
-.attachments-list {
-    background: white;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #dee2e6;
+.message-text {
+    line-height: 1.4;
 }
 
-.attachment-item {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background: white;
-    transition: all 0.3s ease;
+.message-attachments {
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.attachment-item:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transform: translateY(-1px);
+/* WhatsApp-style Image Attachment */
+.attachment-image-wrapper {
+    position: relative;
+    max-width: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
 }
 
-.attachment-name {
+.attachment-image-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.attachment-image-wrapper:hover .image-overlay {
+    opacity: 1;
+}
+
+.attachment-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.image-overlay i {
+    color: white;
+    font-size: 2rem;
+}
+
+/* WhatsApp-style File Attachment */
+.attachment-file-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    max-width: 300px;
+    transition: all 0.2s ease;
+}
+
+.message-sent .attachment-file-card {
+    background: rgba(0, 0, 0, 0.08);
+}
+
+.message-received .attachment-file-card {
+    background: rgba(0, 0, 0, 0.05);
+}
+
+.file-icon {
+    width: 48px;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    border-radius: 50%;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.file-icon .icofont-file-pdf {
+    color: #dc3545;
+}
+
+.file-icon .icofont-file-document {
+    color: #0066cc;
+}
+
+.file-icon .icofont-file-excel {
+    color: #28a745;
+}
+
+.file-icon .icofont-file-alt {
+    color: #6c757d;
+}
+
+.file-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.file-name {
+    font-size: 0.9rem;
     font-weight: 500;
-    color: #007bff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 2px;
 }
 
-.attachment-size {
-    font-size: 0.875rem;
+.file-size {
+    font-size: 0.75rem;
+    opacity: 0.7;
+}
+
+.file-download-btn {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 50%;
+    color: inherit;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.file-download-btn:hover {
+    background: rgba(0, 0, 0, 0.2);
+    transform: scale(1.1);
+}
+
+.file-download-btn i {
+    font-size: 1.1rem;
 }
 </style>
+
+<script>
+function downloadImage(url, filename) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+}
+</script>
                                 </div>
                             </div>
                         </div>
