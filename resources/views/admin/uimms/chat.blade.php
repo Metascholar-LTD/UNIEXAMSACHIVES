@@ -2149,7 +2149,7 @@ document.getElementById('chat-form').addEventListener('submit', function(e) {
     });
 });
 
-// Add message to chat
+// Add message to chat (for sent messages)
 function addMessageToChat(message) {
     const messagesContainer = document.getElementById('chat-messages');
     
@@ -2184,6 +2184,112 @@ function addMessageToChat(message) {
     `;
     
     messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+    scrollToBottom();
+}
+
+// Add new message to chat (for received messages with animation)
+function addNewMessageToChat(message) {
+    const messagesContainer = document.getElementById('chat-messages');
+    const currentUserId = {{ Auth::id() }};
+    const isOwnMessage = message.user_id === currentUserId;
+    
+    // Determine reply mode display
+    let replyModeDisplay = '';
+    if (message.reply_mode === 'specific' && message.specific_recipients) {
+        const recipientIds = message.specific_recipients.split(',');
+        const recipientNames = recipientIds.map(id => {
+            const participant = memoParticipants.find(p => p.user && p.user.id == id);
+            return participant ? `${participant.user.first_name} ${participant.user.last_name}` : 'Unknown';
+        });
+        replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
+    } else if (message.reply_mode === 'all') {
+        replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
+    }
+    
+    // Build attachments HTML if any
+    let attachmentsHtml = '';
+    if (message.attachments && message.attachments.length > 0) {
+        attachmentsHtml = '<div class="message-attachments">';
+        message.attachments.forEach((attachment, index) => {
+            const isImage = attachment.type && attachment.type.includes('image');
+            const isPdf = attachment.type && attachment.type.includes('pdf');
+            const isWord = attachment.type && (attachment.type.includes('word') || attachment.type.includes('document'));
+            const isExcel = attachment.type && (attachment.type.includes('excel') || attachment.type.includes('spreadsheet'));
+            const fileSize = attachment.size ? (attachment.size / 1024).toFixed(1) + ' KB' : 'Unknown size';
+            
+            if (isImage) {
+                attachmentsHtml += `
+                    <div class="attachment-image-wrapper">
+                        <img src="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view" 
+                             alt="${attachment.name}"
+                             class="attachment-image"
+                             onclick="viewImage('/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/view', '${attachment.name}')">
+                        <div class="image-overlay">
+                            <i class="icofont-eye"></i>
+                        </div>
+                    </div>
+                `;
+            } else {
+                attachmentsHtml += `
+                    <div class="attachment-file-card">
+                        <div class="file-icon">
+                            ${isPdf ? '<i class="icofont-file-pdf"></i>' : 
+                              isWord ? '<i class="icofont-file-document"></i>' :
+                              isExcel ? '<i class="icofont-file-excel"></i>' : 
+                              '<i class="icofont-file-alt"></i>'}
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">${attachment.name}</div>
+                            <div class="file-size">${fileSize}</div>
+                        </div>
+                        <a href="/dashboard/uimms/chat/reply/${message.id}/attachment/${index}/download" 
+                           class="file-download-btn" title="Download">
+                            <i class="icofont-download"></i>
+                        </a>
+                    </div>
+                `;
+            }
+        });
+        attachmentsHtml += '</div>';
+    }
+    
+    const messageClass = isOwnMessage ? 'message-sent' : 'message-received';
+    const messageHtml = `
+        <div class="message ${messageClass} new-message">
+            <div class="message-avatar">
+                <img src="${message.user.profile_picture_url || '/profile_pictures/default-profile.png'}" 
+                     alt="${message.user.first_name}">
+            </div>
+            <div class="message-content">
+                <div class="message-header">
+                    <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
+                    ${replyModeDisplay}
+                    <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
+                </div>
+                <div class="message-text">${message.message}</div>
+                ${attachmentsHtml}
+            </div>
+        </div>
+    `;
+    
+    messagesContainer.insertAdjacentHTML('beforeend', messageHtml);
+    
+    // Add animation for new messages
+    const newMessageElement = messagesContainer.lastElementChild;
+    newMessageElement.style.opacity = '0';
+    newMessageElement.style.transform = 'translateY(20px)';
+    
+    setTimeout(() => {
+        newMessageElement.style.transition = 'all 0.3s ease';
+        newMessageElement.style.opacity = '1';
+        newMessageElement.style.transform = 'translateY(0)';
+    }, 100);
+    
+    // Remove animation class after animation completes
+    setTimeout(() => {
+        newMessageElement.classList.remove('new-message');
+    }, 300);
+    
     scrollToBottom();
 }
 
@@ -2315,16 +2421,46 @@ function confirmArchiveMemo() {
     );
 }
 
-// Auto-refresh messages every 5 seconds
+// Silent refresh system for real-time chat updates
+let lastMessageCount = {{ $memo->replies->count() }};
+let lastMessageId = {{ $memo->replies->last() ? $memo->replies->last()->id : 0 }};
+let isPolling = true;
+
+// Auto-refresh messages every 3 seconds
 messageInterval = setInterval(() => {
+    if (!isPolling || isUserTyping) return;
+    
     fetch(`/dashboard/uimms/chat/${memoId}/messages`)
         .then(response => response.json())
         .then(messages => {
-            // Check if there are new messages and update accordingly
-            // This is a simplified version - you might want to implement more sophisticated logic
+            if (messages.length > lastMessageCount) {
+                // New messages detected
+                const newMessages = messages.slice(lastMessageCount);
+                newMessages.forEach(message => {
+                    if (message.id > lastMessageId) {
+                        addNewMessageToChat(message);
+                        lastMessageId = message.id;
+                    }
+                });
+                lastMessageCount = messages.length;
+                
+                // Play notification sound for new messages (not from current user)
+                const currentUserId = {{ Auth::id() }};
+                const hasNewMessagesFromOthers = newMessages.some(msg => msg.user_id !== currentUserId);
+                if (hasNewMessagesFromOthers) {
+                    playNotificationSound();
+                }
+            }
         })
-        .catch(error => console.error('Error refreshing messages:', error));
-}, 5000);
+        .catch(error => {
+            console.error('Error refreshing messages:', error);
+            // If there's an error, stop polling temporarily
+            isPolling = false;
+            setTimeout(() => {
+                isPolling = true;
+            }, 10000); // Resume polling after 10 seconds
+        });
+}, 3000);
 
 // Scroll to bottom on load
 window.addEventListener('load', scrollToBottom);
@@ -2382,6 +2518,40 @@ function closeImageViewer() {
 document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
         closeImageViewer();
+    }
+});
+
+// Play notification sound for new messages
+function playNotificationSound() {
+    try {
+        const audio = new Audio('/sounds/notification.mp3');
+        audio.volume = 0.3; // Lower volume to avoid being too intrusive
+        audio.play().catch(e => {
+            console.log('Could not play notification sound:', e);
+        });
+    } catch (e) {
+        console.log('Notification sound not available:', e);
+    }
+}
+
+// Pause polling when user is typing to avoid conflicts
+let isUserTyping = false;
+let typingTimeout;
+
+document.getElementById('message-input').addEventListener('input', function() {
+    isUserTyping = true;
+    clearTimeout(typingTimeout);
+    typingTimeout = setTimeout(() => {
+        isUserTyping = false;
+    }, 2000); // Resume polling 2 seconds after user stops typing
+});
+
+// Pause polling when user is actively interacting with the page
+document.addEventListener('visibilitychange', function() {
+    if (document.hidden) {
+        isPolling = false;
+    } else {
+        isPolling = true;
     }
 });
 </script>
@@ -2497,6 +2667,68 @@ document.addEventListener('keydown', (e) => {
 .download-image-btn:hover {
     background: #0056b3;
     transform: translateY(-2px);
+}
+
+/* New Message Animation */
+.message.new-message {
+    animation: slideInMessage 0.3s ease-out;
+}
+
+@keyframes slideInMessage {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Subtle pulse animation for new messages */
+.message.new-message .message-content {
+    animation: newMessagePulse 0.6s ease-out;
+}
+
+@keyframes newMessagePulse {
+    0% {
+        box-shadow: 0 0 0 0 rgba(25, 118, 210, 0.4);
+    }
+    50% {
+        box-shadow: 0 0 0 8px rgba(25, 118, 210, 0.1);
+    }
+    100% {
+        box-shadow: 0 0 0 0 rgba(25, 118, 210, 0);
+    }
+}
+
+/* Notification indicator for new messages */
+.message.new-message::before {
+    content: '';
+    position: absolute;
+    left: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 20px;
+    background: #1976d2;
+    border-radius: 2px;
+    animation: newMessageIndicator 1s ease-out;
+}
+
+@keyframes newMessageIndicator {
+    0% {
+        opacity: 0;
+        transform: translateY(-50%) scaleY(0);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-50%) scaleY(1);
+    }
+    100% {
+        opacity: 0.3;
+        transform: translateY(-50%) scaleY(1);
+    }
 }
 </style>
 
