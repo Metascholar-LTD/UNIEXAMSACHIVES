@@ -39,54 +39,57 @@
                         <div class="row">
                             <div class="col-lg-12 col-md-12">
                                 <div class="dashboard__form">
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <!-- Header Section -->
-            <div class="dashboard__inner">
-                <div class="dashboard__inner__head">
-                    <div class="dashboard__inner__head__left">
-                        <p class="dashboard__inner__head__subtitle">View all replies for this memo</p>
-                    </div>
-                </div>
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <!-- Header Section -->
+                                                <div class="dashboard__inner">
+                                                    <div class="dashboard__inner__head">
+                                                        <div class="dashboard__inner__head__left">
+                                                            <p class="dashboard__inner__head__subtitle">View all replies for this memo</p>
+                                                        </div>
+                                                    </div>
 
-                <!-- Original Memo Card -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="icofont-document"></i> Original Memo
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h6 class="text-primary">{{ $recipient->campaign->subject }}</h6>
-                                <p class="text-muted mb-2">
-                                    <i class="icofont-user"></i> From: {{ $recipient->campaign->creator->first_name }} {{ $recipient->campaign->creator->last_name }}
-                                </p>
-                                <p class="text-muted mb-3">
-                                    <i class="icofont-calendar"></i> {{ $recipient->campaign->created_at->format('M d, Y \a\t h:i A') }}
-                                </p>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="memo-stats">
-                                    <div class="stat-item">
-                                        <span class="stat-label">Total Replies:</span>
-                                        <span class="stat-value">{{ $replies->total() }}</span>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-label">Reference:</span>
-                                        <span class="stat-value">{{ $recipient->campaign->reference }}</span>
+                                                    <!-- Original Memo Card -->
+                                                    <div class="card mb-4">
+                                                        <div class="card-header">
+                                                            <h5 class="card-title mb-0">
+                                                                <i class="icofont-document"></i> Original Memo
+                                                            </h5>
+                                                        </div>
+                                                        <div class="card-body">
+                                                            <div class="row">
+                                                                <div class="col-md-8">
+                                                                    <h6 class="text-primary">{{ $recipient->campaign->subject }}</h6>
+                                                                    <p class="text-muted mb-2">
+                                                                        <i class="icofont-user"></i> From: {{ $recipient->campaign->creator->first_name }} {{ $recipient->campaign->creator->last_name }}
+                                                                    </p>
+                                                                    <p class="text-muted mb-3">
+                                                                        <i class="icofont-calendar"></i> {{ $recipient->campaign->created_at->format('M d, Y \a\t h:i A') }}
+                                                                    </p>
+                                                                </div>
+                                                                <div class="col-md-4">
+                                                                    <div class="memo-stats">
+                                                                        <div class="stat-item">
+                                                                            <span class="stat-label">Total Replies:</span>
+                                                                            <span class="stat-value">{{ $replies->total() }}</span>
+                                                                        </div>
+                                                                        <div class="stat-item">
+                                                                            <span class="stat-label">Reference:</span>
+                                                                            <span class="stat-value">{{ $recipient->campaign->reference }}</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <style>
 .memo-content {
@@ -164,13 +167,4 @@
     font-size: 0.875rem;
 }
 </style>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 @endsection
