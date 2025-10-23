@@ -1003,7 +1003,7 @@
                                                 ? 'Are you sure you want to archive the selected memo?'
                                                 : `Are you sure you want to archive ${selectedMemos.size} selected memos?`;
                                             
-                                            confirmDelete(confirmMessage, function() {
+                                            confirmAction(confirmMessage, function() {
                                                 // Show loading state
                                                 const bulkArchiveBtn = document.getElementById('bulk-archive-btn');
                                                 const originalText = bulkArchiveBtn.innerHTML;
@@ -1066,6 +1066,11 @@
                                                     bulkArchiveBtn.innerHTML = originalText;
                                                     bulkArchiveBtn.disabled = false;
                                                 });
+                                            }, null, {
+                                                title: 'Archive Memos',
+                                                type: 'warning',
+                                                confirmText: 'Archive',
+                                                subtitle: 'This will move the selected memos to the archive.'
                                             });
                                         }
 

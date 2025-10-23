@@ -2842,6 +2842,4 @@ document.addEventListener('visibilitychange', function() {
 }
 </style>
 
-@include('components.confirmation-modal')
-
 @endsection
