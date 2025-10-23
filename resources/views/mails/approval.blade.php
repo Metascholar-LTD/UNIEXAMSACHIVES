@@ -231,7 +231,7 @@
                 <div class="greeting">Hi {{ $firstname }},</div>
                 
                 <div class="message">
-                    Great news! Your account has been approved and you now have full access to our University Exams Archive System.
+                    Great news! Your account has been approved and you now have full access to our University Archival System.
                 </div>
                 
                 <div class="approval-box">
@@ -284,7 +284,7 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-disclaimer">
-                This email was sent to {{ $email }} because your account has been approved for our University Exams Archive System. 
+                This email was sent to {{ $email }} because your account has been approved for our University Archival System. 
                 If you didn't expect this approval, please contact us immediately.
             </div>
         </div>
