@@ -98,20 +98,14 @@
                                                             @endphp
                                                             
                                                             @if($isImage)
-                                                                {{-- Image Attachment - Show as file card with download --}}
-                                                                <div class="attachment-file-card">
-                                                                    <div class="file-icon">
-                                                                        <i class="icofont-image"></i>
-                                                                    </div>
-                                                                    <div class="file-info">
-                                                                        <div class="file-name">{{ $attachment['name'] }}</div>
-                                                                        <div class="file-size">{{ $fileSize }}</div>
-                                                                    </div>
-                                                                    <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
-                                                                       class="file-download-btn"
-                                                                       title="Download">
+                                                                {{-- Image Attachment - Show preview --}}
+                                                                <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
+                                                                    <img src="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                         alt="{{ $attachment['name'] }}"
+                                                                         class="attachment-image">
+                                                                    <div class="image-overlay">
                                                                         <i class="icofont-download"></i>
-                                                                    </a>
+                                                                    </div>
                                                                 </div>
                                                             @else
                                                                 {{-- File Attachment - Show file card --}}
@@ -177,6 +171,60 @@
     display: flex;
     align-items: center;
     gap: 15px;
+}
+
+/* Back Button Styles - Exact match to chat page */
+.responsive-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+    min-width: 80px;
+    text-decoration: none;
+}
+
+.responsive-btn:hover {
+    text-decoration: none;
+}
+
+.responsive-btn:active {
+    transform: translate(1px, 1px);
+    box-shadow: 1px 1px 6px rgba(0, 0, 0, 0.15);
+}
+
+.responsive-btn .svgWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+}
+
+.responsive-btn .svgIcon {
+    width: 14px;
+    height: 14px;
+}
+
+.responsive-btn .text {
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* Back Button - Keep Current Grey Color */
+.back-btn {
+    background: linear-gradient(135deg, #6c757d 0%, #545b62 100%);
+}
+
+.back-btn:hover {
+    background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
+    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
 }
 
 .chat-header-right {
@@ -302,7 +350,53 @@
     gap: 8px;
 }
 
-/* Attachment Styles - Exact match to chat page */
+/* Image Attachment Styles - Exact match to chat page */
+.attachment-image-wrapper {
+    position: relative;
+    max-width: 280px;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.attachment-image-wrapper:hover {
+    transform: scale(1.02);
+}
+
+.attachment-image-wrapper:hover .image-overlay {
+    opacity: 1;
+}
+
+.attachment-image {
+    width: 100%;
+    height: auto;
+    max-height: 300px;
+    object-fit: cover;
+    display: block;
+    border-radius: 12px;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+.image-overlay i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+/* File Attachment Styles - Exact match to chat page */
 .attachment-file-card {
     display: flex;
     align-items: center;
@@ -413,6 +507,16 @@
     .chat-container {
         height: 500px;
     }
+}
+
+/* JavaScript for image downloads */
+function downloadImage(url, filename) {
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
 }
 </style>
                                 </div>
