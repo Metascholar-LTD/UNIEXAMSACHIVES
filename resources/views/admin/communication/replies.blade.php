@@ -24,220 +24,426 @@
                             </div>
                         @endif
                         
-                        <div class="dashboard__section__title">
-                            <h4>Memo Replies</h4>
-                            <div style="margin-top:8px; display: flex; gap: 8px; align-items: center;">
-                                <a href="{{ route('admin.communication.index') }}" class="btn btn-sm btn-primary">
-                                    <i class="icofont-arrow-left"></i> Back to Memos
-                                </a>
-                            </div>
-                        </div>
-                        
-                        <div class="row">
-                            <div class="col-lg-12 col-md-12">
-                                <div class="dashboard__form">
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-12">
-            <!-- Header Section -->
-            <div class="dashboard__inner">
-                <div class="dashboard__inner__head">
-                    <div class="dashboard__inner__head__left">
-                        <p class="dashboard__inner__head__subtitle">View all replies for this memo</p>
-                    </div>
-                </div>
-
-                <!-- Original Memo Card -->
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="icofont-document"></i> Original Memo
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <h6 class="text-primary">{{ $campaign->subject }}</h6>
-                                <p class="text-muted mb-2">
-                                    <i class="icofont-user"></i> From: {{ $campaign->creator->first_name }} {{ $campaign->creator->last_name }}
-                                </p>
-                                <p class="text-muted mb-3">
-                                    <i class="icofont-calendar"></i> {{ $campaign->created_at->format('M d, Y \a\t h:i A') }}
-                                </p>
-                            </div>
-                            <div class="col-md-4">
-                                <div class="memo-stats">
-                                    <div class="stat-item">
-                                        <span class="stat-label">Total Replies:</span>
-                                        <span class="stat-value">{{ $replies->total() }}</span>
+                        {{-- Chat Header --}}
+                        <div class="chat-header">
+                            {{-- Top Section: Back Button --}}
+                            <div class="chat-header-top">
+                                <div class="chat-header-left">
+                                    <a href="{{ route('admin.communication.index') }}" class="responsive-btn back-btn">
+                                        <div class="svgWrapper">
+                                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                <path stroke="#fff" stroke-width="2" d="M19 12H5m7-7-7 7 7 7"></path>
+                                            </svg>
+                                            <div class="text">Back</div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="chat-header-right">
+                                    <div class="memo-stats">
+                                        <span class="stat-badge">{{ $replies->total() }} Replies</span>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-label">Reference:</span>
-                                        <span class="stat-value">{{ $campaign->reference }}</span>
+                                </div>
+                            </div>
+                            
+                            {{-- Separator Line --}}
+                            <div class="chat-header-separator"></div>
+                            
+                            {{-- Bottom Section: Subject and Details --}}
+                            <div class="chat-header-bottom">
+                                <div class="chat-title">
+                                    Subject: <h4>{{ $campaign->subject }}</h4>
+                                </div>
+                                <div class="chat-details">
+                                    <div class="detail-item">
+                                        <i class="icofont-user"></i>
+                                        <span>From: {{ $campaign->creator->first_name }} {{ $campaign->creator->last_name }}</span>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-label">Recipients:</span>
-                                        <span class="stat-value">{{ $campaign->total_recipients }}</span>
+                                    <div class="detail-item">
+                                        <i class="icofont-calendar"></i>
+                                        <span>{{ $campaign->created_at->format('M d, Y \a\t h:i A') }}</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <i class="icofont-tag"></i>
+                                        <span>Ref: {{ $campaign->reference }}</span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
 
-                <!-- Replies List -->
-                <div class="card">
-                    <div class="card-header">
-                        <h5 class="card-title mb-0">
-                            <i class="icofont-chat"></i> All Replies ({{ $replies->total() }})
-                        </h5>
-                    </div>
-                    <div class="card-body">
-                        @if($replies->count() > 0)
-                            <div class="replies-list">
-                                @foreach($replies as $reply)
-                                    <div class="reply-item mb-4 p-3 border rounded">
-                                        <div class="reply-header d-flex justify-content-between align-items-start mb-2">
-                                            <div class="reply-author">
-                                                <h6 class="mb-1">
-                                                    <i class="icofont-user"></i> {{ $reply->user->first_name }} {{ $reply->user->last_name }}
-                                                </h6>
-                                                <small class="text-muted">
-                                                    <i class="icofont-calendar"></i> {{ $reply->created_at->format('M d, Y \a\t h:i A') }}
-                                                </small>
+                        {{-- Chat Messages Container --}}
+                        <div class="chat-container">
+                            <div class="chat-messages" id="chat-messages">
+                                @if($replies->count() > 0)
+                                    @foreach($replies as $reply)
+                                        <div class="message message-received">
+                                            <div class="message-avatar">
+                                                <img src="{{ $reply->user->profile_picture_url ?? asset('profile_pictures/default-profile.png') }}" 
+                                                     alt="{{ $reply->user->first_name }}">
                                             </div>
-                                            <div class="reply-status">
-                                                @if($reply->is_read)
-                                                    <span class="badge bg-success">Read</span>
-                                                @else
-                                                    <span class="badge bg-warning">Unread</span>
+                                            <div class="message-content">
+                                                <div class="message-header">
+                                                    <span class="message-sender">{{ $reply->user->first_name }} {{ $reply->user->last_name }}</span>
+                                                    <span class="message-time">{{ $reply->created_at->format('M d, Y H:i') }}</span>
+                                                </div>
+                                                <div class="message-text">{!! nl2br(e($reply->message)) !!}</div>
+                                                @if($reply->attachments && count($reply->attachments) > 0)
+                                                    <div class="message-attachments">
+                                                        @foreach($reply->attachments as $index => $attachment)
+                                                            @php
+                                                                $isImage = str_contains($attachment['type'] ?? '', 'image');
+                                                                $isPdf = str_contains($attachment['type'] ?? '', 'pdf');
+                                                                $isWord = str_contains($attachment['type'] ?? '', 'word') || str_contains($attachment['type'] ?? '', 'document');
+                                                                $isExcel = str_contains($attachment['type'] ?? '', 'excel') || str_contains($attachment['type'] ?? '', 'spreadsheet');
+                                                                $fileSize = isset($attachment['size']) ? number_format($attachment['size'] / 1024, 1) . ' KB' : 'Unknown size';
+                                                            @endphp
+                                                            
+                                                            @if($isImage)
+                                                                {{-- Image Attachment - Show preview --}}
+                                                                <div class="attachment-image-wrapper" onclick="downloadImage('{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}', '{{ $attachment['name'] }}')">
+                                                                    <img src="{{ route('dashboard.memo.reply.view-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                         alt="{{ $attachment['name'] }}"
+                                                                         class="attachment-image">
+                                                                    <div class="image-overlay">
+                                                                        <i class="icofont-download"></i>
+                                                                    </div>
+                                                                </div>
+                                                            @else
+                                                                {{-- File Attachment - Show file card --}}
+                                                                <div class="attachment-file-card">
+                                                                    <div class="file-icon">
+                                                                        @if($isPdf)
+                                                                            <i class="icofont-file-pdf"></i>
+                                                                        @elseif($isWord)
+                                                                            <i class="icofont-file-document"></i>
+                                                                        @elseif($isExcel)
+                                                                            <i class="icofont-file-excel"></i>
+                                                                        @else
+                                                                            <i class="icofont-file-alt"></i>
+                                                                        @endif
+                                                                    </div>
+                                                                    <div class="file-info">
+                                                                        <div class="file-name">{{ $attachment['name'] }}</div>
+                                                                        <div class="file-size">{{ $fileSize }}</div>
+                                                                    </div>
+                                                                    <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
+                                                                       class="file-download-btn"
+                                                                       title="Download">
+                                                                        <i class="icofont-download"></i>
+                                                                    </a>
+                                                                </div>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
                                                 @endif
                                             </div>
                                         </div>
-                                        
-                                        <div class="reply-content mb-3">
-                                            {!! nl2br(e($reply->message)) !!}
+                                    @endforeach
+                                @else
+                                    <div class="no-messages">
+                                        <div class="no-messages-icon">
+                                            <i class="icofont-chat"></i>
                                         </div>
-                                        
-                                        @if($reply->attachments && count($reply->attachments) > 0)
-                                            <div class="reply-attachments">
-                                                <h6 class="mb-2">Attachments:</h6>
-                                                <div class="attachments-list">
-                                                    @foreach($reply->attachments as $index => $attachment)
-                                                        <div class="attachment-item d-flex align-items-center justify-content-between mb-2 p-2 border rounded">
-                                                            <div class="d-flex align-items-center">
-                                                                <i class="icofont-file me-2"></i>
-                                                                <div>
-                                                                    <span class="attachment-name">{{ $attachment['name'] }}</span>
-                                                                    <br>
-                                                                    <small class="attachment-size text-muted">({{ number_format($attachment['size'] / 1024, 1) }} KB)</small>
-                                                                </div>
-                                                            </div>
-                                                            <a href="{{ route('dashboard.memo.reply.download-attachment', ['reply' => $reply->id, 'index' => $index]) }}" 
-                                                               class="btn btn-sm btn-primary">
-                                                                <i class="icofont-download"></i> Download
-                                                            </a>
-                                                        </div>
-                                                    @endforeach
-                                                </div>
-                                            </div>
-                                        @endif
+                                        <h4>No replies yet</h4>
+                                        <p>No one has replied to this memo yet.</p>
                                     </div>
-                                @endforeach
+                                @endif
                             </div>
-                            
-                            <!-- Pagination -->
-                            <div class="d-flex justify-content-center">
-                                {{ $replies->links() }}
-                            </div>
-                        @else
-                            <div class="text-center py-5">
-                                <i class="icofont-chat text-muted" style="font-size: 3rem;"></i>
-                                <h5 class="text-muted mt-3">No replies yet</h5>
-                                <p class="text-muted">No one has replied to this memo yet.</p>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+                        </div>
 
 <style>
-.memo-content {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-    border-left: 4px solid #007bff;
+/* Chat Header Styles */
+.chat-header {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+    overflow: hidden;
 }
 
-.memo-stats {
-    background: #f8f9fa;
-    padding: 15px;
-    border-radius: 8px;
-}
-
-.stat-item {
+.chat-header-top {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 8px;
+    align-items: center;
+    padding: 15px 20px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.stat-label {
-    font-weight: 500;
-    color: #6c757d;
-}
-
-.stat-value {
-    font-weight: 600;
-    color: #007bff;
-}
-
-.reply-item {
-    background: #f8f9fa;
-    border-left: 4px solid #28a745 !important;
-}
-
-.reply-header {
-    border-bottom: 1px solid #dee2e6;
-    padding-bottom: 10px;
-}
-
-.reply-content {
-    background: white;
-    padding: 15px;
+.chat-header-left .responsive-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: white;
+    text-decoration: none;
+    padding: 8px 16px;
     border-radius: 8px;
-    border: 1px solid #dee2e6;
-}
-
-.attachments-list {
-    background: white;
-    padding: 10px;
-    border-radius: 6px;
-    border: 1px solid #dee2e6;
-}
-
-.attachment-item {
-    padding: 10px;
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    background: white;
+    background: rgba(255,255,255,0.2);
     transition: all 0.3s ease;
 }
 
-.attachment-item:hover {
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    transform: translateY(-1px);
+.chat-header-left .responsive-btn:hover {
+    background: rgba(255,255,255,0.3);
+    color: white;
 }
 
-.attachment-name {
+.chat-header-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.stat-badge {
+    background: rgba(255,255,255,0.2);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.875rem;
     font-weight: 500;
+}
+
+.chat-header-separator {
+    height: 1px;
+    background: rgba(255,255,255,0.2);
+}
+
+.chat-header-bottom {
+    padding: 20px;
+    background: #f8f9fa;
+}
+
+.chat-title h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+}
+
+.chat-details {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 10px;
+}
+
+.detail-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.detail-item i {
     color: #007bff;
 }
 
-.attachment-size {
-    font-size: 0.875rem;
+/* Chat Container Styles */
+.chat-container {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow: hidden;
+    height: 600px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    background: #f8f9fa;
+}
+
+/* Message Styles */
+.message {
+    display: flex;
+    margin-bottom: 20px;
+    align-items: flex-start;
+    gap: 12px;
+}
+
+.message-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.message-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.message-content {
+    flex: 1;
+    background: white;
+    border-radius: 12px;
+    padding: 12px 16px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    max-width: 70%;
+}
+
+.message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.message-sender {
+    font-weight: 600;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.message-time {
+    color: #999;
+    font-size: 0.8rem;
+}
+
+.message-text {
+    color: #333;
+    line-height: 1.5;
+    word-wrap: break-word;
+}
+
+/* Attachment Styles */
+.message-attachments {
+    margin-top: 12px;
+}
+
+.attachment-image-wrapper {
+    position: relative;
+    cursor: pointer;
+    border-radius: 8px;
+    overflow: hidden;
+    max-width: 200px;
+    margin-bottom: 8px;
+}
+
+.attachment-image {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0,0,0,0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.attachment-image-wrapper:hover .image-overlay {
+    opacity: 1;
+}
+
+.image-overlay i {
+    color: white;
+    font-size: 1.5rem;
+}
+
+.attachment-file-card {
+    display: flex;
+    align-items: center;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.attachment-file-card:hover {
+    background: #e9ecef;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.file-icon {
+    font-size: 1.5rem;
+    color: #007bff;
+    margin-right: 12px;
+}
+
+.file-info {
+    flex: 1;
+}
+
+.file-name {
+    font-weight: 500;
+    color: #333;
+    font-size: 0.9rem;
+}
+
+.file-size {
+    color: #666;
+    font-size: 0.8rem;
+}
+
+.file-download-btn {
+    color: #007bff;
+    text-decoration: none;
+    padding: 6px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.file-download-btn:hover {
+    background: #007bff;
+    color: white;
+}
+
+/* No Messages State */
+.no-messages {
+    text-align: center;
+    padding: 60px 20px;
+    color: #666;
+}
+
+.no-messages-icon {
+    font-size: 4rem;
+    color: #ccc;
+    margin-bottom: 20px;
+}
+
+.no-messages h4 {
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.no-messages p {
+    color: #999;
+    margin: 0;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .chat-header-top {
+        flex-direction: column;
+        gap: 15px;
+        align-items: flex-start;
+    }
+    
+    .chat-details {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .message-content {
+        max-width: 85%;
+    }
+    
+    .chat-container {
+        height: 500px;
+    }
 }
 </style>
                                 </div>
