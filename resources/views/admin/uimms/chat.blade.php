@@ -2836,6 +2836,32 @@ function exportChatConversation() {
                     padding-bottom: 20px;
                     margin-bottom: 30px;
                 }
+                .export-logo-section {
+                    display: flex;
+                    align-items: center;
+                    margin-bottom: 20px;
+                    padding-bottom: 15px;
+                    border-bottom: 1px solid #e9ecef;
+                }
+                .export-logo {
+                    height: 60px;
+                    max-width: 200px;
+                    margin-right: 20px;
+                }
+                .export-logo-text {
+                    flex: 1;
+                }
+                .export-logo-title {
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #007bff;
+                    margin-bottom: 5px;
+                }
+                .export-logo-tagline {
+                    font-size: 14px;
+                    color: #666;
+                    font-style: italic;
+                }
                 .export-title {
                     font-size: 24px;
                     font-weight: bold;
@@ -2902,11 +2928,31 @@ function exportChatConversation() {
                     body { margin: 0; padding: 15px; }
                     .export-header { page-break-after: avoid; }
                     .export-message { page-break-inside: avoid; }
+                    .export-logo { height: 50px; }
+                }
+                @media (max-width: 600px) {
+                    .export-logo-section {
+                        flex-direction: column;
+                        text-align: center;
+                    }
+                    .export-logo {
+                        margin-right: 0;
+                        margin-bottom: 10px;
+                    }
                 }
             </style>
         </head>
         <body>
             <div class="export-header">
+                <div class="export-logo-section">
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" 
+                         alt="University Exams Archive System" 
+                         class="export-logo" />
+                    <div class="export-logo-text">
+                        <div class="export-logo-title">University Internal Memo Management System</div>
+                        <div class="export-logo-tagline">Excellence in Academic Digital Archiving, Advanced Communication and Internal Memo Management</div>
+                    </div>
+                </div>
                 <div class="export-title">${memoSubject}</div>
                 <div class="export-meta">
                     <div class="export-meta-item">
