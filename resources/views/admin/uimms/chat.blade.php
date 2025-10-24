@@ -266,7 +266,19 @@
                                                     @endphp
                                                     <span class="reply-to-indicator">to {{ implode(', ', $recipientNames) }}</span>
                                                 @elseif($message->reply_mode === 'all')
-                                                    <span class="reply-to-indicator">to All</span>
+                                                    @php
+                                                        // Check if there are only 2 participants - if so, show specific person instead of "All"
+                                                        $currentUserId = auth()->id();
+                                                        $otherParticipants = $memo->active_participants->filter(function($participant) use ($currentUserId) {
+                                                            return $participant['user']['id'] != $currentUserId;
+                                                        });
+                                                    @endphp
+                                                    @if($memo->active_participants->count() <= 2 && $otherParticipants->count() == 1)
+                                                        @php $otherPerson = $otherParticipants->first(); @endphp
+                                                        <span class="reply-to-indicator">to {{ $otherPerson['user']['first_name'] }} {{ $otherPerson['user']['last_name'] }}</span>
+                                                    @else
+                                                        <span class="reply-to-indicator">to All</span>
+                                                    @endif
                                                 @endif
                                                 <span class="message-time">{{ $message->created_at->format('M d, Y H:i') }}</span>
                                             </div>
@@ -1605,8 +1617,9 @@
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
-    margin: 0 8px;
+    margin-left: 8px;
     border: 1px solid #bbdefb;
+    display: inline-block;
 }
 
 /* File Preview Area */
@@ -2293,7 +2306,20 @@ function addMessageToChat(message) {
         });
         replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
     } else if (message.reply_mode === 'all') {
-        replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
+        // Check if there are only 2 participants - if so, show specific person instead of "All"
+        const currentUserId = {{ Auth::id() }};
+        const otherParticipants = memoParticipants.filter(participant => 
+            participant.user && participant.user.id !== currentUserId
+        );
+        
+        if (memoParticipants.length <= 2 && otherParticipants.length === 1) {
+            // Only 2 people total, show the other person's name
+            const otherPerson = otherParticipants[0];
+            replyModeDisplay = `<span class="reply-to-indicator">to ${otherPerson.user.first_name} ${otherPerson.user.last_name}</span>`;
+        } else {
+            // More than 2 people, show "to All"
+            replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
+        }
     }
     
     // Build attachments HTML if any
@@ -2380,7 +2406,19 @@ function addNewMessageToChat(message) {
         });
         replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
     } else if (message.reply_mode === 'all') {
-        replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
+        // Check if there are only 2 participants - if so, show specific person instead of "All"
+        const otherParticipants = memoParticipants.filter(participant => 
+            participant.user && participant.user.id !== currentUserId
+        );
+        
+        if (memoParticipants.length <= 2 && otherParticipants.length === 1) {
+            // Only 2 people total, show the other person's name
+            const otherPerson = otherParticipants[0];
+            replyModeDisplay = `<span class="reply-to-indicator">to ${otherPerson.user.first_name} ${otherPerson.user.last_name}</span>`;
+        } else {
+            // More than 2 people, show "to All"
+            replyModeDisplay = `<span class="reply-to-indicator">to All</span>`;
+        }
     }
     
     // Build attachments HTML if any
@@ -2804,10 +2842,13 @@ function exportChatConversation() {
         const replyTo = message.querySelector('.reply-to-indicator');
         const replyToText = replyTo ? replyTo.textContent : '';
         
+        // Format the reply indicator to be closer to the sender name
+        const formattedReplyTo = replyToText ? ` ${replyToText}` : '';
+        
         messagesHtml += `
             <div class="export-message">
                 <div class="export-message-header">
-                    <strong>${sender}</strong> ${replyToText}
+                    <strong>${sender}${formattedReplyTo}</strong>
                     <span class="export-message-time">${time}</span>
                 </div>
                 <div class="export-message-content">${text}</div>
