@@ -1261,14 +1261,55 @@ class HomeController extends Controller
             // Check if user is a recipient or the creator
             $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
             $isCreator = $memo->created_by === $userId;
+            $isActiveParticipant = $memo->isActiveParticipant($userId);
             
             if (!$isRecipient && !$isCreator) {
                 abort(403, 'You are not a participant in this memo conversation.');
             }
 
-            $messages = $memo->replies()->with('user')->orderBy('created_at', 'asc')->get();
+            // Get all messages first
+            $allMessages = $memo->replies()->with('user')->orderBy('created_at', 'asc')->get();
 
-            return response()->json($messages);
+            // Filter messages based on user visibility
+            $filteredMessages = $allMessages->filter(function ($reply) use ($userId, $isActiveParticipant, $memo) {
+                // User can always see their own messages
+                if ($reply->user_id === $userId) {
+                    return true;
+                }
+                
+                // If user is not an active participant, only show messages from when they were active
+                if (!$isActiveParticipant) {
+                    // Check if this message was sent before the user became inactive
+                    $userRecipient = $memo->recipients->where('user_id', $userId)->first();
+                    if ($userRecipient && $userRecipient->last_activity_at) {
+                        // Only show messages sent before the user's last activity
+                        return $reply->created_at <= $userRecipient->last_activity_at;
+                    }
+                    // If no last_activity_at, show all messages (backward compatibility)
+                    return true;
+                }
+                
+                // For active participants, show all messages based on reply mode
+                // For 'all' replies, everyone can see them
+                if ($reply->reply_mode === 'all') {
+                    return true;
+                }
+                
+                // For 'specific' replies, only the sender and specific recipients can see them
+                if ($reply->reply_mode === 'specific' && $reply->specific_recipients) {
+                    // Handle both string and array formats
+                    $specificRecipients = $reply->specific_recipients;
+                    if (is_string($specificRecipients)) {
+                        $specificRecipients = json_decode($specificRecipients, true) ?: explode(',', $specificRecipients);
+                    }
+                    return in_array($userId, $specificRecipients);
+                }
+                
+                // Default: show the message (fallback for old messages without reply_mode)
+                return true;
+            });
+
+            return response()->json($filteredMessages->values());
             
         } catch (\Exception $e) {
             \Log::error('Error in getChatMessages: ' . $e->getMessage());
