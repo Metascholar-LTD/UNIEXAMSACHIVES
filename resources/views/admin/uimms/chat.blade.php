@@ -1616,7 +1616,7 @@
     padding: 2px 8px;
     border-radius: 12px;
     font-size: 0.75rem;
-    font-weight: 500;
+    font-weight: 400;
     margin-left: 8px;
     border: 1px solid #bbdefb;
     display: inline-block;
@@ -2848,7 +2848,7 @@ function exportChatConversation() {
         messagesHtml += `
             <div class="export-message">
                 <div class="export-message-header">
-                    <strong>${sender}${formattedReplyTo}</strong>
+                    <strong>${sender}</strong>${formattedReplyTo}
                     <span class="export-message-time">${time}</span>
                 </div>
                 <div class="export-message-content">${text}</div>
