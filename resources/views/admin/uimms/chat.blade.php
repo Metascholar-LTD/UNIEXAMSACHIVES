@@ -30,6 +30,22 @@
                                             <div class="text">Back</div>
                                         </div>
                                     </a>
+                                    
+                                    @if($memo->memo_status === 'completed')
+                                        <div class="header-separator"></div>
+                                        <button class="responsive-btn export-btn" onclick="exportChatConversation()">
+                                            <div class="svgWrapper">
+                                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="svgIcon">
+                                                    <path stroke="#fff" stroke-width="2" d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                                                    <polyline stroke="#fff" stroke-width="2" points="14,2 14,8 20,8"></polyline>
+                                                    <line stroke="#fff" stroke-width="2" x1="16" y1="13" x2="8" y2="13"></line>
+                                                    <line stroke="#fff" stroke-width="2" x1="16" y1="17" x2="8" y2="17"></line>
+                                                    <polyline stroke="#fff" stroke-width="2" points="10,9 9,9 8,9"></polyline>
+                                                </svg>
+                                                <div class="text">Export</div>
+                                            </div>
+                                        </button>
+                                    @endif
                             </div>
                             <div class="chat-header-right">
                                 <div class="memo-status">
@@ -786,6 +802,25 @@
 .back-btn:hover {
     background: linear-gradient(135deg, #545b62 0%, #3d4449 100%);
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Header Separator */
+.header-separator {
+    width: 1px;
+    height: 30px;
+    background: #ddd;
+    margin: 0 12px;
+    opacity: 0.6;
+}
+
+/* Export Button */
+.export-btn {
+    background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+}
+
+.export-btn:hover {
+    background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
+    box-shadow: 2px 2px 12px rgba(40, 167, 69, 0.3);
 }
 
 /* Memo Details Section */
@@ -2744,6 +2779,180 @@ document.addEventListener('visibilitychange', function() {
         isPolling = true;
     }
 });
+
+// Export Chat Conversation Function
+function exportChatConversation() {
+    // Create a new window for printing
+    const printWindow = window.open('', '_blank', 'width=800,height=600');
+    
+    // Get memo data
+    const memoSubject = '{{ $memo->subject }}';
+    const memoStatus = '{{ $memo->memo_status }}';
+    const memoCreated = '{{ $memo->created_at->format("M d, Y H:i") }}';
+    const memoCreator = '{{ $memo->creator->first_name }} {{ $memo->creator->last_name }}';
+    const memoAssignee = '{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . " " . $memo->currentAssignee->last_name : "Not assigned" }}';
+    
+    // Get all messages
+    const messagesContainer = document.getElementById('chat-messages');
+    const messages = messagesContainer.querySelectorAll('.message');
+    
+    let messagesHtml = '';
+    messages.forEach(message => {
+        const sender = message.querySelector('.message-sender').textContent;
+        const time = message.querySelector('.message-time').textContent;
+        const text = message.querySelector('.message-text').textContent;
+        const replyTo = message.querySelector('.reply-to-indicator');
+        const replyToText = replyTo ? replyTo.textContent : '';
+        
+        messagesHtml += `
+            <div class="export-message">
+                <div class="export-message-header">
+                    <strong>${sender}</strong> ${replyToText}
+                    <span class="export-message-time">${time}</span>
+                </div>
+                <div class="export-message-content">${text}</div>
+            </div>
+        `;
+    });
+    
+    // Create the print content
+    const printContent = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Chat Export - ${memoSubject}</title>
+            <style>
+                body {
+                    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                    line-height: 1.6;
+                    color: #333;
+                    max-width: 800px;
+                    margin: 0 auto;
+                    padding: 20px;
+                    background: white;
+                }
+                .export-header {
+                    border-bottom: 2px solid #007bff;
+                    padding-bottom: 20px;
+                    margin-bottom: 30px;
+                }
+                .export-title {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #007bff;
+                    margin-bottom: 10px;
+                }
+                .export-meta {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                    margin-bottom: 20px;
+                }
+                .export-meta-item {
+                    background: #f8f9fa;
+                    padding: 10px;
+                    border-radius: 5px;
+                    border-left: 4px solid #007bff;
+                }
+                .export-meta-label {
+                    font-weight: bold;
+                    color: #666;
+                    font-size: 12px;
+                    text-transform: uppercase;
+                    margin-bottom: 5px;
+                }
+                .export-meta-value {
+                    color: #333;
+                    font-size: 14px;
+                }
+                .export-messages {
+                    margin-top: 30px;
+                }
+                .export-message {
+                    margin-bottom: 25px;
+                    padding: 15px;
+                    border: 1px solid #e9ecef;
+                    border-radius: 8px;
+                    background: #f8f9fa;
+                }
+                .export-message-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                }
+                .export-message-time {
+                    color: #666;
+                    font-size: 12px;
+                }
+                .export-message-content {
+                    color: #333;
+                    line-height: 1.5;
+                }
+                .export-footer {
+                    margin-top: 40px;
+                    padding-top: 20px;
+                    border-top: 1px solid #e9ecef;
+                    text-align: center;
+                    color: #666;
+                    font-size: 12px;
+                }
+                @media print {
+                    body { margin: 0; padding: 15px; }
+                    .export-header { page-break-after: avoid; }
+                    .export-message { page-break-inside: avoid; }
+                }
+            </style>
+        </head>
+        <body>
+            <div class="export-header">
+                <div class="export-title">${memoSubject}</div>
+                <div class="export-meta">
+                    <div class="export-meta-item">
+                        <div class="export-meta-label">Status</div>
+                        <div class="export-meta-value">${memoStatus}</div>
+                    </div>
+                    <div class="export-meta-item">
+                        <div class="export-meta-label">Created</div>
+                        <div class="export-meta-value">${memoCreated}</div>
+                    </div>
+                    <div class="export-meta-item">
+                        <div class="export-meta-label">From</div>
+                        <div class="export-meta-value">${memoCreator}</div>
+                    </div>
+                    <div class="export-meta-item">
+                        <div class="export-meta-label">Assigned To</div>
+                        <div class="export-meta-value">${memoAssignee}</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="export-messages">
+                <h3>Conversation History</h3>
+                ${messagesHtml}
+            </div>
+            
+            <div class="export-footer">
+                <p>Exported on ${new Date().toLocaleString()} | UIMMS Chat Export</p>
+            </div>
+        </body>
+        </html>
+    `;
+    
+    // Write content to new window
+    printWindow.document.write(printContent);
+    printWindow.document.close();
+    
+    // Wait for content to load, then trigger print dialog
+    printWindow.onload = function() {
+        setTimeout(() => {
+            printWindow.print();
+            // Close the window after printing (optional)
+            // printWindow.close();
+        }, 500);
+    };
+}
 </script>
 
 <style>
