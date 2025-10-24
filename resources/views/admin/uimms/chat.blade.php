@@ -2328,12 +2328,27 @@ function addMessageToChat(message) {
     // Determine reply mode display
     let replyModeDisplay = '';
     if (message.reply_mode === 'specific' && message.specific_recipients) {
-        const recipientIds = message.specific_recipients.split(',');
-        const recipientNames = recipientIds.map(id => {
-            const participant = memoParticipants.find(p => p.user && p.user.id == id);
-            return participant ? `${participant.user.first_name} ${participant.user.last_name}` : 'Unknown';
-        });
-        replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
+        // Handle different data types for specific_recipients
+        let recipientIds = [];
+        try {
+            if (typeof message.specific_recipients === 'string') {
+                recipientIds = message.specific_recipients.split(',');
+            } else if (Array.isArray(message.specific_recipients)) {
+                recipientIds = message.specific_recipients;
+            } else {
+                console.warn('Unexpected specific_recipients type:', typeof message.specific_recipients, message.specific_recipients);
+                recipientIds = [];
+            }
+            
+            const recipientNames = recipientIds.map(id => {
+                const participant = memoParticipants.find(p => p.user && p.user.id == id);
+                return participant ? `${participant.user.first_name} ${participant.user.last_name}` : 'Unknown';
+            });
+            replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
+        } catch (error) {
+            console.error('Error processing specific recipients:', error, message.specific_recipients);
+            replyModeDisplay = `<span class="reply-to-indicator">to Specific</span>`;
+        }
     } else if (message.reply_mode === 'all') {
         // Check if there are only 2 participants - if so, show specific person instead of "All"
         const currentUserId = {{ Auth::id() }};
@@ -2432,12 +2447,27 @@ function addNewMessageToChat(message) {
     // Determine reply mode display
     let replyModeDisplay = '';
     if (message.reply_mode === 'specific' && message.specific_recipients) {
-        const recipientIds = message.specific_recipients.split(',');
-        const recipientNames = recipientIds.map(id => {
-            const participant = memoParticipants.find(p => p.user && p.user.id == id);
-            return participant ? `${participant.user.first_name} ${participant.user.last_name}` : 'Unknown';
-        });
-        replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
+        // Handle different data types for specific_recipients
+        let recipientIds = [];
+        try {
+            if (typeof message.specific_recipients === 'string') {
+                recipientIds = message.specific_recipients.split(',');
+            } else if (Array.isArray(message.specific_recipients)) {
+                recipientIds = message.specific_recipients;
+            } else {
+                console.warn('Unexpected specific_recipients type:', typeof message.specific_recipients, message.specific_recipients);
+                recipientIds = [];
+            }
+            
+            const recipientNames = recipientIds.map(id => {
+                const participant = memoParticipants.find(p => p.user && p.user.id == id);
+                return participant ? `${participant.user.first_name} ${participant.user.last_name}` : 'Unknown';
+            });
+            replyModeDisplay = `<span class="reply-to-indicator">to ${recipientNames.join(', ')}</span>`;
+        } catch (error) {
+            console.error('Error processing specific recipients:', error, message.specific_recipients);
+            replyModeDisplay = `<span class="reply-to-indicator">to Specific</span>`;
+        }
     } else if (message.reply_mode === 'all') {
         // Check if there are only 2 participants - if so, show specific person instead of "All"
         const otherParticipants = memoParticipants.filter(participant => 
