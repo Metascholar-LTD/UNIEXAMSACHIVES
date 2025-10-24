@@ -253,34 +253,38 @@
                                         </div>
                                         <div class="message-content">
                                             <div class="message-header">
-                                                <span class="message-sender">{{ $message->user->first_name }} {{ $message->user->last_name }}</span>
-                                                @if($message->reply_mode === 'specific' && $message->specific_recipients)
-                                                    @php
-                                                        $recipientNames = [];
-                                                        foreach($message->specific_recipients as $recipientId) {
-                                                            $participant = $memo->active_participants->firstWhere('user.id', $recipientId);
-                                                            if($participant) {
-                                                                $recipientNames[] = $participant['user']['first_name'] . ' ' . $participant['user']['last_name'];
+                                                <div class="message-header-left">
+                                                    <span class="message-sender">{{ $message->user->first_name }} {{ $message->user->last_name }}</span>
+                                                    @if($message->reply_mode === 'specific' && $message->specific_recipients)
+                                                        @php
+                                                            $recipientNames = [];
+                                                            foreach($message->specific_recipients as $recipientId) {
+                                                                $participant = $memo->active_participants->firstWhere('user.id', $recipientId);
+                                                                if($participant) {
+                                                                    $recipientNames[] = $participant['user']['first_name'] . ' ' . $participant['user']['last_name'];
+                                                                }
                                                             }
-                                                        }
-                                                    @endphp
-                                                    <span class="reply-to-indicator">to {{ implode(', ', $recipientNames) }}</span>
-                                                @elseif($message->reply_mode === 'all')
-                                                    @php
-                                                        // Check if there are only 2 participants - if so, show specific person instead of "All"
-                                                        $currentUserId = auth()->id();
-                                                        $otherParticipants = $memo->active_participants->filter(function($participant) use ($currentUserId) {
-                                                            return $participant['user']['id'] != $currentUserId;
-                                                        });
-                                                    @endphp
-                                                    @if($memo->active_participants->count() <= 2 && $otherParticipants->count() == 1)
-                                                        @php $otherPerson = $otherParticipants->first(); @endphp
-                                                        <span class="reply-to-indicator">to {{ $otherPerson['user']['first_name'] }} {{ $otherPerson['user']['last_name'] }}</span>
-                                                    @else
-                                                        <span class="reply-to-indicator">to All</span>
+                                                        @endphp
+                                                        <span class="reply-to-indicator">to {{ implode(', ', $recipientNames) }}</span>
+                                                    @elseif($message->reply_mode === 'all')
+                                                        @php
+                                                            // Check if there are only 2 participants - if so, show specific person instead of "All"
+                                                            $currentUserId = auth()->id();
+                                                            $otherParticipants = $memo->active_participants->filter(function($participant) use ($currentUserId) {
+                                                                return $participant['user']['id'] != $currentUserId;
+                                                            });
+                                                        @endphp
+                                                        @if($memo->active_participants->count() <= 2 && $otherParticipants->count() == 1)
+                                                            @php $otherPerson = $otherParticipants->first(); @endphp
+                                                            <span class="reply-to-indicator">to {{ $otherPerson['user']['first_name'] }} {{ $otherPerson['user']['last_name'] }}</span>
+                                                        @else
+                                                            <span class="reply-to-indicator">to All</span>
+                                                        @endif
                                                     @endif
-                                                @endif
-                                                <span class="message-time">{{ $message->created_at->format('M d, Y H:i') }}</span>
+                                                </div>
+                                                <div class="message-header-right">
+                                                    <span class="message-time">{{ $message->created_at->format('M d, Y H:i') }}</span>
+                                                </div>
                                             </div>
                                             <div class="message-text">{!! $message->message !!}</div>
                                             @if($message->attachments && count($message->attachments) > 0)
@@ -1098,10 +1102,33 @@
 .message-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
     margin-bottom: 5px;
     font-size: 0.8rem;
     opacity: 0.8;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.message-header-left {
+    display: flex;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 4px;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.message-sender {
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.message-header-right {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
 }
 
 .message-text {
@@ -1617,9 +1644,11 @@
     border-radius: 12px;
     font-size: 0.75rem;
     font-weight: 500;
-    margin-left: 8px;
+    margin-left: 4px;
     border: 1px solid #bbdefb;
     display: inline-block;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 /* File Preview Area */
@@ -2376,9 +2405,13 @@ function addMessageToChat(message) {
             </div>
             <div class="message-content">
                 <div class="message-header">
-                    <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
-                    ${replyModeDisplay}
-                    <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
+                    <div class="message-header-left">
+                        <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
+                        ${replyModeDisplay}
+                    </div>
+                    <div class="message-header-right">
+                        <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
+                    </div>
                 </div>
                 <div class="message-text">${message.message}</div>
                 ${attachmentsHtml}
@@ -2476,9 +2509,13 @@ function addNewMessageToChat(message) {
             </div>
             <div class="message-content">
                 <div class="message-header">
-                    <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
-                    ${replyModeDisplay}
-                    <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
+                    <div class="message-header-left">
+                        <span class="message-sender">${message.user.first_name} ${message.user.last_name}</span>
+                        ${replyModeDisplay}
+                    </div>
+                    <div class="message-header-right">
+                        <span class="message-time">${new Date(message.created_at).toLocaleString()}</span>
+                    </div>
                 </div>
                 <div class="message-text">${message.message}</div>
                 ${attachmentsHtml}
