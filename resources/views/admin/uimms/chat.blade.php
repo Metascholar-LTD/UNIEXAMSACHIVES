@@ -319,7 +319,7 @@
                             <i class="icofont-users"></i>
                             All
                         </button>
-                        <button type="button" class="reply-mode-btn" data-mode="specific">
+                        <button type="button" class="reply-mode-btn" data-mode="specific" id="comment-to-btn">
                             <i class="icofont-user"></i>
                             Comment-to
                         </button>
@@ -1339,6 +1339,23 @@
     font-size: 0.9rem;
 }
 
+.reply-mode-btn.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
+    pointer-events: none;
+}
+
+.reply-mode-btn.disabled:hover {
+    background: #f5f5f5;
+    color: #999;
+    border-color: #ddd;
+    transform: none;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
 /* Inline Recipients Selector */
 .inline-recipients-selector {
     display: flex;
@@ -1832,6 +1849,8 @@ function initializeReplyMode() {
         }
     }
     
+    // Check if comment-to button should be disabled (only 2 participants)
+    checkCommentToButtonAvailability();
     
     // Set up reply mode button handlers
     document.querySelectorAll('.reply-mode-btn').forEach(btn => {
@@ -1845,7 +1864,41 @@ function initializeReplyMode() {
     populateRecipientsList();
 }
 
+function checkCommentToButtonAvailability() {
+    const commentToBtn = document.getElementById('comment-to-btn');
+    const currentUserId = {{ Auth::id() }};
+    
+    // Count participants excluding current user
+    const otherParticipants = memoParticipants.filter(participant => 
+        participant.user && participant.user.id !== currentUserId
+    );
+    
+    // If there are only 2 participants total (current user + 1 other), disable comment-to
+    if (memoParticipants.length <= 2) {
+        commentToBtn.disabled = true;
+        commentToBtn.classList.add('disabled');
+        commentToBtn.title = 'Comment-to is not available with only 2 participants';
+        
+        // If comment-to was active, switch to "All" mode
+        if (commentToBtn.classList.contains('active')) {
+            setReplyMode('all');
+        }
+    } else {
+        commentToBtn.disabled = false;
+        commentToBtn.classList.remove('disabled');
+        commentToBtn.title = '';
+    }
+}
+
 function setReplyMode(mode) {
+    // Prevent switching to 'specific' mode if comment-to button is disabled
+    if (mode === 'specific') {
+        const commentToBtn = document.getElementById('comment-to-btn');
+        if (commentToBtn && commentToBtn.disabled) {
+            return; // Don't allow switching to specific mode
+        }
+    }
+    
     // Update button states
     document.querySelectorAll('.reply-mode-btn').forEach(btn => {
         btn.classList.remove('active');
