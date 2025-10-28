@@ -2976,6 +2976,25 @@ function exportChatConversation() {
                     margin: 0 auto;
                     padding: 20px;
                     background: white;
+                    position: relative;
+                }
+                
+                /* Watermark */
+                body::before {
+                    content: '';
+                    position: fixed;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%) rotate(-45deg);
+                    background-image: url('https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg');
+                    background-size: 300px 300px;
+                    background-repeat: no-repeat;
+                    background-position: center;
+                    width: 300px;
+                    height: 300px;
+                    opacity: 0.1;
+                    z-index: -1;
+                    pointer-events: none;
                 }
                 .export-header {
                     border-bottom: 2px solid #007bff;
@@ -3071,10 +3090,21 @@ function exportChatConversation() {
                     font-size: 12px;
                 }
                 @media print {
-                    body { margin: 0; padding: 15px; }
+                    body { 
+                        margin: 0; 
+                        padding: 15px; 
+                    }
                     .export-header { page-break-after: avoid; }
                     .export-message { page-break-inside: avoid; }
                     .export-logo { height: 50px; }
+                    
+                    /* Enhanced watermark for print */
+                    body::before {
+                        opacity: 0.15;
+                        background-size: 400px 400px;
+                        width: 400px;
+                        height: 400px;
+                    }
                 }
                 @media (max-width: 600px) {
                     .export-logo-section {
