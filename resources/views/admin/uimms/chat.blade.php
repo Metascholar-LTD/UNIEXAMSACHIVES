@@ -254,29 +254,6 @@
 
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
-                            @if($memo->memo_status === 'suspended')
-                                {{-- Suspended Chat State --}}
-                                <div class="chat-suspended-overlay">
-                                    <div class="suspended-content">
-                                        <div class="suspended-icon">
-                                            <i class="icofont-pause"></i>
-                                        </div>
-                                        <div class="suspended-message">
-                                            <h4>Chat Suspended</h4>
-                                            <p>This memo has been <strong>suspended</strong> and the chat is temporarily locked.</p>
-                                            <p class="suspended-subtitle">All messaging and actions are disabled until the memo is unsuspended.</p>
-                                        </div>
-                                        @if($canManageMemo)
-                                            <div class="suspended-actions">
-                                                <button class="btn btn-outline-info" onclick="confirmUnsuspendMemo()">
-                                                    <i class="icofont-play"></i> Unsuspend Memo
-                                                </button>
-                                            </div>
-                                        @endif
-                                    </div>
-                                </div>
-                            @endif
-                            
                             <div class="chat-messages {{ $memo->memo_status === 'suspended' ? 'chat-disabled' : '' }}" id="chat-messages">
                                 @foreach($memo->replies as $message)
                                     <div class="message {{ $message->user_id === auth()->id() ? 'message-sent' : 'message-received' }}">
@@ -372,6 +349,39 @@
                                         </div>
                                     </div>
                                 @endforeach
+                                
+                                @if($memo->memo_status === 'suspended')
+                                    {{-- Suspended Message at Bottom --}}
+                                    <div class="message suspended-system-message">
+                                        <div class="message-avatar">
+                                            <i class="icofont-pause suspended-avatar-icon"></i>
+                                        </div>
+                                        <div class="message-content">
+                                            <div class="message-header">
+                                                <div class="message-header-left">
+                                                    <span class="message-sender">System</span>
+                                                </div>
+                                                <div class="message-header-right">
+                                                    <span class="message-time">{{ now()->format('M d, Y H:i') }}</span>
+                                                </div>
+                                            </div>
+                                            <div class="message-text">
+                                                <div class="suspended-notification">
+                                                    <h4>Chat Suspended</h4>
+                                                    <p>This memo has been <strong>suspended</strong> and the chat is temporarily locked.</p>
+                                                    <p class="suspended-subtitle">All messaging and actions are disabled until the memo is unsuspended.</p>
+                                                    @if($canManageMemo)
+                                                        <div class="suspended-actions">
+                                                            <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
+                                                                <i class="icofont-play"></i> Unsuspend Memo
+                                                            </button>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                             </div>
                         </div>
 
@@ -1094,56 +1104,51 @@
     position: relative;
 }
 
-.chat-suspended-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(2px);
+.suspended-system-message {
+    background: #fff3cd;
+    border: 1px solid #ffeaa7;
+    border-radius: 8px;
+    margin-top: 10px;
+}
+
+.suspended-system-message .message-avatar {
+    background: #ffc107;
+    color: white;
     display: flex;
     align-items: center;
     justify-content: center;
-    z-index: 10;
 }
 
-.suspended-content {
+.suspended-avatar-icon {
+    font-size: 20px;
+}
+
+.suspended-notification {
     text-align: center;
-    padding: 40px 20px;
-    max-width: 400px;
+    padding: 10px 0;
 }
 
-.suspended-icon {
-    font-size: 48px;
-    color: #ffc107;
-    margin-bottom: 20px;
-}
-
-.suspended-icon i {
-    display: block;
-}
-
-.suspended-message h4 {
-    color: #495057;
-    margin-bottom: 15px;
-    font-size: 24px;
+.suspended-notification h4 {
+    color: #856404;
+    margin-bottom: 10px;
+    font-size: 18px;
     font-weight: 600;
 }
 
-.suspended-message p {
-    color: #6c757d;
-    margin-bottom: 10px;
-    line-height: 1.5;
+.suspended-notification p {
+    color: #856404;
+    margin-bottom: 8px;
+    line-height: 1.4;
+    font-size: 14px;
 }
 
 .suspended-subtitle {
-    font-size: 14px;
-    color: #adb5bd;
+    font-size: 12px;
+    color: #6c757d;
 }
 
 .suspended-actions {
-    margin-top: 25px;
+    margin-top: 15px;
 }
 
 .chat-disabled {
