@@ -1231,9 +1231,9 @@ class HomeController extends Controller
 
         // Send a system message about status change
         $statusMessages = [
-            'completed' => '✅ **Memo marked as completed**',
-            'suspended' => '⏸️ **Memo suspended**' . ($request->reason ? "\n\nReason: " . $request->reason : ''),
-            'archived' => '📦 **Memo archived**',
+            'completed' => '✅ <em>Memo marked as completed</em>',
+            'suspended' => '⏸️ <em>Memo suspended</em>' . ($request->reason ? "\n\nReason: " . $request->reason : ''),
+            'archived' => '📦 <em>Memo archived</em>',
         ];
 
         MemoReply::create([
