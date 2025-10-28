@@ -96,10 +96,30 @@
                                                 <span class="btn btn-sm btn-secondary disabled">
                                                     <i class="icofont-archive"></i> Archived
                                                 </span>
-                                            @elseif($memo->memo_status === 'suspended' && $canManageMemo)
-                                                <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
-                                                    <i class="icofont-play"></i> Unsuspend
-                                                </button>
+                                            @elseif($memo->memo_status === 'suspended')
+                                                @php
+                                                    // Find who suspended the memo from workflow history
+                                                    $suspendedBy = null;
+                                                    if ($memo->workflow_history) {
+                                                        $suspensionEntry = collect($memo->workflow_history)
+                                                            ->where('action', 'suspended')
+                                                            ->sortByDesc('timestamp')
+                                                            ->first();
+                                                        if ($suspensionEntry) {
+                                                            $suspendedBy = \App\Models\User::find($suspensionEntry['user_id']);
+                                                        }
+                                                    }
+                                                    $canUnsuspend = $suspendedBy && $suspendedBy->id === auth()->id();
+                                                @endphp
+                                                @if($canUnsuspend)
+                                                    <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
+                                                        <i class="icofont-play"></i> Unsuspend
+                                                    </button>
+                                                @else
+                                                    <span class="btn btn-sm btn-outline-info disabled" title="Only {{ $suspendedBy ? $suspendedBy->first_name . ' ' . $suspendedBy->last_name : 'the person who suspended it' }} can unsuspend this memo">
+                                                        <i class="icofont-play"></i> Unsuspend
+                                                    </span>
+                                                @endif
                                             @elseif(!$canManageMemo)
                                                 <span class="btn btn-sm btn-outline-success disabled" title="Only assignee or active participants can manage memo">
                                                     <i class="icofont-check-circled"></i> Complete
@@ -351,6 +371,21 @@
                                 @endforeach
                                 
                                 @if($memo->memo_status === 'suspended')
+                                    @php
+                                        // Find who suspended the memo from workflow history
+                                        $suspendedBy = null;
+                                        if ($memo->workflow_history) {
+                                            $suspensionEntry = collect($memo->workflow_history)
+                                                ->where('action', 'suspended')
+                                                ->sortByDesc('timestamp')
+                                                ->first();
+                                            if ($suspensionEntry) {
+                                                $suspendedBy = \App\Models\User::find($suspensionEntry['user_id']);
+                                            }
+                                        }
+                                        $canUnsuspend = $suspendedBy && $suspendedBy->id === auth()->id();
+                                    @endphp
+                                    
                                     {{-- Suspended Message at Bottom --}}
                                     <div class="message suspended-system-message">
                                         <div class="message-avatar">
@@ -369,12 +404,19 @@
                                                 <div class="suspended-notification">
                                                     <h4>Chat Suspended</h4>
                                                     <p>This memo has been <strong>suspended</strong> and the chat is temporarily locked.</p>
+                                                    @if($suspendedBy)
+                                                        <p class="suspended-subtitle">Suspended by {{ $suspendedBy->first_name }} {{ $suspendedBy->last_name }}</p>
+                                                    @endif
                                                     <p class="suspended-subtitle">All messaging and actions are disabled until the memo is unsuspended.</p>
-                                                    @if($canManageMemo)
+                                                    @if($canUnsuspend)
                                                         <div class="suspended-actions">
                                                             <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
                                                                 <i class="icofont-play"></i> Unsuspend Memo
                                                             </button>
+                                                        </div>
+                                                    @else
+                                                        <div class="suspended-actions">
+                                                            <span class="text-muted">Only {{ $suspendedBy ? $suspendedBy->first_name . ' ' . $suspendedBy->last_name : 'the person who suspended it' }} can unsuspend this memo.</span>
                                                         </div>
                                                     @endif
                                                 </div>

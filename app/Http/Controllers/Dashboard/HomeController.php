@@ -1211,6 +1211,24 @@ class HomeController extends Controller
         if (!$canManageMemo) {
             abort(403, 'Only the current assignee or active participants can manage this memo.');
         }
+        
+        // Special check for unsuspend - only the person who suspended can unsuspend
+        if ($request->status === 'unsuspended') {
+            $suspendedBy = null;
+            if ($memo->workflow_history) {
+                $suspensionEntry = collect($memo->workflow_history)
+                    ->where('action', 'suspended')
+                    ->sortByDesc('timestamp')
+                    ->first();
+                if ($suspensionEntry) {
+                    $suspendedBy = $suspensionEntry['user_id'];
+                }
+            }
+            
+            if (!$suspendedBy || $suspendedBy != $userId) {
+                abort(403, 'Only the person who suspended this memo can unsuspend it.');
+            }
+        }
 
         $request->validate([
             'status' => 'required|in:completed,suspended,archived,unsuspended',
