@@ -2950,8 +2950,19 @@ function exportChatConversation() {
         // Format the reply indicator to be closer to the sender name
         const formattedReplyTo = replyToText ? ` ${replyToText}` : '';
         
+        // Check if this is a system message (status changes, assignments, etc.)
+        const isSystemMessage = text.toLowerCase().includes('memo') && 
+                               (text.toLowerCase().includes('completed') || 
+                                text.toLowerCase().includes('archived') || 
+                                text.toLowerCase().includes('suspended') || 
+                                text.toLowerCase().includes('assigned') ||
+                                text.toLowerCase().includes('status') ||
+                                text.toLowerCase().includes('system'));
+        
+        const messageClass = isSystemMessage ? 'export-message system-message' : 'export-message';
+        
         messagesHtml += `
-            <div class="export-message">
+            <div class="${messageClass}">
                 <div class="export-message-header">
                     <strong>${sender}${formattedReplyTo}</strong>
                     <span class="export-message-time">${time}</span>
@@ -3080,6 +3091,32 @@ function exportChatConversation() {
                 .export-message-content {
                     color: #333;
                     line-height: 1.5;
+                }
+                .export-message.system-message {
+                    margin-bottom: 8px;
+                    padding: 8px 12px;
+                    border: 1px solid #dee2e6;
+                    background-color: #f1f3f4;
+                    font-size: 12px;
+                    opacity: 0.8;
+                }
+                .export-message.system-message .export-message-header {
+                    margin-bottom: 5px;
+                    font-size: 12px;
+                }
+                .export-message.system-message .export-message-header strong {
+                    font-size: 11px;
+                    color: #6c757d;
+                }
+                .export-message.system-message .export-message-content {
+                    font-size: 11px;
+                    color: #6c757d;
+                    font-style: italic;
+                    line-height: 1.3;
+                }
+                .export-message.system-message .export-message-time {
+                    font-size: 10px;
+                    color: #999;
                 }
                 .export-footer {
                     margin-top: 40px;
