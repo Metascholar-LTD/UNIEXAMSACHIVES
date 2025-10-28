@@ -416,7 +416,7 @@
                                     <div class="input-field-wrapper">
                                         <textarea id="message-input" 
                                                   name="message" 
-                                                  placeholder="Type your message..." 
+                                                  placeholder="Minute on Memo..." 
                                                   rows="1" 
                                                   required></textarea>
                                     </div>
