@@ -2985,7 +2985,7 @@ function exportChatConversation() {
                     position: fixed;
                     top: 50%;
                     left: 50%;
-                    transform: translate(-50%, -50%) rotate(-45deg);
+                    transform: translate(-50%, -50%);
                     background-image: url('https://res.cloudinary.com/dsypclqxk/image/upload/v1756722559/catholic-university-ghana-logo_onhrgj.jpg');
                     background-size: 300px 300px;
                     background-repeat: no-repeat;
