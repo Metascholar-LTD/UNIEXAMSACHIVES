@@ -59,6 +59,20 @@
                                         $isCurrentAssignee = $memo->current_assignee_id == $userId;
                                         $isActiveParticipant = $memo->isActiveParticipant($userId);
                                         $canManageMemo = $isCurrentAssignee || $isActiveParticipant;
+                                        
+                                        // Check who suspended the memo for unsuspend authorization
+                                        $suspendedBy = null;
+                                        $canUnsuspend = false;
+                                        if ($memo->memo_status === 'suspended' && $memo->workflow_history) {
+                                            $suspensionEntry = collect($memo->workflow_history)
+                                                ->where('action', 'suspended')
+                                                ->sortByDesc('timestamp')
+                                                ->first();
+                                            if ($suspensionEntry) {
+                                                $suspendedBy = \App\Models\User::find($suspensionEntry['user_id']);
+                                                $canUnsuspend = $suspendedBy && $suspendedBy->id === $userId;
+                                            }
+                                        }
                                     @endphp
                                     
                                     @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
@@ -97,20 +111,6 @@
                                                     <i class="icofont-archive"></i> Archived
                                                 </span>
                                             @elseif($memo->memo_status === 'suspended')
-                                                @php
-                                                    // Find who suspended the memo from workflow history
-                                                    $suspendedBy = null;
-                                                    if ($memo->workflow_history) {
-                                                        $suspensionEntry = collect($memo->workflow_history)
-                                                            ->where('action', 'suspended')
-                                                            ->sortByDesc('timestamp')
-                                                            ->first();
-                                                        if ($suspensionEntry) {
-                                                            $suspendedBy = \App\Models\User::find($suspensionEntry['user_id']);
-                                                        }
-                                                    }
-                                                    $canUnsuspend = $suspendedBy && $suspendedBy->id === auth()->id();
-                                                @endphp
                                                 @if($canUnsuspend)
                                                     <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
                                                         <i class="icofont-play"></i> Unsuspend
