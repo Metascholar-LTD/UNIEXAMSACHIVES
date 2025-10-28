@@ -254,7 +254,30 @@
 
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
-                            <div class="chat-messages" id="chat-messages">
+                            @if($memo->memo_status === 'suspended')
+                                {{-- Suspended Chat State --}}
+                                <div class="chat-suspended-overlay">
+                                    <div class="suspended-content">
+                                        <div class="suspended-icon">
+                                            <i class="icofont-pause"></i>
+                                        </div>
+                                        <div class="suspended-message">
+                                            <h4>Chat Suspended</h4>
+                                            <p>This memo has been <strong>suspended</strong> and the chat is temporarily locked.</p>
+                                            <p class="suspended-subtitle">All messaging and actions are disabled until the memo is unsuspended.</p>
+                                        </div>
+                                        @if($canManageMemo)
+                                            <div class="suspended-actions">
+                                                <button class="btn btn-outline-info" onclick="confirmUnsuspendMemo()">
+                                                    <i class="icofont-play"></i> Unsuspend Memo
+                                                </button>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                            
+                            <div class="chat-messages {{ $memo->memo_status === 'suspended' ? 'chat-disabled' : '' }}" id="chat-messages">
                                 @foreach($memo->replies as $message)
                                     <div class="message {{ $message->user_id === auth()->id() ? 'message-sent' : 'message-received' }}">
                                         <div class="message-avatar">
@@ -1068,6 +1091,64 @@
     height: 400px;
     overflow-y: auto;
     padding: 20px;
+    position: relative;
+}
+
+.chat-suspended-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(2px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
+}
+
+.suspended-content {
+    text-align: center;
+    padding: 40px 20px;
+    max-width: 400px;
+}
+
+.suspended-icon {
+    font-size: 48px;
+    color: #ffc107;
+    margin-bottom: 20px;
+}
+
+.suspended-icon i {
+    display: block;
+}
+
+.suspended-message h4 {
+    color: #495057;
+    margin-bottom: 15px;
+    font-size: 24px;
+    font-weight: 600;
+}
+
+.suspended-message p {
+    color: #6c757d;
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.suspended-subtitle {
+    font-size: 14px;
+    color: #adb5bd;
+}
+
+.suspended-actions {
+    margin-top: 25px;
+}
+
+.chat-disabled {
+    opacity: 0.6;
+    pointer-events: none;
 }
 
 .chat-messages {
