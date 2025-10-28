@@ -71,8 +71,8 @@
                                         </span>
                                     @endif
                                     <div class="btn-group">
-                                        @if($memo->memo_status === 'suspended' && $canManageMemo)
-                                            {{-- When suspended, show only unsuspend button --}}
+                                        @if($memo->memo_status === 'suspended' && $canManageMemo && $memo->canUnsuspend(Auth::id()))
+                                            {{-- When suspended, show only unsuspend button to the user who suspended it --}}
                                             <button class="btn btn-sm btn-success" onclick="confirmUnsuspendMemo()">
                                                 <i class="icofont-play"></i> Unsuspend
                                             </button>
@@ -97,7 +97,11 @@
                                                     <i class="icofont-archive"></i> Archived
                                                 </span>
                                             @elseif($memo->memo_status === 'suspended')
-                                                <span class="btn btn-sm btn-warning disabled">
+                                                @php
+                                                    $suspendedBy = $memo->getSuspendedBy();
+                                                    $suspendedByUser = $suspendedBy ? \App\Models\User::find($suspendedBy) : null;
+                                                @endphp
+                                                <span class="btn btn-sm btn-warning disabled" title="Suspended by {{ $suspendedByUser ? $suspendedByUser->first_name . ' ' . $suspendedByUser->last_name : 'Unknown user' }}">
                                                     <i class="icofont-pause"></i> Suspended
                                                 </span>
                                             @elseif(!$canManageMemo)
@@ -455,9 +459,13 @@
                                         <p>This memo has been <strong>archived</strong> and is now read-only.</p>
                                         <p class="blocked-subtitle">No further actions or messages can be added to this memo</p>
                                     @elseif($memo->memo_status === 'suspended')
+                                        @php
+                                            $suspendedBy = $memo->getSuspendedBy();
+                                            $suspendedByUser = $suspendedBy ? \App\Models\User::find($suspendedBy) : null;
+                                        @endphp
                                         <h4>Memo Suspended</h4>
-                                        <p>This memo has been <strong>suspended</strong> and messaging is temporarily disabled.</p>
-                                        <p class="blocked-subtitle">Only the assignee or active participants can unsuspend this memo to resume conversation</p>
+                                        <p>This memo has been <strong>suspended</strong> by <strong>{{ $suspendedByUser ? $suspendedByUser->first_name . ' ' . $suspendedByUser->last_name : 'Unknown user' }}</strong> and messaging is temporarily disabled.</p>
+                                        <p class="blocked-subtitle">Only {{ $suspendedByUser ? $suspendedByUser->first_name . ' ' . $suspendedByUser->last_name : 'the user who suspended it' }} can unsuspend this memo to resume conversation</p>
                                     @elseif($isAssignedToSomeoneElse)
                                         <h4>Memo Assigned</h4>
                                         <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>

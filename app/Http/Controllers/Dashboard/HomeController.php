@@ -1225,6 +1225,10 @@ class HomeController extends Controller
                 $memo->markAsSuspended($userId, $request->reason);
                 break;
             case 'unsuspended':
+                // Check if the current user can unsuspend this memo
+                if (!$memo->canUnsuspend($userId)) {
+                    abort(403, 'Only the user who suspended this memo can unsuspend it.');
+                }
                 $memo->markAsUnsuspended($userId);
                 break;
             case 'archived':

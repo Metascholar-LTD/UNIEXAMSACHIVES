@@ -306,4 +306,38 @@ class EmailCampaign extends Model
     {
         return $query->where('created_by', $userId);
     }
+
+    /**
+     * Get the user who suspended this memo
+     */
+    public function getSuspendedBy()
+    {
+        if ($this->memo_status !== 'suspended') {
+            return null;
+        }
+
+        $workflowHistory = $this->workflow_history ?? [];
+        
+        // Find the most recent 'suspended' action
+        foreach (array_reverse($workflowHistory) as $entry) {
+            if ($entry['action'] === 'suspended') {
+                return $entry['user_id'];
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Check if the given user can unsuspend this memo
+     */
+    public function canUnsuspend($userId)
+    {
+        if ($this->memo_status !== 'suspended') {
+            return false;
+        }
+
+        $suspendedBy = $this->getSuspendedBy();
+        return $suspendedBy && $suspendedBy == $userId;
+    }
 }
