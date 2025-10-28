@@ -1213,7 +1213,7 @@ class HomeController extends Controller
         }
 
         $request->validate([
-            'status' => 'required|in:completed,suspended,archived',
+            'status' => 'required|in:completed,suspended,archived,unsuspended',
             'reason' => 'nullable|string|max:1000',
         ]);
 
@@ -1224,6 +1224,9 @@ class HomeController extends Controller
             case 'suspended':
                 $memo->markAsSuspended($userId, $request->reason);
                 break;
+            case 'unsuspended':
+                $memo->markAsPending($userId);
+                break;
             case 'archived':
                 $memo->markAsArchived($userId);
                 break;
@@ -1233,6 +1236,7 @@ class HomeController extends Controller
         $statusMessages = [
             'completed' => '✅ **Memo marked as completed**',
             'suspended' => '⏸️ **Memo suspended**' . ($request->reason ? "\n\nReason: " . $request->reason : ''),
+            'unsuspended' => '▶️ **Memo unsuspended**',
             'archived' => '📦 **Memo archived**',
         ];
 

@@ -72,17 +72,23 @@
                                     @endif
                                     <div class="btn-group">
                                         @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
-                                            <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
-                                                <i class="icofont-check-circled"></i> Complete
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
-                                                <i class="icofont-pause"></i> Suspend
-                                            </button>
-                                            <button class="btn btn-sm btn-outline-secondary" onclick="confirmArchiveMemo()">
-                                                <i class="icofont-archive"></i> Archive
-                                            </button>
+                                            @if($memo->memo_status === 'suspended')
+                                                <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
+                                                    <i class="icofont-play"></i> Unsuspend
+                                                </button>
+                                            @else
+                                                <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
+                                                    <i class="icofont-check-circled"></i> Complete
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
+                                                    <i class="icofont-pause"></i> Suspend
+                                                </button>
+                                                <button class="btn btn-sm btn-outline-secondary" onclick="confirmArchiveMemo()">
+                                                    <i class="icofont-archive"></i> Archive
+                                                </button>
+                                            @endif
                                         @else
-                                            @if($memo->memo_status === 'completed')
+                                        @if($memo->memo_status === 'completed')
                                                 <span class="btn btn-sm btn-success disabled">
                                                     <i class="icofont-check-circled"></i> Completed
                                                 </span>
@@ -90,6 +96,10 @@
                                                 <span class="btn btn-sm btn-secondary disabled">
                                                     <i class="icofont-archive"></i> Archived
                                                 </span>
+                                            @elseif($memo->memo_status === 'suspended' && $canManageMemo)
+                                                <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
+                                                    <i class="icofont-play"></i> Unsuspend
+                                                </button>
                                             @elseif(!$canManageMemo)
                                                 <span class="btn btn-sm btn-outline-success disabled" title="Only assignee or active participants can manage memo">
                                                     <i class="icofont-check-circled"></i> Complete
@@ -347,11 +357,11 @@
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
-                        <button type="button" class="reply-mode-btn active" data-mode="all">
+                        <button type="button" class="reply-mode-btn active" data-mode="all" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
                             <i class="icofont-users"></i>
                             All
                         </button>
-                        <button type="button" class="reply-mode-btn" data-mode="specific" id="comment-to-btn">
+                        <button type="button" class="reply-mode-btn" data-mode="specific" id="comment-to-btn" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
                             <i class="icofont-user"></i>
                             Comment-to
                         </button>
@@ -395,7 +405,7 @@
                         </div>
                         
                         <div class="telegram-style-input">
-                                    <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()">
+                                    <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
                                         <svg viewBox="0 0 24 24" class="attachment-icon">
                                             <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
                                         </svg>
@@ -406,10 +416,11 @@
                                                   name="message" 
                                                   placeholder="Type your message..." 
                                                   rows="1" 
+                                                  @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif
                                                   required></textarea>
                                     </div>
                                     
-                                    <button type="submit" class="send-btn">
+                                    <button type="submit" class="send-btn" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
                                         <svg viewBox="0 0 24 24" class="send-icon">
                                             <line x1="22" y1="2" x2="11" y2="13"></line>
                                             <polygon points="22,2 15,22 11,13 2,9"></polygon>
@@ -2681,6 +2692,23 @@ function confirmCompleteMemo() {
             type: 'success',
             confirmText: 'Complete',
             subtitle: 'This will mark the memo as finished and prevent further messages.'
+        }
+    );
+}
+
+// Confirmation function for unsuspending memo
+function confirmUnsuspendMemo() {
+    confirmAction(
+        'Unsuspend this memo and re-enable all actions and messaging?',
+        function() {
+            updateMemoStatus('unsuspended');
+        },
+        null,
+        {
+            title: 'Unsuspend Memo',
+            type: 'info',
+            confirmText: 'Unsuspend',
+            subtitle: 'This will set status back to pending and enable actions.'
         }
     );
 }
