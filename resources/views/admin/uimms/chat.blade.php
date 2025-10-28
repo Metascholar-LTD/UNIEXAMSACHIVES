@@ -2795,38 +2795,15 @@ function updateMemoStatus(status, reason = null) {
         method: 'POST',
         body: formData
     })
-    .then(async (response) => {
-        if (!response.ok) {
-            if (response.status === 403) {
-                confirmAction(
-                    'Only the person who suspended this memo can unsuspend it.',
-                    null,
-                    null,
-                    { title: 'Action not allowed', type: 'error', confirmText: 'OK' }
-                );
-                return;
-            }
-            confirmAction(
-                'Unable to update memo status. Please try again.',
-                null,
-                null,
-                { title: 'Update failed', type: 'error', confirmText: 'OK' }
-            );
-            return;
-        }
-        const data = await response.json();
+    .then(response => response.json())
+    .then(data => {
         if (data.success) {
             location.reload(); // Refresh to show updated status
         }
     })
     .catch(error => {
         console.error('Error updating status:', error);
-        confirmAction(
-            'Network error. Please check your connection and try again.',
-            null,
-            null,
-            { title: 'Network error', type: 'error', confirmText: 'OK' }
-        );
+        alert('Error updating memo status. Please try again.');
     });
 }
 
