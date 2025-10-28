@@ -1211,27 +1211,9 @@ class HomeController extends Controller
         if (!$canManageMemo) {
             abort(403, 'Only the current assignee or active participants can manage this memo.');
         }
-        
-        // Special check for unsuspend - only the person who suspended can unsuspend
-        if ($request->status === 'unsuspended') {
-            $suspendedBy = null;
-            if ($memo->workflow_history) {
-                $suspensionEntry = collect($memo->workflow_history)
-                    ->where('action', 'suspended')
-                    ->sortByDesc('timestamp')
-                    ->first();
-                if ($suspensionEntry) {
-                    $suspendedBy = $suspensionEntry['user_id'];
-                }
-            }
-            
-            if (!$suspendedBy || $suspendedBy != $userId) {
-                abort(403, 'Only the person who suspended this memo can unsuspend it.');
-            }
-        }
 
         $request->validate([
-            'status' => 'required|in:completed,suspended,archived,unsuspended',
+            'status' => 'required|in:completed,suspended,archived',
             'reason' => 'nullable|string|max:1000',
         ]);
 
@@ -1242,9 +1224,6 @@ class HomeController extends Controller
             case 'suspended':
                 $memo->markAsSuspended($userId, $request->reason);
                 break;
-            case 'unsuspended':
-                $memo->markAsPending($userId);
-                break;
             case 'archived':
                 $memo->markAsArchived($userId);
                 break;
@@ -1252,10 +1231,9 @@ class HomeController extends Controller
 
         // Send a system message about status change
         $statusMessages = [
-            'completed' => '✅ <em>Memo marked as completed</em>',
-            'suspended' => '⏸️ <em>Memo suspended</em>' . ($request->reason ? "\n\nReason: " . $request->reason : ''),
-            'unsuspended' => '▶️ <em>Memo unsuspended</em>',
-            'archived' => '📦 <em>Memo archived</em>',
+            'completed' => '✅ **Memo marked as completed**',
+            'suspended' => '⏸️ **Memo suspended**' . ($request->reason ? "\n\nReason: " . $request->reason : ''),
+            'archived' => '📦 **Memo archived**',
         ];
 
         MemoReply::create([

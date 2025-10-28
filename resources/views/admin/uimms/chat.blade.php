@@ -59,20 +59,6 @@
                                         $isCurrentAssignee = $memo->current_assignee_id == $userId;
                                         $isActiveParticipant = $memo->isActiveParticipant($userId);
                                         $canManageMemo = $isCurrentAssignee || $isActiveParticipant;
-                                        
-                                        // Check who suspended the memo for unsuspend authorization
-                                        $suspendedBy = null;
-                                        $canUnsuspend = false;
-                                        if ($memo->memo_status === 'suspended' && $memo->workflow_history) {
-                                            $suspensionEntry = collect($memo->workflow_history)
-                                                ->where('action', 'suspended')
-                                                ->sortByDesc('timestamp')
-                                                ->first();
-                                            if ($suspensionEntry) {
-                                                $suspendedBy = \App\Models\User::find($suspensionEntry['user_id']);
-                                                $canUnsuspend = $suspendedBy && $suspendedBy->id === $userId;
-                                            }
-                                        }
                                     @endphp
                                     
                                     @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
@@ -86,23 +72,17 @@
                                     @endif
                                     <div class="btn-group">
                                         @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
-                                            @if($memo->memo_status === 'suspended')
-                                                <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
-                                                    <i class="icofont-play"></i> Unsuspend
-                                                </button>
-                                            @else
-                                                <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
-                                                    <i class="icofont-check-circled"></i> Complete
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
-                                                    <i class="icofont-pause"></i> Suspend
-                                                </button>
-                                                <button class="btn btn-sm btn-outline-secondary" onclick="confirmArchiveMemo()">
-                                                    <i class="icofont-archive"></i> Archive
-                                                </button>
-                                            @endif
+                                            <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
+                                                <i class="icofont-check-circled"></i> Complete
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-warning" onclick="showSuspendModal()">
+                                                <i class="icofont-pause"></i> Suspend
+                                            </button>
+                                            <button class="btn btn-sm btn-outline-secondary" onclick="confirmArchiveMemo()">
+                                                <i class="icofont-archive"></i> Archive
+                                            </button>
                                         @else
-                                        @if($memo->memo_status === 'completed')
+                                            @if($memo->memo_status === 'completed')
                                                 <span class="btn btn-sm btn-success disabled">
                                                     <i class="icofont-check-circled"></i> Completed
                                                 </span>
@@ -110,16 +90,6 @@
                                                 <span class="btn btn-sm btn-secondary disabled">
                                                     <i class="icofont-archive"></i> Archived
                                                 </span>
-                                            @elseif($memo->memo_status === 'suspended')
-                                                @if($canUnsuspend)
-                                                    <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
-                                                        <i class="icofont-play"></i> Unsuspend
-                                                    </button>
-                                                @else
-                                                    <span class="btn btn-sm btn-outline-info disabled" title="Only {{ $suspendedBy ? $suspendedBy->first_name . ' ' . $suspendedBy->last_name : 'the person who suspended it' }} can unsuspend this memo">
-                                                        <i class="icofont-play"></i> Unsuspend
-                                                    </span>
-                                                @endif
                                             @elseif(!$canManageMemo)
                                                 <span class="btn btn-sm btn-outline-success disabled" title="Only assignee or active participants can manage memo">
                                                     <i class="icofont-check-circled"></i> Complete
@@ -274,7 +244,7 @@
 
                         {{-- Chat Messages Container --}}
                         <div class="chat-container">
-                            <div class="chat-messages {{ $memo->memo_status === 'suspended' ? 'chat-disabled' : '' }}" id="chat-messages">
+                            <div class="chat-messages" id="chat-messages">
                                 @foreach($memo->replies as $message)
                                     <div class="message {{ $message->user_id === auth()->id() ? 'message-sent' : 'message-received' }}">
                                         <div class="message-avatar">
@@ -369,61 +339,6 @@
                                         </div>
                                     </div>
                                 @endforeach
-                                
-                                @if($memo->memo_status === 'suspended')
-                                    @php
-                                        // Find who suspended the memo from workflow history
-                                        $suspendedBy = null;
-                                        if ($memo->workflow_history) {
-                                            $suspensionEntry = collect($memo->workflow_history)
-                                                ->where('action', 'suspended')
-                                                ->sortByDesc('timestamp')
-                                                ->first();
-                                            if ($suspensionEntry) {
-                                                $suspendedBy = \App\Models\User::find($suspensionEntry['user_id']);
-                                            }
-                                        }
-                                        $canUnsuspend = $suspendedBy && $suspendedBy->id === auth()->id();
-                                    @endphp
-                                    
-                                    {{-- Suspended Message at Bottom --}}
-                                    <div class="message suspended-system-message">
-                                        <div class="message-avatar">
-                                            <i class="icofont-pause suspended-avatar-icon"></i>
-                                        </div>
-                                        <div class="message-content">
-                                            <div class="message-header">
-                                                <div class="message-header-left">
-                                                    <span class="message-sender">System</span>
-                                                </div>
-                                                <div class="message-header-right">
-                                                    <span class="message-time">{{ now()->format('M d, Y H:i') }}</span>
-                                                </div>
-                                            </div>
-                                            <div class="message-text">
-                                                <div class="suspended-notification">
-                                                    <h4>Chat Suspended</h4>
-                                                    <p>This memo has been <strong>suspended</strong> and the chat is temporarily locked.</p>
-                                                    @if($suspendedBy)
-                                                        <p class="suspended-subtitle">Suspended by {{ $suspendedBy->first_name }} {{ $suspendedBy->last_name }}</p>
-                                                    @endif
-                                                    <p class="suspended-subtitle">All messaging and actions are disabled until the memo is unsuspended.</p>
-                                                    @if($canUnsuspend)
-                                                        <div class="suspended-actions">
-                                                            <button class="btn btn-sm btn-outline-info" onclick="confirmUnsuspendMemo()">
-                                                                <i class="icofont-play"></i> Unsuspend Memo
-                                                            </button>
-                                                        </div>
-                                                    @else
-                                                        <div class="suspended-actions">
-                                                            <span class="text-muted">Only {{ $suspendedBy ? $suspendedBy->first_name . ' ' . $suspendedBy->last_name : 'the person who suspended it' }} can unsuspend this memo.</span>
-                                                        </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endif
                             </div>
                         </div>
 
@@ -432,11 +347,11 @@
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
-                        <button type="button" class="reply-mode-btn active" data-mode="all" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
+                        <button type="button" class="reply-mode-btn active" data-mode="all">
                             <i class="icofont-users"></i>
                             All
                         </button>
-                        <button type="button" class="reply-mode-btn" data-mode="specific" id="comment-to-btn" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
+                        <button type="button" class="reply-mode-btn" data-mode="specific" id="comment-to-btn">
                             <i class="icofont-user"></i>
                             Comment-to
                         </button>
@@ -480,7 +395,7 @@
                         </div>
                         
                         <div class="telegram-style-input">
-                                    <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
+                                    <button type="button" class="attachment-btn" onclick="document.getElementById('file-input').click()">
                                         <svg viewBox="0 0 24 24" class="attachment-icon">
                                             <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66L9.64 16.2a2 2 0 0 1-2.83-2.83l8.49-8.49"></path>
                                         </svg>
@@ -489,13 +404,12 @@
                                     <div class="input-field-wrapper">
                                         <textarea id="message-input" 
                                                   name="message" 
-                                                  placeholder="Minute on Memo..." 
+                                                  placeholder="Type your message..." 
                                                   rows="1" 
-                                                  @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif
                                                   required></textarea>
                                     </div>
                                     
-                                    <button type="submit" class="send-btn" @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif>
+                                    <button type="submit" class="send-btn">
                                         <svg viewBox="0 0 24 24" class="send-icon">
                                             <line x1="22" y1="2" x2="11" y2="13"></line>
                                             <polygon points="22,2 15,22 11,13 2,9"></polygon>
@@ -1143,59 +1057,6 @@
     height: 400px;
     overflow-y: auto;
     padding: 20px;
-    position: relative;
-}
-
-.suspended-system-message {
-    background: #fff3cd;
-    border: 1px solid #ffeaa7;
-    border-radius: 8px;
-    margin-top: 10px;
-}
-
-.suspended-system-message .message-avatar {
-    background: #ffc107;
-    color: white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.suspended-avatar-icon {
-    font-size: 20px;
-}
-
-.suspended-notification {
-    text-align: center;
-    padding: 10px 0;
-}
-
-.suspended-notification h4 {
-    color: #856404;
-    margin-bottom: 10px;
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.suspended-notification p {
-    color: #856404;
-    margin-bottom: 8px;
-    line-height: 1.4;
-    font-size: 14px;
-}
-
-.suspended-subtitle {
-    font-size: 12px;
-    color: #6c757d;
-}
-
-.suspended-actions {
-    margin-top: 15px;
-}
-
-.chat-disabled {
-    opacity: 0.6;
-    pointer-events: none;
 }
 
 .chat-messages {
@@ -2820,23 +2681,6 @@ function confirmCompleteMemo() {
             type: 'success',
             confirmText: 'Complete',
             subtitle: 'This will mark the memo as finished and prevent further messages.'
-        }
-    );
-}
-
-// Confirmation function for unsuspending memo
-function confirmUnsuspendMemo() {
-    confirmAction(
-        'Unsuspend this memo and re-enable all actions and messaging?',
-        function() {
-            updateMemoStatus('unsuspended');
-        },
-        null,
-        {
-            title: 'Unsuspend Memo',
-            type: 'info',
-            confirmText: 'Unsuspend',
-            subtitle: 'This will set status back to pending and enable actions.'
         }
     );
 }
