@@ -41,7 +41,7 @@
                                                 <line stroke="#fff" stroke-width="2" x1="16" y1="17" x2="8" y2="17"></line>
                                                 <polyline stroke="#fff" stroke-width="2" points="10,9 9,9 8,9"></polyline>
                                             </svg>
-                                            <div class="text">Export and Print</div>
+                                            <div class="text">Export & Print</div>
                                         </div>
                                     </button>
                             </div>
