@@ -251,6 +251,16 @@ class EmailCampaign extends Model
         $this->addToWorkflowHistory('suspended', $userId, null, $reason);
     }
 
+    public function markAsUnsuspended($userId)
+    {
+        $this->update([
+            'memo_status' => 'pending',
+            'suspended_at' => null,
+        ]);
+
+        $this->addToWorkflowHistory('unsuspended', $userId);
+    }
+
     public function markAsArchived($userId)
     {
         $this->update([

@@ -71,7 +71,13 @@
                                         </span>
                                     @endif
                                     <div class="btn-group">
-                                        @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
+                                        @if($memo->memo_status === 'suspended' && $canManageMemo)
+                                            {{-- When suspended, show only unsuspend button --}}
+                                            <button class="btn btn-sm btn-success" onclick="confirmUnsuspendMemo()">
+                                                <i class="icofont-play"></i> Unsuspend
+                                            </button>
+                                        @elseif(!in_array($memo->memo_status, ['completed', 'archived', 'suspended']) && $canManageMemo)
+                                            {{-- When not suspended, completed, or archived, show normal buttons --}}
                                             <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
                                                 <i class="icofont-check-circled"></i> Complete
                                             </button>
@@ -89,6 +95,10 @@
                                             @elseif($memo->memo_status === 'archived')
                                                 <span class="btn btn-sm btn-secondary disabled">
                                                     <i class="icofont-archive"></i> Archived
+                                                </span>
+                                            @elseif($memo->memo_status === 'suspended')
+                                                <span class="btn btn-sm btn-warning disabled">
+                                                    <i class="icofont-pause"></i> Suspended
                                                 </span>
                                             @elseif(!$canManageMemo)
                                                 <span class="btn btn-sm btn-outline-success disabled" title="Only assignee or active participants can manage memo">
@@ -343,7 +353,7 @@
                         </div>
 
                         {{-- Chat Input --}}
-                        @if($canParticipate && !in_array($memo->memo_status, ['completed', 'archived']) && !$isAssignedToSomeoneElse)
+                        @if($canParticipate && !in_array($memo->memo_status, ['completed', 'archived', 'suspended']) && !$isAssignedToSomeoneElse)
                         <div class="chat-input-container">
                     <!-- Reply Mode Selector -->
                     <div class="reply-mode-selector">
@@ -429,6 +439,8 @@
                                         <i class="icofont-check-circled"></i>
                                     @elseif($memo->memo_status === 'archived')
                                         <i class="icofont-archive"></i>
+                                    @elseif($memo->memo_status === 'suspended')
+                                        <i class="icofont-pause"></i>
                                     @else
                                         <i class="icofont-lock"></i>
                                     @endif
@@ -442,6 +454,10 @@
                                         <h4>Memo Archived</h4>
                                         <p>This memo has been <strong>archived</strong> and is now read-only.</p>
                                         <p class="blocked-subtitle">No further actions or messages can be added to this memo</p>
+                                    @elseif($memo->memo_status === 'suspended')
+                                        <h4>Memo Suspended</h4>
+                                        <p>This memo has been <strong>suspended</strong> and messaging is temporarily disabled.</p>
+                                        <p class="blocked-subtitle">Only the assignee or active participants can unsuspend this memo to resume conversation</p>
                                     @elseif($isAssignedToSomeoneElse)
                                         <h4>Memo Assigned</h4>
                                         <p>This memo has been assigned to <strong>{{ $memo->currentAssignee ? $memo->currentAssignee->first_name . ' ' . $memo->currentAssignee->last_name : 'another user' }}</strong>.</p>
@@ -2698,6 +2714,22 @@ function confirmArchiveMemo() {
             type: 'warning',
             confirmText: 'Archive',
             subtitle: 'This will move the memo to the archive and make it read-only.'
+        }
+    );
+}
+
+function confirmUnsuspendMemo() {
+    confirmAction(
+        'Are you sure you want to unsuspend this memo?',
+        function() {
+            updateMemoStatus('unsuspended');
+        },
+        null,
+        {
+            title: 'Unsuspend Memo',
+            type: 'success',
+            confirmText: 'Unsuspend',
+            subtitle: 'This will resume the memo conversation and allow participants to continue messaging.'
         }
     );
 }
