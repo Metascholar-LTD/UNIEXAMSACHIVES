@@ -489,7 +489,7 @@
                                     <div class="input-field-wrapper">
                                         <textarea id="message-input" 
                                                   name="message" 
-                                                  placeholder="Type your message..." 
+                                                  placeholder="Minute on Memo..." 
                                                   rows="1" 
                                                   @if(($memo->memo_status ?? 'pending') === 'suspended') disabled @endif
                                                   required></textarea>
