@@ -128,7 +128,7 @@
                         <p class="developed-text">
                             <i class="icofont-rocket-alt-2"></i>
                             Developed & Powered by 
-                            <a href="mailto:support@academicdigital.space" class="metascholar-brand">
+                            <a href="https://metascholar.academicdigital.space" target="_blank" class="metascholar-brand">
                                 Metascholar Consult LTD
                             </a>
                         </p>
