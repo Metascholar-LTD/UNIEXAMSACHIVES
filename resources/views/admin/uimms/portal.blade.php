@@ -773,6 +773,29 @@
                                         }
 
                                         function displayMemos(memos) {
+                                            // Update the counter based on current status and number of memos
+                                            if (currentStatus === 'pending') {
+                                                const pendingCounter = document.getElementById('count-pending');
+                                                if (pendingCounter) {
+                                                    pendingCounter.textContent = memos.length;
+                                                }
+                                            } else if (currentStatus === 'suspended') {
+                                                const suspendedCounter = document.getElementById('count-suspended');
+                                                if (suspendedCounter) {
+                                                    suspendedCounter.textContent = memos.length;
+                                                }
+                                            } else if (currentStatus === 'completed') {
+                                                const completedCounter = document.getElementById('count-completed');
+                                                if (completedCounter) {
+                                                    completedCounter.textContent = memos.length;
+                                                }
+                                            } else if (currentStatus === 'archived') {
+                                                const archivedCounter = document.getElementById('count-archived');
+                                                if (archivedCounter) {
+                                                    archivedCounter.textContent = memos.length;
+                                                }
+                                            }
+                                            
                                             if (memos.length === 0) {
                                                 document.getElementById('memos-container').innerHTML = `
                                                     <div class="text-center py-5">
