@@ -5,6 +5,7 @@ use App\Http\Controllers\Dashboard\AdvanceCommunicationController;
  
 use App\Http\Controllers\Dashboard\DepartmentController;
 use App\Http\Controllers\Dashboard\DetailsController;
+use App\Http\Controllers\Dashboard\PositionController;
 use App\Http\Controllers\Dashboard\ExamsController;
 use App\Http\Controllers\Dashboard\FilesController;
 use App\Http\Controllers\Dashboard\FoldersController;
@@ -185,6 +186,9 @@ Route::middleware(['auth'])->group(function () {
 
     #department
     Route::resource('departments', DepartmentController::class);
+
+    #positions
+    Route::resource('positions', PositionController::class);
 
     #Academic Year
     Route::post('/dashboard/academic-year/store', [AcademicController::class, 'store'])->name('dashboard.academic.store');
