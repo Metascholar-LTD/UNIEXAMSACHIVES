@@ -917,6 +917,7 @@
   display: flex;
   flex-direction: row;
   gap: 16px;
+  order: 1; /* Ensure it appears first */
 }
 
 /* Staff Category Section */
@@ -924,6 +925,7 @@
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid #e2e8f0;
+  order: 3; /* Ensure it appears after user-selector */
 }
 
 .section-title {
@@ -1046,6 +1048,7 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   margin-top: 16px;
+  order: 2; /* Ensure it appears after recipient-options but before staff-category-section */
 }
 
 .user-selector-header {
