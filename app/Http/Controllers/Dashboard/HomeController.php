@@ -1138,8 +1138,6 @@ class HomeController extends Controller
             ], 422);
         }
         
-        \Log::info('Memo assignment: Assigning to ' . $assignees->count() . ' user(s): ' . $assignees->pluck('email')->join(', '));
-        
         // Assign the memo to multiple users
         $memo->assignToMultiple($assigneeIds, $userId, $request->office);
 
@@ -1177,40 +1175,28 @@ class HomeController extends Controller
         }
 
         // Send email notifications
-        // Send success email to assigner with primary assignee (for email template compatibility)
         try {
+            // Send success email to assigner with primary assignee (for email template compatibility)
             Mail::to(Auth::user()->email)->send(new \App\Mail\MemoAssignmentSuccess(
                 $memo, 
                 Auth::user(), 
                 $assignees->first(), // Primary assignee for email template compatibility
                 $request->office
             ));
-        } catch (\Exception $e) {
-            // Log the error but don't fail the assignment
-            \Log::error('Failed to send memo assignment success email: ' . $e->getMessage());
-        }
 
-        // Send notification email to each assignee individually
-        // This ensures that if one email fails, others still get sent
-        $emailCount = 0;
-        foreach ($assignees as $assignee) {
-            try {
-                \Log::info('Sending memo assignment email to: ' . $assignee->email . ' (ID: ' . $assignee->id . ')');
+            // Send notification email to each assignee
+            foreach ($assignees as $assignee) {
                 Mail::to($assignee->email)->send(new \App\Mail\MemoAssignedNotification(
                     $memo, 
                     Auth::user(), 
                     $assignee, 
                     $request->office
                 ));
-                $emailCount++;
-                \Log::info('Successfully sent memo assignment email to: ' . $assignee->email);
-            } catch (\Exception $e) {
-                // Log the error for this specific assignee but continue with others
-                \Log::error('Failed to send memo assignment email to ' . $assignee->email . ': ' . $e->getMessage());
             }
+        } catch (\Exception $e) {
+            // Log the error but don't fail the assignment
+            \Log::error('Failed to send memo assignment emails: ' . $e->getMessage());
         }
-        
-        \Log::info('Memo assignment: Attempted to send ' . $assignees->count() . ' emails, successfully sent ' . $emailCount . ' emails');
 
         return response()->json([
             'success' => true,
