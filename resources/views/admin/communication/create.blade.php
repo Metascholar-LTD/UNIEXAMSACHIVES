@@ -248,73 +248,6 @@
                                                     </div>
                                                 </div>
 
-                                                <!-- User Selector Dropdown (shown when "Selected Users" is selected) -->
-                                                <div id="user-selector" class="user-selector" style="display: none;">
-                                                    <div class="user-selector-header">
-                                                        <div class="search-container">
-                                                            <div class="search-input-wrapper">
-                                                                <i class="icofont-search search-icon"></i>
-                                                                <input type="text" id="user-search" 
-                                                                       placeholder="Search by name or email..." 
-                                                                       class="search-input">
-                                                            </div>
-                                                        </div>
-                                                        <div class="user-stats">
-                                                            <div class="stats-info">
-                                                                <span class="selected-count">0</span> of <span class="total-count">{{ $users->count() }}</span> users selected
-                                                            </div>
-                                                            <div class="progress-bar-container">
-                                                                <div class="progress-bar" id="selection-progress"></div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="user-list-container">
-                                                        <div class="user-list" id="user-list">
-                                                            @foreach($users as $user)
-                                                                <div class="user-item" data-user-id="{{ $user->id }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
-                                                                    <div class="user-avatar">
-                                                                                                        @if($user->profile_picture)
-                                    <img src="{{ asset('profile_pictures/' . $user->profile_picture) }}" alt="{{ $user->first_name }}" class="avatar-img">
-                                @else
-                                    <div class="avatar-placeholder">
-                                        {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
-                                    </div>
-                                @endif
-                                                                    </div>
-                                                                    <div class="user-info">
-                                                                        <div class="user-name">{{ $user->first_name }} {{ $user->last_name }}</div>
-                                                                        <div class="user-email">{{ $user->email }}</div>
-                                                                        <div class="user-status">
-                                                                            <span class="status-indicator online"></span>
-                                                                            <small>Active User</small>
-                                                                        </div>
-                                                                    </div>
-                                                                    <div class="user-select-checkbox">
-                                                                        <input type="checkbox" name="selected_users[]" 
-                                                                               value="{{ $user->id }}" 
-                                                                               class="user-checkbox"
-                                                                               {{ in_array($user->id, old('selected_users', [])) ? 'checked' : '' }}>
-                                                                        <span class="checkmark"></span>
-                                                                    </div>
-                                                                </div>
-                                                            @endforeach
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="user-actions">
-                                                        <button type="button" class="btn btn-sm btn-outline-primary" id="select-all-btn">
-                                                            <i class="icofont-check-circled"></i> Select All
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="clear-all-btn">
-                                                            <i class="icofont-close-circled"></i> Clear All
-                                                        </button>
-                                                        <button type="button" class="btn btn-sm btn-outline-info" id="export-selected-btn">
-                                                            <i class="icofont-download"></i> Export
-                                                        </button>
-                                                    </div>
-                                                </div>
-
                                                 <!-- Staff Category Cards -->
                                                 <div class="staff-category-section">
                                                     <h6 class="section-title">Staff Categories</h6>
@@ -381,6 +314,72 @@
                                                     </div>
                                                 </div>
                                             </div>
+
+                                        <div id="user-selector" class="user-selector" style="display: none;">
+                                            <div class="user-selector-header">
+                                                <div class="search-container">
+                                                    <div class="search-input-wrapper">
+                                                        <i class="icofont-search search-icon"></i>
+                                                        <input type="text" id="user-search" 
+                                                               placeholder="Search by name or email..." 
+                                                               class="search-input">
+                                                    </div>
+                                                </div>
+                                                <div class="user-stats">
+                                                    <div class="stats-info">
+                                                        <span class="selected-count">0</span> of <span class="total-count">{{ $users->count() }}</span> users selected
+                                                    </div>
+                                                    <div class="progress-bar-container">
+                                                        <div class="progress-bar" id="selection-progress"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="user-list-container">
+                                                <div class="user-list" id="user-list">
+                                                    @foreach($users as $user)
+                                                        <div class="user-item" data-user-id="{{ $user->id }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
+                                                            <div class="user-avatar">
+                                                                                                @if($user->profile_picture)
+                                    <img src="{{ asset('profile_pictures/' . $user->profile_picture) }}" alt="{{ $user->first_name }}" class="avatar-img">
+                                @else
+                                    <div class="avatar-placeholder">
+                                        {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
+                                    </div>
+                                @endif
+                                                            </div>
+                                                            <div class="user-info">
+                                                                <div class="user-name">{{ $user->first_name }} {{ $user->last_name }}</div>
+                                                                <div class="user-email">{{ $user->email }}</div>
+                                                                <div class="user-status">
+                                                                    <span class="status-indicator online"></span>
+                                                                    <small>Active User</small>
+                                                                </div>
+                                                            </div>
+                                                            <div class="user-select-checkbox">
+                                                                <input type="checkbox" name="selected_users[]" 
+                                                                       value="{{ $user->id }}" 
+                                                                       class="user-checkbox"
+                                                                       {{ in_array($user->id, old('selected_users', [])) ? 'checked' : '' }}>
+                                                                <span class="checkmark"></span>
+                                                            </div>
+                                                        </div>
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="user-actions">
+                                                <button type="button" class="btn btn-sm btn-outline-primary" id="select-all-btn">
+                                                    <i class="icofont-check-circled"></i> Select All
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" id="clear-all-btn">
+                                                    <i class="icofont-close-circled"></i> Clear All
+                                                </button>
+                                                <button type="button" class="btn btn-sm btn-outline-info" id="export-selected-btn">
+                                                    <i class="icofont-download"></i> Export
+                                                </button>
+                                            </div>
+                                        </div>
 
                                         <div class="form-group">
                                             <label class="form-label">Sending Options</label>
@@ -917,7 +916,6 @@
   display: flex;
   flex-direction: row;
   gap: 16px;
-  order: 1; /* Ensure it appears first */
 }
 
 /* Staff Category Section */
@@ -925,7 +923,6 @@
   margin-top: 24px;
   padding-top: 24px;
   border-top: 1px solid #e2e8f0;
-  order: 3; /* Ensure it appears after user-selector */
 }
 
 .section-title {
@@ -1048,7 +1045,6 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   overflow: hidden;
   margin-top: 16px;
-  order: 2; /* Ensure it appears after recipient-options but before staff-category-section */
 }
 
 .user-selector-header {
