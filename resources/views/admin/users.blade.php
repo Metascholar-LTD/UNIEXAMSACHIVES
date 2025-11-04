@@ -560,7 +560,7 @@
                                                     {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
                                                 </div>
                                                 <div class="user-info">
-                                                    <h3 class="user-name">{{ $user->first_name }} {{ $user->last_name }}</h3>
+                                                    <h3 class="user-name">{{ $user->first_name }} {{ $user->last_name }}@if($user->position) | {{ $user->position->name }}@endif</h3>
                                                     <p class="user-email">{{ $user->email }}</p>
                                                 </div>
                                             </div>
@@ -625,7 +625,7 @@
                                             @foreach ($users as $index => $user)
                                             <tr data-status="{{ $user->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $user->first_name }} {{ $user->last_name }}</td>
+                                                <td>{{ $user->first_name }} {{ $user->last_name }}@if($user->position) | {{ $user->position->name }}@endif</td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>
                                                     @if($user->staff_category)

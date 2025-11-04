@@ -653,7 +653,7 @@ class HomeController extends Controller
 
     public function users(){
         return view('admin.users',[
-            'users' => User::all(),
+            'users' => User::with('position')->get(),
         ]);
     }
 
