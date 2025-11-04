@@ -1161,7 +1161,7 @@ class HomeController extends Controller
         
         $assignmentMessage = "<em>📋 Memo Assigned by " . Auth::user()->first_name . " " . Auth::user()->last_name . " to " . $assigneeNames . "</em>";
         if ($request->message) {
-            $assignmentMessage .= "\n\n" . $request->message;
+            $assignmentMessage .= "<hr style='margin: 10px 0; border: 0; border-top: 1px solid #ddd;'>" . nl2br(e($request->message));
         }
         
         MemoReply::create([
