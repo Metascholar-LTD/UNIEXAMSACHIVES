@@ -1141,10 +1141,23 @@ class HomeController extends Controller
         // Assign the memo to multiple users
         $memo->assignToMultiple($assigneeIds, $userId, $request->office);
 
-        // Build assignment message with all assignees
-        $assigneeNames = $assignees->map(function($assignee) {
+        // Build assignment message with all assignees - format based on count
+        $assigneeNamesList = $assignees->map(function($assignee) {
             return $assignee->first_name . ' ' . $assignee->last_name;
-        })->join(', ');
+        })->toArray();
+        
+        $assigneeNames = '';
+        $count = count($assigneeNamesList);
+        
+        if ($count === 1) {
+            $assigneeNames = $assigneeNamesList[0];
+        } elseif ($count === 2) {
+            $assigneeNames = $assigneeNamesList[0] . ' and ' . $assigneeNamesList[1];
+        } else {
+            // For 3 or more: "A, B, and C"
+            $lastName = array_pop($assigneeNamesList);
+            $assigneeNames = implode(', ', $assigneeNamesList) . ', and ' . $lastName;
+        }
         
         $assignmentMessage = "<em>📋 Memo Assigned by " . Auth::user()->first_name . " " . Auth::user()->last_name . " to " . $assigneeNames . "</em>";
         if ($request->message) {
