@@ -1122,18 +1122,31 @@ class HomeController extends Controller
         }
 
         $request->validate([
-            'assignee_id' => 'required|exists:users,id',
+            'assignee_ids' => 'required|array|min:1',
+            'assignee_ids.*' => 'required|exists:users,id',
             'office' => 'nullable|string|max:255',
             'message' => 'nullable|string|max:1000',
         ]);
 
-        $assignee = User::findOrFail($request->assignee_id);
+        $assigneeIds = $request->assignee_ids;
+        $assignees = User::whereIn('id', $assigneeIds)->get();
         
-        // Assign the memo
-        $memo->assignTo($request->assignee_id, $userId, $request->office);
+        if ($assignees->count() !== count($assigneeIds)) {
+            return response()->json([
+                'success' => false,
+                'message' => 'One or more selected users were not found.',
+            ], 422);
+        }
+        
+        // Assign the memo to multiple users
+        $memo->assignToMultiple($assigneeIds, $userId, $request->office);
 
-        // Send a system message about the assignment
-        $assignmentMessage = "<em>📋 Memo Assigned by " . Auth::user()->first_name . " " . Auth::user()->last_name . " to " . $assignee->first_name . " " . $assignee->last_name . "</em>";
+        // Build assignment message with all assignees
+        $assigneeNames = $assignees->map(function($assignee) {
+            return $assignee->first_name . ' ' . $assignee->last_name;
+        })->join(', ');
+        
+        $assignmentMessage = "<em>📋 Memo Assigned by " . Auth::user()->first_name . " " . Auth::user()->last_name . " to " . $assigneeNames . "</em>";
         if ($request->message) {
             $assignmentMessage .= "\n\n" . $request->message;
         }
@@ -1145,36 +1158,41 @@ class HomeController extends Controller
             'attachments' => [],
         ]);
 
-        // Create notification for new assignee
-        Notification::create([
-            'user_id' => $request->assignee_id,
-            'type' => 'memo_assigned',
-            'title' => 'Memo Assigned to You',
-            'message' => Auth::user()->first_name . ' assigned a memo to you: ' . $memo->subject,
-            'url' => route('dashboard.uimms.chat', $memo->id),
-            'data' => [
-                'memo_id' => $memo->id,
-                'assigned_by' => Auth::user()->first_name . ' ' . Auth::user()->last_name,
-            ]
-        ]);
+        // Create notifications for all new assignees
+        $assignerName = Auth::user()->first_name . ' ' . Auth::user()->last_name;
+        foreach ($assignees as $assignee) {
+            Notification::create([
+                'user_id' => $assignee->id,
+                'type' => 'memo_assigned',
+                'title' => 'Memo Assigned to You',
+                'message' => $assignerName . ' assigned a memo to you: ' . $memo->subject,
+                'url' => route('dashboard.uimms.chat', $memo->id),
+                'data' => [
+                    'memo_id' => $memo->id,
+                    'assigned_by' => $assignerName,
+                ]
+            ]);
+        }
 
         // Send email notifications
         try {
-            // Send success email to assigner
+            // Send success email to assigner with primary assignee (for email template compatibility)
             Mail::to(Auth::user()->email)->send(new \App\Mail\MemoAssignmentSuccess(
                 $memo, 
                 Auth::user(), 
-                $assignee, 
+                $assignees->first(), // Primary assignee for email template compatibility
                 $request->office
             ));
 
-            // Send notification email to assignee
-            Mail::to($assignee->email)->send(new \App\Mail\MemoAssignedNotification(
-                $memo, 
-                Auth::user(), 
-                $assignee, 
-                $request->office
-            ));
+            // Send notification email to each assignee
+            foreach ($assignees as $assignee) {
+                Mail::to($assignee->email)->send(new \App\Mail\MemoAssignedNotification(
+                    $memo, 
+                    Auth::user(), 
+                    $assignee, 
+                    $request->office
+                ));
+            }
         } catch (\Exception $e) {
             // Log the error but don't fail the assignment
             \Log::error('Failed to send memo assignment emails: ' . $e->getMessage());
@@ -1182,8 +1200,8 @@ class HomeController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Memo assigned successfully',
-            'assignee' => $assignee,
+            'message' => 'Memo assigned successfully to ' . $assignees->count() . ' user(s)',
+            'assignees' => $assignees,
         ]);
     }
 

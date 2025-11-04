@@ -217,6 +217,71 @@ class EmailCampaign extends Model
         return $recipient;
     }
 
+    public function assignToMultiple($userIds, $assignedBy, $office = null)
+    {
+        // Ensure userIds is an array
+        if (!is_array($userIds)) {
+            $userIds = [$userIds];
+        }
+
+        // Deactivate current active participants EXCEPT the assigner
+        $this->activeParticipants()->where('user_id', '!=', $assignedBy)->update(['is_active_participant' => false]);
+        
+        $assignedRecipients = [];
+        
+        // Add all new assignees as active participants
+        foreach ($userIds as $userId) {
+            $recipient = $this->recipients()->where('user_id', $userId)->first();
+            if (!$recipient) {
+                $recipient = $this->recipients()->create([
+                    'user_id' => $userId,
+                    'status' => 'sent',
+                    'is_active_participant' => true,
+                    'assigned_at' => now(),
+                    'last_activity_at' => now(),
+                ]);
+            } else {
+                $recipient->update([
+                    'is_active_participant' => true,
+                    'assigned_at' => now(),
+                    'last_activity_at' => now(),
+                ]);
+            }
+            $assignedRecipients[] = $recipient;
+        }
+
+        // Ensure the assigner (person who made the assignment) remains an active participant
+        $assignerRecipient = $this->recipients()->where('user_id', $assignedBy)->first();
+        if (!$assignerRecipient) {
+            $assignerRecipient = $this->recipients()->create([
+                'user_id' => $assignedBy,
+                'status' => 'sent',
+                'is_active_participant' => true,
+                'assigned_at' => now(),
+                'last_activity_at' => now(),
+            ]);
+        } else {
+            $assignerRecipient->update([
+                'is_active_participant' => true,
+                'last_activity_at' => now(),
+            ]);
+        }
+
+        // Update memo assignment - set first assignee as primary (for backward compatibility)
+        $firstAssigneeId = !empty($userIds) ? $userIds[0] : null;
+        $this->update([
+            'current_assignee_id' => $firstAssigneeId,
+            'assigned_to_office' => $office,
+            'memo_status' => 'pending',
+        ]);
+
+        // Add to workflow history with all assignees
+        $assigneesList = implode(', ', $userIds);
+        $this->addToWorkflowHistory('assigned_multiple', $assignedBy, $assigneesList, $office);
+
+        return $assignedRecipients;
+    }
+
     public function addToWorkflowHistory($action, $userId, $targetUserId = null, $details = null)
     {
         $history = $this->workflow_history ?? [];

@@ -501,13 +501,18 @@
                 @csrf
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label class="form-label">Assign to User</label>
-                        <select name="assignee_id" class="form-select" required>
-                            <option value="">Select a user...</option>
+                        <label class="form-label">Assign to User(s) <span class="text-muted">(Select one or more)</span></label>
+                        <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
                             @foreach($users as $user)
-                                <option value="{{ $user->id }}">{{ $user->first_name }} {{ $user->last_name }} ({{ $user->email }})</option>
+                                <div class="form-check mb-2">
+                                    <input class="form-check-input" type="checkbox" name="assignee_ids[]" value="{{ $user->id }}" id="assignee_{{ $user->id }}">
+                                    <label class="form-check-label" for="assignee_{{ $user->id }}">
+                                        {{ $user->first_name }} {{ $user->last_name }} <span class="text-muted">({{ $user->email }})</span>
+                                    </label>
+                                </div>
                             @endforeach
-                        </select>
+                        </div>
+                        <small class="text-muted">Select at least one user to assign the memo.</small>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Office/Department (Optional)</label>
@@ -2630,6 +2635,13 @@ function showAssignModal() {
 document.getElementById('assign-form').addEventListener('submit', function(e) {
     e.preventDefault();
     
+    // Validate that at least one user is selected
+    const checkedBoxes = this.querySelectorAll('input[name="assignee_ids[]"]:checked');
+    if (checkedBoxes.length === 0) {
+        alert('Please select at least one user to assign the memo.');
+        return;
+    }
+    
     const formData = new FormData(this);
     
     fetch(`/dashboard/uimms/chat/${memoId}/assign`, {
@@ -2644,6 +2656,8 @@ document.getElementById('assign-form').addEventListener('submit', function(e) {
         if (data.success) {
             bootstrap.Modal.getInstance(document.getElementById('assignModal')).hide();
             location.reload(); // Refresh to show new participant
+        } else {
+            alert(data.message || 'Error assigning memo. Please try again.');
         }
     })
     .catch(error => {
