@@ -515,7 +515,7 @@
                                 </div>
                             @endforeach
                         </div>
-                        <small class="text-muted">Select at least one user to assign the memo.</small>
+                        <!-- <small class="text-muted">Select at least one user to assign the memo.</small> -->
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Office/Department (Optional)</label>
