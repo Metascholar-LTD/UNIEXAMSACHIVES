@@ -502,9 +502,12 @@
                 <div class="modal-body">
                     <div class="mb-3">
                         <label class="form-label">Assign to User(s) <span class="text-muted">(Select one or more)</span></label>
-                        <div class="border rounded p-3" style="max-height: 300px; overflow-y: auto;">
+                        <div class="mb-2">
+                            <input type="text" id="user-search-input" class="form-control" placeholder="Search by name or email..." autocomplete="off">
+                        </div>
+                        <div class="border rounded p-3" id="user-list-container" style="max-height: 300px; overflow-y: auto;">
                             @foreach($users as $user)
-                                <div class="form-check mb-2">
+                                <div class="form-check mb-2 user-item" data-name="{{ strtolower($user->first_name . ' ' . $user->last_name) }}" data-email="{{ strtolower($user->email) }}">
                                     <input class="form-check-input" type="checkbox" name="assignee_ids[]" value="{{ $user->id }}" id="assignee_{{ $user->id }}">
                                     <label class="form-check-label" for="assignee_{{ $user->id }}">
                                         {{ $user->first_name }} {{ $user->last_name }} <span class="text-muted">({{ $user->email }})</span>
@@ -2629,8 +2632,72 @@ function scrollToBottom() {
 
 // Assignment functions
 function showAssignModal() {
-    new bootstrap.Modal(document.getElementById('assignModal')).show();
+    const modal = new bootstrap.Modal(document.getElementById('assignModal'));
+    modal.show();
+    
+    // Clear search when modal opens
+    const searchInput = document.getElementById('user-search-input');
+    if (searchInput) {
+        searchInput.value = '';
+        filterUserList('');
+    }
 }
+
+// User search filter functionality
+function filterUserList(searchTerm) {
+    const searchLower = searchTerm.toLowerCase().trim();
+    const userItems = document.querySelectorAll('.user-item');
+    let visibleCount = 0;
+    
+    userItems.forEach(function(item) {
+        const name = item.getAttribute('data-name') || '';
+        const email = item.getAttribute('data-email') || '';
+        
+        if (searchLower === '' || name.includes(searchLower) || email.includes(searchLower)) {
+            item.style.display = 'block';
+            visibleCount++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    
+    // Show message if no results found
+    const container = document.getElementById('user-list-container');
+    let noResultsMsg = container.querySelector('.no-results-message');
+    
+    if (visibleCount === 0 && searchLower !== '') {
+        if (!noResultsMsg) {
+            noResultsMsg = document.createElement('div');
+            noResultsMsg.className = 'no-results-message text-muted text-center p-3';
+            noResultsMsg.textContent = 'No users found matching your search.';
+            container.appendChild(noResultsMsg);
+        }
+        noResultsMsg.style.display = 'block';
+    } else {
+        if (noResultsMsg) {
+            noResultsMsg.style.display = 'none';
+        }
+    }
+}
+
+// Add search input event listener
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('user-search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', function(e) {
+            filterUserList(e.target.value);
+        });
+        
+        // Clear search when modal is hidden
+        const assignModal = document.getElementById('assignModal');
+        if (assignModal) {
+            assignModal.addEventListener('hidden.bs.modal', function() {
+                searchInput.value = '';
+                filterUserList('');
+            });
+        }
+    }
+});
 
 document.getElementById('assign-form').addEventListener('submit', function(e) {
     e.preventDefault();
