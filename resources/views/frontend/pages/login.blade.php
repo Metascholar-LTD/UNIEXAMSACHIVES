@@ -263,6 +263,17 @@
 
                         <div class="form-group">
                             <div class="input-container">
+                                <select name="position_id" id="register-position" class="animated-input">
+                                    <option value="" selected>Choose your Position (Optional)</option>
+                                    @foreach($positions as $position)
+                                        <option value="{{ $position->id }}">{{ $position->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
                                 <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a temporary password" required>
                                 <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
                                     <i class="icofont-eye"></i>

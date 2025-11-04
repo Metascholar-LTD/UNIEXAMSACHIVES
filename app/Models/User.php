@@ -27,6 +27,7 @@ class User extends Authenticatable
         'profile_picture',
         'department_id',
         'staff_category',
+        'position_id',
         'password_changed',
         'admin_access_requested',
         'admin_access_reason',
@@ -82,6 +83,14 @@ class User extends Authenticatable
     public function department()
     {
         return $this->belongsTo(Department::class);
+    }
+
+    /**
+     * Get the position that the user belongs to
+     */
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
     }
 
     /**

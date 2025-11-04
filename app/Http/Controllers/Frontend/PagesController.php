@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Department;
+use App\Models\Position;
 use App\Models\Exam;
 use App\Models\File;
 use Illuminate\Support\Facades\Hash;
@@ -68,7 +69,8 @@ class PagesController extends Controller
         }
         
         $departments = Department::orderBy('name')->get();
-        return view('frontend.pages.login', compact('departments'));
+        $positions = Position::orderBy('name')->get();
+        return view('frontend.pages.login', compact('departments', 'positions'));
     }
 
     public function adminLogin(){
@@ -155,6 +157,7 @@ class PagesController extends Controller
             'password' => 'required|string|min:8',
             'department_id' => 'nullable|exists:departments,id',
             'staff_category' => 'required|string|in:Junior Staff,Senior Staff,Senior Member (Non-Teaching),Senior Member (Teaching)',
+            'position_id' => 'nullable|exists:positions,id',
         ]);
 
         User::create([
@@ -167,6 +170,7 @@ class PagesController extends Controller
             'password' => Hash::make($validatedData['password']),
             'department_id' => $validatedData['department_id'],
             'staff_category' => $validatedData['staff_category'],
+            'position_id' => $validatedData['position_id'] ?? null,
         ]);
 
         // Send registration confirmation email to user (always attempt send)
