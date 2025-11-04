@@ -433,6 +433,40 @@
         border: 1px solid rgba(59, 130, 246, 0.3);
     }
 
+    /* Position Badge Styles */
+    .position-badge {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        background: rgba(196, 181, 253, 0.8);
+        color: #5b21b6;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        margin-top: 0.5rem;
+    }
+
+    .position-chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.3rem;
+        padding: 3px 8px;
+        border-radius: 10px;
+        font-size: 0.7rem;
+        font-weight: 600;
+        background: rgba(196, 181, 253, 0.8);
+        color: #5b21b6;
+        border: 1px solid rgba(139, 92, 246, 0.3);
+        white-space: nowrap;
+    }
+
+    .position-badge i,
+    .position-chip i {
+        font-size: 0.65rem;
+    }
+
     .no-category {
         color: #9ca3af;
         font-style: italic;
@@ -560,7 +594,7 @@
                                                     {{ strtoupper(substr($user->first_name, 0, 1) . substr($user->last_name, 0, 1)) }}
                                                 </div>
                                                 <div class="user-info">
-                                                    <h3 class="user-name">{{ $user->first_name }} {{ $user->last_name }}@if($user->position) | {{ $user->position->name }}@endif</h3>
+                                                    <h3 class="user-name">{{ $user->first_name }} {{ $user->last_name }}</h3>
                                                     <p class="user-email">{{ $user->email }}</p>
                                                 </div>
                                             </div>
@@ -574,6 +608,12 @@
                                                     <div class="staff-category-badge">
                                                         <i class="fas fa-user-tag"></i>
                                                         {{ $user->staff_category }}
+                                                    </div>
+                                                @endif
+                                                @if($user->position)
+                                                    <div class="position-badge">
+                                                        <i class="fas fa-briefcase"></i>
+                                                        {{ $user->position->name }}
                                                     </div>
                                                 @endif
                                             </div>
@@ -625,7 +665,17 @@
                                             @foreach ($users as $index => $user)
                                             <tr data-status="{{ $user->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
                                                 <td>{{ $index + 1 }}</td>
-                                                <td>{{ $user->first_name }} {{ $user->last_name }}@if($user->position) | {{ $user->position->name }}@endif</td>
+                                                <td>
+                                                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                                                        <span>{{ $user->first_name }} {{ $user->last_name }}</span>
+                                                        @if($user->position)
+                                                            <span class="position-chip">
+                                                                <i class="fas fa-briefcase"></i>
+                                                                {{ $user->position->name }}
+                                                            </span>
+                                                        @endif
+                                                    </div>
+                                                </td>
                                                 <td>{{ $user->email }}</td>
                                                 <td>
                                                     @if($user->staff_category)
