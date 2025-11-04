@@ -282,7 +282,16 @@
                                 @endif
                                                             </div>
                                                             <div class="user-info">
-                                                                <div class="user-name">{{ $user->first_name }} {{ $user->last_name }}</div>
+                                                                <div class="user-name">
+                                                                    <span>{{ $user->first_name }} {{ $user->last_name }}</span>
+                                                                    @if($user->position)
+                                                                        <span class="name-separator">|</span>
+                                                                        <span class="position-badge-small">
+                                                                            <i class="fas fa-briefcase"></i>
+                                                                            {{ $user->position->name }}
+                                                                        </span>
+                                                                    @endif
+                                                                </div>
                                                                 <div class="user-email">{{ $user->email }}</div>
                                                                 <div class="user-status">
                                                                     <span class="status-indicator online"></span>
@@ -1194,6 +1203,34 @@
     color: #495057;
     margin-bottom: 4px;
     font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+
+.name-separator {
+    color: #dee2e6;
+    font-weight: 300;
+    padding: 0 0.25rem;
+}
+
+.position-badge-small {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    background: rgba(196, 181, 253, 0.8);
+    color: #5b21b6;
+    border: 1px solid rgba(139, 92, 246, 0.3);
+    white-space: nowrap;
+}
+
+.position-badge-small i {
+    font-size: 0.65rem;
 }
 
 .user-email {

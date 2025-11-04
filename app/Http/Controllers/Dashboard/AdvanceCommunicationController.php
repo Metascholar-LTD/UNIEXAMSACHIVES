@@ -81,7 +81,8 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminAccess();
         
         $users = User::where('is_approve', true)
-                    ->select('id', 'first_name', 'last_name', 'email')
+                    ->with('position')
+                    ->select('id', 'first_name', 'last_name', 'email', 'position_id')
                     ->orderBy('first_name')
                     ->get();
 
@@ -707,7 +708,8 @@ class AdvanceCommunicationController extends Controller
         $this->checkAdminOnlyAccess();
         
         $users = User::where('is_approve', true)
-                    ->select('id', 'first_name', 'last_name', 'email')
+                    ->with('position')
+                    ->select('id', 'first_name', 'last_name', 'email', 'position_id')
                     ->orderBy('first_name')
                     ->get();
 
