@@ -81,10 +81,6 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 20px;
-            background: white;
-            padding: 20px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         @keyframes bounce {
