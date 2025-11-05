@@ -69,11 +69,26 @@
             font-size: 14px;
             color: #333;
             white-space: nowrap;
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .central-control-pill:hover {
+            background: #e9ecef;
+            border-color: #01b2ac;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(1, 178, 172, 0.15);
         }
 
         .central-control-pill i {
             color: #01b2ac;
             font-size: 18px;
+            transition: transform 0.6s ease;
+            display: inline-block;
+        }
+
+        .central-control-pill:hover i {
+            transform: rotate(360deg);
         }
 
         .nav-brand {
