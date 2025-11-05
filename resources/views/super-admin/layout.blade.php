@@ -52,15 +52,15 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 22px;
-            font-weight: 700;
-            color: #333;
             text-decoration: none;
+            height: 100%;
         }
 
-        .nav-brand i {
-            font-size: 28px;
-            color: #01b2ac;
+        .nav-brand img {
+            height: 40px;
+            max-width: 200px;
+            object-fit: contain;
+            display: block;
         }
 
         .nav-user {
@@ -245,8 +245,7 @@
     <nav class="top-nav">
         <div class="container-fluid">
             <a href="{{ route('super-admin.dashboard') }}" class="nav-brand">
-                <i class="icofont-shield"></i>
-                <span>Super Admin</span>
+                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1759601411/a49b4ad9-f1b7-4474-b96a-9b2b7bb3784d_afqtge.png" alt="Metascholar Consult">
             </a>
 
             <div class="nav-user">
