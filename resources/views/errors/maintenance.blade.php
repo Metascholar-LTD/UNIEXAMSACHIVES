@@ -69,18 +69,20 @@
 
         /* Bouncing image */
         .maintenance-image {
-            width: 300px;
-            height: 300px;
             margin: 0 auto 40px;
             animation: bounce 3s ease-in-out infinite;
-            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
-            position: relative;
+            display: inline-block;
+            background: none;
+            border: none;
+            padding: 0;
         }
 
         .maintenance-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            width: 300px;
+            height: auto;
+            max-width: 100%;
+            display: block;
+            filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
         }
 
         @keyframes bounce {
