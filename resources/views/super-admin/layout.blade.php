@@ -249,12 +249,6 @@
             </a>
 
             <div class="nav-user">
-                <div class="user-info">
-                    <div class="user-avatar">
-                        {{ strtoupper(substr(auth()->user()->first_name, 0, 1)) }}
-                    </div>
-                    <span>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</span>
-                </div>
                 <a href="{{ route('logout') }}" class="btn-logout">
                     <i class="icofont-logout"></i> Logout
                 </a>
