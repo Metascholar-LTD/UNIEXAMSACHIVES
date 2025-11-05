@@ -1,5 +1,9 @@
 @php
-    $subscription = \App\Models\SystemSubscription::active()->first();
+    // Don't show subscription widget for super admins
+    if (auth()->check() && auth()->user()->isSuperAdmin()) {
+        $subscription = null;
+    } else {
+        $subscription = \App\Models\SystemSubscription::active()->first();
     if (!$subscription) {
         $subscription = \App\Models\SystemSubscription::where('status', 'expired')
             ->where(function($q) {
@@ -7,8 +11,9 @@
             })
             ->first();
     }
-    if (!$subscription) {
-        $subscription = \App\Models\SystemSubscription::latest()->first();
+        if (!$subscription) {
+            $subscription = \App\Models\SystemSubscription::latest()->first();
+        }
     }
 @endphp
 

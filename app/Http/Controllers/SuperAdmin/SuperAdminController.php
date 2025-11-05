@@ -15,6 +15,36 @@ use Carbon\Carbon;
 class SuperAdminController extends Controller
 {
     /**
+     * Handle super admin login
+     */
+    public function login(Request $request)
+    {
+        $request->validate([
+            'email' => 'required|email',
+            'password' => 'required',
+        ]);
+
+        $credentials = $request->only('email', 'password');
+        
+        if (\Auth::attempt($credentials)) {
+            $user = \Auth::user();
+            
+            // Check if user is super admin
+            if (!$user->isSuperAdmin()) {
+                \Auth::logout();
+                return back()->with('error', 'Access denied. Super Admin privileges required.');
+            }
+            
+            $request->session()->regenerate();
+            
+            return redirect()->route('super-admin.dashboard')
+                ->with('success', 'Welcome back, ' . $user->first_name . '!');
+        }
+
+        return back()->with('error', 'Invalid email or password.');
+    }
+
+    /**
      * Display Super Admin Dashboard
      */
     public function dashboard()

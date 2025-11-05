@@ -232,6 +232,18 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ===== SUPER ADMIN ROUTES =====
+
+// Super Admin Login (separate from main login)
+Route::get('/super-admin/login', function() {
+    if (auth()->check() && auth()->user()->isSuperAdmin()) {
+        return redirect()->route('super-admin.dashboard');
+    }
+    return view('super-admin.login');
+})->name('super-admin.login');
+
+Route::post('/super-admin/login', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'login'])->name('super-admin.login.post');
+
+// Protected Super Admin Routes
 Route::prefix('super-admin')->name('super-admin.')->middleware(['auth', 'super_admin'])->group(function () {
     
     // Dashboard

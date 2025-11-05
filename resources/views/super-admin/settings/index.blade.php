@@ -1,27 +1,15 @@
-@extends('layout.app')
+@extends('super-admin.layout')
+
+@section('title', 'System Settings')
 
 @section('content')
-@include('frontend.header')
-@include('frontend.theme_shadow')
-
-<div class="dashboardarea sp_bottom_100">
-    <div class="container-fluid full__width__padding">
-        <div class="row">
-            @include('components.create_section')
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-1"><i class="icofont-settings-alt"></i> System Settings</h2>
+            <p class="text-muted">Configure system-wide settings and preferences</p>
         </div>
     </div>
-    
-    <div class="dashboard">
-        <div class="container-fluid full__width__padding">
-            <div class="row">
-                @include('components.sidebar')
-                
-                <div class="col-xl-9 col-lg-9 col-md-12">
-                    <div class="dashboard__content__wraper">
-                        <div class="dashboard__section__title">
-                            <h4><i class="icofont-settings-alt"></i> System Settings</h4>
-                            <p class="text-muted">Configure system-wide settings and preferences</p>
-                        </div>
 
                         {{-- Action Buttons --}}
                         <div class="row mb-4">
@@ -147,22 +135,7 @@
                             </div>
                         </div>
 
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
-
-<style>
-.card {
-    border: none;
-    border-radius: 10px;
-}
-.btn-block {
-    width: 100%;
-}
-</style>
 
 @endsection
 

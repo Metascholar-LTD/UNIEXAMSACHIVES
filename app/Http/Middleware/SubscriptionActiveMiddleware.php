@@ -19,7 +19,7 @@ class SubscriptionActiveMiddleware
         'register',
         'logout',
         'password.*',
-        'super-admin.*', // Super admin routes are always accessible
+        'super-admin.*', // Super admin routes (separate system)
         'dashboard.profile',
         'dashboard.settings',
     ];
