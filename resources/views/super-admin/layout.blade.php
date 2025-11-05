@@ -22,22 +22,23 @@
 
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #f5f7fa;
+            background: #f8f9fa;
             color: #333;
         }
 
         /* Top Navigation */
         .top-nav {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: #fff;
+            color: #333;
             padding: 0;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             z-index: 1000;
             height: 70px;
+            border-bottom: 3px solid #01b2ac;
         }
 
         .top-nav .container-fluid {
@@ -50,15 +51,16 @@
         .nav-brand {
             display: flex;
             align-items: center;
-            gap: 15px;
-            font-size: 24px;
+            gap: 12px;
+            font-size: 22px;
             font-weight: 700;
-            color: white;
+            color: #333;
             text-decoration: none;
         }
 
         .nav-brand i {
-            font-size: 32px;
+            font-size: 28px;
+            color: #01b2ac;
         }
 
         .nav-user {
@@ -71,26 +73,28 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            background: rgba(255,255,255,0.1);
+            background: #f8f9fa;
             padding: 8px 20px;
             border-radius: 50px;
+            border: 1px solid #e0e0e0;
         }
 
         .user-avatar {
             width: 40px;
             height: 40px;
             border-radius: 50%;
-            background: white;
-            color: #667eea;
+            background: #01b2ac;
+            color: white;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: 700;
+            font-size: 16px;
         }
 
         .btn-logout {
-            background: rgba(255,255,255,0.2);
-            border: 1px solid rgba(255,255,255,0.3);
+            background: #dc3545;
+            border: none;
             color: white;
             padding: 8px 20px;
             border-radius: 50px;
@@ -99,8 +103,9 @@
         }
 
         .btn-logout:hover {
-            background: rgba(255,255,255,0.3);
+            background: #c82333;
             color: white;
+            transform: translateY(-2px);
         }
 
         /* Sidebar */
@@ -143,12 +148,12 @@
         }
 
         .sidebar-menu a:hover {
-            background: #f5f7fa;
-            color: #667eea;
+            background: #f8f9fa;
+            color: #01b2ac;
         }
 
         .sidebar-menu a.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #01b2ac;
             color: white;
             border-radius: 0 25px 25px 0;
             margin-right: 10px;
@@ -240,7 +245,7 @@
     <nav class="top-nav">
         <div class="container-fluid">
             <a href="{{ route('super-admin.dashboard') }}" class="nav-brand">
-                <i class="fas fa-shield-alt"></i>
+                <i class="icofont-shield"></i>
                 <span>Super Admin</span>
             </a>
 
@@ -252,7 +257,7 @@
                     <span>{{ auth()->user()->first_name }} {{ auth()->user()->last_name }}</span>
                 </div>
                 <a href="{{ route('logout') }}" class="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Logout
+                    <i class="icofont-logout"></i> Logout
                 </a>
             </div>
         </div>
@@ -339,4 +344,3 @@
     @stack('scripts')
 </body>
 </html>
-

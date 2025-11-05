@@ -1,316 +1,315 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Super Admin Login - Metascholar Consult</title>
+@extends('layout.app')
+
+@push('styles')
+<style>
+    /* Super Admin specific customization */
+    .super-admin-icon {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+        border-radius: 50%;
+        border: 2px solid rgba(255, 255, 255, 0.8);
+        background: rgba(255, 255, 255, 0.1);
+        filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+        transition: transform 0.3s ease;
+    }
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    .super-admin-icon:hover {
+        transform: scale(1.1);
+        border-color: rgba(255, 255, 255, 1);
+        background: rgba(255, 255, 255, 0.2);
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+    /* Back to main login link */
+    .back-to-main-notice {
+        background: rgba(59, 130, 246, 0.1);
+        border: 1px solid rgba(59, 130, 246, 0.3);
+        border-radius: 12px;
+        padding: 12px 16px;
+        margin-top: 16px;
+        text-align: center;
+    }
 
-        .login-container {
-            width: 100%;
-            max-width: 450px;
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            animation: slideUp 0.5s ease-out;
-        }
+    .back-to-main-notice p {
+        margin: 0;
+        font-size: 0.9rem;
+        color: #1e40af;
+        font-weight: 500;
+    }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
+    .back-to-main-link {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 600;
+        border-bottom: 1px solid #3b82f6;
+        transition: all 0.3s ease;
+    }
 
-        .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            padding: 40px 30px;
-            text-align: center;
-            color: white;
-        }
+    .back-to-main-link:hover {
+        color: #2563eb;
+        border-bottom-color: #2563eb;
+    }
+</style>
+@endpush
 
-        .login-header i {
-            font-size: 60px;
-            margin-bottom: 15px;
-            opacity: 0.95;
-        }
+@section('content')
+@include('frontend.auth_header')
+@include('frontend.theme_shadow')
+@include('components.modern-notifications')
 
-        .login-header h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 8px;
-        }
-
-        .login-header p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin: 0;
-        }
-
-        .login-body {
-            padding: 40px 30px;
-        }
-
-        .form-group {
-            margin-bottom: 25px;
-        }
-
-        .form-label {
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .form-control {
-            height: 50px;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            padding: 0 20px;
-            font-size: 15px;
-            transition: all 0.3s ease;
-        }
-
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.15);
-        }
-
-        .input-group-text {
-            background: white;
-            border: 2px solid #e0e0e0;
-            border-right: none;
-            border-radius: 10px 0 0 10px;
-            padding: 0 15px;
-            color: #667eea;
-        }
-
-        .input-group .form-control {
-            border-left: none;
-            border-radius: 0 10px 10px 0;
-        }
-
-        .input-group:focus-within .input-group-text {
-            border-color: #667eea;
-        }
-
-        .input-group:focus-within .form-control {
-            border-color: #667eea;
-        }
-
-        .btn-login {
-            width: 100%;
-            height: 50px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            border: none;
-            border-radius: 10px;
-            color: white;
-            font-size: 16px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-        }
-
-        .btn-login:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
-        }
-
-        .btn-login:active {
-            transform: translateY(0);
-        }
-
-        .alert {
-            border-radius: 10px;
-            border: none;
-            padding: 12px 15px;
-            margin-bottom: 20px;
-        }
-
-        .alert-danger {
-            background: #fee;
-            color: #c33;
-        }
-
-        .alert-success {
-            background: #efe;
-            color: #3c3;
-        }
-
-        .back-link {
-            text-align: center;
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .back-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-
-        .back-link a:hover {
-            color: #764ba2;
-        }
-
-        .password-toggle {
-            position: absolute;
-            right: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            color: #999;
-            z-index: 10;
-        }
-
-        .password-toggle:hover {
-            color: #667eea;
-        }
-
-        .form-group.password-field {
-            position: relative;
-        }
-
-        @media (max-width: 576px) {
-            .login-header {
-                padding: 30px 20px;
-            }
-
-            .login-header h2 {
-                font-size: 24px;
-            }
-
-            .login-body {
-                padding: 30px 20px;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <i class="fas fa-shield-alt"></i>
-            <h2>Super Admin</h2>
-            <p>Metascholar Consult Ltd</p>
+<div class="modern-auth-container">
+    <!-- Left Side - Animated Background -->
+    <div class="auth-left-side">
+        <div class="ripple-background">
+            <div class="ripple-circle ripple-1"></div>
+            <div class="ripple-circle ripple-2"></div>
+            <div class="ripple-circle ripple-3"></div>
+            <div class="ripple-circle ripple-4"></div>
         </div>
-
-        <div class="login-body">
-            @if(session('error'))
-            <div class="alert alert-danger">
-                <i class="fas fa-exclamation-circle"></i> {{ session('error') }}
-            </div>
-            @endif
-
-            @if(session('success'))
-            <div class="alert alert-success">
-                <i class="fas fa-check-circle"></i> {{ session('success') }}
-            </div>
-            @endif
-
-            <form method="POST" action="{{ route('super-admin.login.post') }}">
-                @csrf
-
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-envelope"></i>
-                        </span>
-                        <input type="email" 
-                               class="form-control @error('email') is-invalid @enderror" 
-                               name="email" 
-                               placeholder="Enter your email"
-                               value="{{ old('email') }}"
-                               required 
-                               autofocus>
+        
+        <div class="tech-orbit-display">
+            <h1 class="orbit-title">Super Admin Portal</h1>
+            <h2 class="orbit-subtitle" id="typewriter-subtitle"></h2>
+            <div class="orbit-container">
+                <div class="orbit-path"></div>
+                <div class="orbit-icon orbit-icon-1">
+                    <div class="super-admin-icon">
+                        <i class="icofont-shield"></i>
                     </div>
-                    @error('email')
-                    <small class="text-danger">{{ $message }}</small>
-                    @enderror
                 </div>
-
-                <div class="form-group password-field">
-                    <label class="form-label">Password</label>
-                    <div class="input-group">
-                        <span class="input-group-text">
-                            <i class="fas fa-lock"></i>
-                        </span>
-                        <input type="password" 
-                               class="form-control @error('password') is-invalid @enderror" 
-                               name="password" 
-                               id="password"
-                               placeholder="Enter your password"
-                               required>
-                        <span class="password-toggle" onclick="togglePassword()">
-                            <i class="fas fa-eye" id="toggleIcon"></i>
-                        </span>
-                    </div>
-                    @error('password')
-                    <small class="text-danger">{{ $message }}</small>
-                    @enderror
+                <div class="orbit-icon orbit-icon-2">
+                    <i class="icofont-settings"></i>
                 </div>
-
-                <button type="submit" class="btn-login">
-                    <i class="fas fa-sign-in-alt"></i> Login
-                </button>
-            </form>
-
-            <div class="back-link">
-                <a href="{{ route('frontend.login') }}">
-                    <i class="fas fa-arrow-left"></i> Back to Main Login
-                </a>
+                <div class="orbit-icon orbit-icon-3">
+                    <i class="icofont-chart-bar-graph"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-4">
+                    <i class="icofont-database"></i>
+                </div>
+                <div class="orbit-icon orbit-icon-5">
+                    <i class="icofont-lock"></i>
+                </div>
             </div>
         </div>
     </div>
 
-    <script>
-        function togglePassword() {
-            const passwordField = document.getElementById('password');
-            const toggleIcon = document.getElementById('toggleIcon');
-            
-            if (passwordField.type === 'password') {
-                passwordField.type = 'text';
-                toggleIcon.classList.remove('fa-eye');
-                toggleIcon.classList.add('fa-eye-slash');
-            } else {
-                passwordField.type = 'password';
-                toggleIcon.classList.remove('fa-eye-slash');
-                toggleIcon.classList.add('fa-eye');
-            }
-        }
-    </script>
-</body>
-</html>
+    <!-- Right Side - Auth Form -->
+    <div class="auth-right-side">
+        <div class="auth-tabs">
+            <!-- Single Tab for Super Admin Login -->
+            <div class="tab-buttons">
+                <button class="tab-btn active" data-tab="login">
+                    <span class="tab-text">Super Admin Sign In</span>
+                    <div class="tab-indicator"></div>
+                </button>
+            </div>
 
+            <!-- Login Form -->
+            <div class="auth-form-panel active" id="login-panel">
+                <div class="form-container">
+                    <div class="form-header">
+                        <h2 class="form-title">Super Admin Access</h2>
+                        <p class="form-subtitle">Metascholar Consult Ltd - System Management</p>
+                    </div>
+
+                    @if(session('error'))
+                        <div class="alert alert-danger">
+                            {{ session('error') }}
+                        </div>
+                    @endif
+
+                    @if(session('success'))
+                        <div class="alert alert-success">
+                            {{ session('success') }}
+                        </div>
+                    @endif
+
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <form action="{{ route('super-admin.login.post') }}" method="POST" class="animated-form">
+                        @csrf
+                        
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="email" 
+                                       name="email" 
+                                       id="login-email" 
+                                       class="animated-input" 
+                                       placeholder="Enter super admin email" 
+                                       value="{{ old('email') }}"
+                                       required 
+                                       autofocus>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-container">
+                                <input type="password" 
+                                       name="password" 
+                                       id="login-password" 
+                                       class="animated-input" 
+                                       placeholder="Enter super admin password" 
+                                       required>
+                                <button type="button" class="password-toggle" onclick="togglePassword('login-password')">
+                                    <i class="icofont-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="form-options">
+                            <label class="checkbox-container">
+                                <input type="checkbox" name="remember">
+                                <span class="checkmark"></span>
+                                Remember me
+                            </label>
+                        </div>
+
+                        <button type="submit" class="submit-btn">
+                            <span>Access Super Admin Panel</span>
+                            <div class="btn-ripple"></div>
+                        </button>
+                    </form>
+
+                    <!-- Back to Main Login Notice -->
+                    <div class="back-to-main-notice">
+                        <p><i class="icofont-info-circle"></i> Regular users should use the <a href="{{ route('frontend.login') }}" class="back-to-main-link">Main Login Portal</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@push('scripts')
+<script>
+// Initialize auth components when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    initializeAuthForm();
+    setTimeout(typewriterEffect, 1000);
+});
+
+// Initialize form functionality
+function initializeAuthForm() {
+    // Input focus effects
+    const inputs = document.querySelectorAll('.animated-input');
+    inputs.forEach(input => {
+        if (input && input.parentElement) {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            
+            input.addEventListener('blur', function() {
+                this.parentElement.classList.remove('focused');
+            });
+        }
+    });
+
+    // Form submission animations
+    const form = document.querySelector('.animated-form');
+    if (form) {
+        form.addEventListener('submit', function(e) {
+            const submitBtn = this.querySelector('.submit-btn');
+            if (submitBtn) {
+                submitBtn.classList.add('loading');
+                
+                setTimeout(() => {
+                    submitBtn.classList.remove('loading');
+                }, 2000);
+            }
+        });
+    }
+}
+
+// Password toggle functionality
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    const toggle = input.parentElement?.querySelector('.password-toggle i');
+    
+    if (input && toggle) {
+        if (input.type === 'password') {
+            input.type = 'text';
+            toggle.className = 'icofont-eye-blocked';
+        } else {
+            input.type = 'password';
+            toggle.className = 'icofont-eye';
+        }
+    }
+}
+
+// Add ripple effect to buttons
+document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('submit-btn') || e.target.closest('.submit-btn')) {
+        const btn = e.target.classList.contains('submit-btn') ? e.target : e.target.closest('.submit-btn');
+        const ripple = btn.querySelector('.btn-ripple');
+        if (ripple) {
+            ripple.style.left = (e.offsetX - ripple.offsetWidth / 2) + 'px';
+            ripple.style.top = (e.offsetY - ripple.offsetHeight / 2) + 'px';
+            ripple.classList.add('active');
+            
+            setTimeout(() => {
+                ripple.classList.remove('active');
+            }, 600);
+        }
+    }
+});
+
+// Typewriter Effect for Subtitle
+function typewriterEffect() {
+    const subtitle = document.getElementById('typewriter-subtitle');
+    if (!subtitle) return;
+    
+    const texts = [
+        'System Management & Control',
+        'Subscription Administration',
+        'Payment Processing',
+        'Security & Maintenance'
+    ];
+    let currentIndex = 0;
+    let isTyping = true;
+    let charIndex = 0;
+    
+    function type() {
+        const currentText = texts[currentIndex];
+        if (isTyping && charIndex < currentText.length) {
+            subtitle.textContent = currentText.slice(0, charIndex + 1);
+            charIndex++;
+            setTimeout(type, 100);
+        } else if (isTyping && charIndex >= currentText.length) {
+            setTimeout(() => {
+                isTyping = false;
+                erase();
+            }, 2000);
+        }
+    }
+    
+    function erase() {
+        const currentText = texts[currentIndex];
+        if (!isTyping && charIndex > 0) {
+            subtitle.textContent = currentText.slice(0, charIndex - 1);
+            charIndex--;
+            setTimeout(erase, 50);
+        } else if (!isTyping && charIndex <= 0) {
+            currentIndex = (currentIndex + 1) % texts.length;
+            isTyping = true;
+            charIndex = 0;
+            setTimeout(type, 500);
+        }
+    }
+    
+    type();
+}
+</script>
+@endpush
