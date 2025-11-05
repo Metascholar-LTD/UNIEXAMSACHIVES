@@ -230,3 +230,59 @@ Route::middleware(['auth'])->group(function () {
     #logout
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');
 });
+
+// ===== SUPER ADMIN ROUTES =====
+Route::prefix('super-admin')->name('super-admin.')->middleware(['auth', 'super_admin'])->group(function () {
+    
+    // Dashboard
+    Route::get('/', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'dashboard'])->name('dashboard');
+    Route::get('/analytics', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'analytics'])->name('analytics');
+    
+    // User Role Management
+    Route::get('/roles', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'manageRoles'])->name('roles.index');
+    Route::post('/users/{id}/grant-super-admin', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'grantSuperAdmin'])->name('users.grant-super-admin');
+    Route::post('/users/{id}/revoke-super-admin', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'revokeSuperAdmin'])->name('users.revoke-super-admin');
+    
+    // Subscription Management
+    Route::resource('subscriptions', \App\Http\Controllers\SuperAdmin\SubscriptionController::class);
+    Route::post('/subscriptions/{id}/renew', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'renew'])->name('subscriptions.renew');
+    Route::post('/subscriptions/{id}/suspend', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'suspend'])->name('subscriptions.suspend');
+    Route::post('/subscriptions/{id}/reactivate', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'reactivate'])->name('subscriptions.reactivate');
+    Route::get('/subscriptions-export', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'export'])->name('subscriptions.export');
+    Route::post('/subscriptions/bulk-update-statuses', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'bulkUpdateStatuses'])->name('subscriptions.bulk-update-statuses');
+    
+    // Payment Management
+    Route::get('/payments', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'index'])->name('payments.index');
+    Route::get('/payments/{id}', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'show'])->name('payments.show');
+    Route::get('/payments/callback', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'callback'])->name('payments.callback');
+    Route::post('/payments/{id}/retry', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'retry'])->name('payments.retry');
+    Route::post('/payments/{id}/refund', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'refund'])->name('payments.refund');
+    Route::get('/payments/{id}/receipt', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'viewReceipt'])->name('payments.receipt');
+    Route::get('/payments/{id}/receipt/download', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'downloadReceipt'])->name('payments.receipt.download');
+    Route::get('/payments-export', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'export'])->name('payments.export');
+    Route::get('/payments-report', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'report'])->name('payments.report');
+    
+    // Maintenance Management
+    Route::resource('maintenance', \App\Http\Controllers\SuperAdmin\MaintenanceController::class);
+    Route::post('/maintenance/{id}/start', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'start'])->name('maintenance.start');
+    Route::post('/maintenance/{id}/complete', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'complete'])->name('maintenance.complete');
+    Route::post('/maintenance/{id}/cancel', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'cancel'])->name('maintenance.cancel');
+    Route::post('/maintenance/{id}/rollback', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'rollback'])->name('maintenance.rollback');
+    Route::post('/maintenance/{id}/approve', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'approve'])->name('maintenance.approve');
+    Route::post('/maintenance/{id}/notify', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'notifyUsers'])->name('maintenance.notify');
+    
+    // System Settings
+    Route::get('/settings', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'index'])->name('settings.index');
+    Route::post('/settings', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'update'])->name('settings.update');
+    Route::post('/settings/test-paystack', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'testPaystack'])->name('settings.test-paystack');
+    Route::post('/settings/toggle-maintenance', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'toggleMaintenanceMode'])->name('settings.toggle-maintenance');
+    Route::post('/settings/clear-cache', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'clearCache'])->name('settings.clear-cache');
+    Route::post('/settings/optimize', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'optimize'])->name('settings.optimize');
+    Route::get('/settings/export', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'export'])->name('settings.export');
+    Route::post('/settings/import', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'import'])->name('settings.import');
+    Route::post('/settings/reset', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'reset'])->name('settings.reset');
+});
+
+// Webhook endpoints (no auth required)
+Route::post('/webhooks/paystack', [\App\Http\Controllers\SuperAdmin\WebhookController::class, 'paystack'])->name('webhooks.paystack');
+Route::post('/webhooks/test', [\App\Http\Controllers\SuperAdmin\WebhookController::class, 'test'])->name('webhooks.test');

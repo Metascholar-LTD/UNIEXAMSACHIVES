@@ -24,6 +24,9 @@ class User extends Authenticatable
         'last_name',
         'is_admin',
         'is_approve',
+        'role',
+        'super_admin_access_granted_at',
+        'super_admin_granted_by',
         'profile_picture',
         'department_id',
         'staff_category',
@@ -56,6 +59,8 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'super_admin_access_granted_at' => 'datetime',
+            'admin_access_requested_at' => 'datetime',
         ];
     }
 
@@ -107,5 +112,188 @@ class User extends Authenticatable
     public function isUsingTemporaryPassword()
     {
         return $this->is_approve && !$this->password_changed;
+    }
+
+    // ===== Super Admin System Relationships =====
+    
+    /**
+     * User who granted super admin access to this user
+     */
+    public function superAdminGrantor()
+    {
+        return $this->belongsTo(User::class, 'super_admin_granted_by');
+    }
+
+    /**
+     * System subscriptions created by this user
+     */
+    public function createdSubscriptions()
+    {
+        return $this->hasMany(SystemSubscription::class, 'created_by');
+    }
+
+    /**
+     * System subscriptions updated by this user
+     */
+    public function updatedSubscriptions()
+    {
+        return $this->hasMany(SystemSubscription::class, 'updated_by');
+    }
+
+    /**
+     * Payment transactions initiated by this user
+     */
+    public function paymentTransactions()
+    {
+        return $this->hasMany(PaymentTransaction::class, 'user_id');
+    }
+
+    /**
+     * Payment transactions processed by this user
+     */
+    public function processedTransactions()
+    {
+        return $this->hasMany(PaymentTransaction::class, 'processed_by');
+    }
+
+    /**
+     * Maintenance logs performed by this user
+     */
+    public function maintenanceLogs()
+    {
+        return $this->hasMany(SystemMaintenanceLog::class, 'performed_by');
+    }
+
+    /**
+     * System notifications created by this user
+     */
+    public function createdNotifications()
+    {
+        return $this->hasMany(SystemNotification::class, 'created_by');
+    }
+
+    /**
+     * Notification reads by this user
+     */
+    public function notificationReads()
+    {
+        return $this->hasMany(UserNotificationRead::class, 'user_id');
+    }
+
+    /**
+     * System notifications read by this user
+     */
+    public function readNotifications()
+    {
+        return $this->belongsToMany(SystemNotification::class, 'user_notification_reads', 'user_id', 'system_notification_id')
+                    ->withPivot(['read_at', 'dismissed_at', 'acknowledged_at'])
+                    ->withTimestamps();
+    }
+
+    // ===== Role Check Methods =====
+    
+    /**
+     * Check if user is a super admin
+     */
+    public function isSuperAdmin(): bool
+    {
+        return $this->role === 'super_admin';
+    }
+
+    /**
+     * Check if user is an admin
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin' || $this->isSuperAdmin();
+    }
+
+    /**
+     * Check if user is a regular user
+     */
+    public function isRegularUser(): bool
+    {
+        return $this->role === 'user';
+    }
+
+    /**
+     * Check if user has admin or super admin privileges
+     */
+    public function hasAdminPrivileges(): bool
+    {
+        return in_array($this->role, ['admin', 'super_admin']);
+    }
+
+    /**
+     * Get role display name
+     */
+    public function getRoleDisplayAttribute(): string
+    {
+        return match($this->role) {
+            'super_admin' => 'Super Administrator',
+            'admin' => 'Administrator',
+            'user' => 'User',
+            default => ucfirst($this->role ?? 'User')
+        };
+    }
+
+    /**
+     * Get role badge color
+     */
+    public function getRoleBadgeColorAttribute(): string
+    {
+        return match($this->role) {
+            'super_admin' => 'danger',
+            'admin' => 'warning',
+            'user' => 'info',
+            default => 'secondary'
+        };
+    }
+
+    /**
+     * Grant super admin access to this user
+     */
+    public function grantSuperAdminAccess(int $grantedBy): void
+    {
+        $this->update([
+            'role' => 'super_admin',
+            'super_admin_access_granted_at' => now(),
+            'super_admin_granted_by' => $grantedBy,
+        ]);
+    }
+
+    /**
+     * Revoke super admin access from this user
+     */
+    public function revokeSuperAdminAccess(): void
+    {
+        $this->update([
+            'role' => $this->is_admin ? 'admin' : 'user',
+            'super_admin_access_granted_at' => null,
+            'super_admin_granted_by' => null,
+        ]);
+    }
+
+    /**
+     * Get unread system notifications count for this user
+     */
+    public function getUnreadSystemNotificationsCount(): int
+    {
+        return SystemNotification::active()
+            ->forUser($this->id)
+            ->unreadByUser($this->id)
+            ->count();
+    }
+
+    /**
+     * Get active system notifications for this user
+     */
+    public function getActiveSystemNotifications()
+    {
+        return SystemNotification::active()
+            ->forUser($this->id)
+            ->orderBy('priority', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->get();
     }
 }
