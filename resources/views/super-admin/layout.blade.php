@@ -46,6 +46,34 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            position: relative;
+        }
+
+        .nav-center {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .central-control-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f8f9fa;
+            padding: 8px 24px;
+            border-radius: 50px;
+            border: 1px solid #e0e0e0;
+            font-weight: 600;
+            font-size: 14px;
+            color: #333;
+            white-space: nowrap;
+        }
+
+        .central-control-pill i {
+            color: #01b2ac;
+            font-size: 18px;
         }
 
         .nav-brand {
@@ -235,6 +263,21 @@
             .user-info span {
                 display: none;
             }
+
+            .nav-center {
+                display: none;
+            }
+
+            .central-control-pill {
+                font-size: 12px;
+                padding: 6px 16px;
+            }
+        }
+
+        @media (max-width: 1024px) {
+            .nav-center {
+                display: none;
+            }
         }
     </style>
 
@@ -247,6 +290,13 @@
             <a href="{{ route('super-admin.dashboard') }}" class="nav-brand">
                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1759601411/a49b4ad9-f1b7-4474-b96a-9b2b7bb3784d_afqtge.png" alt="Metascholar Consult">
             </a>
+
+            <div class="nav-center">
+                <div class="central-control-pill">
+                    <i class="icofont-gear"></i>
+                    <span>Central Control System</span>
+                </div>
+            </div>
 
             <div class="nav-user">
                 <a href="{{ route('logout') }}" class="btn-logout">
