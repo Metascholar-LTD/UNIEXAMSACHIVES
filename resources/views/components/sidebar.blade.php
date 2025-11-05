@@ -493,6 +493,23 @@
                         </li>
                     @endunless
                 @endauth
+
+                {{-- Super Admin Menu --}}
+                @auth
+                    @if(auth()->user()->isSuperAdmin())
+                    <li>
+                        <a class="{{ request()->routeIs('super-admin.*') ? 'active' : '' }}" href="{{route('super-admin.dashboard')}}" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 600;">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                                class="feather feather-shield">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            Super Admin</a>
+                    </li>
+                    @endif
+                @endauth
+
                 <li>
                     <a class="{{ request()->routeIs('dashboard.settings') ? 'active' : '' }}" href="{{route('dashboard.settings')}}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
