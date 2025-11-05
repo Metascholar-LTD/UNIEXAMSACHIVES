@@ -17,7 +17,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__message__content__main">
                         <div class="dashboard__message__content__main__title dashboard__message__content__main__title__2">
-                            <h3>Memos</h3>
+                            <h3>Memos Notifications</h3>
 
                         </div>
                         <div class="dashboard__meessage__wraper">
