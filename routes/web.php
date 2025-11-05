@@ -244,7 +244,8 @@ Route::get('/super-admin/login', function() {
 Route::post('/super-admin/login', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'login'])->name('super-admin.login.post');
 
 // Protected Super Admin Routes
-Route::prefix('super-admin')->name('super-admin.')->middleware(['auth', 'super_admin'])->group(function () {
+// Note: Only using 'super_admin' middleware which handles auth check and redirects to super-admin.login
+Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])->group(function () {
     
     // Dashboard
     Route::get('/', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'dashboard'])->name('dashboard');

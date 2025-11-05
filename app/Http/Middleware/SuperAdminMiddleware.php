@@ -17,8 +17,8 @@ class SuperAdminMiddleware
     {
         // Check if user is authenticated
         if (!auth()->check()) {
-            return redirect()->route('frontend.login')
-                ->with('error', 'Please login to access this area.');
+            return redirect()->route('super-admin.login')
+                ->with('error', 'Please login to access Super Admin area.');
         }
 
         // Check if user is super admin
