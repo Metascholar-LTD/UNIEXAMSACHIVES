@@ -227,6 +227,148 @@
         border-radius: 1.5rem;
     }
 
+    /* Modern Statistics Card Styles - Adapted from React Component */
+    .stat-card {
+        position: relative;
+        width: 100%;
+        height: 224px; /* h-56 equivalent */
+        border-radius: 1rem; /* rounded-2xl */
+        overflow: hidden;
+        padding: 1.5rem; /* p-6 */
+        color: white;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        display: flex;
+        align-items: flex-end;
+        isolation: isolate;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        cursor: pointer;
+    }
+
+    .stat-card:hover {
+        transform: scale(1.03);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    }
+
+    /* Background Image & Overlay */
+    .stat-card-bg {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+    }
+
+    .stat-card-bg img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    .stat-card-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(59, 130, 246, 0.6); /* blue-500/60 */
+        z-index: -1;
+    }
+
+    /* Card specific overlays */
+    .stat-card-subscriptions .stat-card-overlay {
+        background: rgba(99, 102, 241, 0.6); /* indigo */
+    }
+
+    .stat-card-revenue .stat-card-overlay {
+        background: rgba(236, 72, 153, 0.6); /* pink */
+    }
+
+    .stat-card-expiring .stat-card-overlay {
+        background: rgba(251, 191, 36, 0.6); /* yellow */
+    }
+
+    .stat-card-payments .stat-card-overlay {
+        background: rgba(59, 130, 246, 0.6); /* blue */
+    }
+
+    /* Main Content Grid */
+    .stat-card-content {
+        width: 100%;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 1rem;
+        align-items: flex-end;
+    }
+
+    /* Left Section: Info */
+    .stat-card-info {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        height: 100%;
+    }
+
+    .stat-card-title {
+        font-size: 1.25rem; /* text-xl */
+        font-weight: 700;
+        line-height: 1.25;
+        margin: 0 0 0.5rem 0;
+        opacity: 0;
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    .stat-card-subtitle {
+        font-size: 0.875rem; /* text-sm */
+        margin: 0;
+        opacity: 0;
+        animation: fadeInUp 0.6s ease 0.1s forwards;
+    }
+
+    .stat-card-subtitle.visible {
+        opacity: 0.8;
+    }
+
+    /* Right Section: Large Number */
+    .stat-card-number {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .stat-card-number h1 {
+        font-size: 6rem; /* text-8xl */
+        font-weight: 700;
+        letter-spacing: -0.05em;
+        color: rgba(255, 255, 255, 0.9);
+        user-select: none;
+        margin: 0;
+        opacity: 0;
+        animation: fadeInUp 0.6s ease 0.2s forwards;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .stat-card {
+            height: 200px;
+            padding: 1.25rem;
+        }
+
+        .stat-card-number h1 {
+            font-size: 4rem;
+        }
+
+        .stat-card-title {
+            font-size: 1.125rem;
+        }
+    }
+
 </style>
 @endpush
 
@@ -243,17 +385,18 @@
     <div class="row">
         {{-- Subscriptions Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
-            <div class="card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 style="opacity: 0.9; margin-bottom: 10px;">Active Subscriptions</h6>
-                            <h2 style="font-weight: 700; margin: 0;">{{ $stats['active_subscriptions'] }}</h2>
-                            <small style="opacity: 0.8;">Total: {{ $stats['total_subscriptions'] }}</small>
-                        </div>
-                        <div>
-                            <i class="icofont-tasks-alt" style="font-size: 50px; opacity: 0.3;"></i>
-                        </div>
+            <div class="stat-card stat-card-subscriptions">
+                <div class="stat-card-bg">
+                    <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80" alt="Subscriptions">
+                </div>
+                <div class="stat-card-overlay"></div>
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h2 class="stat-card-title">Active Subscriptions</h2>
+                        <p class="stat-card-subtitle visible">Total: {{ $stats['total_subscriptions'] }}</p>
+                    </div>
+                    <div class="stat-card-number">
+                        <h1>{{ $stats['active_subscriptions'] }}</h1>
                     </div>
                 </div>
             </div>
@@ -261,17 +404,27 @@
 
         {{-- Revenue Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
-            <div class="card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 style="opacity: 0.9; margin-bottom: 10px;">Monthly Revenue</h6>
-                            <h2 style="font-weight: 700; margin: 0;">GHS {{ number_format($stats['monthly_revenue'], 2) }}</h2>
-                            <small style="opacity: 0.8;">Total: GHS {{ number_format($stats['total_revenue'], 2) }}</small>
-                        </div>
-                        <div>
-                            <i class="icofont-money" style="font-size: 50px; opacity: 0.3;"></i>
-                        </div>
+            <div class="stat-card stat-card-revenue">
+                <div class="stat-card-bg">
+                    <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&auto=format&fit=crop&q=80" alt="Revenue">
+                </div>
+                <div class="stat-card-overlay"></div>
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h2 class="stat-card-title">Monthly Revenue</h2>
+                        <p class="stat-card-subtitle visible">Total: GHS {{ number_format($stats['total_revenue'], 2) }}</p>
+                    </div>
+                    <div class="stat-card-number">
+                        <h1>@php
+                            $revenue = $stats['monthly_revenue'];
+                            if ($revenue >= 1000000) {
+                                echo number_format($revenue / 1000000, 1) . 'M';
+                            } elseif ($revenue >= 1000) {
+                                echo number_format($revenue / 1000, 1) . 'K';
+                            } else {
+                                echo number_format($revenue, 0);
+                            }
+                        @endphp</h1>
                     </div>
                 </div>
             </div>
@@ -279,17 +432,18 @@
 
         {{-- Expiring Soon Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
-            <div class="card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 style="opacity: 0.9; margin-bottom: 10px;">Expiring Soon</h6>
-                            <h2 style="font-weight: 700; margin: 0;">{{ $stats['expiring_soon'] }}</h2>
-                            <small style="opacity: 0.8;">Next 30 days</small>
-                        </div>
-                        <div>
-                            <i class="icofont-warning-alt" style="font-size: 50px; opacity: 0.3;"></i>
-                        </div>
+            <div class="stat-card stat-card-expiring">
+                <div class="stat-card-bg">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop&q=80" alt="Expiring">
+                </div>
+                <div class="stat-card-overlay"></div>
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h2 class="stat-card-title">Expiring Soon</h2>
+                        <p class="stat-card-subtitle visible">Next 30 days</p>
+                    </div>
+                    <div class="stat-card-number">
+                        <h1>{{ $stats['expiring_soon'] }}</h1>
                     </div>
                 </div>
             </div>
@@ -297,17 +451,18 @@
 
         {{-- Payments Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
-            <div class="card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white;">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <div>
-                            <h6 style="opacity: 0.9; margin-bottom: 10px;">Successful Payments</h6>
-                            <h2 style="font-weight: 700; margin: 0;">{{ $stats['successful_payments'] }}</h2>
-                            <small style="opacity: 0.8;">Pending: {{ $stats['pending_payments'] }}</small>
-                        </div>
-                        <div>
-                            <i class="icofont-credit-card" style="font-size: 50px; opacity: 0.3;"></i>
-                        </div>
+            <div class="stat-card stat-card-payments">
+                <div class="stat-card-bg">
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900&auto=format&fit=crop&q=80" alt="Payments">
+                </div>
+                <div class="stat-card-overlay"></div>
+                <div class="stat-card-content">
+                    <div class="stat-card-info">
+                        <h2 class="stat-card-title">Successful Payments</h2>
+                        <p class="stat-card-subtitle visible">Pending: {{ $stats['pending_payments'] }}</p>
+                    </div>
+                    <div class="stat-card-number">
+                        <h1>{{ $stats['successful_payments'] }}</h1>
                     </div>
                 </div>
             </div>
