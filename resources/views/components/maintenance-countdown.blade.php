@@ -652,7 +652,7 @@
 
     /* Flip Countdown Timer Styles - From Uiverse.io by Carlos-vargs */
     .nums {
-        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 3px 10px #111;
         border-top: 1px solid #393939;
         display: inline-block;
         height: 100px;
@@ -680,7 +680,7 @@
         border-top: 1px solid black;
         border-radius: 0 0 5px 5px;
         bottom: 0;
-        box-shadow: inset 0 8px 25px #202020;
+        box-shadow: inset 0 15px 50px #202020;
         color: #eeeeee;
         content: "0";
         display: block;
@@ -697,15 +697,19 @@
     }
 
     .num {
+        animation-fill-mode: forwards;
+        animation-iteration-count: infinite;
+        animation-timing-function: ease-in;
         border-radius: 5px;
         font-size: 65px;
         height: 100%;
         left: 0;
         position: absolute;
+        transform: rotateX(0);
+        transition: 0.6s;
         transform-style: preserve-3d;
         top: 0;
         width: 100%;
-        z-index: 1;
     }
 
     .num:before,
@@ -725,56 +729,182 @@
     .num:before {
         background: #181818;
         border-radius: 5px 5px 0 0;
-        box-shadow: inset 0 10px 35px #111111;
+        box-shadow: inset 0 15px 50px #111111;
         content: attr(data-num);
         line-height: 1.38;
         top: 0;
         z-index: 1;
-        transform-origin: bottom;
     }
 
     .num:after {
         background: #2a2a2a;
         border-bottom: 1px solid #444444;
         border-radius: 0 0 5px 5px;
-        box-shadow: inset 0 10px 35px #202020;
+        box-shadow: inset 0 15px 50px #202020;
         content: attr(data-num-next);
         height: calc(50% - 1px);
         line-height: 0;
-        top: 50%;
+        top: 0;
         transform: rotateX(180deg);
-        transform-origin: top;
     }
 
-    /* Default state - all numbers hidden */
-    .nums-one .num,
-    .nums-ten .num {
+    /* Animations for ones (seconds, minutes units) */
+    .nums-one .num:nth-of-type(1) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 0s;
+        z-index: 10;
+    }
+    .nums-one .num:nth-of-type(2) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 1s;
+        z-index: 9;
+    }
+    .nums-one .num:nth-of-type(3) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 2s;
+        z-index: 8;
+    }
+    .nums-one .num:nth-of-type(4) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 3s;
+        z-index: 7;
+    }
+    .nums-one .num:nth-of-type(5) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 4s;
+        z-index: 6;
+    }
+    .nums-one .num:nth-of-type(6) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 5s;
+        z-index: 5;
+    }
+    .nums-one .num:nth-of-type(7) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 6s;
+        z-index: 4;
+    }
+    .nums-one .num:nth-of-type(8) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 7s;
+        z-index: 3;
+    }
+    .nums-one .num:nth-of-type(9) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 8s;
+        z-index: 2;
+    }
+    .nums-one .num:nth-of-type(10) {
+        animation: num-one 10s infinite ease-in;
+        animation-delay: 9s;
         z-index: 1;
-        transform: rotateX(-180deg);
     }
 
-    /* Active number - visible */
+    /* Animations for tens (days, hours tens, minutes tens, seconds tens) */
+    .nums-ten .num:nth-of-type(1) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 9s;
+        z-index: 10;
+    }
+    .nums-ten .num:nth-of-type(2) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 19s;
+        z-index: 9;
+    }
+    .nums-ten .num:nth-of-type(3) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 29s;
+        z-index: 8;
+    }
+    .nums-ten .num:nth-of-type(4) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 39s;
+        z-index: 7;
+    }
+    .nums-ten .num:nth-of-type(5) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 49s;
+        z-index: 6;
+    }
+    .nums-ten .num:nth-of-type(6) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 59s;
+        z-index: 5;
+    }
+    .nums-ten .num:nth-of-type(7) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 69s;
+        z-index: 4;
+    }
+    .nums-ten .num:nth-of-type(8) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 79s;
+        z-index: 3;
+    }
+    .nums-ten .num:nth-of-type(9) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 89s;
+        z-index: 2;
+    }
+    .nums-ten .num:nth-of-type(10) {
+        animation: num-ten 100s infinite ease-in;
+        animation-delay: 99s;
+        z-index: 1;
+    }
+
+    @keyframes num-one {
+        0% {
+            transform: rotateX(0);
+            z-index: 50;
+        }
+        10% {
+            transform: rotateX(-180deg);
+            z-index: 50;
+        }
+        90% {
+            transform: rotateX(-180deg);
+            z-index: 1;
+        }
+        90.0001% {
+            transform: rotateX(0);
+        }
+        100% {
+            transform: rotateX(0);
+        }
+    }
+
+    @keyframes num-ten {
+        0% {
+            transform: rotateX(0);
+            z-index: 50;
+        }
+        1% {
+            transform: rotateX(-180deg);
+            z-index: 50;
+        }
+        90% {
+            transform: rotateX(-180deg);
+            z-index: 1;
+        }
+        90.0001% {
+            transform: rotateX(0);
+        }
+        100% {
+            transform: rotateX(0);
+        }
+    }
+
+    /* Override animations for active numbers - controlled by JavaScript */
     .num.active {
-        z-index: 100;
+        animation: none !important;
+        z-index: 100 !important;
         transform: rotateX(0deg) !important;
     }
 
-    /* Flip animation when number changes */
-    .num.flipping {
-        animation: flip-number 0.6s ease-in forwards;
-        z-index: 100;
-    }
-
-    @keyframes flip-number {
-        0% {
-            transform: rotateX(0deg);
-        }
-        50% {
-            transform: rotateX(-90deg);
-        }
-        100% {
-            transform: rotateX(0deg);
-        }
+    .num.hidden {
+        animation: none !important;
+        z-index: 1 !important;
+        transform: rotateX(-180deg) !important;
     }
 
     /* Modal Footer */
@@ -1068,36 +1198,31 @@
             nums.forEach((num) => {
                 const numValue = parseInt(num.getAttribute('data-num'));
                 
-                // Remove all active classes and reset transforms
-                num.classList.remove('active', 'flipping');
+                // Remove all classes
+                num.classList.remove('active', 'hidden');
                 
                 // Show the target number
                 if (numValue === targetValue) {
                     // If changing from another number, trigger flip animation
                     if (currentActive && currentActive !== num) {
                         // Hide current active first
-                        currentActive.style.zIndex = '1';
-                        currentActive.style.transform = 'rotateX(-180deg)';
                         currentActive.classList.remove('active');
+                        currentActive.classList.add('hidden');
                         
-                        // Show new number with flip
-                        num.style.zIndex = '100';
-                        num.classList.add('flipping');
+                        // Show new number with flip animation
+                        num.classList.add('active');
+                        // Trigger a reflow to restart animation
+                        num.style.animation = 'none';
                         setTimeout(() => {
-                            num.classList.remove('flipping');
-                            num.classList.add('active');
-                            num.style.transform = 'rotateX(0deg)';
-                        }, 600);
+                            num.style.animation = '';
+                        }, 10);
                     } else {
                         // Initial display or no change - show immediately
-                        num.style.zIndex = '100';
-                        num.style.transform = 'rotateX(0deg)';
                         num.classList.add('active');
                     }
                 } else {
                     // Hide non-active numbers
-                    num.style.zIndex = '1';
-                    num.style.transform = 'rotateX(-180deg)';
+                    num.classList.add('hidden');
                 }
             });
         }
