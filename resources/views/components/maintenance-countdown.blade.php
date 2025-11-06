@@ -659,6 +659,7 @@
         perspective: 1000px;
         position: relative;
         width: 65px;
+        --current-num: "0";
     }
 
     .nums:before {
@@ -682,7 +683,7 @@
         bottom: 0;
         box-shadow: inset 0 15px 50px #202020;
         color: #eeeeee;
-        content: "0";
+        content: var(--current-num);
         display: block;
         font-size: 65px;
         height: calc(50% - 1px);
@@ -1184,6 +1185,9 @@
         function updateFlipDigit(containerId, targetValue) {
             const container = document.getElementById(containerId);
             if (!container) return;
+
+            // Update the CSS variable for the static bottom half
+            container.style.setProperty('--current-num', '"' + targetValue + '"');
 
             const nums = container.querySelectorAll('.num');
             let currentActive = null;
