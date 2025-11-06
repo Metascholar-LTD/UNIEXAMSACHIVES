@@ -105,135 +105,30 @@
 
             <div class="maintenance-countdown-section">
                 <h3 class="countdown-title">Time Until Maintenance</h3>
-                <div class="countdown-container">
-                    <!-- Days - Tens -->
-                    <div class="countdown-group">
+                <div class="countdown-container" id="flip-countdown">
+                    <div class="countdown-unit" id="days">
+                        <div class="countdown-wrapper">
+                            <div class="nums" data-type="days"></div>
+                        </div>
                         <div class="countdown-label">Days</div>
-                        <div class="countdown-wrapper">
-                            <div class="nums nums-ten" id="days-tens">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                            <div class="nums nums-one" id="days-ones">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="countdown-separator">:</div>
-
-                    <!-- Hours - Tens -->
-                    <div class="countdown-group">
+                    <div class="countdown-unit" id="hours">
+                        <div class="countdown-wrapper">
+                            <div class="nums" data-type="hours"></div>
+                        </div>
                         <div class="countdown-label">Hours</div>
-                        <div class="countdown-wrapper">
-                            <div class="nums nums-ten" id="hours-tens">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                            <div class="nums nums-one" id="hours-ones">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="countdown-separator">:</div>
-
-                    <!-- Minutes - Tens -->
-                    <div class="countdown-group">
+                    <div class="countdown-unit" id="minutes">
+                        <div class="countdown-wrapper">
+                            <div class="nums" data-type="minutes"></div>
+                        </div>
                         <div class="countdown-label">Minutes</div>
-                        <div class="countdown-wrapper">
-                            <div class="nums nums-ten" id="minutes-tens">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                            <div class="nums nums-one" id="minutes-ones">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                        </div>
                     </div>
-
-                    <div class="countdown-separator">:</div>
-
-                    <!-- Seconds - Tens -->
-                    <div class="countdown-group">
-                        <div class="countdown-label">Seconds</div>
+                    <div class="countdown-unit" id="seconds">
                         <div class="countdown-wrapper">
-                            <div class="nums nums-ten" id="seconds-tens">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
-                            <div class="nums nums-one" id="seconds-ones">
-                                <div class="num" data-num="0" data-num-next="1"></div>
-                                <div class="num" data-num="1" data-num-next="2"></div>
-                                <div class="num" data-num="2" data-num-next="3"></div>
-                                <div class="num" data-num="3" data-num-next="4"></div>
-                                <div class="num" data-num="4" data-num-next="5"></div>
-                                <div class="num" data-num="5" data-num-next="6"></div>
-                                <div class="num" data-num="6" data-num-next="7"></div>
-                                <div class="num" data-num="7" data-num-next="8"></div>
-                                <div class="num" data-num="8" data-num-next="9"></div>
-                                <div class="num" data-num="9" data-num-next="0"></div>
-                            </div>
+                            <div class="nums" data-type="seconds"></div>
                         </div>
+                        <div class="countdown-label">Seconds</div>
                     </div>
                 </div>
             </div>
@@ -612,299 +507,99 @@
     }
 
     .countdown-container {
-        height: 100px;
-        position: relative;
-        text-align: center;
         display: flex;
-        gap: 8px;
+        gap: 30px;
+        text-align: center;
         justify-content: center;
-        align-items: center;
+        align-items: flex-end;
         flex-wrap: wrap;
     }
 
-    .countdown-group {
+    .countdown-unit {
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.375rem;
     }
 
     .countdown-label {
-        font-size: 0.625rem;
+        font-size: 14px;
+        margin-top: 10px;
         font-weight: 600;
-        color: #6b7280;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
+        color: #333;
     }
 
     .countdown-wrapper {
-        display: flex;
-        gap: 3px;
-    }
-
-    .countdown-separator {
-        font-size: 1rem;
-        font-weight: 700;
-        color: #1f2937;
-        align-self: flex-end;
-        padding-bottom: 28px;
-    }
-
-    /* Flip Countdown Timer Styles - From Uiverse.io by Carlos-vargs */
-    .nums {
-        box-shadow: 0 3px 10px #111;
-        border-top: 1px solid #393939;
-        display: inline-block;
         height: 100px;
+        display: flex;
+        gap: 10px;
         perspective: 1000px;
-        position: relative;
-        width: 65px;
     }
 
-    .nums:before {
-        border-bottom: 2px solid black;
+    .nums {
+        position: relative;
+        width: 80px;
+        height: 100px;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 8px 8px 15px rgba(42, 42, 42, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.5);
+    }
+
+    .nums::before {
+        border-bottom: 1px solid #d2d2d2;
         content: "";
         height: 1px;
-        left: 0;
         position: absolute;
-        transform: translate3d(0, -1px, 0);
         top: 50%;
         width: 100%;
-        z-index: 1000;
-    }
-
-    .nums:after {
-        backface-visibility: hidden;
-        background: #2a2a2a;
-        border-bottom: 1px solid #444444;
-        border-top: 1px solid black;
-        border-radius: 0 0 5px 5px;
-        bottom: 0;
-        box-shadow: inset 0 15px 50px #202020;
-        color: #eeeeee;
-        content: "0";
-        display: block;
-        font-size: 65px;
-        height: calc(50% - 1px);
-        left: 0;
-        line-height: 0;
-        overflow: hidden;
-        position: absolute;
-        text-align: center;
-        text-shadow: 0 1px 2px #333;
-        width: 100%;
-        z-index: -1;
+        z-index: 5;
     }
 
     .num {
-        animation-fill-mode: forwards;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in;
-        border-radius: 5px;
-        font-size: 65px;
-        height: 100%;
-        left: 0;
         position: absolute;
-        transform: rotateX(0);
-        transition: 0.6s;
-        transform-style: preserve-3d;
         top: 0;
+        left: 0;
         width: 100%;
+        height: 100%;
+        font-size: 80px;
+        color: #333;
+        text-align: center;
+        background: #e0e0e0;
+        border-radius: 15px;
+        transform-origin: bottom;
+        transform-style: preserve-3d;
+        transition: transform 0.6s ease-in;
     }
 
-    .num:before,
-    .num:after {
-        backface-visibility: hidden;
-        color: #eeeeee;
-        display: block;
+    .num.flip {
+        transform: rotateX(-180deg);
+    }
+
+    .num::before,
+    .num::after {
+        position: absolute;
+        width: 100%;
         height: 50%;
         left: 0;
-        overflow: hidden;
-        position: absolute;
-        text-align: center;
-        text-shadow: 0 1px 2px #333;
-        width: 100%;
+        background: #e0e0e0;
+        color: #333;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: bold;
+        backface-visibility: hidden;
     }
 
-    .num:before {
-        background: #181818;
-        border-radius: 5px 5px 0 0;
-        box-shadow: inset 0 15px 50px #111111;
-        content: attr(data-num);
-        line-height: 1.38;
+    .num::before {
+        content: attr(data-current);
+        border-radius: 15px 15px 0 0;
         top: 0;
-        z-index: 1;
     }
 
-    .num:after {
-        background: #2a2a2a;
-        border-bottom: 1px solid #444444;
-        border-radius: 0 0 5px 5px;
-        box-shadow: inset 0 15px 50px #202020;
-        content: attr(data-num);
-        height: calc(50% - 1px);
-        line-height: 0;
+    .num::after {
+        content: attr(data-next);
+        border-radius: 0 0 15px 15px;
+        transform: rotateX(180deg);
         bottom: 0;
-        top: auto;
-    }
-
-    /* Animations for ones (seconds, minutes units) */
-    .nums-one .num:nth-of-type(1) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 0s;
-        z-index: 10;
-    }
-    .nums-one .num:nth-of-type(2) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 1s;
-        z-index: 9;
-    }
-    .nums-one .num:nth-of-type(3) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 2s;
-        z-index: 8;
-    }
-    .nums-one .num:nth-of-type(4) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 3s;
-        z-index: 7;
-    }
-    .nums-one .num:nth-of-type(5) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 4s;
-        z-index: 6;
-    }
-    .nums-one .num:nth-of-type(6) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 5s;
-        z-index: 5;
-    }
-    .nums-one .num:nth-of-type(7) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 6s;
-        z-index: 4;
-    }
-    .nums-one .num:nth-of-type(8) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 7s;
-        z-index: 3;
-    }
-    .nums-one .num:nth-of-type(9) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 8s;
-        z-index: 2;
-    }
-    .nums-one .num:nth-of-type(10) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 9s;
-        z-index: 1;
-    }
-
-    /* Animations for tens (days, hours tens, minutes tens, seconds tens) */
-    .nums-ten .num:nth-of-type(1) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 9s;
-        z-index: 10;
-    }
-    .nums-ten .num:nth-of-type(2) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 19s;
-        z-index: 9;
-    }
-    .nums-ten .num:nth-of-type(3) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 29s;
-        z-index: 8;
-    }
-    .nums-ten .num:nth-of-type(4) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 39s;
-        z-index: 7;
-    }
-    .nums-ten .num:nth-of-type(5) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 49s;
-        z-index: 6;
-    }
-    .nums-ten .num:nth-of-type(6) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 59s;
-        z-index: 5;
-    }
-    .nums-ten .num:nth-of-type(7) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 69s;
-        z-index: 4;
-    }
-    .nums-ten .num:nth-of-type(8) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 79s;
-        z-index: 3;
-    }
-    .nums-ten .num:nth-of-type(9) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 89s;
-        z-index: 2;
-    }
-    .nums-ten .num:nth-of-type(10) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 99s;
-        z-index: 1;
-    }
-
-    @keyframes num-one {
-        0% {
-            transform: rotateX(0);
-            z-index: 50;
-        }
-        10% {
-            transform: rotateX(-180deg);
-            z-index: 50;
-        }
-        90% {
-            transform: rotateX(-180deg);
-            z-index: 1;
-        }
-        90.0001% {
-            transform: rotateX(0);
-        }
-        100% {
-            transform: rotateX(0);
-        }
-    }
-
-    @keyframes num-ten {
-        0% {
-            transform: rotateX(0);
-            z-index: 50;
-        }
-        1% {
-            transform: rotateX(-180deg);
-            z-index: 50;
-        }
-        90% {
-            transform: rotateX(-180deg);
-            z-index: 1;
-        }
-        90.0001% {
-            transform: rotateX(0);
-        }
-        100% {
-            transform: rotateX(0);
-        }
-    }
-
-    /* Override animations for active numbers - controlled by JavaScript */
-    .num.active {
-        animation: none !important;
-        z-index: 100 !important;
-        transform: rotateX(0deg) !important;
-    }
-
-    .num.hidden {
-        animation: none !important;
-        z-index: 1 !important;
-        transform: rotateX(-180deg) !important;
     }
 
     /* Modal Footer */
@@ -950,26 +645,20 @@
         }
 
         .countdown-container {
-            gap: 6px;
-            height: 85px;
+            gap: 15px;
         }
 
         .nums {
-            width: 55px;
-            height: 85px;
+            width: 60px;
+            height: 80px;
         }
 
         .num {
-            font-size: 55px;
+            font-size: 60px;
         }
 
-        .nums:after {
-            font-size: 55px;
-        }
-
-        .countdown-separator {
-            font-size: 0.875rem;
-            padding-bottom: 24px;
+        .countdown-wrapper {
+            height: 80px;
         }
 
         .maintenance-header-content {
@@ -1071,17 +760,17 @@
             overlay.addEventListener('click', closeMaintenanceModal);
         }
 
-        // Store current values to detect changes
-        let currentValues = {
-            daysTens: -1,
-            daysOnes: -1,
-            hoursTens: -1,
-            hoursOnes: -1,
-            minutesTens: -1,
-            minutesOnes: -1,
-            secondsTens: -1,
-            secondsOnes: -1
-        };
+        // Function to update flip element
+        function updateFlip(element, newValue) {
+            const current = element.getAttribute("data-current");
+            if (current === String(newValue)) return;
+            element.setAttribute("data-next", newValue);
+            element.classList.add("flip");
+            setTimeout(() => {
+                element.setAttribute("data-current", newValue);
+                element.classList.remove("flip");
+            }, 600);
+        }
 
         // Function to update flip countdown
         function updateFlipCountdown() {
@@ -1104,48 +793,29 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Update each digit and trigger flip if changed
-            const daysTens = Math.floor(days / 10);
-            const daysOnes = days % 10;
-            const hoursTens = Math.floor(hours / 10);
-            const hoursOnes = hours % 10;
-            const minutesTens = Math.floor(minutes / 10);
-            const minutesOnes = minutes % 10;
-            const secondsTens = Math.floor(seconds / 10);
-            const secondsOnes = seconds % 10;
+            updateUnit("days", days);
+            updateUnit("hours", hours);
+            updateUnit("minutes", minutes);
+            updateUnit("seconds", seconds);
+        }
 
-            if (currentValues.daysTens !== daysTens) {
-                updateFlipDigit('days-tens', daysTens);
-                currentValues.daysTens = daysTens;
+        // Function to update unit
+        function updateUnit(unit, value) {
+            const nums = document.querySelector(`[data-type="${unit}"]`);
+            if (!nums) return;
+            
+            let numEl = nums.querySelector(".num");
+
+            if (!numEl) {
+                numEl = document.createElement("div");
+                numEl.classList.add("num");
+                numEl.setAttribute("data-current", value);
+                numEl.setAttribute("data-next", value);
+                nums.appendChild(numEl);
+                return;
             }
-            if (currentValues.daysOnes !== daysOnes) {
-                updateFlipDigit('days-ones', daysOnes);
-                currentValues.daysOnes = daysOnes;
-            }
-            if (currentValues.hoursTens !== hoursTens) {
-                updateFlipDigit('hours-tens', hoursTens);
-                currentValues.hoursTens = hoursTens;
-            }
-            if (currentValues.hoursOnes !== hoursOnes) {
-                updateFlipDigit('hours-ones', hoursOnes);
-                currentValues.hoursOnes = hoursOnes;
-            }
-            if (currentValues.minutesTens !== minutesTens) {
-                updateFlipDigit('minutes-tens', minutesTens);
-                currentValues.minutesTens = minutesTens;
-            }
-            if (currentValues.minutesOnes !== minutesOnes) {
-                updateFlipDigit('minutes-ones', minutesOnes);
-                currentValues.minutesOnes = minutesOnes;
-            }
-            if (currentValues.secondsTens !== secondsTens) {
-                updateFlipDigit('seconds-tens', secondsTens);
-                currentValues.secondsTens = secondsTens;
-            }
-            if (currentValues.secondsOnes !== secondsOnes) {
-                updateFlipDigit('seconds-ones', secondsOnes);
-                currentValues.secondsOnes = secondsOnes;
-            }
+
+            updateFlip(numEl, value);
         }
 
         // Function to update navbar countdown
@@ -1178,53 +848,6 @@
         function startNavbarCountdown() {
             updateNavbarCountdown();
             navbarCountdownInterval = setInterval(updateNavbarCountdown, 1000);
-        }
-
-        // Function to update flip digit by triggering animation
-        function updateFlipDigit(containerId, targetValue) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-
-            const nums = container.querySelectorAll('.num');
-            let currentActive = null;
-            
-            // Find current active number
-            nums.forEach((num) => {
-                if (num.classList.contains('active')) {
-                    currentActive = num;
-                }
-            });
-
-            nums.forEach((num) => {
-                const numValue = parseInt(num.getAttribute('data-num'));
-                
-                // Remove all classes
-                num.classList.remove('active', 'hidden');
-                
-                // Show the target number
-                if (numValue === targetValue) {
-                    // If changing from another number, trigger flip animation
-                    if (currentActive && currentActive !== num) {
-                        // Hide current active first
-                        currentActive.classList.remove('active');
-                        currentActive.classList.add('hidden');
-                        
-                        // Show new number with flip animation
-                        num.classList.add('active');
-                        // Trigger a reflow to restart animation
-                        num.style.animation = 'none';
-                        setTimeout(() => {
-                            num.style.animation = '';
-                        }, 10);
-                    } else {
-                        // Initial display or no change - show immediately
-                        num.classList.add('active');
-                    }
-                } else {
-                    // Hide non-active numbers
-                    num.classList.add('hidden');
-                }
-            });
         }
 
         // Initialize countdown immediately - set initial values
