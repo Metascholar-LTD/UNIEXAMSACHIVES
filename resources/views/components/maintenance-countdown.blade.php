@@ -252,6 +252,46 @@
     /* Navbar Countdown Styles - Integrated into existing navbar */
     .maintenance-navbar-countdown {
         display: none;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        width: auto;
+        margin: 0;
+    }
+    
+    /* Make the navbar countdown sticky when displayed */
+    .maintenance-navbar-countdown[style*="display: block"],
+    .maintenance-navbar-countdown.maintenance-countdown-active {
+        display: block !important;
+    }
+    
+    /* Sticky wrapper for the entire navbar when countdown is active */
+    header.maintenance-header-sticky,
+    nav.maintenance-header-sticky,
+    .navbar.maintenance-header-sticky {
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        transition: background 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    /* Fallback for browsers that support :has() */
+    @supports selector(:has(*)) {
+        header:has(.maintenance-navbar-countdown[style*="display: block"]),
+        nav:has(.maintenance-navbar-countdown[style*="display: block"]),
+        .navbar:has(.maintenance-navbar-countdown[style*="display: block"]) {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+        }
     }
 
     .maintenance-nav-item {
@@ -872,25 +912,7 @@
         // Wait for DOM to be ready to ensure navbar exists
         function initNavbarCountdown() {
             if (!navbarDismissed && navbarCountdown) {
-                showNavbarCountdown();
-                // Retry a few times to ensure it gets into navbar
-                let retries = 0;
-                const maxRetries = 5;
-                const checkInterval = setInterval(() => {
-                    if (navbarCountdown && !navbarDismissed) {
-                        if (!navbarCountdown.parentNode || navbarCountdown.style.display === 'none') {
-                            showNavbarCountdown();
-                            retries++;
-                            if (retries >= maxRetries) {
-                                clearInterval(checkInterval);
-                            }
-                        } else {
-                            clearInterval(checkInterval);
-                        }
-                    } else {
-                        clearInterval(checkInterval);
-                    }
-                }, 300);
+            showNavbarCountdown();
             }
         }
         
@@ -901,13 +923,6 @@
             // DOM is already ready
             setTimeout(initNavbarCountdown, 100);
         }
-        
-        // Also try on window load as a fallback
-        window.addEventListener('load', function() {
-            if (!navbarDismissed && navbarCountdown) {
-                setTimeout(initNavbarCountdown, 200);
-            }
-        });
 
         // Show modal on page load if not dismissed
         if (!modalDismissed) {
@@ -936,51 +951,40 @@
         };
 
         // Show navbar countdown function
-        let showNavbarRetryCount = 0;
         function showNavbarCountdown() {
             if (navbarCountdown && !navbarDismissed) {
-                // Check if already displayed and in navbar
+                // Check if already displayed
                 if (navbarCountdown.style.display === 'block' && navbarCountdown.parentNode) {
                     // Already showing, just make sure countdown is running
                     if (!navbarCountdownInterval) {
                         startNavbarCountdown();
                     }
-                    showNavbarRetryCount = 0; // Reset counter on success
                     return;
                 }
                 
-                // Try multiple selectors to find navbar
-                let navRight = document.querySelector('.uda-nav-right');
-                if (!navRight) {
-                    navRight = document.querySelector('nav .navbar-nav');
-                }
-                if (!navRight) {
-                    navRight = document.querySelector('header nav');
-                }
-                if (!navRight) {
-                    navRight = document.querySelector('nav');
-                }
-                
+                // Find the navbar right section and inject countdown
+                const navRight = document.querySelector('.uda-nav-right');
                 if (navRight) {
                     // Only add if not already a child
                     if (!navbarCountdown.parentNode) {
-                        // Insert before notifications/logout button
-                        const firstChild = navRight.firstElementChild;
-                        if (firstChild) {
-                            navRight.insertBefore(navbarCountdown, firstChild);
-                        } else {
-                            navRight.appendChild(navbarCountdown);
+                    // Insert before notifications/logout button
+                    const firstChild = navRight.firstElementChild;
+                    if (firstChild) {
+                        navRight.insertBefore(navbarCountdown, firstChild);
+                    } else {
+                        navRight.appendChild(navbarCountdown);
                         }
                     }
                     navbarCountdown.style.display = 'block';
-                    startNavbarCountdown();
-                    showNavbarRetryCount = 0; // Reset counter on success
-                } else {
-                    // Retry after a short delay if navbar not found (max 10 retries)
-                    if (showNavbarRetryCount < 10) {
-                        showNavbarRetryCount++;
-                        setTimeout(showNavbarCountdown, 200);
+                    navbarCountdown.classList.add('maintenance-countdown-active');
+                    
+                    // Make parent header/navbar sticky
+                    const header = navbarCountdown.closest('header, nav, .navbar');
+                    if (header) {
+                        header.classList.add('maintenance-header-sticky');
                     }
+                    
+                    startNavbarCountdown();
                 }
             }
         }
@@ -989,6 +993,14 @@
         window.dismissNavbarCountdown = function() {
             if (navbarCountdown) {
                 navbarCountdown.style.display = 'none';
+                navbarCountdown.classList.remove('maintenance-countdown-active');
+                
+                // Remove sticky class from parent header/navbar
+                const header = navbarCountdown.closest('header, nav, .navbar');
+                if (header) {
+                    header.classList.remove('maintenance-header-sticky');
+                }
+                
                 localStorage.setItem('maintenance-navbar-dismissed-' + maintenanceId, 'true');
                 if (navbarCountdownInterval) {
                     clearInterval(navbarCountdownInterval);
