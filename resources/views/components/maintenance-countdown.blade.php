@@ -659,7 +659,6 @@
         perspective: 1000px;
         position: relative;
         width: 65px;
-        --current-num: "0";
     }
 
     .nums:before {
@@ -683,7 +682,7 @@
         bottom: 0;
         box-shadow: inset 0 15px 50px #202020;
         color: #eeeeee;
-        content: var(--current-num);
+        content: "0";
         display: block;
         font-size: 65px;
         height: calc(50% - 1px);
@@ -745,9 +744,8 @@
         content: attr(data-num);
         height: calc(50% - 1px);
         line-height: 0;
-        top: 0;
-        transform: rotateX(180deg);
-        z-index: 2;
+        bottom: 0;
+        top: auto;
     }
 
     /* Animations for ones (seconds, minutes units) */
@@ -901,13 +899,12 @@
         animation: none !important;
         z-index: 100 !important;
         transform: rotateX(0deg) !important;
-        display: block !important;
     }
 
     .num.hidden {
         animation: none !important;
         z-index: 1 !important;
-        display: none !important;
+        transform: rotateX(-180deg) !important;
     }
 
     /* Modal Footer */
@@ -1190,58 +1187,44 @@
 
             const nums = container.querySelectorAll('.num');
             let currentActive = null;
-            let currentValue = null;
             
             // Find current active number
             nums.forEach((num) => {
                 if (num.classList.contains('active')) {
                     currentActive = num;
-                    currentValue = parseInt(num.getAttribute('data-num'));
                 }
             });
 
-            // If value changed, animate the flip
-            if (currentActive && currentValue !== targetValue) {
-                // Update static bottom immediately so it's revealed during flip
-                container.style.setProperty('--current-num', '"' + targetValue + '"');
+            nums.forEach((num) => {
+                const numValue = parseInt(num.getAttribute('data-num'));
                 
-                // Trigger flip animation on the OLD card
-                currentActive.style.transform = 'rotateX(-180deg)';
-                currentActive.style.transition = 'transform 0.6s ease-in';
+                // Remove all classes
+                num.classList.remove('active', 'hidden');
                 
-                // After flip completes, switch to new card
-                setTimeout(() => {
-                    // Switch active card
-                    nums.forEach((num) => {
-                        const numValue = parseInt(num.getAttribute('data-num'));
-                        num.classList.remove('active', 'hidden');
+                // Show the target number
+                if (numValue === targetValue) {
+                    // If changing from another number, trigger flip animation
+                    if (currentActive && currentActive !== num) {
+                        // Hide current active first
+                        currentActive.classList.remove('active');
+                        currentActive.classList.add('hidden');
                         
-                        if (numValue === targetValue) {
-                            num.classList.add('active');
-                            num.style.transform = 'rotateX(0deg)';
-                            num.style.transition = 'none';
-                        } else {
-                            num.classList.add('hidden');
-                            num.style.transform = 'rotateX(0deg)';
-                        }
-                    });
-                }, 600);
-            } else {
-                // Initial display or no change
-                container.style.setProperty('--current-num', '"' + targetValue + '"');
-                
-                nums.forEach((num) => {
-                    const numValue = parseInt(num.getAttribute('data-num'));
-                    num.classList.remove('active', 'hidden');
-                    
-                    if (numValue === targetValue) {
+                        // Show new number with flip animation
                         num.classList.add('active');
-                        num.style.transform = 'rotateX(0deg)';
+                        // Trigger a reflow to restart animation
+                        num.style.animation = 'none';
+                        setTimeout(() => {
+                            num.style.animation = '';
+                        }, 10);
                     } else {
-                        num.classList.add('hidden');
+                        // Initial display or no change - show immediately
+                        num.classList.add('active');
                     }
-                });
-            }
+                } else {
+                    // Hide non-active numbers
+                    num.classList.add('hidden');
+                }
+            });
         }
 
         // Initialize countdown immediately - set initial values
