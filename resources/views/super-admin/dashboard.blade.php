@@ -459,7 +459,7 @@
             <div class="stat-card stat-card-expiring">
                 <i class="icofont-warning-alt stat-card-icon"></i>
                 <div class="stat-card-bg">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop&q=80" alt="Expiring">
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762423693/expiring-soon-phrase-written-on-260nw-1660836226_yryti0.jpg" alt="Expiring">
                 </div>
                 <div class="stat-card-overlay"></div>
                 <div class="stat-card-content">
