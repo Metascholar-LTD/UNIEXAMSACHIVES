@@ -294,41 +294,6 @@
                 display: none;
             }
         }
-
-        /* Footer Styles */
-        .super-admin-footer {
-            background: white;
-            border-top: 1px solid #e5e7eb;
-            padding: 1.5rem 0;
-            margin-top: 3rem;
-            position: relative;
-            z-index: 100;
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 1.5rem;
-            text-align: center;
-        }
-
-        .footer-text {
-            margin: 0;
-            color: #6b7280;
-            font-size: 0.875rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .footer-powered {
-            margin: 0;
-            color: #6b7280;
-            font-size: 0.875rem;
-        }
-
-        .footer-powered strong {
-            color: #1f2937;
-            font-weight: 600;
-        }
     </style>
 
     @stack('styles')
@@ -430,18 +395,6 @@
 
         @yield('content')
     </main>
-
-    <!-- Footer -->
-    <footer class="super-admin-footer">
-        <div class="container-fluid">
-            <div class="footer-content">
-                <p class="footer-text">© 2025 Metascholar Consult LTD. All rights reserved.</p>
-                <p class="footer-powered">
-                    Developed & Powered by <strong>Metascholar Consult LTD</strong>
-                </p>
-            </div>
-        </div>
-    </footer>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
