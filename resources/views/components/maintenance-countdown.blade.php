@@ -33,7 +33,6 @@
                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
             </svg>
         </div>
-        <div class="maintenance-nav-separator"></div>
         <div class="maintenance-nav-countdown" id="navbar-countdown-display">
             <span class="maintenance-nav-label">Maintenance:</span>
             <span id="navbar-days">00</span>d
@@ -252,61 +251,19 @@
     /* Navbar Countdown Styles - Integrated into existing navbar */
     .maintenance-navbar-countdown {
         display: none;
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        width: auto;
-        margin: 0;
-    }
-    
-    /* Make the navbar countdown sticky when displayed */
-    .maintenance-navbar-countdown[style*="display: block"],
-    .maintenance-navbar-countdown.maintenance-countdown-active {
-        display: block !important;
-    }
-    
-    /* Sticky wrapper for the entire navbar when countdown is active */
-    header.maintenance-header-sticky,
-    nav.maintenance-header-sticky,
-    .navbar.maintenance-header-sticky {
-        position: sticky;
-        top: 0;
-        z-index: 1000;
-        background: rgba(255, 255, 255, 0.98);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        transition: background 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    /* Fallback for browsers that support :has() */
-    @supports selector(:has(*)) {
-        header:has(.maintenance-navbar-countdown[style*="display: block"]),
-        nav:has(.maintenance-navbar-countdown[style*="display: block"]),
-        .navbar:has(.maintenance-navbar-countdown[style*="display: block"]) {
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-        }
     }
 
     .maintenance-nav-item {
         display: flex;
         align-items: center;
-        gap: 0.375rem;
-        padding: 0.375rem 0.625rem;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
         background: rgba(245, 158, 11, 0.1);
         border: 1px solid rgba(245, 158, 11, 0.3);
-        border-radius: 6px;
-        font-size: 0.75rem;
+        border-radius: 8px;
+        font-size: 0.8125rem;
         white-space: nowrap;
         animation: fadeIn 0.3s ease-out;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        line-height: 1.2;
     }
 
     .maintenance-impact-low .maintenance-nav-item {
@@ -334,13 +291,6 @@
         color: #f59e0b;
         display: flex;
         align-items: center;
-        width: 14px;
-        height: 14px;
-    }
-    
-    .maintenance-nav-icon svg {
-        width: 14px;
-        height: 14px;
     }
 
     .maintenance-impact-low .maintenance-nav-icon {
@@ -355,42 +305,12 @@
         color: #ef4444;
     }
 
-    .maintenance-nav-separator {
-        width: 1px;
-        height: 16px;
-        background: rgba(0, 0, 0, 0.15);
-        margin: 0 0.375rem;
-        flex-shrink: 0;
-    }
-
-    .maintenance-impact-low .maintenance-nav-separator {
-        background: rgba(59, 130, 246, 0.3);
-    }
-
-    .maintenance-impact-medium .maintenance-nav-separator {
-        background: rgba(245, 158, 11, 0.3);
-    }
-
-    .maintenance-impact-high .maintenance-nav-separator {
-        background: rgba(249, 115, 22, 0.3);
-    }
-
-    .maintenance-impact-critical .maintenance-nav-separator {
-        background: rgba(239, 68, 68, 0.3);
-    }
-
     .maintenance-nav-countdown {
-        display: inline-flex;
+        display: flex;
         align-items: center;
         gap: 0.25rem;
         font-weight: 600;
         color: #78350f;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        letter-spacing: -0.01em;
-    }
-    
-    .maintenance-nav-countdown > * {
-        white-space: nowrap;
     }
 
     .maintenance-impact-low .maintenance-nav-countdown {
@@ -406,21 +326,15 @@
     }
 
     .maintenance-nav-label {
-        font-size: 0.6875rem;
+        font-size: 0.75rem;
         font-weight: 500;
-        margin-right: 0.375rem;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        letter-spacing: 0.01em;
+        margin-right: 0.25rem;
     }
 
     .maintenance-nav-countdown span:not(.maintenance-nav-label) {
         font-weight: 700;
-        min-width: 1.25rem;
+        min-width: 1.5rem;
         text-align: center;
-        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-        letter-spacing: 0;
-        display: inline-block;
-        margin-right: -0.125rem;
     }
 
     .maintenance-nav-close {
@@ -472,26 +386,16 @@
     /* Responsive adjustments for navbar countdown */
     @media (max-width: 991px) {
         .maintenance-nav-item {
-            padding: 0.3125rem 0.5rem;
-            font-size: 0.6875rem;
-            gap: 0.3125rem;
-        }
-
-        .maintenance-nav-separator {
-            height: 14px;
-            margin: 0 0.3125rem;
+            padding: 0.375rem 0.5rem;
+            font-size: 0.75rem;
         }
 
         .maintenance-nav-label {
             display: none;
         }
 
-        .maintenance-nav-countdown {
-            gap: 0.1875rem;
-        }
-
         .maintenance-nav-countdown span:not(.maintenance-nav-label) {
-            min-width: 1.125rem;
+            min-width: 1.25rem;
         }
     }
 
@@ -908,20 +812,9 @@
         const modalDismissed = localStorage.getItem('maintenance-modal-dismissed-' + maintenanceId) === 'true';
         const navbarDismissed = localStorage.getItem('maintenance-navbar-dismissed-' + maintenanceId) === 'true';
 
-        // Always show navbar countdown unless user explicitly dismissed it
-        // Wait for DOM to be ready to ensure navbar exists
-        function initNavbarCountdown() {
-            if (!navbarDismissed && navbarCountdown) {
+        // Show navbar countdown if modal was dismissed and navbar not dismissed
+        if (modalDismissed && !navbarDismissed && navbarCountdown) {
             showNavbarCountdown();
-            }
-        }
-        
-        // Try immediately, and also on DOMContentLoaded in case DOM isn't ready yet
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initNavbarCountdown);
-        } else {
-            // DOM is already ready
-            setTimeout(initNavbarCountdown, 100);
         }
 
         // Show modal on page load if not dismissed
@@ -943,8 +836,8 @@
                 document.body.style.overflow = '';
                 // Store in localStorage to not show again this session
                 localStorage.setItem('maintenance-modal-dismissed-' + maintenanceId, 'true');
-                // Ensure navbar countdown is showing (it should already be showing, but just in case)
-                if (!navbarDismissed && navbarCountdown) {
+                // Show navbar countdown
+                if (!navbarDismissed) {
                     showNavbarCountdown();
                 }
             }, 300);
@@ -953,37 +846,17 @@
         // Show navbar countdown function
         function showNavbarCountdown() {
             if (navbarCountdown && !navbarDismissed) {
-                // Check if already displayed
-                if (navbarCountdown.style.display === 'block' && navbarCountdown.parentNode) {
-                    // Already showing, just make sure countdown is running
-                    if (!navbarCountdownInterval) {
-                        startNavbarCountdown();
-                    }
-                    return;
-                }
-                
                 // Find the navbar right section and inject countdown
                 const navRight = document.querySelector('.uda-nav-right');
                 if (navRight) {
-                    // Only add if not already a child
-                    if (!navbarCountdown.parentNode) {
                     // Insert before notifications/logout button
                     const firstChild = navRight.firstElementChild;
                     if (firstChild) {
                         navRight.insertBefore(navbarCountdown, firstChild);
                     } else {
                         navRight.appendChild(navbarCountdown);
-                        }
                     }
                     navbarCountdown.style.display = 'block';
-                    navbarCountdown.classList.add('maintenance-countdown-active');
-                    
-                    // Make parent header/navbar sticky
-                    const header = navbarCountdown.closest('header, nav, .navbar');
-                    if (header) {
-                        header.classList.add('maintenance-header-sticky');
-                    }
-                    
                     startNavbarCountdown();
                 }
             }
@@ -993,14 +866,6 @@
         window.dismissNavbarCountdown = function() {
             if (navbarCountdown) {
                 navbarCountdown.style.display = 'none';
-                navbarCountdown.classList.remove('maintenance-countdown-active');
-                
-                // Remove sticky class from parent header/navbar
-                const header = navbarCountdown.closest('header, nav, .navbar');
-                if (header) {
-                    header.classList.remove('maintenance-header-sticky');
-                }
-                
                 localStorage.setItem('maintenance-navbar-dismissed-' + maintenanceId, 'true');
                 if (navbarCountdownInterval) {
                     clearInterval(navbarCountdownInterval);
