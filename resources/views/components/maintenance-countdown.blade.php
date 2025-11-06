@@ -370,4 +370,4 @@
         setInterval(updateCountdown, 1000);
     })();
 </script>
-
+@endif
