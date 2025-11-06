@@ -508,28 +508,30 @@
 
     .countdown-container {
         display: flex;
-        gap: 30px;
+        gap: 20px;
         text-align: center;
         justify-content: center;
-        align-items: flex-end;
+        align-items: center;
         flex-wrap: wrap;
+        padding: 10px;
     }
 
     .countdown-unit {
         display: flex;
         flex-direction: column;
         align-items: center;
+        gap: 10px;
     }
 
     .countdown-label {
         font-size: 14px;
-        margin-top: 10px;
         font-weight: 600;
         color: #333;
+        margin: 0;
     }
 
     .countdown-wrapper {
-        height: 100px;
+        height: 120px;
         display: flex;
         gap: 10px;
         perspective: 1000px;
@@ -537,11 +539,12 @@
 
     .nums {
         position: relative;
-        width: 80px;
-        height: 100px;
-        border-radius: 15px;
+        width: 90px;
+        height: 120px;
+        border-radius: 20px;
         overflow: hidden;
         box-shadow: 8px 8px 15px rgba(42, 42, 42, 0.2), -8px -8px 15px rgba(255, 255, 255, 0.5);
+        background: #e0e0e0;
     }
 
     .nums::before {
@@ -550,6 +553,7 @@
         height: 1px;
         position: absolute;
         top: 50%;
+        left: 0;
         width: 100%;
         z-index: 5;
     }
@@ -560,12 +564,13 @@
         left: 0;
         width: 100%;
         height: 100%;
-        font-size: 80px;
+        font-size: 72px;
+        line-height: 1;
         color: #333;
         text-align: center;
         background: #e0e0e0;
-        border-radius: 15px;
-        transform-origin: bottom;
+        border-radius: 20px;
+        transform-origin: center bottom;
         transform-style: preserve-3d;
         transition: transform 0.6s ease-in;
     }
@@ -587,19 +592,26 @@
         align-items: center;
         font-weight: bold;
         backface-visibility: hidden;
+        overflow: hidden;
+        font-size: 72px;
+        line-height: 1;
     }
 
     .num::before {
         content: attr(data-current);
-        border-radius: 15px 15px 0 0;
+        border-radius: 20px 20px 0 0;
         top: 0;
+        align-items: flex-end;
+        padding-bottom: 5px;
     }
 
     .num::after {
         content: attr(data-next);
-        border-radius: 0 0 15px 15px;
+        border-radius: 0 0 20px 20px;
         transform: rotateX(180deg);
         bottom: 0;
+        align-items: flex-start;
+        padding-top: 5px;
     }
 
     /* Modal Footer */
@@ -645,20 +657,27 @@
         }
 
         .countdown-container {
-            gap: 15px;
+            gap: 10px;
+            padding: 5px;
         }
 
         .nums {
-            width: 60px;
-            height: 80px;
+            width: 70px;
+            height: 90px;
         }
 
-        .num {
-            font-size: 60px;
+        .num,
+        .num::before,
+        .num::after {
+            font-size: 56px;
         }
 
         .countdown-wrapper {
-            height: 80px;
+            height: 90px;
+        }
+
+        .countdown-label {
+            font-size: 12px;
         }
 
         .maintenance-header-content {
