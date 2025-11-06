@@ -650,261 +650,146 @@
         padding-bottom: 28px;
     }
 
-    /* Flip Countdown Timer Styles - From Uiverse.io by Carlos-vargs */
+    /* Flip Countdown Timer Styles - Split-flap Display Effect */
     .nums {
-        box-shadow: 0 3px 10px #111;
-        border-top: 1px solid #393939;
+        perspective: 1000px;
         display: inline-block;
         height: 100px;
-        perspective: 1000px;
         position: relative;
         width: 65px;
     }
 
-    .nums:before {
-        border-bottom: 2px solid black;
-        content: "";
-        height: 1px;
-        left: 0;
-        position: absolute;
-        transform: translate3d(0, -1px, 0);
-        top: 50%;
-        width: 100%;
-        z-index: 1000;
-    }
-
-    .nums:after {
-        backface-visibility: hidden;
-        background: #2a2a2a;
-        border-bottom: 1px solid #444444;
-        border-top: 1px solid black;
-        border-radius: 0 0 5px 5px;
-        bottom: 0;
-        box-shadow: inset 0 15px 50px #202020;
-        color: #eeeeee;
-        content: "0";
-        display: block;
-        font-size: 65px;
-        height: calc(50% - 1px);
-        left: 0;
-        line-height: 0;
-        overflow: hidden;
-        position: absolute;
-        text-align: center;
-        text-shadow: 0 1px 2px #333;
-        width: 100%;
-        z-index: -1;
-    }
-
     .num {
-        animation-fill-mode: forwards;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in;
-        border-radius: 5px;
-        font-size: 65px;
-        height: 100%;
-        left: 0;
-        position: absolute;
-        transform: rotateX(0);
-        transition: 0.6s;
-        transform-style: preserve-3d;
-        top: 0;
+        position: relative;
         width: 100%;
+        height: 100%;
+        font-size: 65px;
+        font-weight: bold;
+        color: #eeeeee;
+        background: #333;
+        border-radius: 10px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
     }
 
-    .num:before,
-    .num:after {
-        backface-visibility: hidden;
-        color: #eeeeee;
-        display: block;
+    .num::before,
+    .num::after {
+        content: attr(data-num);
+        position: absolute;
+        width: 100%;
         height: 50%;
         left: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        backface-visibility: hidden;
         overflow: hidden;
-        position: absolute;
-        text-align: center;
-        text-shadow: 0 1px 2px #333;
-        width: 100%;
+        text-shadow: 0 1px 2px #000;
     }
 
-    .num:before {
-        background: #181818;
-        border-radius: 5px 5px 0 0;
-        box-shadow: inset 0 15px 50px #111111;
-        content: attr(data-num);
-        line-height: 1.38;
+    .num::before {
         top: 0;
-        z-index: 1;
+        background: linear-gradient(to bottom, #181818 0%, #222 100%);
+        border-radius: 10px 10px 0 0;
+        border-bottom: 1px solid #111;
+        line-height: 200px;
+        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
+        z-index: 3;
     }
 
-    .num:after {
-        background: #2a2a2a;
-        border-bottom: 1px solid #444444;
-        border-radius: 0 0 5px 5px;
-        box-shadow: inset 0 15px 50px #202020;
-        content: attr(data-num);
-        height: calc(50% - 1px);
-        line-height: 0;
+    .num::after {
         bottom: 0;
-        top: auto;
-    }
-
-    /* Animations for ones (seconds, minutes units) */
-    .nums-one .num:nth-of-type(1) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 0s;
-        z-index: 10;
-    }
-    .nums-one .num:nth-of-type(2) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 1s;
-        z-index: 9;
-    }
-    .nums-one .num:nth-of-type(3) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 2s;
-        z-index: 8;
-    }
-    .nums-one .num:nth-of-type(4) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 3s;
-        z-index: 7;
-    }
-    .nums-one .num:nth-of-type(5) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 4s;
-        z-index: 6;
-    }
-    .nums-one .num:nth-of-type(6) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 5s;
-        z-index: 5;
-    }
-    .nums-one .num:nth-of-type(7) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 6s;
-        z-index: 4;
-    }
-    .nums-one .num:nth-of-type(8) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 7s;
-        z-index: 3;
-    }
-    .nums-one .num:nth-of-type(9) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 8s;
-        z-index: 2;
-    }
-    .nums-one .num:nth-of-type(10) {
-        animation: num-one 10s infinite ease-in;
-        animation-delay: 9s;
+        background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
+        border-radius: 0 0 10px 10px;
+        border-top: 1px solid #444;
+        line-height: 0;
+        box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.4);
         z-index: 1;
     }
 
-    /* Animations for tens (days, hours tens, minutes tens, seconds tens) */
-    .nums-ten .num:nth-of-type(1) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 9s;
-        z-index: 10;
-    }
-    .nums-ten .num:nth-of-type(2) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 19s;
-        z-index: 9;
-    }
-    .nums-ten .num:nth-of-type(3) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 29s;
-        z-index: 8;
-    }
-    .nums-ten .num:nth-of-type(4) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 39s;
-        z-index: 7;
-    }
-    .nums-ten .num:nth-of-type(5) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 49s;
-        z-index: 6;
-    }
-    .nums-ten .num:nth-of-type(6) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 59s;
-        z-index: 5;
-    }
-    .nums-ten .num:nth-of-type(7) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 69s;
-        z-index: 4;
-    }
-    .nums-ten .num:nth-of-type(8) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 79s;
-        z-index: 3;
-    }
-    .nums-ten .num:nth-of-type(9) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 89s;
+    /* Flip animation for the top half */
+    .num.flip::before {
+        animation: flipDown 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
         z-index: 2;
     }
-    .nums-ten .num:nth-of-type(10) {
-        animation: num-ten 100s infinite ease-in;
-        animation-delay: 99s;
+
+    @keyframes flipDown {
+        0% {
+            transform-origin: bottom;
+            transform: rotateX(0deg);
+        }
+        100% {
+            transform-origin: bottom;
+            transform: rotateX(-180deg);
+        }
+    }
+
+    /* Next number preparation */
+    .num .next-half-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 50%;
+        background: linear-gradient(to bottom, #181818 0%, #222 100%);
+        border-radius: 10px 10px 0 0;
+        border-bottom: 1px solid #111;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #eeeeee;
+        font-size: 65px;
+        font-weight: bold;
+        line-height: 200px;
+        overflow: hidden;
+        text-shadow: 0 1px 2px #000;
+        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
         z-index: 1;
+        opacity: 0;
     }
 
-    @keyframes num-one {
+    .num.flip .next-half-top {
+        opacity: 1;
+        animation: showNext 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
+    }
+
+    @keyframes showNext {
         0% {
-            transform: rotateX(0);
-            z-index: 50;
+            opacity: 0;
         }
-        10% {
-            transform: rotateX(-180deg);
-            z-index: 50;
-        }
-        90% {
-            transform: rotateX(-180deg);
-            z-index: 1;
-        }
-        90.0001% {
-            transform: rotateX(0);
+        50% {
+            opacity: 0;
         }
         100% {
-            transform: rotateX(0);
+            opacity: 1;
         }
     }
 
-    @keyframes num-ten {
-        0% {
-            transform: rotateX(0);
-            z-index: 50;
-        }
-        1% {
-            transform: rotateX(-180deg);
-            z-index: 50;
-        }
-        90% {
-            transform: rotateX(-180deg);
-            z-index: 1;
-        }
-        90.0001% {
-            transform: rotateX(0);
-        }
-        100% {
-            transform: rotateX(0);
-        }
-    }
-
-    /* Override animations for active numbers - controlled by JavaScript */
+    /* Active/Hidden state for JavaScript control */
     .num.active {
-        animation: none !important;
-        z-index: 100 !important;
-        transform: rotateX(0deg) !important;
+        display: flex;
+        z-index: 10;
     }
 
     .num.hidden {
-        animation: none !important;
-        z-index: 1 !important;
-        transform: rotateX(-180deg) !important;
+        display: none;
+    }
+
+    /* Middle divider line */
+    .nums::before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: #000;
+        z-index: 5;
+        transform: translateY(-1px);
+        box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
     }
 
     /* Modal Footer */
@@ -963,8 +848,13 @@
             font-size: 55px;
         }
 
-        .nums:after {
+        .num::before {
+            line-height: 170px;
+        }
+
+        .num .next-half-top {
             font-size: 55px;
+            line-height: 170px;
         }
 
         .countdown-separator {
@@ -1198,33 +1088,69 @@
             nums.forEach((num) => {
                 const numValue = parseInt(num.getAttribute('data-num'));
                 
-                // Remove all classes
-                num.classList.remove('active', 'hidden');
-                
                 // Show the target number
                 if (numValue === targetValue) {
                     // If changing from another number, trigger flip animation
                     if (currentActive && currentActive !== num) {
-                        // Hide current active first
-                        currentActive.classList.remove('active');
-                        currentActive.classList.add('hidden');
+                        const oldValue = currentActive.getAttribute('data-num');
                         
-                        // Show new number with flip animation
-                        num.classList.add('active');
-                        // Trigger a reflow to restart animation
-                        num.style.animation = 'none';
-                        setTimeout(() => {
-                            num.style.animation = '';
-                        }, 10);
-                    } else {
-                        // Initial display or no change - show immediately
+                        // Trigger flip animation on current active
+                        flipNumber(currentActive, targetValue, () => {
+                            // After animation, hide old and show new
+                            currentActive.classList.remove('active');
+                            currentActive.classList.add('hidden');
+                            num.classList.remove('hidden');
+                            num.classList.add('active');
+                        });
+                    } else if (!currentActive) {
+                        // Initial display - show immediately
+                        num.classList.remove('hidden');
                         num.classList.add('active');
                     }
+                    // If currentActive === num, no change needed
                 } else {
-                    // Hide non-active numbers
-                    num.classList.add('hidden');
+                    // Hide non-active numbers (but not during animation)
+                    if (num !== currentActive) {
+                        num.classList.remove('active');
+                        num.classList.add('hidden');
+                    }
                 }
             });
+        }
+
+        // Flip animation function
+        function flipNumber(element, newValue, callback) {
+            const oldValue = element.getAttribute('data-num');
+            if (oldValue === String(newValue)) {
+                if (callback) callback();
+                return;
+            }
+
+            // Create next number display element
+            const nextHalfTop = document.createElement('div');
+            nextHalfTop.className = 'next-half-top';
+            nextHalfTop.textContent = newValue;
+            element.appendChild(nextHalfTop);
+
+            // Add flip class to trigger animation
+            element.classList.add('flip');
+
+            // Handle animation end
+            const onAnimEnd = () => {
+                element.setAttribute('data-num', newValue);
+                element.classList.remove('flip');
+                
+                // Remove the next-half-top element
+                if (nextHalfTop.parentNode === element) {
+                    element.removeChild(nextHalfTop);
+                }
+                
+                element.removeEventListener('animationend', onAnimEnd);
+                
+                if (callback) callback();
+            };
+
+            element.addEventListener('animationend', onAnimEnd);
         }
 
         // Initialize countdown immediately - set initial values
