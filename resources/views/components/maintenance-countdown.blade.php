@@ -21,6 +21,36 @@
 @endphp
 
 @if($upcomingMaintenance)
+<!-- Maintenance Countdown Header Banner (shown when modal is dismissed) -->
+<div id="maintenance-header-banner" class="maintenance-header-banner maintenance-impact-{{ $upcomingMaintenance->impact_level }}" 
+     data-start-time="{{ $upcomingMaintenance->scheduled_start->timestamp * 1000 }}"
+     data-maintenance-id="{{ $upcomingMaintenance->id }}"
+     style="display: none;">
+    <div class="maintenance-header-content">
+        <div class="maintenance-header-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+            </svg>
+        </div>
+        <div class="maintenance-header-text">
+            <span class="maintenance-header-title">{{ $upcomingMaintenance->title }}</span>
+            <span class="maintenance-header-time">{{ $upcomingMaintenance->scheduled_start->format('M d, Y h:i A') }}</span>
+        </div>
+        <div class="maintenance-header-countdown" id="header-countdown-display">
+            <span id="header-days">00</span>d :
+            <span id="header-hours">00</span>h :
+            <span id="header-minutes">00</span>m :
+            <span id="header-seconds">00</span>s
+        </div>
+        <button class="maintenance-header-close" onclick="dismissHeaderBanner()">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </button>
+    </div>
+</div>
+
 <!-- Maintenance Countdown Modal -->
 <div id="maintenance-countdown-modal" class="maintenance-modal" data-start-time="{{ $upcomingMaintenance->scheduled_start->timestamp * 1000 }}">
     <div class="maintenance-modal-overlay"></div>
@@ -220,6 +250,163 @@
 </div>
 
 <style>
+    /* Header Banner Styles */
+    .maintenance-header-banner {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9998;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-bottom: 2px solid #f59e0b;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        animation: slideDown 0.3s ease-out;
+    }
+
+    .maintenance-impact-low .maintenance-header-banner {
+        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+        border-bottom-color: #3b82f6;
+    }
+
+    .maintenance-impact-medium .maintenance-header-banner {
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        border-bottom-color: #f59e0b;
+    }
+
+    .maintenance-impact-high .maintenance-header-banner {
+        background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
+        border-bottom-color: #f97316;
+    }
+
+    .maintenance-impact-critical .maintenance-header-banner {
+        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+        border-bottom-color: #ef4444;
+    }
+
+    .maintenance-header-content {
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0.75rem 1.5rem;
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        position: relative;
+    }
+
+    .maintenance-header-icon {
+        flex-shrink: 0;
+        color: #78350f;
+    }
+
+    .maintenance-impact-low .maintenance-header-icon {
+        color: #1e40af;
+    }
+
+    .maintenance-impact-high .maintenance-header-icon {
+        color: #9a3412;
+    }
+
+    .maintenance-impact-critical .maintenance-header-icon {
+        color: #991b1b;
+    }
+
+    .maintenance-header-text {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+        min-width: 0;
+    }
+
+    .maintenance-header-title {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #78350f;
+    }
+
+    .maintenance-impact-low .maintenance-header-title {
+        color: #1e40af;
+    }
+
+    .maintenance-impact-high .maintenance-header-title {
+        color: #9a3412;
+    }
+
+    .maintenance-impact-critical .maintenance-header-title {
+        color: #991b1b;
+    }
+
+    .maintenance-header-time {
+        font-size: 0.75rem;
+        color: #92400e;
+    }
+
+    .maintenance-impact-low .maintenance-header-time {
+        color: #1e3a8a;
+    }
+
+    .maintenance-impact-high .maintenance-header-time {
+        color: #7c2d12;
+    }
+
+    .maintenance-impact-critical .maintenance-header-time {
+        color: #7f1d1d;
+    }
+
+    .maintenance-header-countdown {
+        flex-shrink: 0;
+        font-size: 0.875rem;
+        font-weight: 700;
+        color: #78350f;
+        white-space: nowrap;
+    }
+
+    .maintenance-impact-low .maintenance-header-countdown {
+        color: #1e40af;
+    }
+
+    .maintenance-impact-high .maintenance-header-countdown {
+        color: #9a3412;
+    }
+
+    .maintenance-impact-critical .maintenance-header-countdown {
+        color: #991b1b;
+    }
+
+    .maintenance-header-close {
+        flex-shrink: 0;
+        background: rgba(0, 0, 0, 0.05);
+        border: none;
+        border-radius: 50%;
+        width: 1.75rem;
+        height: 1.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: all 0.2s;
+        color: #78350f;
+    }
+
+    .maintenance-header-close:hover {
+        background: rgba(0, 0, 0, 0.1);
+    }
+
+    body.maintenance-banner-active {
+        padding-top: 60px;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
     /* Modal Styles */
     .maintenance-modal {
         position: fixed;
@@ -258,7 +445,7 @@
         background: white;
         border-radius: 20px;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        max-width: 600px;
+        max-width: 750px;
         width: 100%;
         max-height: 85vh;
         overflow-y: auto;
@@ -433,13 +620,14 @@
     }
 
     .countdown-container {
-        height: 120px;
+        height: 100px;
         position: relative;
         text-align: center;
         display: flex;
-        gap: 12px;
+        gap: 8px;
         justify-content: center;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .countdown-group {
@@ -459,26 +647,26 @@
 
     .countdown-wrapper {
         display: flex;
-        gap: 4px;
+        gap: 3px;
     }
 
     .countdown-separator {
-        font-size: 1.25rem;
+        font-size: 1rem;
         font-weight: 700;
         color: #1f2937;
         align-self: flex-end;
-        padding-bottom: 35px;
+        padding-bottom: 28px;
     }
 
     /* Flip Countdown Timer Styles - From Uiverse.io by Carlos-vargs */
     .nums {
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
         border-top: 1px solid #393939;
         display: inline-block;
-        height: 120px;
+        height: 100px;
         perspective: 1000px;
         position: relative;
-        width: 85px;
+        width: 65px;
     }
 
     .nums:before {
@@ -500,11 +688,11 @@
         border-top: 1px solid black;
         border-radius: 0 0 5px 5px;
         bottom: 0;
-        box-shadow: inset 0 10px 30px #202020;
+        box-shadow: inset 0 8px 25px #202020;
         color: #eeeeee;
         content: "0";
         display: block;
-        font-size: 85px;
+        font-size: 65px;
         height: calc(50% - 1px);
         left: 0;
         line-height: 0;
@@ -517,19 +705,15 @@
     }
 
     .num {
-        animation-fill-mode: forwards;
-        animation-iteration-count: infinite;
-        animation-timing-function: ease-in;
         border-radius: 5px;
-        font-size: 85px;
+        font-size: 65px;
         height: 100%;
         left: 0;
         position: absolute;
-        transform: rotateX(0);
-        transition: 0.6s;
         transform-style: preserve-3d;
         top: 0;
         width: 100%;
+        z-index: 1;
     }
 
     .num:before,
@@ -549,23 +733,25 @@
     .num:before {
         background: #181818;
         border-radius: 5px 5px 0 0;
-        box-shadow: inset 0 15px 50px #111111;
+        box-shadow: inset 0 10px 35px #111111;
         content: attr(data-num);
         line-height: 1.38;
         top: 0;
         z-index: 1;
+        transform-origin: bottom;
     }
 
     .num:after {
         background: #2a2a2a;
         border-bottom: 1px solid #444444;
         border-radius: 0 0 5px 5px;
-        box-shadow: inset 0 15px 50px #202020;
+        box-shadow: inset 0 10px 35px #202020;
         content: attr(data-num-next);
         height: calc(50% - 1px);
         line-height: 0;
-        top: 0;
+        top: 50%;
         transform: rotateX(180deg);
+        transform-origin: top;
     }
 
     /* Default state - all numbers hidden */
@@ -578,7 +764,7 @@
     /* Active number - visible */
     .num.active {
         z-index: 100;
-        transform: rotateX(0deg);
+        transform: rotateX(0deg) !important;
     }
 
     /* Flip animation when number changes */
@@ -642,26 +828,35 @@
         }
 
         .countdown-container {
-            gap: 8px;
-            height: 100px;
+            gap: 6px;
+            height: 85px;
         }
 
         .nums {
-            width: 70px;
-            height: 100px;
+            width: 55px;
+            height: 85px;
         }
 
         .num {
-            font-size: 70px;
+            font-size: 55px;
         }
 
         .nums:after {
-            font-size: 70px;
+            font-size: 55px;
         }
 
         .countdown-separator {
-            font-size: 1rem;
-            padding-bottom: 30px;
+            font-size: 0.875rem;
+            padding-bottom: 24px;
+        }
+
+        .maintenance-header-content {
+            padding: 0.625rem 1rem;
+            flex-wrap: wrap;
+        }
+
+        .maintenance-header-countdown {
+            font-size: 0.75rem;
         }
     }
 </style>
@@ -669,16 +864,33 @@
 <script>
     (function() {
         const modal = document.getElementById('maintenance-countdown-modal');
+        const headerBanner = document.getElementById('maintenance-header-banner');
         if (!modal) return;
 
         const startTime = parseInt(modal.dataset.startTime);
+        const maintenanceId = {{ $upcomingMaintenance->id }};
         let countdownInterval;
+        let headerCountdownInterval;
 
-        // Show modal on page load
-        setTimeout(() => {
-            modal.classList.add('show');
-            document.body.style.overflow = 'hidden';
-        }, 500);
+        // Check if modal was dismissed
+        const modalDismissed = localStorage.getItem('maintenance-modal-dismissed-' + maintenanceId) === 'true';
+        const headerDismissed = localStorage.getItem('maintenance-header-dismissed-' + maintenanceId) === 'true';
+
+        // Show header banner if modal was dismissed and header not dismissed
+        if (modalDismissed && !headerDismissed) {
+            showHeaderBanner();
+        }
+
+        // Show modal on page load if not dismissed
+        if (!modalDismissed) {
+            setTimeout(() => {
+                modal.classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }, 500);
+        } else {
+            // Ensure body scroll is enabled if modal is dismissed
+            document.body.style.overflow = '';
+        }
 
         // Close modal function
         window.closeMaintenanceModal = function() {
@@ -686,9 +898,34 @@
             setTimeout(() => {
                 modal.style.display = 'none';
                 document.body.style.overflow = '';
+                // Store in localStorage to not show again this session
+                localStorage.setItem('maintenance-modal-dismissed-' + maintenanceId, 'true');
+                // Show header banner
+                if (!headerDismissed) {
+                    showHeaderBanner();
+                }
             }, 300);
-            // Store in localStorage to not show again this session
-            localStorage.setItem('maintenance-modal-dismissed-' + {{ $upcomingMaintenance->id }}, 'true');
+        };
+
+        // Show header banner function
+        function showHeaderBanner() {
+            if (headerBanner && !headerDismissed) {
+                headerBanner.style.display = 'block';
+                document.body.classList.add('maintenance-banner-active');
+                startHeaderCountdown();
+            }
+        }
+
+        // Dismiss header banner function
+        window.dismissHeaderBanner = function() {
+            if (headerBanner) {
+                headerBanner.style.display = 'none';
+                document.body.classList.remove('maintenance-banner-active');
+                localStorage.setItem('maintenance-header-dismissed-' + maintenanceId, 'true');
+                if (headerCountdownInterval) {
+                    clearInterval(headerCountdownInterval);
+                }
+            }
         };
 
         // Close button
@@ -701,12 +938,6 @@
         const overlay = modal.querySelector('.maintenance-modal-overlay');
         if (overlay) {
             overlay.addEventListener('click', closeMaintenanceModal);
-        }
-
-        // Check if already dismissed
-        if (localStorage.getItem('maintenance-modal-dismissed-' + {{ $upcomingMaintenance->id }}) === 'true') {
-            modal.style.display = 'none';
-            return;
         }
 
         // Store current values to detect changes
@@ -728,7 +959,12 @@
 
             if (distance < 0) {
                 // Maintenance has started
-                closeMaintenanceModal();
+                if (modal && modal.classList.contains('show')) {
+                    closeMaintenanceModal();
+                }
+                if (headerBanner) {
+                    dismissHeaderBanner();
+                }
                 return;
             }
 
@@ -781,6 +1017,38 @@
             }
         }
 
+        // Function to update header countdown
+        function updateHeaderCountdown() {
+            const now = new Date().getTime();
+            const distance = startTime - now;
+
+            if (distance < 0) {
+                dismissHeaderBanner();
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const daysEl = document.getElementById('header-days');
+            const hoursEl = document.getElementById('header-hours');
+            const minutesEl = document.getElementById('header-minutes');
+            const secondsEl = document.getElementById('header-seconds');
+
+            if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        // Start header countdown
+        function startHeaderCountdown() {
+            updateHeaderCountdown();
+            headerCountdownInterval = setInterval(updateHeaderCountdown, 1000);
+        }
+
         // Function to update flip digit by triggering animation
         function updateFlipDigit(containerId, targetValue) {
             const container = document.getElementById(containerId);
@@ -799,20 +1067,30 @@
             nums.forEach((num) => {
                 const numValue = parseInt(num.getAttribute('data-num'));
                 
-                // Remove all active classes
+                // Remove all active classes and reset transforms
                 num.classList.remove('active', 'flipping');
                 
                 // Show the target number
                 if (numValue === targetValue) {
                     // If changing from another number, trigger flip animation
-                    if (currentActive && currentActive !== num && currentActive.classList.contains('active')) {
+                    if (currentActive && currentActive !== num) {
+                        // Hide current active first
+                        currentActive.style.zIndex = '1';
+                        currentActive.style.transform = 'rotateX(-180deg)';
+                        currentActive.classList.remove('active');
+                        
+                        // Show new number with flip
+                        num.style.zIndex = '100';
                         num.classList.add('flipping');
                         setTimeout(() => {
                             num.classList.remove('flipping');
                             num.classList.add('active');
+                            num.style.transform = 'rotateX(0deg)';
                         }, 600);
                     } else {
                         // Initial display or no change - show immediately
+                        num.style.zIndex = '100';
+                        num.style.transform = 'rotateX(0deg)';
                         num.classList.add('active');
                     }
                 } else {
@@ -832,6 +1110,14 @@
         // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
             if (countdownInterval) clearInterval(countdownInterval);
+            if (headerCountdownInterval) clearInterval(headerCountdownInterval);
+        });
+
+        // Ensure body scroll is enabled on page load if modal is not shown
+        window.addEventListener('load', function() {
+            if (modalDismissed || !modal.classList.contains('show')) {
+                document.body.style.overflow = '';
+            }
         });
     })();
 </script>
