@@ -227,6 +227,47 @@
         border-radius: 1.5rem;
     }
 
+    /* Page Header Style - Hostinger Style */
+    .page-header-modern {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .page-header-separator {
+        width: 1px;
+        height: 2rem;
+        background-color: #d1d5db;
+        margin: 0;
+    }
+
+    .page-header-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .page-header-breadcrumb i {
+        font-size: 1rem;
+    }
+
+    .page-header-description {
+        margin-top: 0.5rem;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+
     /* Modern Statistics Card Styles - Adapted from React Component */
     .stat-card {
         position: relative;
@@ -406,8 +447,15 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-12">
-            <h2 class="mb-1"><i class="icofont-dashboard-web"></i> Dashboard</h2>
-            <p class="text-muted">Complete system overview and management</p>
+            <div class="page-header-modern">
+                <h1 class="page-header-title">Dashboard</h1>
+                <div class="page-header-separator"></div>
+                <div class="page-header-breadcrumb">
+                    <i class="icofont-home"></i>
+                    <span> - Dashboard</span>
+                </div>
+            </div>
+            <p class="page-header-description">Complete system overview and management</p>
         </div>
     </div>
 

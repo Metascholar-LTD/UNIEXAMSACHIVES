@@ -144,6 +144,47 @@
     .settings-button-danger .settings-button-icon {
         background: linear-gradient(to bottom right, rgba(239, 68, 68, 0.3), rgba(248, 113, 113, 0.2));
     }
+
+    /* Page Header Style - Hostinger Style */
+    .page-header-modern {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .page-header-title {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .page-header-separator {
+        width: 1px;
+        height: 2rem;
+        background-color: #d1d5db;
+        margin: 0;
+    }
+
+    .page-header-breadcrumb {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-size: 0.875rem;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .page-header-breadcrumb i {
+        font-size: 1rem;
+    }
+
+    .page-header-description {
+        margin-top: 0.5rem;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
 </style>
 @endpush
 
@@ -151,8 +192,15 @@
 <div class="container-fluid">
     <div class="row mb-4">
         <div class="col-12">
-            <h2 class="mb-1"><i class="icofont-settings-alt"></i> System Settings</h2>
-            <p class="text-muted">Configure system-wide settings and preferences</p>
+            <div class="page-header-modern">
+                <h1 class="page-header-title">System Settings</h1>
+                <div class="page-header-separator"></div>
+                <div class="page-header-breadcrumb">
+                    <i class="icofont-home"></i>
+                    <span> - System Settings</span>
+                </div>
+            </div>
+            <p class="page-header-description">Configure system-wide settings and preferences</p>
         </div>
     </div>
 
