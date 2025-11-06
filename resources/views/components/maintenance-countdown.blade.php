@@ -901,12 +901,13 @@
         animation: none !important;
         z-index: 100 !important;
         transform: rotateX(0deg) !important;
+        display: block !important;
     }
 
     .num.hidden {
         animation: none !important;
         z-index: 1 !important;
-        transform: rotateX(-180deg) !important;
+        display: none !important;
     }
 
     /* Modal Footer */
