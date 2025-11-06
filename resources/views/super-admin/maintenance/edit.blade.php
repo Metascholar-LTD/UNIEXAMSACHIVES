@@ -343,8 +343,8 @@
         </div>
 
         {{-- Danger Zone - Update Actions --}}
-        <div class="modern-card" style="border: 2px solid #ef4444;">
-            <div class="modern-card-header" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-bottom: 2px solid #ef4444;">
+        <div class="modern-card">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);">
                 <h5 style="color: #991b1b;">
                     <i class="icofont-warning"></i>
                     Update Maintenance
@@ -365,7 +365,7 @@
                                    border: 2px solid rgba(239, 68, 68, 0.3);
                                    font-weight: 700;"
                             onclick="return confirm('Are you sure you want to update this maintenance? Please review all changes before proceeding.')">
-                        <i class="icofont-save"></i> Update Maintenance
+                        Update Maintenance
                     </button>
                 </div>
             </div>
