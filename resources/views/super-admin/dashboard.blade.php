@@ -4,41 +4,26 @@
 
 @push('styles')
 <style>
-    /* Modern Button Component Styles - Converted from React/Tailwind */
+    /* Modern Button Component Styles - Whitish Grey Theme */
     .modern-action-button {
         position: relative;
         overflow: hidden;
-        border: 2px solid rgba(99, 102, 241, 0.4);
+        border: 2px solid rgba(229, 231, 235, 0.6);
         cursor: pointer;
         transition: all 0.5s ease-out;
-        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         text-decoration: none;
         display: block;
         width: 100%;
         padding: 1rem;
         border-radius: 1rem;
+        background: linear-gradient(to bottom right, rgba(249, 250, 251, 0.95), rgba(243, 244, 246, 0.95), rgba(249, 250, 251, 0.95));
     }
 
     .modern-action-button:hover {
-        box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         transform: scale(1.02) translateY(-4px);
-    }
-
-    /* Hover shadow effects for different gradients */
-    .modern-button-gradient-primary:hover {
-        box-shadow: 0 25px 50px -12px rgba(99, 102, 241, 0.3);
-    }
-
-    .modern-button-gradient-success:hover {
-        box-shadow: 0 25px 50px -12px rgba(34, 197, 94, 0.3);
-    }
-
-    .modern-button-gradient-info:hover {
-        box-shadow: 0 25px 50px -12px rgba(59, 130, 246, 0.3);
-    }
-
-    .modern-button-gradient-warning:hover {
-        box-shadow: 0 25px 50px -12px rgba(234, 179, 8, 0.3);
+        border-color: rgba(209, 213, 219, 0.8);
     }
 
     .modern-action-button:active {
@@ -50,7 +35,7 @@
         content: '';
         position: absolute;
         inset: 0;
-        background: linear-gradient(to right, transparent, rgba(129, 140, 248, 0.4), transparent);
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
         transform: translateX(-100%);
         transition: transform 1s ease-out;
         z-index: 1;
@@ -60,26 +45,13 @@
         transform: translateX(100%);
     }
 
-    /* Gradient-specific moving layers */
-    .modern-button-gradient-success::before {
-        background: linear-gradient(to right, transparent, rgba(74, 222, 128, 0.4), transparent);
-    }
-
-    .modern-button-gradient-info::before {
-        background: linear-gradient(to right, transparent, rgba(96, 165, 250, 0.4), transparent);
-    }
-
-    .modern-button-gradient-warning::before {
-        background: linear-gradient(to right, transparent, rgba(250, 204, 21, 0.4), transparent);
-    }
-
     /* Overlay glow */
     .modern-action-button::after {
         content: '';
         position: absolute;
         inset: 0;
         border-radius: 1rem;
-        background: linear-gradient(to right, rgba(129, 140, 248, 0.2), rgba(129, 140, 248, 0.1), rgba(129, 140, 248, 0.2));
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
         opacity: 0;
         transition: opacity 0.5s;
         z-index: 1;
@@ -87,19 +59,6 @@
 
     .modern-action-button:hover::after {
         opacity: 1;
-    }
-
-    /* Gradient-specific overlay glows */
-    .modern-button-gradient-success::after {
-        background: linear-gradient(to right, rgba(74, 222, 128, 0.2), rgba(74, 222, 128, 0.1), rgba(74, 222, 128, 0.2));
-    }
-
-    .modern-button-gradient-info::after {
-        background: linear-gradient(to right, rgba(96, 165, 250, 0.2), rgba(96, 165, 250, 0.1), rgba(96, 165, 250, 0.2));
-    }
-
-    .modern-button-gradient-warning::after {
-        background: linear-gradient(to right, rgba(250, 204, 21, 0.2), rgba(250, 204, 21, 0.1), rgba(250, 204, 21, 0.2));
     }
 
     /* Content wrapper */
@@ -115,7 +74,7 @@
     .modern-button-icon {
         padding: 0.75rem;
         border-radius: 0.5rem;
-        background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.5), rgba(129, 140, 248, 0.3));
+        background: linear-gradient(to bottom right, rgba(229, 231, 235, 0.8), rgba(243, 244, 246, 0.6));
         backdrop-filter: blur(4px);
         transition: all 0.3s;
         display: flex;
@@ -124,44 +83,18 @@
     }
 
     .modern-action-button:hover .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(129, 140, 248, 0.6), rgba(99, 102, 241, 0.4));
-    }
-
-    /* Icon gradients for different button types */
-    .modern-button-gradient-success .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(34, 197, 94, 0.5), rgba(74, 222, 128, 0.3));
-    }
-
-    .modern-button-gradient-success:hover .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(74, 222, 128, 0.6), rgba(34, 197, 94, 0.4));
-    }
-
-    .modern-button-gradient-info .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.5), rgba(96, 165, 250, 0.3));
-    }
-
-    .modern-button-gradient-info:hover .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(96, 165, 250, 0.6), rgba(59, 130, 246, 0.4));
-    }
-
-    .modern-button-gradient-warning .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(234, 179, 8, 0.5), rgba(250, 204, 21, 0.3));
-    }
-
-    .modern-button-gradient-warning:hover .modern-button-icon {
-        background: linear-gradient(to bottom right, rgba(250, 204, 21, 0.6), rgba(234, 179, 8, 0.4));
+        background: linear-gradient(to bottom right, rgba(209, 213, 219, 0.9), rgba(229, 231, 235, 0.7));
     }
 
     .modern-button-icon svg {
         width: 1.75rem;
         height: 1.75rem;
-        color: white;
+        color: #374151;
         transition: all 0.3s;
-        filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
     }
 
     .modern-action-button:hover .modern-button-icon svg {
-        color: rgba(255, 255, 255, 0.9);
+        color: #1f2937;
         transform: scale(1.1);
     }
 
@@ -172,27 +105,26 @@
     }
 
     .modern-button-title {
-        color: white;
+        color: #1f2937;
         font-weight: 700;
         font-size: 1.125rem;
         margin: 0;
         transition: color 0.3s;
-        filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
     }
 
     .modern-action-button:hover .modern-button-title {
-        color: rgba(255, 255, 255, 0.9);
+        color: #111827;
     }
 
     .modern-button-subtitle {
-        color: rgba(255, 255, 255, 0.7);
+        color: #6b7280;
         font-size: 0.875rem;
         margin: 0;
         transition: color 0.3s;
     }
 
     .modern-action-button:hover .modern-button-subtitle {
-        color: rgba(255, 255, 255, 0.9);
+        color: #4b5563;
     }
 
     /* Arrow */
@@ -209,7 +141,7 @@
     .modern-button-arrow svg {
         width: 1.25rem;
         height: 1.25rem;
-        color: white;
+        color: #374151;
     }
 
     /* Size variants */
@@ -228,42 +160,6 @@
         border-radius: 1.5rem;
     }
 
-    /* Custom gradient variants - Light mode */
-    .modern-button-gradient-primary {
-        background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.4), rgba(129, 140, 248, 0.4), rgba(99, 102, 241, 0.6));
-        border-color: rgba(99, 102, 241, 0.4);
-    }
-
-    .modern-button-gradient-success {
-        background: linear-gradient(to bottom right, rgba(34, 197, 94, 0.4), rgba(74, 222, 128, 0.4), rgba(34, 197, 94, 0.6));
-        border-color: rgba(34, 197, 94, 0.4);
-    }
-
-    .modern-button-gradient-info {
-        background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.4), rgba(96, 165, 250, 0.4), rgba(59, 130, 246, 0.6));
-        border-color: rgba(59, 130, 246, 0.4);
-    }
-
-    .modern-button-gradient-warning {
-        background: linear-gradient(to bottom right, rgba(234, 179, 8, 0.4), rgba(250, 204, 21, 0.4), rgba(234, 179, 8, 0.6));
-        border-color: rgba(234, 179, 8, 0.4);
-    }
-
-    /* Dark mode gradients */
-    @media (prefers-color-scheme: dark) {
-        .modern-button-gradient-primary {
-            background: linear-gradient(to bottom right, rgba(67, 56, 202, 0.3), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
-        }
-        .modern-button-gradient-success {
-            background: linear-gradient(to bottom right, rgba(22, 163, 74, 0.3), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
-        }
-        .modern-button-gradient-info {
-            background: linear-gradient(to bottom right, rgba(37, 99, 235, 0.3), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
-        }
-        .modern-button-gradient-warning {
-            background: linear-gradient(to bottom right, rgba(217, 119, 6, 0.3), rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7));
-        }
-    }
 </style>
 @endpush
 
@@ -361,7 +257,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.subscriptions.create') }}" class="modern-action-button modern-button-md modern-button-gradient-primary">
+                            <a href="{{ route('super-admin.subscriptions.create') }}" class="modern-action-button modern-button-md">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -382,7 +278,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.subscriptions.index') }}" class="modern-action-button modern-button-md modern-button-gradient-info">
+                            <a href="{{ route('super-admin.subscriptions.index') }}" class="modern-action-button modern-button-md">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -407,7 +303,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.payments.index') }}" class="modern-action-button modern-button-md modern-button-gradient-success">
+                            <a href="{{ route('super-admin.payments.index') }}" class="modern-action-button modern-button-md">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -428,7 +324,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.settings.index') }}" class="modern-action-button modern-button-md modern-button-gradient-warning">
+                            <a href="{{ route('super-admin.settings.index') }}" class="modern-action-button modern-button-md">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
