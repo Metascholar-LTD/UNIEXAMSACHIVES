@@ -744,8 +744,11 @@
         content: attr(data-num);
         height: calc(50% - 1px);
         line-height: 0;
-        top: 0;
-        transform: rotateX(180deg);
+        bottom: 0;
+        top: auto;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
     }
 
     /* Animations for ones (seconds, minutes units) */
