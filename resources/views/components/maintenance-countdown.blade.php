@@ -812,20 +812,9 @@
         const modalDismissed = localStorage.getItem('maintenance-modal-dismissed-' + maintenanceId) === 'true';
         const navbarDismissed = localStorage.getItem('maintenance-navbar-dismissed-' + maintenanceId) === 'true';
 
-        // Always show navbar countdown unless it's been dismissed (X button clicked)
-        // Wait for DOM to be ready to ensure navbar exists
-        function initNavbarCountdown() {
-            if (!navbarDismissed && navbarCountdown) {
-                showNavbarCountdown();
-            }
-        }
-        
-        // Try immediately, and also on DOMContentLoaded in case DOM isn't ready yet
-        if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initNavbarCountdown);
-        } else {
-            // DOM is already ready
-            setTimeout(initNavbarCountdown, 100);
+        // Show navbar countdown if modal was dismissed and navbar not dismissed
+        if (modalDismissed && !navbarDismissed && navbarCountdown) {
+            showNavbarCountdown();
         }
 
         // Show modal on page load if not dismissed
@@ -847,8 +836,8 @@
                 document.body.style.overflow = '';
                 // Store in localStorage to not show again this session
                 localStorage.setItem('maintenance-modal-dismissed-' + maintenanceId, 'true');
-                // Ensure navbar countdown is showing (it should already be showing, but just in case)
-                if (!navbarDismissed && navbarCountdown) {
+                // Show navbar countdown
+                if (!navbarDismissed) {
                     showNavbarCountdown();
                 }
             }, 300);
@@ -857,33 +846,18 @@
         // Show navbar countdown function
         function showNavbarCountdown() {
             if (navbarCountdown && !navbarDismissed) {
-                // Check if already displayed
-                if (navbarCountdown.style.display === 'block' && navbarCountdown.parentNode) {
-                    // Already showing, just make sure countdown is running
-                    if (!navbarCountdownInterval) {
-                        startNavbarCountdown();
-                    }
-                    return;
-                }
-                
                 // Find the navbar right section and inject countdown
                 const navRight = document.querySelector('.uda-nav-right');
                 if (navRight) {
-                    // Only add if not already a child
-                    if (!navbarCountdown.parentNode) {
-                        // Insert before notifications/logout button (close to notification icon)
-                        const firstChild = navRight.firstElementChild;
-                        if (firstChild) {
-                            navRight.insertBefore(navbarCountdown, firstChild);
-                        } else {
-                            navRight.appendChild(navbarCountdown);
-                        }
+                    // Insert before notifications/logout button
+                    const firstChild = navRight.firstElementChild;
+                    if (firstChild) {
+                        navRight.insertBefore(navbarCountdown, firstChild);
+                    } else {
+                        navRight.appendChild(navbarCountdown);
                     }
                     navbarCountdown.style.display = 'block';
                     startNavbarCountdown();
-                } else {
-                    // If navbar not found, try again after a short delay
-                    setTimeout(showNavbarCountdown, 200);
                 }
             }
         }
@@ -895,7 +869,6 @@
                 localStorage.setItem('maintenance-navbar-dismissed-' + maintenanceId, 'true');
                 if (navbarCountdownInterval) {
                     clearInterval(navbarCountdownInterval);
-                    navbarCountdownInterval = null;
                 }
             }
         };
