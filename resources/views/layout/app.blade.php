@@ -56,6 +56,9 @@
     {{-- confirmation modal --}}
     @include('components.confirmation-modal')
 
+    {{-- Maintenance Countdown Banner --}}
+    @include('components.maintenance-countdown')
+
     <main class="main_wrapper overflow-hidden">
         @include('components.password-reminder')
         @yield('content')

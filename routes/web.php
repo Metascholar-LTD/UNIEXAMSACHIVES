@@ -44,6 +44,19 @@ Route::get('/leadership', [PagesController::class, 'leadership'])->name('fronten
 Route::get('/faqs', [PagesController::class, 'faqs'])->name('frontend.faqs');
 Route::post('/clear-session-messages', [App\Http\Controllers\NotificationController::class, 'clearSessionMessages'])->name('clear.session.messages');
 
+// Maintenance Status Check API (accessible during maintenance)
+Route::get('/api/check-maintenance-status', function() {
+    $maintenanceMode = \App\Models\SystemSetting::getMaintenanceMode();
+    $activeMaintenance = \App\Models\SystemMaintenanceLog::active()->first();
+    
+    return response()->json([
+        'maintenance_active' => $maintenanceMode && $activeMaintenance !== null,
+        'maintenance_mode' => $maintenanceMode,
+        'has_active_maintenance' => $activeMaintenance !== null,
+        'scheduled_end' => $activeMaintenance?->scheduled_end?->toIso8601String(),
+    ]);
+})->name('api.check-maintenance-status');
+
 # Authentication Required Routes
 Route::middleware(['auth'])->group(function () {
     #Dashboard - Home

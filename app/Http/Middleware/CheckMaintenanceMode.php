@@ -19,6 +19,7 @@ class CheckMaintenanceMode
         'login',
         'logout',
         'super-admin.*', // Super admin routes are always accessible
+        'api.check-maintenance-status', // Allow checking maintenance status
     ];
 
     /**
@@ -38,6 +39,11 @@ class CheckMaintenanceMode
             if ($request->routeIs($exemptRoute)) {
                 return $next($request);
             }
+        }
+
+        // Also check if path matches API maintenance check
+        if ($request->is('api/check-maintenance-status')) {
+            return $next($request);
         }
 
         // Check if system is in maintenance mode

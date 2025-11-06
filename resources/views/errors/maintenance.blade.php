@@ -267,14 +267,41 @@
                 @endif
                 
                 @if($maintenance->scheduled_end)
-                    <p class="time">
+                    <p class="time" style="margin-top: 20px; margin-bottom: 10px;">
                         <i class="icofont-clock-time"></i> 
                         Expected completion: {{ $maintenance->scheduled_end->format('M d, Y h:i A') }}
                     </p>
+                    
+                    <!-- Countdown Timer -->
+                    <div class="countdown-container" id="maintenance-countdown-container" 
+                         data-end-time="{{ $maintenance->scheduled_end->timestamp * 1000 }}">
+                        <div class="countdown-label">Maintenance ends in:</div>
+                        <div class="countdown-display">
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="countdown-hours">00</span>
+                                <span class="countdown-unit">Hours</span>
+                            </div>
+                            <span class="countdown-separator">:</span>
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="countdown-minutes">00</span>
+                                <span class="countdown-unit">Minutes</span>
+                            </div>
+                            <span class="countdown-separator">:</span>
+                            <div class="countdown-item">
+                                <span class="countdown-value" id="countdown-seconds">00</span>
+                                <span class="countdown-unit">Seconds</span>
+                            </div>
+                        </div>
+                    </div>
                 @endif
             @else
                 <p style="margin-top: 15px;">We'll be back shortly. Thank you for your patience!</p>
             @endif
+
+            <!-- Manual Refresh Button -->
+            <button class="refresh-button" id="check-maintenance-btn" onclick="checkMaintenanceStatus()">
+                <i class="icofont-refresh"></i> Check Status
+            </button>
 
             <!-- Loading animation -->
             <div class="loading-dots">
@@ -287,6 +314,217 @@
 
     <!-- Icofont for icons -->
     <link rel="stylesheet" href="{{ asset('css/icofont.min.css') }}">
+
+    <style>
+        /* Countdown Timer Styles */
+        .countdown-container {
+            margin: 25px 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .countdown-label {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .countdown-display {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .countdown-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 15px 20px;
+            min-width: 80px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            line-height: 1;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .countdown-unit {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 8px;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .countdown-separator {
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Refresh Button */
+        .refresh-button {
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #01b2ac 0%, #008b87 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(1, 178, 172, 0.3);
+        }
+
+        .refresh-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(1, 178, 172, 0.4);
+        }
+
+        .refresh-button:active {
+            transform: translateY(0);
+        }
+
+        .refresh-button i {
+            font-size: 18px;
+            animation: spin 2s linear infinite;
+        }
+
+        .refresh-button.checking i {
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .countdown-display {
+                gap: 10px;
+            }
+
+            .countdown-item {
+                min-width: 60px;
+                padding: 12px 15px;
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+
+            .countdown-separator {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+
+    <script>
+        let checkInterval;
+        let countdownInterval;
+
+        function updateCountdown() {
+            const container = document.getElementById('maintenance-countdown-container');
+            if (!container) return;
+
+            const endTime = parseInt(container.dataset.endTime);
+            const now = new Date().getTime();
+            const distance = endTime - now;
+
+            if (distance < 0) {
+                // Maintenance should be over, check status
+                checkMaintenanceStatus();
+                return;
+            }
+
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            const hoursEl = document.getElementById('countdown-hours');
+            const minutesEl = document.getElementById('countdown-minutes');
+            const secondsEl = document.getElementById('countdown-seconds');
+
+            if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
+            if (minutesEl) minutesEl.textContent = String(minutes).padStart(2, '0');
+            if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
+        }
+
+        function checkMaintenanceStatus() {
+            const btn = document.getElementById('check-maintenance-btn');
+            if (btn) {
+                btn.classList.add('checking');
+                btn.disabled = true;
+            }
+
+            fetch('/api/check-maintenance-status', {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.maintenance_active) {
+                    // Maintenance is over, redirect to home
+                    window.location.href = '/';
+                } else {
+                    // Still in maintenance, show message
+                    if (btn) {
+                        btn.classList.remove('checking');
+                        btn.disabled = false;
+                    }
+                    // Optionally show a message that maintenance is still active
+                }
+            })
+            .catch(error => {
+                console.error('Error checking maintenance status:', error);
+                if (btn) {
+                    btn.classList.remove('checking');
+                    btn.disabled = false;
+                }
+            });
+        }
+
+        // Start countdown if maintenance end time exists
+        const container = document.getElementById('maintenance-countdown-container');
+        if (container) {
+            // Update immediately
+            updateCountdown();
+            
+            // Update every second
+            countdownInterval = setInterval(updateCountdown, 1000);
+
+            // Check maintenance status every 30 seconds
+            checkInterval = setInterval(checkMaintenanceStatus, 30000);
+        }
+
+        // Clean up on page unload
+        window.addEventListener('beforeunload', function() {
+            if (checkInterval) clearInterval(checkInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+        });
+    </script>
 </body>
 </html>
 
