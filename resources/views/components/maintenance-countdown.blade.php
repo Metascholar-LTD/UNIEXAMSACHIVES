@@ -744,8 +744,7 @@
         content: attr(data-num);
         height: calc(50% - 1px);
         line-height: 0;
-        top: 0;
-        transform: scaleY(-1);
+        bottom: 0;
     }
 
     /* Animations for ones (seconds, minutes units) */
