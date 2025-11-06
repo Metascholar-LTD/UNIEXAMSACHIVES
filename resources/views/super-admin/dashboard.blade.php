@@ -122,31 +122,45 @@
         background: linear-gradient(to bottom right, rgba(250, 204, 21, 0.6), rgba(234, 179, 8, 0.4));
     }
 
-    /* Icon SVG - default grey */
-    .modern-button-icon svg {
+    /* Icon SVG and Icon Fonts - default grey */
+    .modern-button-icon svg,
+    .modern-button-icon i {
         width: 1.75rem;
         height: 1.75rem;
         color: #374151;
         transition: all 0.3s;
+        font-size: 1.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .modern-action-button:hover .modern-button-icon svg {
+    .modern-action-button:hover .modern-button-icon svg,
+    .modern-action-button:hover .modern-button-icon i {
         color: #1f2937;
         transform: scale(1.1);
     }
 
-    /* Icon SVG - white for colorful icon containers */
+    /* Icon SVG and Icon Fonts - white for colorful icon containers */
     .button-icon-primary .modern-button-icon svg,
+    .button-icon-primary .modern-button-icon i,
     .button-icon-info .modern-button-icon svg,
+    .button-icon-info .modern-button-icon i,
     .button-icon-success .modern-button-icon svg,
-    .button-icon-warning .modern-button-icon svg {
+    .button-icon-success .modern-button-icon i,
+    .button-icon-warning .modern-button-icon svg,
+    .button-icon-warning .modern-button-icon i {
         color: white;
     }
 
     .button-icon-primary:hover .modern-button-icon svg,
+    .button-icon-primary:hover .modern-button-icon i,
     .button-icon-info:hover .modern-button-icon svg,
+    .button-icon-info:hover .modern-button-icon i,
     .button-icon-success:hover .modern-button-icon svg,
-    .button-icon-warning:hover .modern-button-icon svg {
+    .button-icon-success:hover .modern-button-icon i,
+    .button-icon-warning:hover .modern-button-icon svg,
+    .button-icon-warning:hover .modern-button-icon i {
         color: rgba(255, 255, 255, 0.9);
         transform: scale(1.1);
     }
@@ -380,10 +394,7 @@
                             <a href="{{ route('super-admin.settings.index') }}" class="modern-action-button modern-button-md button-icon-warning">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                            <circle cx="12" cy="12" r="3"></circle>
-                                            <path d="M12 1v6m0 6v6m9-9h-6m-6 0H3m15.364 6.364l-4.243-4.243m-4.242 0L5.636 18.364m12.728 0l-4.243-4.243m-4.242 0L5.636 5.636"></path>
-                                        </svg>
+                                        <i class="icofont-settings-alt"></i>
                                     </div>
                                     <div class="modern-button-text">
                                         <p class="modern-button-title">Settings</p>
