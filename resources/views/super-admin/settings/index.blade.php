@@ -196,7 +196,7 @@
                 <h1 class="page-header-title">System Settings</h1>
                 <div class="page-header-separator"></div>
                 <div class="page-header-breadcrumb">
-                    <i class="icofont-home"></i>
+                    <i class="icofont-settings-alt"></i>
                     <span> - System Settings</span>
                 </div>
             </div>

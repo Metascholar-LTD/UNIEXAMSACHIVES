@@ -451,7 +451,7 @@
                 <h1 class="page-header-title">Dashboard</h1>
                 <div class="page-header-separator"></div>
                 <div class="page-header-breadcrumb">
-                    <i class="icofont-home"></i>
+                    <i class="icofont-dashboard-web"></i>
                     <span> - Dashboard</span>
                 </div>
             </div>
