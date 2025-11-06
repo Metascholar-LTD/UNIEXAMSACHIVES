@@ -741,11 +741,11 @@
         border-bottom: 1px solid #444444;
         border-radius: 0 0 5px 5px;
         box-shadow: inset 0 15px 50px #202020;
-        content: attr(data-num);
+        content: attr(data-num-next);
         height: calc(50% - 1px);
         line-height: 0;
-        bottom: 0;
-        top: auto;
+        top: 0;
+        transform: rotateX(180deg);
     }
 
     /* Animations for ones (seconds, minutes units) */
