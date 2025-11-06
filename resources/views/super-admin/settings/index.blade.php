@@ -214,10 +214,10 @@
     }
 
     .settings-card-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+        color: #1f2937;
         padding: 1.25rem 1.5rem;
-        border-bottom: none;
+        border-bottom: 1px solid #e5e7eb;
     }
 
     .settings-card-header h5 {
