@@ -353,11 +353,11 @@
         }
     }
 
-    /* Top Right Icon */
+    /* Top Left Icon */
     .stat-card-icon {
         position: absolute;
         top: 1.5rem;
-        right: 1.5rem;
+        left: 1.5rem;
         font-size: 3.125rem; /* 50px */
         opacity: 0.3;
         z-index: 1;
@@ -387,7 +387,7 @@
         .stat-card-icon {
             font-size: 2.5rem;
             top: 1rem;
-            right: 1rem;
+            left: 1rem;
         }
     }
 
