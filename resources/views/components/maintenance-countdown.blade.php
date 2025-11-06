@@ -666,105 +666,83 @@
         font-size: 65px;
         font-weight: bold;
         color: #eeeeee;
-        background: #333;
         border-radius: 10px;
         display: flex;
         justify-content: center;
         align-items: center;
-        overflow: hidden;
+        overflow: visible;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
-    }
-
-    .num::before,
-    .num::after {
-        content: attr(data-num);
-        position: absolute;
-        width: 100%;
-        height: 50%;
-        left: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        backface-visibility: hidden;
-        overflow: hidden;
         text-shadow: 0 1px 2px #000;
     }
 
-    .num::before {
+    /* Static top half - shows current number */
+    .num .static-top {
+        position: absolute;
         top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
         background: linear-gradient(to bottom, #181818 0%, #222 100%);
         border-radius: 10px 10px 0 0;
-        border-bottom: 1px solid #111;
-        line-height: 200px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        overflow: hidden;
         box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
         z-index: 3;
+        padding-bottom: 2px;
     }
 
-    .num::after {
+    /* Static bottom half - shows current number */
+    .num .static-bottom {
+        position: absolute;
         bottom: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
         background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
         border-radius: 0 0 10px 10px;
-        border-top: 1px solid #444;
-        line-height: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        overflow: hidden;
         box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.4);
         z-index: 1;
+        padding-top: 2px;
     }
 
-    /* Flip animation for the top half */
-    .num.flip::before {
+    /* Flipping top half - animates down to reveal new number */
+    .num .flip-top {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 50%;
+        background: linear-gradient(to bottom, #181818 0%, #222 100%);
+        border-radius: 10px 10px 0 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-end;
+        overflow: hidden;
+        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
+        transform-origin: bottom;
+        transform-style: preserve-3d;
+        backface-visibility: hidden;
+        z-index: 4;
+        padding-bottom: 2px;
+    }
+
+    /* Flip animation */
+    .num.flip .flip-top {
         animation: flipDown 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
-        z-index: 2;
     }
 
     @keyframes flipDown {
         0% {
-            transform-origin: bottom;
             transform: rotateX(0deg);
         }
         100% {
-            transform-origin: bottom;
             transform: rotateX(-180deg);
-        }
-    }
-
-    /* Next number preparation */
-    .num .next-half-top {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 50%;
-        background: linear-gradient(to bottom, #181818 0%, #222 100%);
-        border-radius: 10px 10px 0 0;
-        border-bottom: 1px solid #111;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #eeeeee;
-        font-size: 65px;
-        font-weight: bold;
-        line-height: 200px;
-        overflow: hidden;
-        text-shadow: 0 1px 2px #000;
-        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
-        z-index: 1;
-        opacity: 0;
-    }
-
-    .num.flip .next-half-top {
-        opacity: 1;
-        animation: showNext 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
-    }
-
-    @keyframes showNext {
-        0% {
-            opacity: 0;
-        }
-        50% {
-            opacity: 0;
-        }
-        100% {
-            opacity: 1;
         }
     }
 
@@ -848,13 +826,10 @@
             font-size: 55px;
         }
 
-        .num::before {
-            line-height: 170px;
-        }
-
-        .num .next-half-top {
+        .num .static-top,
+        .num .static-bottom,
+        .num .flip-top {
             font-size: 55px;
-            line-height: 170px;
         }
 
         .countdown-separator {
@@ -1101,11 +1076,14 @@
                             currentActive.classList.add('hidden');
                             num.classList.remove('hidden');
                             num.classList.add('active');
+                            // Initialize the new active card
+                            initializeCard(num, targetValue);
                         });
                     } else if (!currentActive) {
                         // Initial display - show immediately
                         num.classList.remove('hidden');
                         num.classList.add('active');
+                        initializeCard(num, targetValue);
                     }
                     // If currentActive === num, no change needed
                 } else {
@@ -1118,6 +1096,26 @@
             });
         }
 
+        // Initialize card with static top and bottom halves
+        function initializeCard(element, value) {
+            // Clear existing content
+            element.innerHTML = '';
+            
+            // Create static top half
+            const staticTop = document.createElement('div');
+            staticTop.className = 'static-top';
+            staticTop.textContent = value;
+            
+            // Create static bottom half
+            const staticBottom = document.createElement('div');
+            staticBottom.className = 'static-bottom';
+            staticBottom.textContent = value;
+            
+            element.appendChild(staticTop);
+            element.appendChild(staticBottom);
+            element.setAttribute('data-num', value);
+        }
+
         // Flip animation function
         function flipNumber(element, newValue, callback) {
             const oldValue = element.getAttribute('data-num');
@@ -1126,25 +1124,39 @@
                 return;
             }
 
-            // Create next number display element
-            const nextHalfTop = document.createElement('div');
-            nextHalfTop.className = 'next-half-top';
-            nextHalfTop.textContent = newValue;
-            element.appendChild(nextHalfTop);
+            // Get the static elements
+            const staticTop = element.querySelector('.static-top');
+            const staticBottom = element.querySelector('.static-bottom');
+            
+            if (!staticTop || !staticBottom) {
+                // Card not initialized, just callback
+                if (callback) callback();
+                return;
+            }
 
-            // Add flip class to trigger animation
+            // Create flipping top half with old value
+            const flipTop = document.createElement('div');
+            flipTop.className = 'flip-top';
+            flipTop.textContent = oldValue;
+            element.appendChild(flipTop);
+
+            // Update static halves to new value (they're behind the flip-top)
+            staticTop.textContent = newValue;
+            staticBottom.textContent = newValue;
+
+            // Trigger flip animation
             element.classList.add('flip');
 
             // Handle animation end
             const onAnimEnd = () => {
-                element.setAttribute('data-num', newValue);
                 element.classList.remove('flip');
                 
-                // Remove the next-half-top element
-                if (nextHalfTop.parentNode === element) {
-                    element.removeChild(nextHalfTop);
+                // Remove the flip-top element
+                if (flipTop.parentNode === element) {
+                    element.removeChild(flipTop);
                 }
                 
+                element.setAttribute('data-num', newValue);
                 element.removeEventListener('animationend', onAnimEnd);
                 
                 if (callback) callback();
