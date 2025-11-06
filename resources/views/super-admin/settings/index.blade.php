@@ -2,6 +2,151 @@
 
 @section('title', 'System Settings')
 
+@push('styles')
+<style>
+    /* Compact Modern Button Styles for Settings Page */
+    .settings-action-button {
+        position: relative;
+        overflow: hidden;
+        border: 2px solid rgba(229, 231, 235, 0.6);
+        cursor: pointer;
+        transition: all 0.5s ease-out;
+        box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.06);
+        text-decoration: none;
+        display: block;
+        width: 100%;
+        padding: 0.75rem 1rem;
+        border-radius: 0.75rem;
+        background: linear-gradient(to bottom right, rgba(249, 250, 251, 0.95), rgba(243, 244, 246, 0.95), rgba(249, 250, 251, 0.95));
+        color: #1f2937;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .settings-action-button:hover {
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+        transform: scale(1.02) translateY(-2px);
+        border-color: rgba(209, 213, 219, 0.8);
+    }
+
+    .settings-action-button:active {
+        transform: scale(0.98);
+    }
+
+    /* Moving gradient layer */
+    .settings-action-button::before {
+        content: '';
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.5), transparent);
+        transform: translateX(-100%);
+        transition: transform 1s ease-out;
+        z-index: 1;
+    }
+
+    .settings-action-button:hover::before {
+        transform: translateX(100%);
+    }
+
+    /* Overlay glow */
+    .settings-action-button::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        border-radius: 0.75rem;
+        background: linear-gradient(to right, rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.3));
+        opacity: 0;
+        transition: opacity 0.5s;
+        z-index: 1;
+    }
+
+    .settings-action-button:hover::after {
+        opacity: 1;
+    }
+
+    /* Content wrapper */
+    .settings-button-content {
+        position: relative;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+    }
+
+    /* Icon styling */
+    .settings-action-button i {
+        font-size: 1rem;
+        transition: transform 0.3s;
+    }
+
+    .settings-action-button:hover i {
+        transform: scale(1.1);
+    }
+
+    /* Color variants for different button types */
+    .settings-button-info {
+        background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.15), rgba(96, 165, 250, 0.1));
+        border: 2px solid rgba(59, 130, 246, 0.3);
+        color: #1e40af;
+    }
+
+    .settings-button-info .settings-button-icon {
+        background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.3), rgba(96, 165, 250, 0.2));
+    }
+
+    .settings-button-warning {
+        background: linear-gradient(to bottom right, rgba(234, 179, 8, 0.15), rgba(250, 204, 21, 0.1));
+        border: 2px solid rgba(234, 179, 8, 0.3);
+        color: #92400e;
+    }
+
+    .settings-button-warning .settings-button-icon {
+        background: linear-gradient(to bottom right, rgba(234, 179, 8, 0.3), rgba(250, 204, 21, 0.2));
+    }
+
+    .settings-button-success {
+        background: linear-gradient(to bottom right, rgba(34, 197, 94, 0.15), rgba(74, 222, 128, 0.1));
+        border: 2px solid rgba(34, 197, 94, 0.3);
+        color: #166534;
+    }
+
+    .settings-button-success .settings-button-icon {
+        background: linear-gradient(to bottom right, rgba(34, 197, 94, 0.3), rgba(74, 222, 128, 0.2));
+    }
+
+    .settings-button-secondary {
+        background: linear-gradient(to bottom right, rgba(107, 114, 128, 0.15), rgba(156, 163, 175, 0.1));
+        border: 2px solid rgba(107, 114, 128, 0.3);
+        color: #374151;
+    }
+
+    .settings-button-secondary .settings-button-icon {
+        background: linear-gradient(to bottom right, rgba(107, 114, 128, 0.3), rgba(156, 163, 175, 0.2));
+    }
+
+    .settings-button-primary {
+        background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
+        border: 2px solid rgba(99, 102, 241, 0.3);
+        color: #4338ca;
+    }
+
+    .settings-button-primary .settings-button-icon {
+        background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.3), rgba(129, 140, 248, 0.2));
+    }
+
+    .settings-button-danger {
+        background: linear-gradient(to bottom right, rgba(239, 68, 68, 0.15), rgba(248, 113, 113, 0.1));
+        border: 2px solid rgba(239, 68, 68, 0.3);
+        color: #991b1b;
+    }
+
+    .settings-button-danger .settings-button-icon {
+        background: linear-gradient(to bottom right, rgba(239, 68, 68, 0.3), rgba(248, 113, 113, 0.2));
+    }
+</style>
+@endpush
+
 @section('content')
 <div class="container-fluid">
     <div class="row mb-4">
@@ -13,33 +158,45 @@
 
                         {{-- Action Buttons --}}
                         <div class="row mb-4">
-                            <div class="col-md-3">
+                            <div class="col-md-3 mb-2">
                                 <form method="POST" action="{{ route('super-admin.settings.test-paystack') }}">
                                     @csrf
-                                    <button type="submit" class="btn btn-info btn-block">
-                                        <i class="icofont-verification-check"></i> Test Paystack
+                                    <button type="submit" class="settings-action-button settings-button-info">
+                                        <div class="settings-button-content">
+                                            <i class="icofont-verification-check"></i>
+                                            <span>Test Paystack</span>
+                                        </div>
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mb-2">
                                 <form method="POST" action="{{ route('super-admin.settings.clear-cache') }}">
                                     @csrf
-                                    <button type="submit" class="btn btn-warning btn-block">
-                                        <i class="icofont-refresh"></i> Clear Cache
+                                    <button type="submit" class="settings-action-button settings-button-warning">
+                                        <div class="settings-button-content">
+                                            <i class="icofont-refresh"></i>
+                                            <span>Clear Cache</span>
+                                        </div>
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-md-3">
+                            <div class="col-md-3 mb-2">
                                 <form method="POST" action="{{ route('super-admin.settings.optimize') }}">
                                     @csrf
-                                    <button type="submit" class="btn btn-success btn-block">
-                                        <i class="icofont-speed-meter"></i> Optimize
+                                    <button type="submit" class="settings-action-button settings-button-success">
+                                        <div class="settings-button-content">
+                                            <i class="icofont-speed-meter"></i>
+                                            <span>Optimize</span>
+                                        </div>
                                     </button>
                                 </form>
                             </div>
-                            <div class="col-md-3">
-                                <a href="{{ route('super-admin.settings.export') }}" class="btn btn-secondary btn-block">
-                                    <i class="icofont-download"></i> Export Settings
+                            <div class="col-md-3 mb-2">
+                                <a href="{{ route('super-admin.settings.export') }}" class="settings-action-button settings-button-secondary">
+                                    <div class="settings-button-content">
+                                        <i class="icofont-download"></i>
+                                        <span>Export Settings</span>
+                                    </div>
                                 </a>
                             </div>
                         </div>
@@ -105,8 +262,11 @@
                             @endforeach
 
                             <div class="text-right">
-                                <button type="submit" class="btn btn-primary btn-lg">
-                                    <i class="icofont-save"></i> Save All Settings
+                                <button type="submit" class="settings-action-button settings-button-primary" style="display: inline-block; width: auto; padding: 0.875rem 1.5rem;">
+                                    <div class="settings-button-content">
+                                        <i class="icofont-save"></i>
+                                        <span>Save All Settings</span>
+                                    </div>
                                 </button>
                             </div>
                         </form>
@@ -122,13 +282,19 @@
                                 <form method="POST" action="{{ route('super-admin.settings.toggle-maintenance') }}" class="d-inline">
                                     @csrf
                                     @if(App\Models\SystemSetting::getMaintenanceMode())
-                                    <button type="submit" class="btn btn-success">
-                                        <i class="icofont-check-circled"></i> Disable Maintenance Mode
+                                    <button type="submit" class="settings-action-button settings-button-success" style="display: inline-block; width: auto; padding: 0.875rem 1.5rem;">
+                                        <div class="settings-button-content">
+                                            <i class="icofont-check-circled"></i>
+                                            <span>Disable Maintenance Mode</span>
+                                        </div>
                                     </button>
                                     @else
                                     <input type="hidden" name="enable" value="1">
-                                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure? This will block all users except super admins.')">
-                                        <i class="icofont-ban"></i> Enable Maintenance Mode
+                                    <button type="submit" class="settings-action-button settings-button-danger" onclick="return confirm('Are you sure? This will block all users except super admins.')" style="display: inline-block; width: auto; padding: 0.875rem 1.5rem;">
+                                        <div class="settings-button-content">
+                                            <i class="icofont-ban"></i>
+                                            <span>Enable Maintenance Mode</span>
+                                        </div>
                                     </button>
                                     @endif
                                 </form>
