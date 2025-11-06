@@ -1203,6 +1203,10 @@
                 
                 // Show the target number
                 if (numValue === targetValue) {
+                    // CRITICAL FIX: Update data-num-next to match data-num
+                    // This ensures both top and bottom halves show the same number
+                    num.setAttribute('data-num-next', targetValue.toString());
+                    
                     // If changing from another number, trigger flip animation
                     if (currentActive && currentActive !== num) {
                         // Hide current active first
