@@ -731,7 +731,7 @@
         border-radius: 5px 5px 0 0;
         box-shadow: inset 0 15px 50px #111111;
         content: attr(data-num);
-        line-height: 1.38;
+        line-height: 100px;
         top: 0;
         z-index: 1;
     }
@@ -743,7 +743,7 @@
         box-shadow: inset 0 15px 50px #202020;
         content: attr(data-num);
         height: calc(50% - 1px);
-        line-height: 0;
+        line-height: 100px;
         bottom: 0;
         top: auto;
     }
