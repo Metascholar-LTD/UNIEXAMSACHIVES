@@ -262,28 +262,36 @@
         object-fit: cover;
     }
 
-    .stat-card-overlay {
+    /* Dark overlay for text readability */
+    .stat-card-dark-overlay {
         position: absolute;
         inset: 0;
-        background: rgba(59, 130, 246, 0.6); /* blue-500/60 */
+        background: rgba(0, 0, 0, 0.5); /* Dark overlay */
         z-index: -1;
     }
 
-    /* Card specific overlays */
+    .stat-card-overlay {
+        position: absolute;
+        inset: 0;
+        background: rgba(59, 130, 246, 0.3); /* Lower brightness, reduced opacity */
+        z-index: -1;
+    }
+
+    /* Card specific overlays - darker colors with lower brightness */
     .stat-card-subscriptions .stat-card-overlay {
-        background: rgba(99, 102, 241, 0.6); /* indigo */
+        background: rgba(67, 56, 202, 0.25); /* Darker indigo, lower opacity */
     }
 
     .stat-card-revenue .stat-card-overlay {
-        background: rgba(236, 72, 153, 0.6); /* pink */
+        background: rgba(190, 24, 93, 0.25); /* Darker pink, lower opacity */
     }
 
     .stat-card-expiring .stat-card-overlay {
-        background: rgba(251, 191, 36, 0.6); /* yellow */
+        background: rgba(217, 119, 6, 0.25); /* Darker yellow/orange, lower opacity */
     }
 
     .stat-card-payments .stat-card-overlay {
-        background: rgba(59, 130, 246, 0.6); /* blue */
+        background: rgba(37, 99, 235, 0.25); /* Darker blue, lower opacity */
     }
 
     /* Main Content Grid */
@@ -412,6 +420,7 @@
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80" alt="Subscriptions">
                 </div>
+                <div class="stat-card-dark-overlay"></div>
                 <div class="stat-card-overlay"></div>
                 <div class="stat-card-content">
                     <div class="stat-card-info">
@@ -432,6 +441,7 @@
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&auto=format&fit=crop&q=80" alt="Revenue">
                 </div>
+                <div class="stat-card-dark-overlay"></div>
                 <div class="stat-card-overlay"></div>
                 <div class="stat-card-content">
                     <div class="stat-card-info">
@@ -461,6 +471,7 @@
                 <div class="stat-card-bg">
                     <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762423693/expiring-soon-phrase-written-on-260nw-1660836226_yryti0.jpg" alt="Expiring">
                 </div>
+                <div class="stat-card-dark-overlay"></div>
                 <div class="stat-card-overlay"></div>
                 <div class="stat-card-content">
                     <div class="stat-card-info">
@@ -481,6 +492,7 @@
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900&auto=format&fit=crop&q=80" alt="Payments">
                 </div>
+                <div class="stat-card-dark-overlay"></div>
                 <div class="stat-card-overlay"></div>
                 <div class="stat-card-content">
                     <div class="stat-card-info">
