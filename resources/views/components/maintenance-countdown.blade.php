@@ -256,14 +256,16 @@
     .maintenance-nav-item {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        padding: 0.5rem 0.75rem;
+        gap: 0.375rem;
+        padding: 0.375rem 0.625rem;
         background: rgba(245, 158, 11, 0.1);
         border: 1px solid rgba(245, 158, 11, 0.3);
-        border-radius: 8px;
-        font-size: 0.8125rem;
+        border-radius: 6px;
+        font-size: 0.75rem;
         white-space: nowrap;
         animation: fadeIn 0.3s ease-out;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        line-height: 1.2;
     }
 
     .maintenance-impact-low .maintenance-nav-item {
@@ -291,6 +293,13 @@
         color: #f59e0b;
         display: flex;
         align-items: center;
+        width: 14px;
+        height: 14px;
+    }
+    
+    .maintenance-nav-icon svg {
+        width: 14px;
+        height: 14px;
     }
 
     .maintenance-impact-low .maintenance-nav-icon {
@@ -306,11 +315,17 @@
     }
 
     .maintenance-nav-countdown {
-        display: flex;
+        display: inline-flex;
         align-items: center;
         gap: 0.25rem;
         font-weight: 600;
         color: #78350f;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        letter-spacing: -0.01em;
+    }
+    
+    .maintenance-nav-countdown > * {
+        white-space: nowrap;
     }
 
     .maintenance-impact-low .maintenance-nav-countdown {
@@ -326,15 +341,21 @@
     }
 
     .maintenance-nav-label {
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         font-weight: 500;
-        margin-right: 0.25rem;
+        margin-right: 0.375rem;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        letter-spacing: 0.01em;
     }
 
     .maintenance-nav-countdown span:not(.maintenance-nav-label) {
         font-weight: 700;
-        min-width: 1.5rem;
+        min-width: 1.25rem;
         text-align: center;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        letter-spacing: 0;
+        display: inline-block;
+        margin-right: -0.125rem;
     }
 
     .maintenance-nav-close {
@@ -386,16 +407,21 @@
     /* Responsive adjustments for navbar countdown */
     @media (max-width: 991px) {
         .maintenance-nav-item {
-            padding: 0.375rem 0.5rem;
-            font-size: 0.75rem;
+            padding: 0.3125rem 0.5rem;
+            font-size: 0.6875rem;
+            gap: 0.3125rem;
         }
 
         .maintenance-nav-label {
             display: none;
         }
 
+        .maintenance-nav-countdown {
+            gap: 0.1875rem;
+        }
+
         .maintenance-nav-countdown span:not(.maintenance-nav-label) {
-            min-width: 1.25rem;
+            min-width: 1.125rem;
         }
     }
 
