@@ -716,7 +716,9 @@
     .num:after {
         backface-visibility: hidden;
         color: #eeeeee;
-        display: block;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         height: 50%;
         left: 0;
         overflow: hidden;
@@ -731,9 +733,10 @@
         border-radius: 5px 5px 0 0;
         box-shadow: inset 0 15px 50px #111111;
         content: attr(data-num);
-        line-height: 1.38;
         top: 0;
         z-index: 1;
+        align-items: flex-end;
+        padding-bottom: 2px;
     }
 
     .num:after {
@@ -743,12 +746,10 @@
         box-shadow: inset 0 15px 50px #202020;
         content: attr(data-num);
         height: calc(50% - 1px);
-        line-height: 0;
         bottom: 0;
         top: auto;
-        display: flex;
         align-items: flex-start;
-        justify-content: center;
+        padding-top: 2px;
     }
 
     /* Animations for ones (seconds, minutes units) */
