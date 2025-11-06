@@ -561,6 +561,7 @@
         color: #6b7280;
         text-transform: uppercase;
         letter-spacing: 0.5px;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
     .maintenance-info-value {
@@ -568,6 +569,7 @@
         color: #1f2937;
         font-weight: 500;
         line-height: 1.5;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
     .maintenance-info-badge {
@@ -577,6 +579,7 @@
         font-size: 0.75rem;
         font-weight: 600;
         text-transform: uppercase;
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     }
 
     .maintenance-impact-badge-low {
@@ -1014,8 +1017,8 @@
                     if (!currentActive || currentActive !== num) {
                         // Hide old active
                         if (currentActive) {
-                            currentActive.classList.remove('active');
-                            currentActive.classList.add('hidden');
+                        currentActive.classList.remove('active');
+                        currentActive.classList.add('hidden');
                         }
                         
                         // Show new number
@@ -1035,7 +1038,7 @@
                     // Hide non-active numbers
                     if (num !== currentActive) {
                         num.classList.remove('active');
-                        num.classList.add('hidden');
+                    num.classList.add('hidden');
                     }
                 }
             });
