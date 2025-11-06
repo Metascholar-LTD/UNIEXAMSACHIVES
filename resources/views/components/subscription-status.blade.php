@@ -185,14 +185,14 @@
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     background: #ffffff;
     border-radius: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(0, 0, 0, 0.05);
+    border: 1px solid #e9ecef;
 }
 
 .modern-subscription-card:hover {
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 5px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06), 0 4px 8px rgba(0, 0, 0, 0.04);
     transform: translateY(-2px);
 }
 
@@ -202,7 +202,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 24px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid #f0f1f3;
+    background: #fafbfc;
 }
 
 .header-left {
@@ -240,14 +241,14 @@
     margin: 0;
     font-size: 20px;
     font-weight: 700;
-    color: #111827;
+    color: #212529;
     letter-spacing: -0.025em;
 }
 
 .subscription-subtitle {
     margin: 0;
     font-size: 14px;
-    color: #6b7280;
+    color: #6c757d;
     font-weight: 400;
 }
 
@@ -301,7 +302,7 @@
 .alert-content p {
     margin: 0;
     font-size: 14px;
-    color: #374151;
+    color: #495057;
     line-height: 1.6;
 }
 
@@ -309,37 +310,38 @@
 .subscription-details-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1px;
-    background: rgba(0, 0, 0, 0.05);
+    gap: 12px;
     margin: 0 24px;
-    border-radius: 12px;
-    overflow: hidden;
 }
 
 .detail-item {
-    background: #f9fafb;
+    background: #fafbfc;
     padding: 20px;
     display: flex;
     gap: 16px;
     align-items: center;
     transition: all 0.3s ease;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
 }
 
 .detail-item:hover {
-    background: #f3f4f6;
+    background: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transform: translateY(-2px);
 }
 
 .detail-icon {
     width: 44px;
     height: 44px;
-    background: #ffffff;
+    background: #f8f9fa;
     border-radius: 10px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 22px;
-    color: #4b5563;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    color: #6c757d;
+    border: 1px solid #e9ecef;
 }
 
 .detail-content {
@@ -350,7 +352,7 @@
 
 .detail-label {
     font-size: 12px;
-    color: #6b7280;
+    color: #6c757d;
     font-weight: 500;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -358,13 +360,17 @@
 
 .detail-value {
     font-size: 15px;
-    color: #111827;
+    color: #212529;
     font-weight: 600;
 }
 
 /* Progress Section */
 .progress-section {
     padding: 24px;
+    background: #fafbfc;
+    margin: 24px;
+    border-radius: 12px;
+    border: 1px solid #e9ecef;
 }
 
 .progress-header {
@@ -376,19 +382,19 @@
 
 .progress-label {
     font-size: 14px;
-    color: #374151;
+    color: #495057;
     font-weight: 600;
 }
 
 .progress-percentage {
     font-size: 14px;
-    color: #6b7280;
+    color: #6c757d;
     font-weight: 600;
 }
 
 .modern-progress-bar {
     height: 12px;
-    background: #f3f4f6;
+    background: #e9ecef;
     border-radius: 12px;
     overflow: hidden;
     position: relative;
@@ -426,7 +432,7 @@
 
 .date-text {
     font-size: 12px;
-    color: #6b7280;
+    color: #6c757d;
     font-weight: 500;
 }
 
@@ -435,7 +441,8 @@
     padding: 24px;
     display: flex;
     gap: 12px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-top: 1px solid #f0f1f3;
+    background: #fafbfc;
 }
 
 .modern-btn {
@@ -467,20 +474,22 @@
 .btn-primary:hover {
     background: #2563eb;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
     color: #ffffff;
 }
 
 .btn-secondary {
-    background: #f3f4f6;
-    color: #374151;
+    background: #ffffff;
+    color: #495057;
+    border: 1px solid #dee2e6;
 }
 
 .btn-secondary:hover {
-    background: #e5e7eb;
+    background: #f8f9fa;
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    color: #111827;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+    color: #212529;
+    border-color: #ced4da;
 }
 
 .btn-danger {
@@ -555,53 +564,6 @@
     
     .modern-btn {
         width: 100%;
-    }
-}
-
-/* Dark Mode Support */
-@media (prefers-color-scheme: dark) {
-    .modern-subscription-card {
-        background: #1f2937;
-        border-color: rgba(255, 255, 255, 0.1);
-    }
-    
-    .subscription-title {
-        color: #f9fafb;
-    }
-    
-    .subscription-subtitle {
-        color: #9ca3af;
-    }
-    
-    .detail-item {
-        background: #111827;
-    }
-    
-    .detail-item:hover {
-        background: #1f2937;
-    }
-    
-    .detail-icon {
-        background: #374151;
-        color: #9ca3af;
-    }
-    
-    .detail-value {
-        color: #f9fafb;
-    }
-    
-    .modern-progress-bar {
-        background: #374151;
-    }
-    
-    .btn-secondary {
-        background: #374151;
-        color: #f9fafb;
-    }
-    
-    .btn-secondary:hover {
-        background: #4b5563;
-        color: #ffffff;
     }
 }
 </style>
