@@ -745,6 +745,7 @@
         height: calc(50% - 1px);
         line-height: 0;
         bottom: 0;
+        top: auto;
     }
 
     /* Animations for ones (seconds, minutes units) */
