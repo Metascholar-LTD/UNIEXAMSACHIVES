@@ -21,29 +21,27 @@
 @endphp
 
 @if($upcomingMaintenance)
-<!-- Maintenance Countdown Header Banner (shown when modal is dismissed) -->
-<div id="maintenance-header-banner" class="maintenance-header-banner maintenance-impact-{{ $upcomingMaintenance->impact_level }}" 
+<!-- Maintenance Countdown in Navbar (injected into header) -->
+<div id="maintenance-navbar-countdown" 
+     class="maintenance-navbar-countdown maintenance-impact-{{ $upcomingMaintenance->impact_level }}" 
      data-start-time="{{ $upcomingMaintenance->scheduled_start->timestamp * 1000 }}"
      data-maintenance-id="{{ $upcomingMaintenance->id }}"
      style="display: none;">
-    <div class="maintenance-header-content">
-        <div class="maintenance-header-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <div class="maintenance-nav-item">
+        <div class="maintenance-nav-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
             </svg>
         </div>
-        <div class="maintenance-header-text">
-            <span class="maintenance-header-title">{{ $upcomingMaintenance->title }}</span>
-            <span class="maintenance-header-time">{{ $upcomingMaintenance->scheduled_start->format('M d, Y h:i A') }}</span>
+        <div class="maintenance-nav-countdown" id="navbar-countdown-display">
+            <span class="maintenance-nav-label">Maintenance:</span>
+            <span id="navbar-days">00</span>d
+            <span id="navbar-hours">00</span>h
+            <span id="navbar-minutes">00</span>m
+            <span id="navbar-seconds">00</span>s
         </div>
-        <div class="maintenance-header-countdown" id="header-countdown-display">
-            <span id="header-days">00</span>d :
-            <span id="header-hours">00</span>h :
-            <span id="header-minutes">00</span>m :
-            <span id="header-seconds">00</span>s
-        </div>
-        <button class="maintenance-header-close" onclick="dismissHeaderBanner()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <button class="maintenance-nav-close" onclick="dismissNavbarCountdown()" title="Dismiss">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18"></line>
                 <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
@@ -250,160 +248,154 @@
 </div>
 
 <style>
-    /* Header Banner Styles */
-    .maintenance-header-banner {
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        z-index: 9998;
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        border-bottom: 2px solid #f59e0b;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        animation: slideDown 0.3s ease-out;
+    /* Navbar Countdown Styles - Integrated into existing navbar */
+    .maintenance-navbar-countdown {
+        display: none;
     }
 
-    .maintenance-impact-low .maintenance-header-banner {
-        background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
-        border-bottom-color: #3b82f6;
-    }
-
-    .maintenance-impact-medium .maintenance-header-banner {
-        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
-        border-bottom-color: #f59e0b;
-    }
-
-    .maintenance-impact-high .maintenance-header-banner {
-        background: linear-gradient(135deg, #fed7aa 0%, #fdba74 100%);
-        border-bottom-color: #f97316;
-    }
-
-    .maintenance-impact-critical .maintenance-header-banner {
-        background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-        border-bottom-color: #ef4444;
-    }
-
-    .maintenance-header-content {
-        max-width: 1400px;
-        margin: 0 auto;
-        padding: 0.75rem 1.5rem;
+    .maintenance-nav-item {
         display: flex;
         align-items: center;
-        gap: 1rem;
-        position: relative;
+        gap: 0.5rem;
+        padding: 0.5rem 0.75rem;
+        background: rgba(245, 158, 11, 0.1);
+        border: 1px solid rgba(245, 158, 11, 0.3);
+        border-radius: 8px;
+        font-size: 0.8125rem;
+        white-space: nowrap;
+        animation: fadeIn 0.3s ease-out;
     }
 
-    .maintenance-header-icon {
+    .maintenance-impact-low .maintenance-nav-item {
+        background: rgba(59, 130, 246, 0.1);
+        border-color: rgba(59, 130, 246, 0.3);
+    }
+
+    .maintenance-impact-medium .maintenance-nav-item {
+        background: rgba(245, 158, 11, 0.1);
+        border-color: rgba(245, 158, 11, 0.3);
+    }
+
+    .maintenance-impact-high .maintenance-nav-item {
+        background: rgba(249, 115, 22, 0.1);
+        border-color: rgba(249, 115, 22, 0.3);
+    }
+
+    .maintenance-impact-critical .maintenance-nav-item {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.3);
+    }
+
+    .maintenance-nav-icon {
         flex-shrink: 0;
-        color: #78350f;
-    }
-
-    .maintenance-impact-low .maintenance-header-icon {
-        color: #1e40af;
-    }
-
-    .maintenance-impact-high .maintenance-header-icon {
-        color: #9a3412;
-    }
-
-    .maintenance-impact-critical .maintenance-header-icon {
-        color: #991b1b;
-    }
-
-    .maintenance-header-text {
-        flex: 1;
+        color: #f59e0b;
         display: flex;
-        flex-direction: column;
-        gap: 0.25rem;
-        min-width: 0;
+        align-items: center;
     }
 
-    .maintenance-header-title {
-        font-size: 0.875rem;
+    .maintenance-impact-low .maintenance-nav-icon {
+        color: #3b82f6;
+    }
+
+    .maintenance-impact-high .maintenance-nav-icon {
+        color: #f97316;
+    }
+
+    .maintenance-impact-critical .maintenance-nav-icon {
+        color: #ef4444;
+    }
+
+    .maintenance-nav-countdown {
+        display: flex;
+        align-items: center;
+        gap: 0.25rem;
         font-weight: 600;
         color: #78350f;
     }
 
-    .maintenance-impact-low .maintenance-header-title {
+    .maintenance-impact-low .maintenance-nav-countdown {
         color: #1e40af;
     }
 
-    .maintenance-impact-high .maintenance-header-title {
+    .maintenance-impact-high .maintenance-nav-countdown {
         color: #9a3412;
     }
 
-    .maintenance-impact-critical .maintenance-header-title {
+    .maintenance-impact-critical .maintenance-nav-countdown {
         color: #991b1b;
     }
 
-    .maintenance-header-time {
+    .maintenance-nav-label {
         font-size: 0.75rem;
-        color: #92400e;
+        font-weight: 500;
+        margin-right: 0.25rem;
     }
 
-    .maintenance-impact-low .maintenance-header-time {
-        color: #1e3a8a;
-    }
-
-    .maintenance-impact-high .maintenance-header-time {
-        color: #7c2d12;
-    }
-
-    .maintenance-impact-critical .maintenance-header-time {
-        color: #7f1d1d;
-    }
-
-    .maintenance-header-countdown {
-        flex-shrink: 0;
-        font-size: 0.875rem;
+    .maintenance-nav-countdown span:not(.maintenance-nav-label) {
         font-weight: 700;
-        color: #78350f;
-        white-space: nowrap;
+        min-width: 1.5rem;
+        text-align: center;
     }
 
-    .maintenance-impact-low .maintenance-header-countdown {
-        color: #1e40af;
-    }
-
-    .maintenance-impact-high .maintenance-header-countdown {
-        color: #9a3412;
-    }
-
-    .maintenance-impact-critical .maintenance-header-countdown {
-        color: #991b1b;
-    }
-
-    .maintenance-header-close {
+    .maintenance-nav-close {
         flex-shrink: 0;
-        background: rgba(0, 0, 0, 0.05);
+        background: transparent;
         border: none;
-        border-radius: 50%;
-        width: 1.75rem;
-        height: 1.75rem;
+        border-radius: 4px;
+        width: 1.25rem;
+        height: 1.25rem;
         display: flex;
         align-items: center;
         justify-content: center;
         cursor: pointer;
         transition: all 0.2s;
         color: #78350f;
+        opacity: 0.6;
+        padding: 0;
+        margin-left: 0.25rem;
     }
 
-    .maintenance-header-close:hover {
-        background: rgba(0, 0, 0, 0.1);
+    .maintenance-nav-close:hover {
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.05);
     }
 
-    body.maintenance-banner-active {
-        padding-top: 60px;
+    .maintenance-impact-low .maintenance-nav-close {
+        color: #1e40af;
     }
 
-    @keyframes slideDown {
+    .maintenance-impact-high .maintenance-nav-close {
+        color: #9a3412;
+    }
+
+    .maintenance-impact-critical .maintenance-nav-close {
+        color: #991b1b;
+    }
+
+    @keyframes fadeIn {
         from {
-            transform: translateY(-100%);
             opacity: 0;
+            transform: scale(0.95);
         }
         to {
-            transform: translateY(0);
             opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    /* Responsive adjustments for navbar countdown */
+    @media (max-width: 991px) {
+        .maintenance-nav-item {
+            padding: 0.375rem 0.5rem;
+            font-size: 0.75rem;
+        }
+
+        .maintenance-nav-label {
+            display: none;
+        }
+
+        .maintenance-nav-countdown span:not(.maintenance-nav-label) {
+            min-width: 1.25rem;
         }
     }
 
@@ -864,21 +856,21 @@
 <script>
     (function() {
         const modal = document.getElementById('maintenance-countdown-modal');
-        const headerBanner = document.getElementById('maintenance-header-banner');
+        const navbarCountdown = document.getElementById('maintenance-navbar-countdown');
         if (!modal) return;
 
         const startTime = parseInt(modal.dataset.startTime);
         const maintenanceId = {{ $upcomingMaintenance->id }};
         let countdownInterval;
-        let headerCountdownInterval;
+        let navbarCountdownInterval;
 
         // Check if modal was dismissed
         const modalDismissed = localStorage.getItem('maintenance-modal-dismissed-' + maintenanceId) === 'true';
-        const headerDismissed = localStorage.getItem('maintenance-header-dismissed-' + maintenanceId) === 'true';
+        const navbarDismissed = localStorage.getItem('maintenance-navbar-dismissed-' + maintenanceId) === 'true';
 
-        // Show header banner if modal was dismissed and header not dismissed
-        if (modalDismissed && !headerDismissed) {
-            showHeaderBanner();
+        // Show navbar countdown if modal was dismissed and navbar not dismissed
+        if (modalDismissed && !navbarDismissed && navbarCountdown) {
+            showNavbarCountdown();
         }
 
         // Show modal on page load if not dismissed
@@ -900,30 +892,39 @@
                 document.body.style.overflow = '';
                 // Store in localStorage to not show again this session
                 localStorage.setItem('maintenance-modal-dismissed-' + maintenanceId, 'true');
-                // Show header banner
-                if (!headerDismissed) {
-                    showHeaderBanner();
+                // Show navbar countdown
+                if (!navbarDismissed) {
+                    showNavbarCountdown();
                 }
             }, 300);
         };
 
-        // Show header banner function
-        function showHeaderBanner() {
-            if (headerBanner && !headerDismissed) {
-                headerBanner.style.display = 'block';
-                document.body.classList.add('maintenance-banner-active');
-                startHeaderCountdown();
+        // Show navbar countdown function
+        function showNavbarCountdown() {
+            if (navbarCountdown && !navbarDismissed) {
+                // Find the navbar right section and inject countdown
+                const navRight = document.querySelector('.uda-nav-right');
+                if (navRight) {
+                    // Insert before notifications/logout button
+                    const firstChild = navRight.firstElementChild;
+                    if (firstChild) {
+                        navRight.insertBefore(navbarCountdown, firstChild);
+                    } else {
+                        navRight.appendChild(navbarCountdown);
+                    }
+                    navbarCountdown.style.display = 'block';
+                    startNavbarCountdown();
+                }
             }
         }
 
-        // Dismiss header banner function
-        window.dismissHeaderBanner = function() {
-            if (headerBanner) {
-                headerBanner.style.display = 'none';
-                document.body.classList.remove('maintenance-banner-active');
-                localStorage.setItem('maintenance-header-dismissed-' + maintenanceId, 'true');
-                if (headerCountdownInterval) {
-                    clearInterval(headerCountdownInterval);
+        // Dismiss navbar countdown function
+        window.dismissNavbarCountdown = function() {
+            if (navbarCountdown) {
+                navbarCountdown.style.display = 'none';
+                localStorage.setItem('maintenance-navbar-dismissed-' + maintenanceId, 'true');
+                if (navbarCountdownInterval) {
+                    clearInterval(navbarCountdownInterval);
                 }
             }
         };
@@ -962,8 +963,8 @@
                 if (modal && modal.classList.contains('show')) {
                     closeMaintenanceModal();
                 }
-                if (headerBanner) {
-                    dismissHeaderBanner();
+                if (navbarCountdown && navbarCountdown.style.display !== 'none') {
+                    dismissNavbarCountdown();
                 }
                 return;
             }
@@ -1017,13 +1018,13 @@
             }
         }
 
-        // Function to update header countdown
-        function updateHeaderCountdown() {
+        // Function to update navbar countdown
+        function updateNavbarCountdown() {
             const now = new Date().getTime();
             const distance = startTime - now;
 
             if (distance < 0) {
-                dismissHeaderBanner();
+                dismissNavbarCountdown();
                 return;
             }
 
@@ -1032,10 +1033,10 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            const daysEl = document.getElementById('header-days');
-            const hoursEl = document.getElementById('header-hours');
-            const minutesEl = document.getElementById('header-minutes');
-            const secondsEl = document.getElementById('header-seconds');
+            const daysEl = document.getElementById('navbar-days');
+            const hoursEl = document.getElementById('navbar-hours');
+            const minutesEl = document.getElementById('navbar-minutes');
+            const secondsEl = document.getElementById('navbar-seconds');
 
             if (daysEl) daysEl.textContent = String(days).padStart(2, '0');
             if (hoursEl) hoursEl.textContent = String(hours).padStart(2, '0');
@@ -1043,10 +1044,10 @@
             if (secondsEl) secondsEl.textContent = String(seconds).padStart(2, '0');
         }
 
-        // Start header countdown
-        function startHeaderCountdown() {
-            updateHeaderCountdown();
-            headerCountdownInterval = setInterval(updateHeaderCountdown, 1000);
+        // Start navbar countdown
+        function startNavbarCountdown() {
+            updateNavbarCountdown();
+            navbarCountdownInterval = setInterval(updateNavbarCountdown, 1000);
         }
 
         // Function to update flip digit by triggering animation
@@ -1110,7 +1111,7 @@
         // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
             if (countdownInterval) clearInterval(countdownInterval);
-            if (headerCountdownInterval) clearInterval(headerCountdownInterval);
+            if (navbarCountdownInterval) clearInterval(navbarCountdownInterval);
         });
 
         // Ensure body scroll is enabled on page load if modal is not shown
