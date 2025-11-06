@@ -15,131 +15,594 @@
             $subscription = \App\Models\SystemSubscription::latest()->first();
         }
     }
+    
+    // Determine status colors
+    $statusColors = [
+        'active' => ['bg' => '#10b981', 'light' => '#d1fae5', 'border' => '#34d399'],
+        'expiring_soon' => ['bg' => '#f59e0b', 'light' => '#fef3c7', 'border' => '#fbbf24'],
+        'expired' => ['bg' => '#ef4444', 'light' => '#fee2e2', 'border' => '#f87171'],
+        'suspended' => ['bg' => '#dc2626', 'light' => '#fecaca', 'border' => '#ef4444']
+    ];
+    
+    $currentStatus = $subscription ? $subscription->status : 'active';
+    $colors = $statusColors[$currentStatus] ?? $statusColors['active'];
 @endphp
 
 @if($subscription)
-<div class="card shadow-sm mb-4" style="border-left: 5px solid {{ $subscription->status === 'active' ? '#28a745' : ($subscription->status === 'expiring_soon' ? '#ffc107' : '#dc3545') }};">
-    <div class="card-body">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="mb-0">
-                <i class="icofont-ui-calendar"></i> Subscription Status
-            </h5>
-            <span class="badge badge-{{ $subscription->status_badge_color }} badge-pill">
-                {{ ucfirst(str_replace('_', ' ', $subscription->status)) }}
-            </span>
-        </div>
-
-        {{-- Status Message --}}
-        @if($subscription->status === 'active')
-            <div class="alert alert-success mb-3">
-                <i class="icofont-check-circled"></i> 
-                <strong>Active</strong> - Your subscription is active and all features are available.
+<div class="modern-subscription-card mb-4">
+    <div class="subscription-header">
+        <div class="header-left">
+            <div class="icon-wrapper" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
+                <i class="icofont-ui-calendar" style="color: {{ $colors['bg'] }};"></i>
             </div>
-        @elseif($subscription->status === 'expiring_soon')
-            <div class="alert alert-warning mb-3">
-                <i class="icofont-warning"></i> 
-                <strong>Expiring Soon!</strong> Your subscription expires in {{ $subscription->days_until_expiry }} {{ $subscription->days_until_expiry === 1 ? 'day' : 'days' }}.
-            </div>
-        @elseif($subscription->status === 'expired' && $subscription->is_in_grace_period)
-            <div class="alert alert-danger mb-3">
-                <i class="icofont-error"></i> 
-                <strong>Expired - Grace Period</strong> Your subscription expired. {{ $subscription->grace_period_days }} days grace period active.
-            </div>
-        @elseif($subscription->status === 'suspended')
-            <div class="alert alert-danger mb-3">
-                <i class="icofont-ban"></i> 
-                <strong>Suspended</strong> Your subscription has been suspended. Please renew immediately.
-            </div>
-        @endif
-
-        {{-- Subscription Details --}}
-        <div class="row">
-            <div class="col-md-6">
-                <p class="mb-2">
-                    <strong>Plan:</strong> 
-                    <span class="badge badge-info">{{ ucfirst($subscription->subscription_plan) }}</span>
-                </p>
-                <p class="mb-2">
-                    <strong>Renewal Cycle:</strong> 
-                    {{ ucfirst(str_replace('_', ' ', $subscription->renewal_cycle)) }}
-                </p>
-            </div>
-            <div class="col-md-6">
-                <p class="mb-2">
-                    <strong>Expires:</strong> 
-                    {{ $subscription->subscription_end_date->format('M d, Y') }}
-                </p>
-                <p class="mb-2">
-                    <strong>Renewal Amount:</strong> 
-                    {{ $subscription->formatted_renewal_amount }}
-                </p>
+            <div class="header-text">
+                <h3 class="subscription-title">Subscription Status</h3>
+                <p class="subscription-subtitle">Monitor your account</p>
             </div>
         </div>
-
-        {{-- Progress Bar --}}
-        @if($subscription->status !== 'suspended')
-        @php
-            $totalDays = $subscription->subscription_start_date->diffInDays($subscription->subscription_end_date);
-            $daysElapsed = $subscription->subscription_start_date->diffInDays(now());
-            $progress = $totalDays > 0 ? min(100, ($daysElapsed / $totalDays) * 100) : 0;
-            $progressColor = $progress > 90 ? 'danger' : ($progress > 75 ? 'warning' : 'success');
-        @endphp
-        <div class="mt-3">
-            <div class="d-flex justify-content-between mb-1">
-                <small class="text-muted">Subscription Period</small>
-                <small class="text-muted">{{ number_format($progress, 1) }}% elapsed</small>
-            </div>
-            <div class="progress" style="height: 10px;">
-                <div class="progress-bar bg-{{ $progressColor }}" role="progressbar" 
-                     style="width: {{ $progress }}%;" 
-                     aria-valuenow="{{ $progress }}" 
-                     aria-valuemin="0" 
-                     aria-valuemax="100">
-                </div>
-            </div>
+        <div class="status-badge" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
+            <span style="color: {{ $colors['bg'] }};">{{ ucfirst(str_replace('_', ' ', $subscription->status)) }}</span>
         </div>
-        @endif
+    </div>
 
-        {{-- Action Buttons --}}
-        <div class="mt-3">
-            @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
-                @if(auth()->user()->isAdmin())
-                <a href="{{ route('super-admin.subscriptions.show', $subscription->id) }}" class="btn btn-primary btn-sm">
-                    <i class="icofont-eye"></i> View Details
-                </a>
-                <a href="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" class="btn btn-success btn-sm">
-                    <i class="icofont-refresh"></i> Renew Now
-                </a>
-                @endif
-            @elseif($subscription->status === 'expired' || $subscription->status === 'suspended')
-                @if(auth()->user()->isAdmin())
-                <a href="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" class="btn btn-danger btn-block">
-                    <i class="icofont-refresh"></i> Renew Immediately - Avoid Service Interruption
-                </a>
-                @else
-                <p class="text-danger mb-0">
-                    <i class="icofont-info-circle"></i> Please contact your administrator to renew the subscription.
-                </p>
-                @endif
+    {{-- Status Alert Box --}}
+    <div class="status-alert-box" style="background: {{ $colors['light'] }}; border-left-color: {{ $colors['bg'] }};">
+        <div class="alert-icon" style="color: {{ $colors['bg'] }};">
+            @if($subscription->status === 'active')
+                <i class="icofont-check-circled"></i>
+            @elseif($subscription->status === 'expiring_soon')
+                <i class="icofont-warning"></i>
+            @elseif($subscription->status === 'expired' && $subscription->is_in_grace_period)
+                <i class="icofont-error"></i>
+            @elseif($subscription->status === 'suspended')
+                <i class="icofont-ban"></i>
             @endif
         </div>
-
-        {{-- Auto-Renewal Status --}}
-        @if($subscription->auto_renewal)
-        <div class="mt-3">
-            <small class="text-success">
-                <i class="icofont-check-circled"></i> Auto-renewal is enabled
-            </small>
+        <div class="alert-content">
+            @if($subscription->status === 'active')
+                <h4 style="color: {{ $colors['bg'] }};">All Systems Active</h4>
+                <p>Your subscription is active and all features are available.</p>
+            @elseif($subscription->status === 'expiring_soon')
+                <h4 style="color: {{ $colors['bg'] }};">Action Required</h4>
+                <p>Your subscription expires in <strong>{{ $subscription->days_until_expiry }} {{ $subscription->days_until_expiry === 1 ? 'day' : 'days' }}</strong>. Renew now to avoid interruption.</p>
+            @elseif($subscription->status === 'expired' && $subscription->is_in_grace_period)
+                <h4 style="color: {{ $colors['bg'] }};">Grace Period Active</h4>
+                <p>Your subscription has expired. You have <strong>{{ $subscription->grace_period_days }} days</strong> grace period remaining.</p>
+            @elseif($subscription->status === 'suspended')
+                <h4 style="color: {{ $colors['bg'] }};">Account Suspended</h4>
+                <p>Your subscription has been suspended. Please renew immediately to restore access.</p>
+            @endif
         </div>
+    </div>
+
+    {{-- Subscription Details Grid --}}
+    <div class="subscription-details-grid">
+        <div class="detail-item">
+            <div class="detail-icon">
+                <i class="icofont-certificate"></i>
+            </div>
+            <div class="detail-content">
+                <span class="detail-label">Plan Type</span>
+                <span class="detail-value">{{ ucfirst($subscription->subscription_plan) }}</span>
+            </div>
+        </div>
+        
+        <div class="detail-item">
+            <div class="detail-icon">
+                <i class="icofont-refresh"></i>
+            </div>
+            <div class="detail-content">
+                <span class="detail-label">Renewal Cycle</span>
+                <span class="detail-value">{{ ucfirst(str_replace('_', ' ', $subscription->renewal_cycle)) }}</span>
+            </div>
+        </div>
+        
+        <div class="detail-item">
+            <div class="detail-icon">
+                <i class="icofont-calendar"></i>
+            </div>
+            <div class="detail-content">
+                <span class="detail-label">Expires On</span>
+                <span class="detail-value">{{ $subscription->subscription_end_date->format('M d, Y') }}</span>
+            </div>
+        </div>
+        
+        <div class="detail-item">
+            <div class="detail-icon">
+                <i class="icofont-cur-dollar"></i>
+            </div>
+            <div class="detail-content">
+                <span class="detail-label">Renewal Amount</span>
+                <span class="detail-value">{{ $subscription->formatted_renewal_amount }}</span>
+            </div>
+        </div>
+    </div>
+
+    {{-- Progress Section --}}
+    @if($subscription->status !== 'suspended')
+    @php
+        $totalDays = $subscription->subscription_start_date->diffInDays($subscription->subscription_end_date);
+        $daysElapsed = $subscription->subscription_start_date->diffInDays(now());
+        $progress = $totalDays > 0 ? min(100, ($daysElapsed / $totalDays) * 100) : 0;
+        $progressColor = $progress > 90 ? '#ef4444' : ($progress > 75 ? '#f59e0b' : '#10b981');
+    @endphp
+    <div class="progress-section">
+        <div class="progress-header">
+            <span class="progress-label">Subscription Period</span>
+            <span class="progress-percentage">{{ number_format($progress, 1) }}% elapsed</span>
+        </div>
+        <div class="modern-progress-bar">
+            <div class="progress-fill" style="width: {{ $progress }}%; background: {{ $progressColor }};"></div>
+        </div>
+        <div class="progress-dates">
+            <span class="date-text">{{ $subscription->subscription_start_date->format('M d, Y') }}</span>
+            <span class="date-text">{{ $subscription->subscription_end_date->format('M d, Y') }}</span>
+        </div>
+    </div>
+    @endif
+
+    {{-- Action Buttons --}}
+    <div class="subscription-actions">
+        @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
+            @if(auth()->user()->isAdmin())
+            <a href="{{ route('super-admin.subscriptions.show', $subscription->id) }}" class="modern-btn btn-secondary">
+                <i class="icofont-eye"></i>
+                <span>View Details</span>
+            </a>
+            <a href="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" class="modern-btn btn-primary">
+                <i class="icofont-refresh"></i>
+                <span>Renew Now</span>
+            </a>
+            @endif
+        @elseif($subscription->status === 'expired' || $subscription->status === 'suspended')
+            @if(auth()->user()->isAdmin())
+            <a href="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" class="modern-btn btn-danger btn-block">
+                <i class="icofont-refresh"></i>
+                <span>Renew Immediately</span>
+            </a>
+            @else
+            <div class="contact-admin-notice">
+                <i class="icofont-info-circle"></i>
+                <span>Please contact your administrator to renew the subscription.</span>
+            </div>
+            @endif
         @endif
     </div>
+
+    {{-- Auto-Renewal Badge --}}
+    @if($subscription->auto_renewal)
+    <div class="auto-renewal-badge">
+        <i class="icofont-check-circled"></i>
+        <span>Auto-renewal enabled</span>
+    </div>
+    @endif
 </div>
 @endif
 
 <style>
-.badge-pill {
-    padding: 0.5em 0.8em;
-    font-size: 0.9em;
+/* Modern Subscription Card Styles */
+.modern-subscription-card {
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    background: #ffffff;
+    border-radius: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modern-subscription-card:hover {
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 5px 10px rgba(0, 0, 0, 0.05);
+    transform: translateY(-2px);
+}
+
+/* Header Section */
+.subscription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.icon-wrapper {
+    width: 56px;
+    height: 56px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid;
+    transition: all 0.3s ease;
+}
+
+.icon-wrapper i {
+    font-size: 28px;
+}
+
+.modern-subscription-card:hover .icon-wrapper {
+    transform: scale(1.05);
+}
+
+.header-text {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.subscription-title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+    letter-spacing: -0.025em;
+}
+
+.subscription-subtitle {
+    margin: 0;
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 400;
+}
+
+.status-badge {
+    padding: 10px 20px;
+    border-radius: 12px;
+    border: 2px solid;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.025em;
+    transition: all 0.3s ease;
+}
+
+.status-badge:hover {
+    transform: scale(1.05);
+}
+
+/* Status Alert Box */
+.status-alert-box {
+    margin: 24px;
+    padding: 20px;
+    border-radius: 12px;
+    border-left: 4px solid;
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    transition: all 0.3s ease;
+}
+
+.status-alert-box:hover {
+    transform: translateX(4px);
+}
+
+.alert-icon {
+    font-size: 28px;
+    line-height: 1;
+    margin-top: 2px;
+}
+
+.alert-content {
+    flex: 1;
+}
+
+.alert-content h4 {
+    margin: 0 0 6px 0;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.025em;
+}
+
+.alert-content p {
+    margin: 0;
+    font-size: 14px;
+    color: #374151;
+    line-height: 1.6;
+}
+
+/* Subscription Details Grid */
+.subscription-details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1px;
+    background: rgba(0, 0, 0, 0.05);
+    margin: 0 24px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.detail-item {
+    background: #f9fafb;
+    padding: 20px;
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.detail-item:hover {
+    background: #f3f4f6;
+}
+
+.detail-icon {
+    width: 44px;
+    height: 44px;
+    background: #ffffff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    color: #4b5563;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.detail-content {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.detail-label {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.detail-value {
+    font-size: 15px;
+    color: #111827;
+    font-weight: 600;
+}
+
+/* Progress Section */
+.progress-section {
+    padding: 24px;
+}
+
+.progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.progress-label {
+    font-size: 14px;
+    color: #374151;
+    font-weight: 600;
+}
+
+.progress-percentage {
+    font-size: 14px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.modern-progress-bar {
+    height: 12px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    overflow: hidden;
+    position: relative;
+}
+
+.progress-fill {
+    height: 100%;
+    border-radius: 12px;
+    transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.progress-dates {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.date-text {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 500;
+}
+
+/* Action Buttons */
+.subscription-actions {
+    padding: 24px;
+    display: flex;
+    gap: 12px;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.modern-btn {
+    flex: 1;
+    padding: 14px 24px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    border: none;
+    cursor: pointer;
+    letter-spacing: 0.025em;
+}
+
+.modern-btn i {
+    font-size: 18px;
+}
+
+.btn-primary {
+    background: #3b82f6;
+    color: #ffffff;
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    color: #ffffff;
+}
+
+.btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+}
+
+.btn-secondary:hover {
+    background: #e5e7eb;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    color: #111827;
+}
+
+.btn-danger {
+    background: #ef4444;
+    color: #ffffff;
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    color: #ffffff;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.contact-admin-notice {
+    width: 100%;
+    padding: 16px;
+    background: #fef2f2;
+    border-radius: 10px;
+    color: #991b1b;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+}
+
+.contact-admin-notice i {
+    font-size: 20px;
+}
+
+/* Auto-Renewal Badge */
+.auto-renewal-badge {
+    margin: 0 24px 24px;
+    padding: 12px 16px;
+    background: #d1fae5;
+    border-radius: 10px;
+    color: #065f46;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.auto-renewal-badge i {
+    font-size: 16px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .subscription-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+    }
+    
+    .status-badge {
+        align-self: flex-start;
+    }
+    
+    .subscription-details-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .subscription-actions {
+        flex-direction: column;
+    }
+    
+    .modern-btn {
+        width: 100%;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    .modern-subscription-card {
+        background: #1f2937;
+        border-color: rgba(255, 255, 255, 0.1);
+    }
+    
+    .subscription-title {
+        color: #f9fafb;
+    }
+    
+    .subscription-subtitle {
+        color: #9ca3af;
+    }
+    
+    .detail-item {
+        background: #111827;
+    }
+    
+    .detail-item:hover {
+        background: #1f2937;
+    }
+    
+    .detail-icon {
+        background: #374151;
+        color: #9ca3af;
+    }
+    
+    .detail-value {
+        color: #f9fafb;
+    }
+    
+    .modern-progress-bar {
+        background: #374151;
+    }
+    
+    .btn-secondary {
+        background: #374151;
+        color: #f9fafb;
+    }
+    
+    .btn-secondary:hover {
+        background: #4b5563;
+        color: #ffffff;
+    }
 }
 </style>
 
