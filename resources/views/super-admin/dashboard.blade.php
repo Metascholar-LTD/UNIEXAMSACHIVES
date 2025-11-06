@@ -70,7 +70,7 @@
         gap: 1rem;
     }
 
-    /* Icon container */
+    /* Icon container - default grey */
     .modern-button-icon {
         padding: 0.75rem;
         border-radius: 0.5rem;
@@ -86,6 +86,43 @@
         background: linear-gradient(to bottom right, rgba(209, 213, 219, 0.9), rgba(229, 231, 235, 0.7));
     }
 
+    /* Colorful icon containers - Primary (Indigo) */
+    .button-icon-primary .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(99, 102, 241, 0.5), rgba(129, 140, 248, 0.3));
+    }
+
+    .button-icon-primary:hover .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(129, 140, 248, 0.6), rgba(99, 102, 241, 0.4));
+    }
+
+    /* Colorful icon containers - Info (Blue) */
+    .button-icon-info .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(59, 130, 246, 0.5), rgba(96, 165, 250, 0.3));
+    }
+
+    .button-icon-info:hover .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(96, 165, 250, 0.6), rgba(59, 130, 246, 0.4));
+    }
+
+    /* Colorful icon containers - Success (Green) */
+    .button-icon-success .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(34, 197, 94, 0.5), rgba(74, 222, 128, 0.3));
+    }
+
+    .button-icon-success:hover .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(74, 222, 128, 0.6), rgba(34, 197, 94, 0.4));
+    }
+
+    /* Colorful icon containers - Warning (Yellow) */
+    .button-icon-warning .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(234, 179, 8, 0.5), rgba(250, 204, 21, 0.3));
+    }
+
+    .button-icon-warning:hover .modern-button-icon {
+        background: linear-gradient(to bottom right, rgba(250, 204, 21, 0.6), rgba(234, 179, 8, 0.4));
+    }
+
+    /* Icon SVG - default grey */
     .modern-button-icon svg {
         width: 1.75rem;
         height: 1.75rem;
@@ -95,6 +132,22 @@
 
     .modern-action-button:hover .modern-button-icon svg {
         color: #1f2937;
+        transform: scale(1.1);
+    }
+
+    /* Icon SVG - white for colorful icon containers */
+    .button-icon-primary .modern-button-icon svg,
+    .button-icon-info .modern-button-icon svg,
+    .button-icon-success .modern-button-icon svg,
+    .button-icon-warning .modern-button-icon svg {
+        color: white;
+    }
+
+    .button-icon-primary:hover .modern-button-icon svg,
+    .button-icon-info:hover .modern-button-icon svg,
+    .button-icon-success:hover .modern-button-icon svg,
+    .button-icon-warning:hover .modern-button-icon svg {
+        color: rgba(255, 255, 255, 0.9);
         transform: scale(1.1);
     }
 
@@ -257,7 +310,7 @@
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.subscriptions.create') }}" class="modern-action-button modern-button-md">
+                            <a href="{{ route('super-admin.subscriptions.create') }}" class="modern-action-button modern-button-md button-icon-primary">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -278,7 +331,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.subscriptions.index') }}" class="modern-action-button modern-button-md">
+                            <a href="{{ route('super-admin.subscriptions.index') }}" class="modern-action-button modern-button-md button-icon-info">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -303,7 +356,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.payments.index') }}" class="modern-action-button modern-button-md">
+                            <a href="{{ route('super-admin.payments.index') }}" class="modern-action-button modern-button-md button-icon-success">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -324,7 +377,7 @@
                             </a>
                         </div>
                         <div class="col-md-3 mb-3">
-                            <a href="{{ route('super-admin.settings.index') }}" class="modern-action-button modern-button-md">
+                            <a href="{{ route('super-admin.settings.index') }}" class="modern-action-button modern-button-md button-icon-warning">
                                 <div class="modern-button-content">
                                     <div class="modern-button-icon">
                                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
