@@ -693,7 +693,7 @@
         text-align: center;
         text-shadow: 0 1px 2px #333;
         width: 100%;
-        z-index: 0;
+        z-index: -1;
     }
 
     .num {
@@ -741,11 +741,11 @@
         border-bottom: 1px solid #444444;
         border-radius: 0 0 5px 5px;
         box-shadow: inset 0 15px 50px #202020;
-        content: attr(data-num-next);
+        content: attr(data-num);
         height: calc(50% - 1px);
         line-height: 0;
-        top: 0;
-        transform: rotateX(180deg);
+        bottom: 0;
+        top: auto;
     }
 
     /* Animations for ones (seconds, minutes units) */
@@ -1203,10 +1203,6 @@
                 
                 // Show the target number
                 if (numValue === targetValue) {
-                    // CRITICAL FIX: Update data-num-next to match data-num
-                    // This ensures both top and bottom halves show the same number
-                    num.setAttribute('data-num-next', targetValue.toString());
-                    
                     // If changing from another number, trigger flip animation
                     if (currentActive && currentActive !== num) {
                         // Hide current active first
