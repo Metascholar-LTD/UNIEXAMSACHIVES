@@ -45,28 +45,30 @@
         <div class="maintenance-modal-body">
             <div class="maintenance-info-card">
                 <div class="maintenance-info-item">
-                    <span class="maintenance-info-label">Title</span>
+                    <span class="maintenance-info-label">Maintenance Title</span>
                     <span class="maintenance-info-value">{{ $upcomingMaintenance->title }}</span>
                 </div>
                 
+                @if($upcomingMaintenance->banner_message ?? $upcomingMaintenance->description)
                 <div class="maintenance-info-item">
                     <span class="maintenance-info-label">Description</span>
                     <span class="maintenance-info-value">{{ $upcomingMaintenance->banner_message ?? $upcomingMaintenance->description }}</span>
                 </div>
+                @endif
 
                 <div class="maintenance-info-row">
                     <div class="maintenance-info-item">
-                        <span class="maintenance-info-label">Start Time</span>
-                        <span class="maintenance-info-value">{{ $upcomingMaintenance->scheduled_start->format('M d, Y h:i A') }}</span>
+                        <span class="maintenance-info-label">Start</span>
+                        <span class="maintenance-info-value">{{ $upcomingMaintenance->scheduled_start->format('M d, Y') }}<br>{{ $upcomingMaintenance->scheduled_start->format('h:i A') }}</span>
                     </div>
                     <div class="maintenance-info-item">
-                        <span class="maintenance-info-label">End Time</span>
-                        <span class="maintenance-info-value">{{ $upcomingMaintenance->scheduled_end->format('M d, Y h:i A') }}</span>
+                        <span class="maintenance-info-label">End</span>
+                        <span class="maintenance-info-value">{{ $upcomingMaintenance->scheduled_end->format('M d, Y') }}<br>{{ $upcomingMaintenance->scheduled_end->format('h:i A') }}</span>
                     </div>
                 </div>
 
-                <div class="maintenance-info-item">
-                    <span class="maintenance-info-label">Impact Level</span>
+                <div class="maintenance-info-item" style="margin-top: 0.5rem;">
+                    <span class="maintenance-info-label">Impact</span>
                     <span class="maintenance-info-badge maintenance-impact-badge-{{ $upcomingMaintenance->impact_level }}">
                         {{ ucfirst($upcomingMaintenance->impact_level) }}
                     </span>
@@ -74,7 +76,7 @@
             </div>
 
             <div class="maintenance-countdown-section">
-                <h3 class="countdown-title">Maintenance Starts In</h3>
+                <h3 class="countdown-title">Time Until Maintenance</h3>
                 <div class="countdown-container">
                     <!-- Days - Tens -->
                     <div class="countdown-group">
@@ -254,11 +256,11 @@
     .maintenance-modal-content {
         position: relative;
         background: white;
-        border-radius: 24px;
+        border-radius: 20px;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-        max-width: 900px;
+        max-width: 600px;
         width: 100%;
-        max-height: 90vh;
+        max-height: 85vh;
         overflow-y: auto;
         transform: scale(0.9) translateY(20px);
         transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -294,14 +296,14 @@
 
     .maintenance-modal-header {
         text-align: center;
-        padding: 2.5rem 2rem 1.5rem;
+        padding: 1.75rem 1.5rem 1.25rem;
         border-bottom: 1px solid #e5e7eb;
     }
 
     .maintenance-modal-icon {
-        width: 4rem;
-        height: 4rem;
-        margin: 0 auto 1rem;
+        width: 3rem;
+        height: 3rem;
+        margin: 0 auto 0.75rem;
         border-radius: 50%;
         display: flex;
         align-items: center;
@@ -331,36 +333,36 @@
     }
 
     .maintenance-modal-title {
-        font-size: 1.875rem;
+        font-size: 1.5rem;
         font-weight: 700;
         color: #1f2937;
-        margin: 0 0 0.5rem;
+        margin: 0 0 0.375rem;
     }
 
     .maintenance-modal-subtitle {
-        font-size: 1rem;
+        font-size: 0.875rem;
         color: #6b7280;
         margin: 0;
     }
 
     .maintenance-modal-body {
-        padding: 2rem;
+        padding: 1.5rem;
     }
 
     /* Info Card */
     .maintenance-info-card {
         background: #f9fafb;
-        border-radius: 1rem;
-        padding: 1.5rem;
-        margin-bottom: 2rem;
+        border-radius: 0.75rem;
+        padding: 1.25rem;
+        margin-bottom: 1.5rem;
         border: 1px solid #e5e7eb;
     }
 
     .maintenance-info-item {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
-        margin-bottom: 1rem;
+        gap: 0.375rem;
+        margin-bottom: 0.875rem;
     }
 
     .maintenance-info-item:last-child {
@@ -370,12 +372,12 @@
     .maintenance-info-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 1rem;
-        margin-bottom: 1rem;
+        gap: 0.875rem;
+        margin-bottom: 0.875rem;
     }
 
     .maintenance-info-label {
-        font-size: 0.75rem;
+        font-size: 0.6875rem;
         font-weight: 600;
         color: #6b7280;
         text-transform: uppercase;
@@ -383,9 +385,10 @@
     }
 
     .maintenance-info-value {
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         color: #1f2937;
         font-weight: 500;
+        line-height: 1.5;
     }
 
     .maintenance-info-badge {
@@ -423,18 +426,18 @@
     }
 
     .countdown-title {
-        font-size: 1.25rem;
-        font-weight: 700;
+        font-size: 1rem;
+        font-weight: 600;
         color: #1f2937;
-        margin-bottom: 2rem;
+        margin-bottom: 1.25rem;
     }
 
     .countdown-container {
-        height: 200px;
+        height: 120px;
         position: relative;
         text-align: center;
         display: flex;
-        gap: 20px;
+        gap: 12px;
         justify-content: center;
         align-items: center;
     }
@@ -443,11 +446,11 @@
         display: flex;
         flex-direction: column;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.375rem;
     }
 
     .countdown-label {
-        font-size: 0.75rem;
+        font-size: 0.625rem;
         font-weight: 600;
         color: #6b7280;
         text-transform: uppercase;
@@ -456,26 +459,26 @@
 
     .countdown-wrapper {
         display: flex;
-        gap: 8px;
+        gap: 4px;
     }
 
     .countdown-separator {
-        font-size: 2rem;
+        font-size: 1.25rem;
         font-weight: 700;
         color: #1f2937;
         align-self: flex-end;
-        padding-bottom: 60px;
+        padding-bottom: 35px;
     }
 
     /* Flip Countdown Timer Styles - From Uiverse.io by Carlos-vargs */
     .nums {
-        box-shadow: 0 3px 10px #111;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
         border-top: 1px solid #393939;
         display: inline-block;
-        height: 200px;
+        height: 120px;
         perspective: 1000px;
         position: relative;
-        width: 140px;
+        width: 85px;
     }
 
     .nums:before {
@@ -497,11 +500,11 @@
         border-top: 1px solid black;
         border-radius: 0 0 5px 5px;
         bottom: 0;
-        box-shadow: inset 0 15px 50px #202020;
+        box-shadow: inset 0 10px 30px #202020;
         color: #eeeeee;
         content: "0";
         display: block;
-        font-size: 145px;
+        font-size: 85px;
         height: calc(50% - 1px);
         left: 0;
         line-height: 0;
@@ -518,7 +521,7 @@
         animation-iteration-count: infinite;
         animation-timing-function: ease-in;
         border-radius: 5px;
-        font-size: 145px;
+        font-size: 85px;
         height: 100%;
         left: 0;
         position: absolute;
@@ -598,7 +601,7 @@
 
     /* Modal Footer */
     .maintenance-modal-footer {
-        padding: 1.5rem 2rem 2rem;
+        padding: 1.25rem 1.5rem 1.5rem;
         border-top: 1px solid #e5e7eb;
         text-align: center;
     }
@@ -607,9 +610,9 @@
         background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.05));
         color: #4338ca;
         border: 1px solid rgba(99, 102, 241, 0.2);
-        padding: 0.75rem 2rem;
+        padding: 0.625rem 1.5rem;
         border-radius: 0.5rem;
-        font-size: 0.9375rem;
+        font-size: 0.875rem;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s;
@@ -627,11 +630,11 @@
         }
 
         .maintenance-modal-header {
-            padding: 2rem 1.5rem 1rem;
+            padding: 1.5rem 1.25rem 1rem;
         }
 
         .maintenance-modal-body {
-            padding: 1.5rem;
+            padding: 1.25rem;
         }
 
         .maintenance-info-row {
@@ -639,26 +642,26 @@
         }
 
         .countdown-container {
-            gap: 10px;
-            flex-wrap: wrap;
+            gap: 8px;
+            height: 100px;
         }
 
         .nums {
-            width: 100px;
-            height: 150px;
+            width: 70px;
+            height: 100px;
         }
 
         .num {
-            font-size: 110px;
+            font-size: 70px;
         }
 
         .nums:after {
-            font-size: 110px;
+            font-size: 70px;
         }
 
         .countdown-separator {
-            font-size: 1.5rem;
-            padding-bottom: 45px;
+            font-size: 1rem;
+            padding-bottom: 30px;
         }
     }
 </style>
@@ -802,27 +805,29 @@
                 // Show the target number
                 if (numValue === targetValue) {
                     // If changing from another number, trigger flip animation
-                    if (currentActive && currentActive !== num) {
+                    if (currentActive && currentActive !== num && currentActive.classList.contains('active')) {
                         num.classList.add('flipping');
                         setTimeout(() => {
                             num.classList.remove('flipping');
                             num.classList.add('active');
                         }, 600);
                     } else {
+                        // Initial display or no change - show immediately
                         num.classList.add('active');
                     }
+                } else {
+                    // Hide non-active numbers
+                    num.style.zIndex = '1';
+                    num.style.transform = 'rotateX(-180deg)';
                 }
             });
         }
 
-        // Initialize countdown immediately
+        // Initialize countdown immediately - set initial values
         updateFlipCountdown();
         
-        // Set initial values without animation
-        setTimeout(() => {
-            updateFlipCountdown();
-            countdownInterval = setInterval(updateFlipCountdown, 1000);
-        }, 100);
+        // Start interval for updates
+        countdownInterval = setInterval(updateFlipCountdown, 1000);
 
         // Cleanup on page unload
         window.addEventListener('beforeunload', function() {
