@@ -650,9 +650,8 @@
         padding-bottom: 28px;
     }
 
-    /* Flip Countdown Timer Styles - Split-flap Display Effect */
+    /* Simple Countdown Timer Styles */
     .nums {
-        perspective: 1000px;
         display: inline-block;
         height: 100px;
         position: relative;
@@ -669,133 +668,17 @@
         font-weight: bold;
         color: #eeeeee;
         border-radius: 10px;
-        background: #222;
+        background: linear-gradient(to bottom, #181818 0%, #222 50%, #2a2a2a 50%, #1a1a1a 100%);
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
         text-shadow: 0 1px 2px #000;
-    }
-
-    /* Static top half - clips the top portion of the number */
-    .num .static-top {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 50%;
-        background: linear-gradient(to bottom, #181818 0%, #222 100%);
-        border-radius: 10px 10px 0 0;
-        overflow: hidden;
-        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
-        z-index: 3;
-    }
-
-    .num .static-top::after {
-        content: attr(data-value);
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 200%;
         display: flex;
         justify-content: center;
         align-items: center;
-        font-size: 65px;
-        font-weight: bold;
-        color: #eeeeee;
-        text-shadow: 0 1px 2px #000;
-    }
-
-    /* Static bottom half - clips the bottom portion of the number */
-    .num .static-bottom {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        height: 50%;
-        background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
-        border-radius: 0 0 10px 10px;
-        overflow: hidden;
-        box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.4);
-        z-index: 1;
-    }
-
-    .num .static-bottom::after {
-        content: attr(data-value);
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 200%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 65px;
-        font-weight: bold;
-        color: #eeeeee;
-        text-shadow: 0 1px 2px #000;
-    }
-
-    /* Flipping top half - animates down to reveal new number */
-    .num .flip-top {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 50%;
-        background: linear-gradient(to bottom, #181818 0%, #222 100%);
-        border-radius: 10px 10px 0 0;
-        overflow: hidden;
-        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
-        transform-origin: bottom;
-        transform-style: preserve-3d;
-        backface-visibility: hidden;
-        z-index: 4;
-    }
-
-    .num .flip-top::after {
-        content: attr(data-value);
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        width: 100%;
-        height: 200%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 65px;
-        font-weight: bold;
-        color: #eeeeee;
-        text-shadow: 0 1px 2px #000;
-    }
-
-    /* Flip animation */
-    .num.flip .flip-top {
-        animation: flipDown 0.6s cubic-bezier(0.455, 0.03, 0.515, 0.955) forwards;
-    }
-
-    @keyframes flipDown {
-        0% {
-            transform: rotateX(0deg);
-        }
-        100% {
-            transform: rotateX(-180deg);
-        }
-    }
-
-    /* Active/Hidden state for JavaScript control */
-    .num.active {
-        display: block;
-        z-index: 10;
-    }
-
-    .num.hidden {
-        display: none;
+        transition: opacity 0.3s ease;
     }
 
     /* Middle divider line */
-    .nums::before {
+    .num::before {
         content: "";
         position: absolute;
         top: 50%;
@@ -806,6 +689,37 @@
         z-index: 5;
         transform: translateY(-1px);
         box-shadow: 0 1px 1px rgba(0, 0, 0, 0.5);
+    }
+
+    /* Inner shadow effects for depth */
+    .num::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        border-radius: 10px;
+        box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4), inset 0 -10px 30px rgba(0, 0, 0, 0.4);
+        pointer-events: none;
+    }
+
+    /* Active/Hidden state for JavaScript control */
+    .num.active {
+        display: flex;
+        z-index: 10;
+        opacity: 1;
+    }
+
+    .num.hidden {
+        display: none;
+        opacity: 0;
+    }
+
+    /* Number display */
+    .num .number {
+        position: relative;
+        z-index: 2;
     }
 
     /* Modal Footer */
@@ -861,12 +775,6 @@
         }
 
         .num {
-            font-size: 55px;
-        }
-
-        .num .static-top::after,
-        .num .static-bottom::after,
-        .num .flip-top::after {
             font-size: 55px;
         }
 
@@ -1083,7 +991,7 @@
             navbarCountdownInterval = setInterval(updateNavbarCountdown, 1000);
         }
 
-        // Function to update flip digit by triggering animation
+        // Function to update digit - simplified without flip animation
         function updateFlipDigit(containerId, targetValue) {
             const container = document.getElementById(containerId);
             if (!container) return;
@@ -1103,104 +1011,34 @@
                 
                 // Show the target number
                 if (numValue === targetValue) {
-                    // If changing from another number, trigger flip animation
-                    if (currentActive && currentActive !== num) {
-                        const oldValue = currentActive.getAttribute('data-num');
-                        
-                        // Trigger flip animation on current active
-                        flipNumber(currentActive, targetValue, () => {
-                            // After animation, hide old and show new
+                    if (!currentActive || currentActive !== num) {
+                        // Hide old active
+                        if (currentActive) {
                             currentActive.classList.remove('active');
                             currentActive.classList.add('hidden');
-                            num.classList.remove('hidden');
-                            num.classList.add('active');
-                            // Initialize the new active card
-                            initializeCard(num, targetValue);
-                        });
-                    } else if (!currentActive) {
-                        // Initial display - show immediately
+                        }
+                        
+                        // Show new number
                         num.classList.remove('hidden');
                         num.classList.add('active');
-                        initializeCard(num, targetValue);
+                        
+                        // Update number display
+                        let numberSpan = num.querySelector('.number');
+                        if (!numberSpan) {
+                            numberSpan = document.createElement('span');
+                            numberSpan.className = 'number';
+                            num.appendChild(numberSpan);
+                        }
+                        numberSpan.textContent = targetValue;
                     }
-                    // If currentActive === num, no change needed
                 } else {
-                    // Hide non-active numbers (but not during animation)
+                    // Hide non-active numbers
                     if (num !== currentActive) {
                         num.classList.remove('active');
                         num.classList.add('hidden');
                     }
                 }
             });
-        }
-
-        // Initialize card with static top and bottom halves
-        function initializeCard(element, value) {
-            // Clear existing content
-            element.innerHTML = '';
-            
-            // Create static top half
-            const staticTop = document.createElement('div');
-            staticTop.className = 'static-top';
-            staticTop.setAttribute('data-value', value);
-            
-            // Create static bottom half
-            const staticBottom = document.createElement('div');
-            staticBottom.className = 'static-bottom';
-            staticBottom.setAttribute('data-value', value);
-            
-            element.appendChild(staticTop);
-            element.appendChild(staticBottom);
-            element.setAttribute('data-num', value);
-        }
-
-        // Flip animation function
-        function flipNumber(element, newValue, callback) {
-            const oldValue = element.getAttribute('data-num');
-            if (oldValue === String(newValue)) {
-                if (callback) callback();
-                return;
-            }
-
-            // Get the static elements
-            const staticTop = element.querySelector('.static-top');
-            const staticBottom = element.querySelector('.static-bottom');
-            
-            if (!staticTop || !staticBottom) {
-                // Card not initialized, just callback
-                if (callback) callback();
-                return;
-            }
-
-            // Create flipping top half with old value
-            const flipTop = document.createElement('div');
-            flipTop.className = 'flip-top';
-            flipTop.setAttribute('data-value', oldValue);
-            element.appendChild(flipTop);
-
-            // Update static halves to new value (they're behind the flip-top)
-            staticTop.setAttribute('data-value', newValue);
-            staticBottom.setAttribute('data-value', newValue);
-
-            // Trigger flip animation
-            element.classList.add('flip');
-
-            // Handle animation end
-            const onAnimEnd = () => {
-                element.classList.remove('flip');
-                
-                // Remove the flip-top element
-                if (flipTop.parentNode === element) {
-                    element.removeChild(flipTop);
-                }
-                
-                element.setAttribute('data-num', newValue);
-                element.removeEventListener('animationend', onAnimEnd);
-                
-                if (callback) callback();
-            };
-
-            element.addEventListener('animationend', onAnimEnd);
         }
 
         // Initialize countdown immediately - set initial values
