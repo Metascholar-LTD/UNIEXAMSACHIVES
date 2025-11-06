@@ -351,10 +351,11 @@
                 </h5>
             </div>
             <div class="modern-card-body">
-                <p style="color: #7f1d1d; margin-bottom: 1.5rem; font-weight: 600;">
+                <p style="color: #1f2937; margin-bottom: 1.5rem; font-weight: 600;">
                     <i class="icofont-info-circle"></i> 
                     By clicking "Update Maintenance", you are confirming that all changes are correct and the maintenance schedule will be updated.
                 </p>
+                <div style="border-top: 1px solid #e5e7eb; margin: 1.5rem 0; padding-top: 1.5rem;"></div>
                 <div class="d-flex justify-content-between align-items-center">
                     <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" class="btn-modern btn-modern-secondary">
                         <i class="icofont-close"></i> Cancel
