@@ -7,9 +7,9 @@
     <title>@yield('title', 'Super Admin') - Metascholar Consult</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="https://res.cloudinary.com/dsypclqxk/image/upload/v1762441686/LOGO_tkhcsf.jpg">
-    <link rel="shortcut icon" type="image/jpeg" href="https://res.cloudinary.com/dsypclqxk/image/upload/v1762441686/LOGO_tkhcsf.jpg">
-    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dsypclqxk/image/upload/v1762441686/LOGO_tkhcsf.jpg">
+    <link rel="icon" type="image/jpeg" href="https://res.cloudinary.com/dsypclqxk/image/upload/v1762441822/Metscholar_iyoxrw.png">
+    <link rel="shortcut icon" type="image/jpeg" href="https://res.cloudinary.com/dsypclqxk/image/upload/v1762441822/Metscholar_iyoxrw.png">
+    <link rel="apple-touch-icon" href="https://res.cloudinary.com/dsypclqxk/image/upload/v1762441822/Metscholar_iyoxrw.png">
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
