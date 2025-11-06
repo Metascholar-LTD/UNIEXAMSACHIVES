@@ -342,37 +342,33 @@
             </div>
         </div>
 
-        {{-- Rollback --}}
-        <div class="modern-card">
-            <div class="modern-card-header">
-                <h5>
-                    <i class="icofont-undo"></i>
-                    Rollback Options
+        {{-- Danger Zone - Update Actions --}}
+        <div class="modern-card" style="border: 2px solid #ef4444;">
+            <div class="modern-card-header" style="background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%); border-bottom: 2px solid #ef4444;">
+                <h5 style="color: #991b1b;">
+                    <i class="icofont-warning"></i>
+                    Update Maintenance
                 </h5>
             </div>
             <div class="modern-card-body">
-                <div class="checkbox-modern">
-                    <input type="checkbox" name="rollback_available" id="rollback_available" value="1" 
-                           {{ $maintenance->rollback_available ? 'checked' : '' }}>
-                    <label for="rollback_available">Rollback Available</label>
-                </div>
-
-                <div class="form-group-modern" id="rollback_procedure" style="display: {{ $maintenance->rollback_available ? 'block' : 'none' }};">
-                    <label class="form-label-modern">Rollback Procedure</label>
-                    <textarea name="rollback_procedure" class="form-control form-control-modern" 
-                              rows="3">{{ $maintenance->rollback_procedure }}</textarea>
+                <p style="color: #7f1d1d; margin-bottom: 1.5rem; font-weight: 600;">
+                    <i class="icofont-info-circle"></i> 
+                    By clicking "Update Maintenance", you are confirming that all changes are correct and the maintenance schedule will be updated.
+                </p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" class="btn-modern btn-modern-secondary">
+                        <i class="icofont-close"></i> Cancel
+                    </a>
+                    <button type="submit" class="btn-modern" 
+                            style="background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(220, 38, 38, 0.05)); 
+                                   color: #dc2626; 
+                                   border: 2px solid rgba(239, 68, 68, 0.3);
+                                   font-weight: 700;"
+                            onclick="return confirm('Are you sure you want to update this maintenance? Please review all changes before proceeding.')">
+                        <i class="icofont-save"></i> Update Maintenance
+                    </button>
                 </div>
             </div>
-        </div>
-
-        {{-- Actions --}}
-        <div class="d-flex justify-content-between">
-            <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" class="btn-modern btn-modern-secondary">
-                Cancel
-            </a>
-            <button type="submit" class="btn-modern btn-modern-primary">
-                <i class="icofont-save"></i> Update Maintenance
-            </button>
         </div>
     </form>
 </div>
@@ -382,11 +378,6 @@
     // Toggle downtime minutes field
     document.getElementById('requires_downtime')?.addEventListener('change', function() {
         document.getElementById('downtime_minutes').style.display = this.checked ? 'block' : 'none';
-    });
-
-    // Toggle rollback procedure field
-    document.getElementById('rollback_available')?.addEventListener('change', function() {
-        document.getElementById('rollback_procedure').style.display = this.checked ? 'block' : 'none';
     });
 
     // Toggle banner options
