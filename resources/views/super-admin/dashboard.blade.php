@@ -445,6 +445,324 @@
         }
     }
 
+    /* Modern Subscription Notice Styles */
+    .subscription-notice-container {
+        font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+        background: #ffffff;
+        border-radius: 16px;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        border-left: 6px solid #f59e0b;
+        overflow: hidden;
+        transition: all 0.3s ease;
+    }
+
+    .subscription-notice-container:hover {
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        transform: translateY(-2px);
+    }
+
+    .notice-header {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 24px 28px 20px 28px;
+        background: #fffbeb;
+        border-bottom: 1px solid #fef3c7;
+    }
+
+    .notice-icon-wrapper {
+        flex-shrink: 0;
+        width: 56px;
+        height: 56px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #ffffff;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .notice-icon-wrapper i {
+        font-size: 28px;
+        color: #f59e0b;
+    }
+
+    .notice-header-content {
+        flex: 1;
+    }
+
+    .notice-title {
+        font-size: 20px;
+        font-weight: 700;
+        color: #78350f;
+        margin: 0 0 4px 0;
+        line-height: 1.3;
+        letter-spacing: -0.01em;
+    }
+
+    .notice-subtitle {
+        font-size: 14px;
+        color: #92400e;
+        margin: 0;
+        font-weight: 500;
+    }
+
+    .notice-count-badge {
+        flex-shrink: 0;
+        background: #f59e0b;
+        color: #ffffff;
+        padding: 8px 20px;
+        border-radius: 24px;
+        font-size: 18px;
+        font-weight: 700;
+        box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+        min-width: 56px;
+        text-align: center;
+    }
+
+    .notice-body {
+        padding: 0;
+    }
+
+    .subscription-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    .subscription-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 20px 28px;
+        border-bottom: 1px solid #f3f4f6;
+        transition: background-color 0.2s ease;
+    }
+
+    .subscription-item:last-child {
+        border-bottom: none;
+    }
+
+    .subscription-item:hover {
+        background: #fafafa;
+    }
+
+    .subscription-index {
+        flex-shrink: 0;
+        width: 36px;
+        height: 36px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9fafb;
+        border: 2px solid #e5e7eb;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        color: #6b7280;
+    }
+
+    .subscription-info {
+        flex: 1;
+        min-width: 0;
+    }
+
+    .subscription-name {
+        font-size: 16px;
+        font-weight: 600;
+        color: #111827;
+        margin: 0 0 6px 0;
+        line-height: 1.3;
+    }
+
+    .subscription-meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .meta-item {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+        color: #6b7280;
+    }
+
+    .meta-item i {
+        font-size: 14px;
+        color: #9ca3af;
+    }
+
+    .meta-label {
+        font-weight: 500;
+    }
+
+    .meta-value {
+        font-weight: 600;
+        color: #374151;
+    }
+
+    .expiry-badge {
+        flex-shrink: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #fef3c7;
+        padding: 10px 16px;
+        border-radius: 10px;
+        border: 1px solid #fde68a;
+    }
+
+    .expiry-days {
+        font-size: 22px;
+        font-weight: 700;
+        color: #92400e;
+        line-height: 1;
+        margin: 0;
+    }
+
+    .expiry-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #b45309;
+        margin: 2px 0 0 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .subscription-action {
+        flex-shrink: 0;
+    }
+
+    .view-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 20px;
+        background: #f59e0b;
+        color: #ffffff;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        border: none;
+        box-shadow: 0 2px 4px rgba(245, 158, 11, 0.2);
+    }
+
+    .view-btn:hover {
+        background: #d97706;
+        color: #ffffff;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(245, 158, 11, 0.3);
+        text-decoration: none;
+    }
+
+    .view-btn:active {
+        transform: translateY(0);
+    }
+
+    .view-btn i {
+        font-size: 16px;
+    }
+
+    .notice-footer {
+        padding: 20px 28px;
+        background: #f9fafb;
+        border-top: 1px solid #e5e7eb;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+    .footer-text {
+        font-size: 13px;
+        color: #6b7280;
+        margin: 0;
+    }
+
+    .view-all-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 18px;
+        background: #ffffff;
+        color: #374151;
+        text-decoration: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.2s ease;
+        border: 2px solid #e5e7eb;
+    }
+
+    .view-all-btn:hover {
+        background: #f9fafb;
+        color: #111827;
+        border-color: #d1d5db;
+        text-decoration: none;
+    }
+
+    .view-all-btn i {
+        font-size: 14px;
+        transition: transform 0.2s ease;
+    }
+
+    .view-all-btn:hover i {
+        transform: translateX(2px);
+    }
+
+    /* Responsive adjustments for subscription notice */
+    @media (max-width: 768px) {
+        .notice-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 20px;
+        }
+
+        .notice-count-badge {
+            align-self: flex-start;
+        }
+
+        .subscription-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 16px 20px;
+        }
+
+        .expiry-badge {
+            flex-direction: row;
+            gap: 8px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .subscription-action {
+            width: 100%;
+        }
+
+        .view-btn {
+            width: 100%;
+            justify-content: center;
+        }
+
+        .notice-footer {
+            flex-direction: column;
+            align-items: stretch;
+            padding: 16px 20px;
+        }
+
+        .view-all-btn {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+
 </style>
 @endpush
 
@@ -660,23 +978,67 @@
         </div>
     </div>
 
-    {{-- Alerts Section --}}
+    {{-- Modern Subscription Notice Section --}}
     @if($expiringSubscriptions->count() > 0)
     <div class="row mb-4">
         <div class="col-12">
-            <div class="alert alert-warning">
-                <h5><i class="icofont-warning"></i> Expiring Subscriptions Alert</h5>
-                <p>{{ $expiringSubscriptions->count() }} subscription(s) expiring in the next 14 days:</p>
-                <ul class="mb-0">
-                    @foreach($expiringSubscriptions->take(5) as $sub)
-                    <li>
-                        <strong>{{ $sub->institution_name }}</strong> - 
-                        Expires: {{ $sub->subscription_end_date->format('M d, Y') }} 
-                        ({{ $sub->days_until_expiry }} days)
-                        <a href="{{ route('super-admin.subscriptions.show', $sub->id) }}" class="btn btn-sm btn-warning ml-2">View</a>
-                    </li>
-                    @endforeach
-                </ul>
+            <div class="subscription-notice-container">
+                <!-- Header -->
+                <div class="notice-header">
+                    <div class="notice-icon-wrapper">
+                        <i class="icofont-warning"></i>
+                    </div>
+                    <div class="notice-header-content">
+                        <h5 class="notice-title">Expiring Subscriptions Alert</h5>
+                        <p class="notice-subtitle">Action required for subscriptions expiring in the next 14 days</p>
+                    </div>
+                    <div class="notice-count-badge">{{ $expiringSubscriptions->count() }}</div>
+                </div>
+
+                <!-- Body -->
+                <div class="notice-body">
+                    <ul class="subscription-list">
+                        @foreach($expiringSubscriptions->take(5) as $index => $sub)
+                        <li class="subscription-item">
+                            <div class="subscription-index">{{ $index + 1 }}</div>
+                            
+                            <div class="subscription-info">
+                                <h6 class="subscription-name">{{ $sub->institution_name }}</h6>
+                                <div class="subscription-meta">
+                                    <div class="meta-item">
+                                        <i class="icofont-calendar"></i>
+                                        <span class="meta-label">Expires:</span>
+                                        <span class="meta-value">{{ $sub->subscription_end_date->format('M d, Y') }}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="expiry-badge">
+                                <p class="expiry-days">{{ $sub->days_until_expiry }}</p>
+                                <p class="expiry-label">Days Left</p>
+                            </div>
+
+                            <div class="subscription-action">
+                                <a href="{{ route('super-admin.subscriptions.show', $sub->id) }}" class="view-btn">
+                                    <span>View Details</span>
+                                    <i class="icofont-arrow-right"></i>
+                                </a>
+                            </div>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                <!-- Footer -->
+                @if($expiringSubscriptions->count() > 5)
+                <div class="notice-footer">
+                    <p class="footer-text">Showing 5 of {{ $expiringSubscriptions->count() }} expiring subscriptions</p>
+                    <a href="{{ route('super-admin.subscriptions.index') }}" class="view-all-btn">
+                        <span>View All Subscriptions</span>
+                        <i class="icofont-arrow-right"></i>
+                    </a>
+                </div>
+                @endif
             </div>
         </div>
     </div>
