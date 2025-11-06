@@ -30,32 +30,60 @@
 
 @if($subscription)
 <div class="modern-subscription-card mb-4">
-    <div class="subscription-header">
+    <div class="subscription-header" onclick="toggleSubscriptionCard()" style="cursor: pointer;">
         <div class="header-left">
             <div class="icon-wrapper" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
-                <i class="icofont-ui-calendar" style="color: {{ $colors['bg'] }};"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="{{ $colors['bg'] }}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                    <line x1="16" x2="16" y1="2" y2="6"/>
+                    <line x1="8" x2="8" y1="2" y2="6"/>
+                    <line x1="3" x2="21" y1="10" y2="10"/>
+                </svg>
             </div>
             <div class="header-text">
                 <h3 class="subscription-title">Subscription Status</h3>
                 <p class="subscription-subtitle">Monitor your account</p>
             </div>
         </div>
-        <div class="status-badge" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
-            <span style="color: {{ $colors['bg'] }};">{{ ucfirst(str_replace('_', ' ', $subscription->status)) }}</span>
+        <div class="header-right">
+            <div class="status-badge" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
+                <span style="color: {{ $colors['bg'] }};">{{ ucfirst(str_replace('_', ' ', $subscription->status)) }}</span>
+            </div>
+            <button type="button" class="collapse-btn" aria-label="Toggle subscription details">
+                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </button>
         </div>
     </div>
+
+    <div class="subscription-content" id="subscriptionContent">
 
     {{-- Status Alert Box --}}
     <div class="status-alert-box" style="background: {{ $colors['light'] }}; border-left-color: {{ $colors['bg'] }};">
         <div class="alert-icon" style="color: {{ $colors['bg'] }};">
             @if($subscription->status === 'active')
-                <i class="icofont-check-circled"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
             @elseif($subscription->status === 'expiring_soon')
-                <i class="icofont-warning"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                    <line x1="12" x2="12" y1="9" y2="13"/>
+                    <line x1="12" x2="12.01" y1="17" y2="17"/>
+                </svg>
             @elseif($subscription->status === 'expired' && $subscription->is_in_grace_period)
-                <i class="icofont-error"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" x2="12" y1="8" y2="12"/>
+                    <line x1="12" x2="12.01" y1="16" y2="16"/>
+                </svg>
             @elseif($subscription->status === 'suspended')
-                <i class="icofont-ban"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="4.93" x2="19.07" y1="4.93" y2="19.07"/>
+                </svg>
             @endif
         </div>
         <div class="alert-content">
@@ -79,7 +107,11 @@
     <div class="subscription-details-grid">
         <div class="detail-item">
             <div class="detail-icon">
-                <i class="icofont-certificate"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="m15 9-6 6"/>
+                    <path d="m9 9 6 6"/>
+                </svg>
             </div>
             <div class="detail-content">
                 <span class="detail-label">Plan Type</span>
@@ -89,7 +121,10 @@
         
         <div class="detail-item">
             <div class="detail-icon">
-                <i class="icofont-refresh"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
+                </svg>
             </div>
             <div class="detail-content">
                 <span class="detail-label">Renewal Cycle</span>
@@ -99,7 +134,12 @@
         
         <div class="detail-item">
             <div class="detail-icon">
-                <i class="icofont-calendar"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M8 2v4"/>
+                    <path d="M16 2v4"/>
+                    <rect width="18" height="18" x="3" y="4" rx="2"/>
+                    <path d="M3 10h18"/>
+                </svg>
             </div>
             <div class="detail-content">
                 <span class="detail-label">Expires On</span>
@@ -109,7 +149,10 @@
         
         <div class="detail-item">
             <div class="detail-icon">
-                <i class="icofont-cur-dollar"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="12" x2="12" y1="2" y2="22"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
             </div>
             <div class="detail-content">
                 <span class="detail-label">Renewal Amount</span>
@@ -146,23 +189,36 @@
         @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
             @if(auth()->user()->isAdmin())
             <a href="{{ route('super-admin.subscriptions.show', $subscription->id) }}" class="modern-btn btn-secondary">
-                <i class="icofont-eye"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                </svg>
                 <span>View Details</span>
             </a>
             <a href="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" class="modern-btn btn-primary">
-                <i class="icofont-refresh"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
+                </svg>
                 <span>Renew Now</span>
             </a>
             @endif
         @elseif($subscription->status === 'expired' || $subscription->status === 'suspended')
             @if(auth()->user()->isAdmin())
             <a href="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" class="modern-btn btn-danger btn-block">
-                <i class="icofont-refresh"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                    <path d="M21 3v5h-5"/>
+                </svg>
                 <span>Renew Immediately</span>
             </a>
             @else
             <div class="contact-admin-notice">
-                <i class="icofont-info-circle"></i>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M12 16v-4"/>
+                    <path d="M12 8h.01"/>
+                </svg>
                 <span>Please contact your administrator to renew the subscription.</span>
             </div>
             @endif
@@ -172,10 +228,15 @@
     {{-- Auto-Renewal Badge --}}
     @if($subscription->auto_renewal)
     <div class="auto-renewal-badge">
-        <i class="icofont-check-circled"></i>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+            <polyline points="22 4 12 14.01 9 11.01"/>
+        </svg>
         <span>Auto-renewal enabled</span>
     </div>
     @endif
+    
+    </div> {{-- End subscription-content --}}
 </div>
 @endif
 
@@ -204,9 +265,20 @@
     padding: 24px;
     border-bottom: 1px solid #f0f1f3;
     background: #fafbfc;
+    transition: background 0.2s ease;
+}
+
+.subscription-header:hover {
+    background: #f8f9fa;
 }
 
 .header-left {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-right {
     display: flex;
     align-items: center;
     gap: 16px;
@@ -264,6 +336,53 @@
 
 .status-badge:hover {
     transform: scale(1.05);
+}
+
+/* Collapse Button */
+.collapse-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+    color: #6c757d;
+}
+
+.collapse-btn:hover {
+    background: #f8f9fa;
+    border-color: #ced4da;
+    transform: scale(1.05);
+}
+
+.collapse-btn:active {
+    transform: scale(0.95);
+}
+
+.chevron-icon {
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.modern-subscription-card.collapsed .chevron-icon {
+    transform: rotate(-180deg);
+}
+
+/* Collapsible Content */
+.subscription-content {
+    max-height: 2000px;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+    opacity: 1;
+}
+
+.modern-subscription-card.collapsed .subscription-content {
+    max-height: 0;
+    opacity: 0;
 }
 
 /* Status Alert Box */
@@ -545,13 +664,15 @@
 /* Responsive Design */
 @media (max-width: 768px) {
     .subscription-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 16px;
+        padding: 20px;
     }
     
-    .status-badge {
-        align-self: flex-start;
+    .header-left {
+        flex: 1;
+    }
+    
+    .header-right {
+        gap: 12px;
     }
     
     .subscription-details-grid {
@@ -565,6 +686,51 @@
     .modern-btn {
         width: 100%;
     }
+    
+    .icon-wrapper {
+        width: 48px;
+        height: 48px;
+    }
+    
+    .icon-wrapper svg {
+        width: 24px;
+        height: 24px;
+    }
+    
+    .subscription-title {
+        font-size: 18px;
+    }
+    
+    .subscription-subtitle {
+        font-size: 13px;
+    }
 }
 </style>
+
+<script>
+function toggleSubscriptionCard() {
+    const card = document.querySelector('.modern-subscription-card');
+    const isCollapsed = card.classList.contains('collapsed');
+    
+    if (isCollapsed) {
+        card.classList.remove('collapsed');
+        // Save state to localStorage
+        localStorage.setItem('subscriptionCardCollapsed', 'false');
+    } else {
+        card.classList.add('collapsed');
+        // Save state to localStorage
+        localStorage.setItem('subscriptionCardCollapsed', 'true');
+    }
+}
+
+// Restore collapsed state on page load
+document.addEventListener('DOMContentLoaded', function() {
+    const card = document.querySelector('.modern-subscription-card');
+    const isCollapsed = localStorage.getItem('subscriptionCardCollapsed') === 'true';
+    
+    if (isCollapsed && card) {
+        card.classList.add('collapsed');
+    }
+});
+</script>
 
