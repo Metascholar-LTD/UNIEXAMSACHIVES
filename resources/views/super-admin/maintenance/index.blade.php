@@ -197,6 +197,13 @@
         background: linear-gradient(135deg, rgba(99, 102, 241, 0.15), rgba(129, 140, 248, 0.1));
         transform: translateY(-1px);
     }
+
+    /* Action buttons container */
+    .action-buttons {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
 </style>
 @endpush
 
@@ -279,8 +286,22 @@
                                 @endif
                             </td>
                             <td>
-                                <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" 
-                                   class="btn-modern btn-modern-primary">View</a>
+                                <div class="action-buttons">
+                                    <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" 
+                                       class="btn-modern btn-modern-primary">View</a>
+                                    @if($maintenance->status !== 'in_progress')
+                                    <form method="POST" action="{{ route('super-admin.maintenance.destroy', $maintenance->id) }}" 
+                                          class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this maintenance? This action cannot be undone.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="confirm" value="1">
+                                        <button type="submit" class="btn-modern btn-modern-danger">
+                                            <i class="icofont-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach
@@ -334,8 +355,22 @@
                             </td>
                             <td>{{ ucfirst($maintenance->impact_level) }}</td>
                             <td>
-                                <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" 
-                                   class="btn-modern btn-modern-primary">View</a>
+                                <div class="action-buttons">
+                                    <a href="{{ route('super-admin.maintenance.show', $maintenance->id) }}" 
+                                       class="btn-modern btn-modern-primary">View</a>
+                                    @if($maintenance->status !== 'in_progress')
+                                    <form method="POST" action="{{ route('super-admin.maintenance.destroy', $maintenance->id) }}" 
+                                          class="d-inline"
+                                          onsubmit="return confirm('Are you sure you want to delete this maintenance? This action cannot be undone.')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <input type="hidden" name="confirm" value="1">
+                                        <button type="submit" class="btn-modern btn-modern-danger">
+                                            <i class="icofont-trash"></i> Delete
+                                        </button>
+                                    </form>
+                                    @endif
+                                </div>
                             </td>
                         </tr>
                         @endforeach

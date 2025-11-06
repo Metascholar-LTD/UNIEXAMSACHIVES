@@ -301,6 +301,18 @@
                 </button>
             </form>
         @endif
+
+        @if($maintenance->status !== 'in_progress')
+            <form method="POST" action="{{ route('super-admin.maintenance.destroy', $maintenance->id) }}" class="d-inline" id="delete-maintenance-form">
+                @csrf
+                @method('DELETE')
+                <input type="hidden" name="confirm" value="1">
+                <button type="submit" class="btn-modern btn-modern-danger" 
+                        onclick="return confirm('Are you sure you want to delete this maintenance? This action cannot be undone.')">
+                    <i class="icofont-trash"></i> Delete
+                </button>
+            </form>
+        @endif
     </div>
 
     {{-- Basic Information --}}
