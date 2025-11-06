@@ -660,22 +660,21 @@
     }
 
     .num {
-        position: relative;
+        position: absolute;
+        top: 0;
+        left: 0;
         width: 100%;
         height: 100%;
         font-size: 65px;
         font-weight: bold;
         color: #eeeeee;
         border-radius: 10px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        overflow: visible;
+        background: #222;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.5);
         text-shadow: 0 1px 2px #000;
     }
 
-    /* Static top half - shows current number */
+    /* Static top half - clips the top portion of the number */
     .num .static-top {
         position: absolute;
         top: 0;
@@ -684,16 +683,29 @@
         height: 50%;
         background: linear-gradient(to bottom, #181818 0%, #222 100%);
         border-radius: 10px 10px 0 0;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
         overflow: hidden;
         box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
         z-index: 3;
-        padding-bottom: 2px;
     }
 
-    /* Static bottom half - shows current number */
+    .num .static-top::after {
+        content: attr(data-value);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 200%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 65px;
+        font-weight: bold;
+        color: #eeeeee;
+        text-shadow: 0 1px 2px #000;
+    }
+
+    /* Static bottom half - clips the bottom portion of the number */
     .num .static-bottom {
         position: absolute;
         bottom: 0;
@@ -702,13 +714,26 @@
         height: 50%;
         background: linear-gradient(to bottom, #2a2a2a 0%, #1a1a1a 100%);
         border-radius: 0 0 10px 10px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-start;
         overflow: hidden;
         box-shadow: inset 0 -10px 30px rgba(0, 0, 0, 0.4);
         z-index: 1;
-        padding-top: 2px;
+    }
+
+    .num .static-bottom::after {
+        content: attr(data-value);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 200%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 65px;
+        font-weight: bold;
+        color: #eeeeee;
+        text-shadow: 0 1px 2px #000;
     }
 
     /* Flipping top half - animates down to reveal new number */
@@ -720,16 +745,29 @@
         height: 50%;
         background: linear-gradient(to bottom, #181818 0%, #222 100%);
         border-radius: 10px 10px 0 0;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end;
         overflow: hidden;
         box-shadow: inset 0 10px 30px rgba(0, 0, 0, 0.4);
         transform-origin: bottom;
         transform-style: preserve-3d;
         backface-visibility: hidden;
         z-index: 4;
-        padding-bottom: 2px;
+    }
+
+    .num .flip-top::after {
+        content: attr(data-value);
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        width: 100%;
+        height: 200%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 65px;
+        font-weight: bold;
+        color: #eeeeee;
+        text-shadow: 0 1px 2px #000;
     }
 
     /* Flip animation */
@@ -748,7 +786,7 @@
 
     /* Active/Hidden state for JavaScript control */
     .num.active {
-        display: flex;
+        display: block;
         z-index: 10;
     }
 
@@ -826,9 +864,9 @@
             font-size: 55px;
         }
 
-        .num .static-top,
-        .num .static-bottom,
-        .num .flip-top {
+        .num .static-top::after,
+        .num .static-bottom::after,
+        .num .flip-top::after {
             font-size: 55px;
         }
 
@@ -1104,12 +1142,12 @@
             // Create static top half
             const staticTop = document.createElement('div');
             staticTop.className = 'static-top';
-            staticTop.textContent = value;
+            staticTop.setAttribute('data-value', value);
             
             // Create static bottom half
             const staticBottom = document.createElement('div');
             staticBottom.className = 'static-bottom';
-            staticBottom.textContent = value;
+            staticBottom.setAttribute('data-value', value);
             
             element.appendChild(staticTop);
             element.appendChild(staticBottom);
@@ -1137,12 +1175,12 @@
             // Create flipping top half with old value
             const flipTop = document.createElement('div');
             flipTop.className = 'flip-top';
-            flipTop.textContent = oldValue;
+            flipTop.setAttribute('data-value', oldValue);
             element.appendChild(flipTop);
 
             // Update static halves to new value (they're behind the flip-top)
-            staticTop.textContent = newValue;
-            staticBottom.textContent = newValue;
+            staticTop.setAttribute('data-value', newValue);
+            staticBottom.setAttribute('data-value', newValue);
 
             // Trigger flip animation
             element.classList.add('flip');
