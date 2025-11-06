@@ -353,6 +353,22 @@
         }
     }
 
+    /* Top Right Icon */
+    .stat-card-icon {
+        position: absolute;
+        top: 1.5rem;
+        right: 1.5rem;
+        font-size: 3.125rem; /* 50px */
+        opacity: 0.3;
+        z-index: 1;
+        transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    .stat-card:hover .stat-card-icon {
+        opacity: 0.5;
+        transform: scale(1.1);
+    }
+
     /* Responsive adjustments */
     @media (max-width: 768px) {
         .stat-card {
@@ -366,6 +382,12 @@
 
         .stat-card-title {
             font-size: 1.125rem;
+        }
+
+        .stat-card-icon {
+            font-size: 2.5rem;
+            top: 1rem;
+            right: 1rem;
         }
     }
 
@@ -386,6 +408,7 @@
         {{-- Subscriptions Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
             <div class="stat-card stat-card-subscriptions">
+                <i class="icofont-tasks-alt stat-card-icon"></i>
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=900&auto=format&fit=crop&q=80" alt="Subscriptions">
                 </div>
@@ -405,6 +428,7 @@
         {{-- Revenue Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
             <div class="stat-card stat-card-revenue">
+                <i class="icofont-money stat-card-icon"></i>
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?w=900&auto=format&fit=crop&q=80" alt="Revenue">
                 </div>
@@ -433,6 +457,7 @@
         {{-- Expiring Soon Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
             <div class="stat-card stat-card-expiring">
+                <i class="icofont-warning-alt stat-card-icon"></i>
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=900&auto=format&fit=crop&q=80" alt="Expiring">
                 </div>
@@ -452,6 +477,7 @@
         {{-- Payments Card --}}
         <div class="col-xl-3 col-lg-6 col-md-6 col-12 mb-4">
             <div class="stat-card stat-card-payments">
+                <i class="icofont-credit-card stat-card-icon"></i>
                 <div class="stat-card-bg">
                     <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=900&auto=format&fit=crop&q=80" alt="Payments">
                 </div>
