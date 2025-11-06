@@ -33,6 +33,7 @@
                 <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
             </svg>
         </div>
+        <div class="maintenance-nav-separator"></div>
         <div class="maintenance-nav-countdown" id="navbar-countdown-display">
             <span class="maintenance-nav-label">Maintenance:</span>
             <span id="navbar-days">00</span>d
@@ -314,6 +315,30 @@
         color: #ef4444;
     }
 
+    .maintenance-nav-separator {
+        width: 1px;
+        height: 16px;
+        background: rgba(0, 0, 0, 0.15);
+        margin: 0 0.375rem;
+        flex-shrink: 0;
+    }
+
+    .maintenance-impact-low .maintenance-nav-separator {
+        background: rgba(59, 130, 246, 0.3);
+    }
+
+    .maintenance-impact-medium .maintenance-nav-separator {
+        background: rgba(245, 158, 11, 0.3);
+    }
+
+    .maintenance-impact-high .maintenance-nav-separator {
+        background: rgba(249, 115, 22, 0.3);
+    }
+
+    .maintenance-impact-critical .maintenance-nav-separator {
+        background: rgba(239, 68, 68, 0.3);
+    }
+
     .maintenance-nav-countdown {
         display: inline-flex;
         align-items: center;
@@ -410,6 +435,11 @@
             padding: 0.3125rem 0.5rem;
             font-size: 0.6875rem;
             gap: 0.3125rem;
+        }
+
+        .maintenance-nav-separator {
+            height: 14px;
+            margin: 0 0.3125rem;
         }
 
         .maintenance-nav-label {
