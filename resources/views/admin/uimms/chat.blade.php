@@ -61,7 +61,7 @@
                                     
                                     @if(!in_array($memo->memo_status, ['completed', 'archived']) && $canManageMemo)
                                         <button class="btn btn-sm btn-outline-primary" onclick="showAssignModal()">
-                                            <i class="icofont-user"></i> Assign
+                                            <i class="icofont-user"></i> Minute - To
                                         </button>
                                     @else
                                         <span class="btn btn-sm btn-outline-primary disabled" title="{{ !$canManageMemo ? 'Only assignee or active participants can assign' : 'Memo is completed/archived' }}">
