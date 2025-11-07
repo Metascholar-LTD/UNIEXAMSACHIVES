@@ -65,7 +65,7 @@
                                         </button>
                                     @else
                                         <span class="btn btn-sm btn-outline-primary disabled" title="{{ !$canManageMemo ? 'Only assignee or active participants can assign' : 'Memo is completed/archived' }}">
-                                            <i class="icofont-user"></i> Assign
+                                            <i class="icofont-user"></i> Minute - To
                                         </span>
                                     @endif
                                     <div class="btn-group">
