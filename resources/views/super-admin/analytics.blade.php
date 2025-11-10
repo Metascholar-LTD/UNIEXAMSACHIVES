@@ -385,7 +385,17 @@
                     <ul class="analytics-list">
                         @foreach($analytics['users']['by_role'] as $role => $count)
                         <li class="analytics-list-item">
-                            <span class="analytics-list-label">{{ ucfirst(str_replace('_', ' ', $role)) }}</span>
+                            <span class="analytics-list-label">
+                                @if($role == 'super_admin')
+                                    Super Admin
+                                @elseif($role == 'admin')
+                                    User
+                                @elseif($role == 'user')
+                                    Admin
+                                @else
+                                    {{ ucfirst(str_replace('_', ' ', $role)) }}
+                                @endif
+                            </span>
                             <span class="analytics-list-value">{{ $count }}</span>
                         </li>
                         @endforeach
