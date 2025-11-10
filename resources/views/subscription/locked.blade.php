@@ -15,68 +15,18 @@
 
         body {
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            background: white;
+            background: #f8f9fa;
             color: #333;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Background Paths Animation */
-        .background-paths-container {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 1;
-            opacity: 0.4;
-        }
-
-        .background-paths-container svg {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .background-paths-container path {
-            stroke: rgba(1, 178, 172, 0.15);
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        @keyframes pathDraw {
-            0% {
-                stroke-dashoffset: 1000;
-                opacity: 0.2;
-            }
-            50% {
-                opacity: 0.4;
-            }
-            100% {
-                stroke-dashoffset: 0;
-                opacity: 0.2;
-            }
-        }
-
-        .path-animated {
-            animation: pathDraw 20s linear infinite;
-        }
-
-        .path-animated-reverse {
-            animation: pathDraw 25s linear infinite reverse;
         }
 
         .page-container {
             max-width: 900px;
             width: 100%;
-            position: relative;
-            z-index: 100;
         }
 
         .page-header-modern {
@@ -84,8 +34,6 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 0.5rem;
-            position: relative;
-            z-index: 100;
         }
 
         .page-header-title {
@@ -93,26 +41,6 @@
             font-weight: 700;
             color: #1f2937;
             margin: 0;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Letter Animation */
-        .title-letter {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(100px);
-            transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.6s ease;
-        }
-
-        .title-letter.animate {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        .title-word {
-            display: inline-block;
-            margin-right: 0.5rem;
         }
 
         .page-header-separator {
@@ -139,8 +67,6 @@
             margin-top: 0.5rem;
             color: #6b7280;
             font-size: 0.875rem;
-            position: relative;
-            z-index: 100;
         }
 
         .modern-card {
@@ -150,8 +76,6 @@
             border: 1px solid #e5e7eb;
             margin-bottom: 1.5rem;
             overflow: hidden;
-            position: relative;
-            z-index: 100;
         }
 
         .modern-card-header {
@@ -261,24 +185,6 @@
             outline: none;
         }
 
-        .btn-subscribe-wrapper {
-            display: inline-block;
-            position: relative;
-            width: 100%;
-            margin-top: 1rem;
-            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(255, 255, 255, 0.1));
-            padding: 1px;
-            border-radius: 1rem;
-            backdrop-filter: blur(10px);
-            overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            transition: box-shadow 0.3s ease;
-        }
-
-        .btn-subscribe-wrapper:hover {
-            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
         .btn-subscribe {
             background: #01b2ac;
             color: white;
@@ -286,42 +192,17 @@
             padding: 0.875rem 1.5rem;
             font-size: 0.875rem;
             font-weight: 600;
-            border-radius: calc(1rem - 1px);
+            border-radius: 0.5rem;
             width: 100%;
             cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
+            transition: all 0.2s;
+            margin-top: 1rem;
         }
 
         .btn-subscribe:hover {
             background: #019a94;
-            transform: translateY(-2px);
+            transform: translateY(-1px);
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-        }
-
-        .btn-subscribe:hover .btn-arrow {
-            transform: translateX(6px);
-            opacity: 1;
-        }
-
-        .btn-subscribe .btn-text {
-            opacity: 0.95;
-            transition: opacity 0.3s ease;
-        }
-
-        .btn-subscribe:hover .btn-text {
-            opacity: 1;
-        }
-
-        .btn-arrow {
-            opacity: 0.8;
-            transition: all 0.3s ease;
-            display: inline-block;
         }
 
         .btn-subscribe:disabled {
@@ -375,20 +256,9 @@
     </style>
 </head>
 <body>
-    <!-- Background Paths Animation -->
-    <div class="background-paths-container" id="backgroundPaths1"></div>
-    <div class="background-paths-container" id="backgroundPaths2" style="opacity: 0.4;"></div>
-    
     <div class="page-container">
         <div class="page-header-modern">
-            <h1 class="page-header-title" id="animatedTitle">
-                <span class="title-word">
-                    <span class="title-letter">S</span><span class="title-letter">u</span><span class="title-letter">b</span><span class="title-letter">s</span><span class="title-letter">c</span><span class="title-letter">r</span><span class="title-letter">i</span><span class="title-letter">p</span><span class="title-letter">t</span><span class="title-letter">i</span><span class="title-letter">o</span><span class="title-letter">n</span>
-                </span>
-                <span class="title-word">
-                    <span class="title-letter">R</span><span class="title-letter">e</span><span class="title-letter">q</span><span class="title-letter">u</span><span class="title-letter">i</span><span class="title-letter">r</span><span class="title-letter">e</span><span class="title-letter">d</span>
-                </span>
-            </h1>
+            <h1 class="page-header-title">Subscription Required</h1>
             <div class="page-header-separator"></div>
             <div class="page-header-breadcrumb">
                 <i class="icofont-lock"></i>
@@ -451,14 +321,9 @@
                                        required>
                             </div>
 
-                            <div class="btn-subscribe-wrapper">
-                                <button type="submit" class="btn-subscribe" id="subscribeBtn" disabled>
-                                    <span class="btn-text">
-                                        <i class="icofont-credit-card"></i> Subscribe Now
-                                    </span>
-                                    <span class="btn-arrow">→</span>
-                                </button>
-                            </div>
+                            <button type="submit" class="btn-subscribe" id="subscribeBtn" disabled>
+                                <i class="icofont-credit-card"></i> Subscribe Now
+                            </button>
 
                             <p class="info-text">
                                 <i class="icofont-shield"></i> Secure payment powered by Paystack
@@ -481,79 +346,6 @@
     </div>
 
     <script>
-        // Background Paths Animation
-        function createBackgroundPaths(containerId, position) {
-            const container = document.getElementById(containerId);
-            if (!container) return;
-            
-            const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
-            svg.setAttribute('viewBox', '0 0 696 316');
-            svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
-            svg.style.width = '100%';
-            svg.style.height = '100%';
-            svg.style.position = 'absolute';
-            svg.style.top = '0';
-            svg.style.left = '0';
-            
-            for (let i = 0; i < 36; i++) {
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const xOffset = 380 - i * 5 * position;
-                const yOffset1 = 189 + i * 6;
-                const yOffset2 = 216 - i * 6;
-                const xOffset2 = 152 - i * 5 * position;
-                const yOffset3 = 343 - i * 6;
-                const xOffset3 = 616 - i * 5 * position;
-                const yOffset4 = 470 - i * 6;
-                const xOffset4 = 684 - i * 5 * position;
-                const yOffset5 = 875 - i * 6;
-                
-                const d = `M-${xOffset} -${yOffset1}C-${xOffset} -${yOffset1} -${312 - i * 5 * position} ${yOffset2} ${xOffset2} ${yOffset3}C${xOffset3} ${yOffset4} ${xOffset4} ${yOffset5} ${xOffset4} ${yOffset5}`;
-                
-                path.setAttribute('d', d);
-                path.setAttribute('stroke', '#01b2ac');
-                path.setAttribute('stroke-width', (0.5 + i * 0.03).toString());
-                path.setAttribute('stroke-opacity', (0.1 + i * 0.02).toString());
-                path.setAttribute('fill', 'none');
-                path.style.strokeDasharray = '1000';
-                path.style.strokeDashoffset = '1000';
-                
-                const animationDuration = 20 + Math.random() * 10;
-                path.style.animation = `pathDraw ${animationDuration}s linear infinite`;
-                if (position === -1) {
-                    path.style.animationDirection = 'reverse';
-                }
-                
-                svg.appendChild(path);
-            }
-            
-            container.appendChild(svg);
-        }
-
-        // Initialize background paths on page load
-        window.addEventListener('DOMContentLoaded', () => {
-            createBackgroundPaths('backgroundPaths1', 1);
-            createBackgroundPaths('backgroundPaths2', -1);
-        });
-
-        // Title Letter Animation
-        function animateTitle() {
-            const letters = document.querySelectorAll('.title-letter');
-            letters.forEach((letter, index) => {
-                setTimeout(() => {
-                    letter.classList.add('animate');
-                }, index * 30);
-            });
-        }
-
-        // Start title animation on load
-        if (document.readyState === 'loading') {
-            window.addEventListener('DOMContentLoaded', () => {
-                animateTitle();
-            });
-        } else {
-            animateTitle();
-        }
-
         function selectYears(yearKey) {
             // Remove selected class from all cards
             document.querySelectorAll('.plan-card').forEach(card => {
