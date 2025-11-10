@@ -87,8 +87,8 @@ class SubscriptionController extends Controller
         // - 1 year: ends on Nov 10, 2026 (1 year from today, same day)
         // - 2 years: ends on Nov 10, 2027 (2 years from today, same day)
         // - 3 years: ends on Nov 10, 2028 (3 years from today, same day)
-        $startDate = now();
-        $endDate = $startDate->copy()->addYears($years)->endOfDay();
+        $startDate = now()->startOfDay(); // Start of today
+        $endDate = $startDate->copy()->addYears($years)->endOfDay(); // Add years and set to end of day
 
         // Get grace period from settings
         $gracePeriodDays = SystemSetting::getGracePeriodDays();
