@@ -256,7 +256,8 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // ===== ADMIN SUBSCRIPTION RENEWAL ROUTE =====
-// Allow regular admins (role='user') to renew subscriptions
+// Allow regular admins (role='user' in database, displayed as "Admin" in UI) to renew subscriptions
+// Note: Database 'user' = UI "Admin" - see ROLE_TERMINOLOGY.md for details
 Route::post('/subscriptions/{id}/renew', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'renew'])
     ->middleware(['auth'])
     ->name('admin.subscriptions.renew');

@@ -185,6 +185,8 @@
     @endif
 
     {{-- Action Buttons --}}
+    {{-- Note: isRegularUser() checks for role='user' which is displayed as "Admin" in UI --}}
+    {{-- See ROLE_TERMINOLOGY.md for role terminology documentation --}}
     <div class="subscription-actions">
         @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
             @if(auth()->user()->isRegularUser())

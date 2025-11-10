@@ -172,10 +172,13 @@ class SubscriptionController extends Controller
 
     /**
      * Initiate subscription renewal
+     * 
+     * Note: Allows super admins and regular admins (role='user' in database, displayed as "Admin" in UI)
+     * See ROLE_TERMINOLOGY.md for role terminology documentation.
      */
     public function renew(Request $request, int $id)
     {
-        // Allow super admins and regular admins (role='user') to renew
+        // Allow super admins and regular admins (role='user' in database = "Admin" in UI) to renew
         $user = auth()->user();
         if (!$user->isSuperAdmin() && !$user->isRegularUser()) {
             abort(403, 'Unauthorized. Admin access required.');

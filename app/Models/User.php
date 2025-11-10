@@ -191,9 +191,20 @@ class User extends Authenticatable
     }
 
     // ===== Role Check Methods =====
+    // 
+    // ⚠️ IMPORTANT: This system uses REVERSED role terminology in the UI!
+    // 
+    // Database values:
+    //   - 'super_admin' = Super Admin (unchanged)
+    //   - 'admin' = Normal users (displayed as "User" in UI)
+    //   - 'user' = Administrators (displayed as "Admin" in UI)
+    // 
+    // See ROLE_TERMINOLOGY.md for complete documentation.
     
     /**
      * Check if user is a super admin
+     * 
+     * @return bool True if role is 'super_admin'
      */
     public function isSuperAdmin(): bool
     {
@@ -201,7 +212,11 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is an admin
+     * Check if user is an admin (normal user in UI terms)
+     * 
+     * Note: Database 'admin' = UI "User" (normal users)
+     * 
+     * @return bool True if role is 'admin' or 'super_admin'
      */
     public function isAdmin(): bool
     {
@@ -209,7 +224,12 @@ class User extends Authenticatable
     }
 
     /**
-     * Check if user is a regular user
+     * Check if user is a regular user (admin in UI terms)
+     * 
+     * Note: Database 'user' = UI "Admin" (system administrators)
+     * This method checks for users who can manage subscriptions and make payments.
+     * 
+     * @return bool True if role is 'user'
      */
     public function isRegularUser(): bool
     {
