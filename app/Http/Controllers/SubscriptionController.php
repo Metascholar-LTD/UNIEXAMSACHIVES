@@ -83,11 +83,15 @@ class SubscriptionController extends Controller
         $amount = $basePrice * $years;
         
         // Calculate end date based on years
-        // End date should be the last day of the year (Dec 31) for the subscription period
+        // End date should be the same day/month as the start date, but in the target year
+        // If created on Nov 10, 2025 for 1 year, it ends on Nov 10, 2025 (same year)
+        // If created on Nov 10, 2025 for 2 years, it ends on Nov 10, 2026
         $startDate = now();
         $startYear = $startDate->year;
+        $startMonth = $startDate->month;
+        $startDay = $startDate->day;
         $endYear = $startYear + $years - 1; // If 1 year, end in same year; if 2 years, end in next year, etc.
-        $endDate = $startDate->copy()->setDate($endYear, 12, 31)->endOfDay();
+        $endDate = $startDate->copy()->setDate($endYear, $startMonth, $startDay)->endOfDay();
 
         // Get grace period from settings
         $gracePeriodDays = SystemSetting::getGracePeriodDays();
