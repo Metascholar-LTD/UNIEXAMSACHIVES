@@ -193,7 +193,7 @@
             display: flex;
             justify-content: center;
             gap: 8px;
-            margin-top: 20px;
+            margin-top: 50px;
         }
 
         .loading-dots span {
