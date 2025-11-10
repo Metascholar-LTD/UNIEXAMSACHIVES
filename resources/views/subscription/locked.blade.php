@@ -15,100 +15,18 @@
 
         body {
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            background: #ffffff;
+            background: #f8f9fa;
             color: #333;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            position: relative;
-            overflow: hidden;
-        }
-
-        /* Background Paths Animation */
-        .background-paths-container {
-            position: fixed;
-            inset: 0;
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.15;
-        }
-
-        .background-paths-svg {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .background-path {
-            stroke: #1f2937;
-            fill: none;
-            stroke-linecap: round;
-            stroke-linejoin: round;
-        }
-
-        @keyframes pathDraw {
-            0% {
-                stroke-dashoffset: 1000;
-                opacity: 0.3;
-            }
-            50% {
-                opacity: 0.6;
-            }
-            100% {
-                stroke-dashoffset: 0;
-                opacity: 0.3;
-            }
-        }
-
-        .background-path-animated {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: pathDraw 20s linear infinite;
-        }
-
-        .background-path-animated-reverse {
-            stroke-dasharray: 1000;
-            stroke-dashoffset: 1000;
-            animation: pathDraw 25s linear infinite reverse;
         }
 
         .page-container {
             max-width: 900px;
             width: 100%;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Animated Title */
-        .animated-title {
-            font-size: 2.5rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: #1f2937;
-            text-align: center;
-        }
-
-        .animated-title-word {
-            display: inline-block;
-            margin-right: 0.5rem;
-        }
-
-        .animated-title-letter {
-            display: inline-block;
-            opacity: 0;
-            transform: translateY(100px);
-            animation: letterSlideIn 0.6s ease-out forwards;
-        }
-
-        @keyframes letterSlideIn {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .page-header-modern {
@@ -338,16 +256,9 @@
     </style>
 </head>
 <body>
-    <!-- Background Paths Animation -->
-    <div class="background-paths-container" id="backgroundPaths">
-        <svg class="background-paths-svg" viewBox="0 0 696 316" preserveAspectRatio="xMidYMid slice">
-            <title>Background Paths</title>
-        </svg>
-    </div>
-
     <div class="page-container">
         <div class="page-header-modern">
-            <h1 class="page-header-title animated-title" id="animatedTitle">Subscription Required</h1>
+            <h1 class="page-header-title">Subscription Required</h1>
             <div class="page-header-separator"></div>
             <div class="page-header-breadcrumb">
                 <i class="icofont-lock"></i>
@@ -435,74 +346,6 @@
     </div>
 
     <script>
-        // Background Paths Animation
-        function createBackgroundPaths() {
-            const svg = document.querySelector('.background-paths-svg');
-            if (!svg) return;
-
-            // Create paths for position 1
-            for (let i = 0; i < 36; i++) {
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const position = 1;
-                const d = `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position} -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`;
-                
-                path.setAttribute('d', d);
-                path.setAttribute('stroke-width', 0.5 + i * 0.03);
-                path.setAttribute('stroke-opacity', 0.1 + i * 0.03);
-                path.classList.add('background-path', 'background-path-animated');
-                path.style.animationDelay = (i * 0.2) + 's';
-                path.style.animationDuration = (20 + Math.random() * 10) + 's';
-                svg.appendChild(path);
-            }
-
-            // Create paths for position -1
-            for (let i = 0; i < 36; i++) {
-                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                const position = -1;
-                const d = `M-${380 - i * 5 * position} -${189 + i * 6}C-${380 - i * 5 * position} -${189 + i * 6} -${312 - i * 5 * position} ${216 - i * 6} ${152 - i * 5 * position} ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${684 - i * 5 * position} ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`;
-                
-                path.setAttribute('d', d);
-                path.setAttribute('stroke-width', 0.5 + i * 0.03);
-                path.setAttribute('stroke-opacity', 0.1 + i * 0.03);
-                path.classList.add('background-path', 'background-path-animated-reverse');
-                path.style.animationDelay = (i * 0.2) + 's';
-                path.style.animationDuration = (25 + Math.random() * 10) + 's';
-                svg.appendChild(path);
-            }
-        }
-
-        // Animated Title Letters
-        function animateTitle() {
-            const titleElement = document.getElementById('animatedTitle');
-            if (!titleElement) return;
-
-            const text = titleElement.textContent;
-            const words = text.split(' ');
-            
-            titleElement.innerHTML = '';
-            
-            words.forEach((word, wordIndex) => {
-                const wordSpan = document.createElement('span');
-                wordSpan.className = 'animated-title-word';
-                
-                word.split('').forEach((letter, letterIndex) => {
-                    const letterSpan = document.createElement('span');
-                    letterSpan.className = 'animated-title-letter';
-                    letterSpan.textContent = letter === ' ' ? '\u00A0' : letter;
-                    letterSpan.style.animationDelay = (wordIndex * 0.1 + letterIndex * 0.03) + 's';
-                    wordSpan.appendChild(letterSpan);
-                });
-                
-                titleElement.appendChild(wordSpan);
-            });
-        }
-
-        // Initialize animations on page load
-        document.addEventListener('DOMContentLoaded', function() {
-            createBackgroundPaths();
-            animateTitle();
-        });
-
         function selectYears(yearKey) {
             // Remove selected class from all cards
             document.querySelectorAll('.plan-card').forEach(card => {
