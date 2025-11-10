@@ -298,7 +298,6 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])-
     // Payment Management
     Route::get('/payments', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'index'])->name('payments.index');
     Route::get('/payments/{id}', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'show'])->name('payments.show');
-    Route::get('/payments/callback', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'callback'])->name('payments.callback');
     Route::post('/payments/{id}/retry', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'retry'])->name('payments.retry');
     Route::post('/payments/{id}/refund', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'refund'])->name('payments.refund');
     Route::get('/payments/{id}/receipt', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'viewReceipt'])->name('payments.receipt');
@@ -326,6 +325,12 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])-
     Route::post('/settings/import', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'import'])->name('settings.import');
     Route::post('/settings/reset', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'reset'])->name('settings.reset');
 });
+
+// Payment callback (accessible to authenticated users, not just super admins)
+// This is needed because Paystack redirects back and session might be lost
+Route::get('/super-admin/payments/callback', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'callback'])
+    ->middleware(['auth'])
+    ->name('super-admin.payments.callback');
 
 // Webhook endpoints (no auth required)
 Route::post('/webhooks/paystack', [\App\Http\Controllers\SuperAdmin\WebhookController::class, 'paystack'])->name('webhooks.paystack');

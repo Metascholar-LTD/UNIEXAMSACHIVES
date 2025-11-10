@@ -98,18 +98,34 @@ class PaymentController extends Controller
         $reference = $request->query('reference');
 
         if (!$reference) {
-            return redirect()->route('super-admin.dashboard')
+            // Redirect based on user role
+            if (auth()->check() && auth()->user()->isSuperAdmin()) {
+                return redirect()->route('super-admin.dashboard')
+                    ->with('error', 'Invalid payment reference.');
+            }
+            return redirect()->route('dashboard')
                 ->with('error', 'Invalid payment reference.');
         }
 
         $result = $this->subscriptionManager->verifyAndCompletePayment($reference);
 
         if ($result['success']) {
-            return redirect()->route('super-admin.payments.show', $result['transaction']->id)
+            // Redirect based on user role
+            if (auth()->check() && auth()->user()->isSuperAdmin()) {
+                return redirect()->route('super-admin.payments.show', $result['transaction']->id)
+                    ->with('success', 'Payment completed successfully!');
+            }
+            // For regular admins or other users, redirect to dashboard with success message
+            return redirect()->route('dashboard')
                 ->with('success', 'Payment completed successfully!');
         }
 
-        return redirect()->route('super-admin.dashboard')
+        // Redirect based on user role for failed payments
+        if (auth()->check() && auth()->user()->isSuperAdmin()) {
+            return redirect()->route('super-admin.dashboard')
+                ->with('error', $result['message'] ?? 'Payment verification failed.');
+        }
+        return redirect()->route('dashboard')
             ->with('error', $result['message'] ?? 'Payment verification failed.');
     }
 
