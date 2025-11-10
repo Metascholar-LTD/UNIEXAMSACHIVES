@@ -351,14 +351,6 @@
                 </button>
             </form>
         </div>
-        <div class="col-md-3 mb-3">
-            <a href="{{ route('super-admin.settings.export') }}" class="settings-action-button settings-button-secondary">
-                <div class="settings-button-content">
-                    <i class="icofont-download"></i>
-                    <span>Export Settings</span>
-                </div>
-            </a>
-        </div>
     </div>
 
     {{-- Settings Form --}}
