@@ -12,10 +12,30 @@ class SystemSettingsController extends Controller
 {
     /**
      * Display system settings
+     * Only show settings that are defined in the SuperAdminSystemSeeder
      */
     public function index()
     {
-        $settings = SystemSetting::orderBy('category')->orderBy('key')->get()->groupBy('category');
+        // List of allowed setting keys from SuperAdminSystemSeeder
+        $allowedKeys = [
+            'paystack_public_key',
+            'paystack_secret_key',
+            'paystack_webhook_secret',
+            'subscription_grace_period_days',
+            'auto_renewal_enabled',
+            'renewal_reminder_days',
+            'system_name',
+            'system_email',
+            'send_renewal_emails',
+            'send_payment_receipts',
+            'default_currency',
+        ];
+
+        $settings = SystemSetting::whereIn('key', $allowedKeys)
+            ->orderBy('category')
+            ->orderBy('key')
+            ->get()
+            ->groupBy('category');
 
         return view('super-admin.settings.index', compact('settings'));
     }
