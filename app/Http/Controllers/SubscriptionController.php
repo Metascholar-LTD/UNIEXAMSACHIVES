@@ -84,13 +84,17 @@ class SubscriptionController extends Controller
         
         // Calculate end date based on years
         // End date should be the same day/month as the start date, but in the target year
-        // If created on Nov 10, 2025 for 1 year, it ends on Nov 10, 2025 (same year)
-        // If created on Nov 10, 2025 for 2 years, it ends on Nov 10, 2026
+        // Examples (if created on Nov 10, 2025):
+        // - 1 year: ends on Nov 10, 2025 (same year, same day)
+        // - 2 years: ends on Nov 10, 2026 (next year, same day)
+        // - 3 years: ends on Nov 10, 2027 (2 years later, same day)
         $startDate = now();
         $startYear = $startDate->year;
         $startMonth = $startDate->month;
         $startDay = $startDate->day;
-        $endYear = $startYear + $years - 1; // If 1 year, end in same year; if 2 years, end in next year, etc.
+        // Calculate end year: startYear + (years - 1)
+        // This ensures 1 year ends in same year, 2 years ends in next year, 3 years ends 2 years later
+        $endYear = $startYear + $years - 1;
         $endDate = $startDate->copy()->setDate($endYear, $startMonth, $startDay)->endOfDay();
 
         // Get grace period from settings
