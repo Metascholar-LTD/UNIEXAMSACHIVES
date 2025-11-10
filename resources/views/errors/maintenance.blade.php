@@ -182,7 +182,7 @@
         }
 
         .maintenance-info .time {
-            color: #ffd700;
+            color: #FDE8DA;
             font-weight: 600;
             font-size: 18px;
             margin-top: 15px;
