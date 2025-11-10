@@ -175,19 +175,6 @@ class SuperAdminSystemSeeder extends Seeder
                 'validation_rules' => 'required|email',
                 'default_value' => 'admin@institution.edu',
             ],
-            [
-                'key' => 'maintenance_mode',
-                'value' => '0',
-                'category' => 'maintenance',
-                'label' => 'Maintenance Mode',
-                'description' => 'Put the system in maintenance mode (blocks all users except super admins)',
-                'data_type' => 'boolean',
-                'is_public' => true,
-                'is_editable' => true,
-                'requires_restart' => false,
-                'validation_rules' => 'boolean',
-                'default_value' => '0',
-            ],
 
             // Email Settings
             [
