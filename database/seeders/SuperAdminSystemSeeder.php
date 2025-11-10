@@ -152,7 +152,7 @@ class SuperAdminSystemSeeder extends Seeder
                 'value' => json_encode([30, 14, 7, 1]),
                 'category' => 'subscription',
                 'label' => 'Renewal Reminder Days',
-                'description' => 'Days before expiry to send renewal reminders (enter 4 numbers)',
+                'description' => 'Enter 4 numbers (days) before expiry to send renewal reminders. Example: 30, 14, 7, 1',
                 'data_type' => 'json',
                 'is_public' => false,
                 'is_editable' => true,
