@@ -148,7 +148,18 @@ class PaymentTransaction extends Model
 
         // Update subscription
         if ($this->subscription) {
-            $this->subscription->renew();
+            // Only call renew() for actual renewals (when subscription already has a past end date)
+            // For new subscriptions, just update payment date and ensure status is active
+            if ($this->subscription->subscription_end_date->isPast()) {
+                // This is a renewal - extend the subscription
+                $this->subscription->renew();
+            } else {
+                // This is a new subscription - just update payment info, don't change dates
+                $this->subscription->last_payment_date = now();
+                $this->subscription->status = 'active';
+                $this->subscription->failed_payment_attempts = 0;
+                $this->subscription->save();
+            }
         }
     }
 
