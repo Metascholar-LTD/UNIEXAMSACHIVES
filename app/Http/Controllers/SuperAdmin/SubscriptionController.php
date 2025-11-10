@@ -175,6 +175,12 @@ class SubscriptionController extends Controller
      */
     public function renew(Request $request, int $id)
     {
+        // Allow super admins and regular admins (role='user') to renew
+        $user = auth()->user();
+        if (!$user->isSuperAdmin() && !$user->isRegularUser()) {
+            abort(403, 'Unauthorized. Admin access required.');
+        }
+
         $subscription = SystemSubscription::findOrFail($id);
 
         $callbackUrl = route('super-admin.payments.callback');

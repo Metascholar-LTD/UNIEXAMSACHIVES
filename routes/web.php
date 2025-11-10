@@ -255,6 +255,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout',[HomeController::class, 'logout'])->name('logout');
 });
 
+// ===== ADMIN SUBSCRIPTION RENEWAL ROUTE =====
+// Allow regular admins (role='user') to renew subscriptions
+Route::post('/subscriptions/{id}/renew', [\App\Http\Controllers\SuperAdmin\SubscriptionController::class, 'renew'])
+    ->middleware(['auth'])
+    ->name('admin.subscriptions.renew');
+
 // ===== SUPER ADMIN ROUTES =====
 
 // Super Admin Login (separate from main login)
