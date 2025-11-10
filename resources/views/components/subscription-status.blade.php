@@ -164,15 +164,23 @@
     {{-- Progress Section --}}
     @if($subscription->status !== 'suspended')
     @php
+        // Calculate progress based on remaining time (not elapsed)
+        // Full bar (100%) when subscription is new, empty (0%) when about to expire
         $totalDays = $subscription->subscription_start_date->diffInDays($subscription->subscription_end_date);
-        $daysElapsed = $subscription->subscription_start_date->diffInDays(now());
-        $progress = $totalDays > 0 ? min(100, ($daysElapsed / $totalDays) * 100) : 0;
-        $progressColor = $progress > 90 ? '#ef4444' : ($progress > 75 ? '#f59e0b' : '#10b981');
+        $now = now();
+        $daysRemaining = $now->isBefore($subscription->subscription_end_date) 
+            ? $now->diffInDays($subscription->subscription_end_date) 
+            : 0;
+        $progress = $totalDays > 0 ? max(0, min(100, ($daysRemaining / $totalDays) * 100)) : 0;
+        
+        // Color based on remaining time (reverse of elapsed)
+        // Green when plenty of time left, red when about to expire
+        $progressColor = $progress < 10 ? '#ef4444' : ($progress < 25 ? '#f59e0b' : '#10b981');
     @endphp
     <div class="progress-section">
         <div class="progress-header">
             <span class="progress-label">Subscription Period</span>
-            <span class="progress-percentage">{{ number_format($progress, 1) }}% elapsed</span>
+            <span class="progress-percentage">{{ number_format($progress, 1) }}% remaining</span>
         </div>
         <div class="modern-progress-bar">
             <div class="progress-fill" style="width: {{ $progress }}%; background: {{ $progressColor }};"></div>
