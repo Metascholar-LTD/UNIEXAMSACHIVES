@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\SystemSetting;
 use App\Services\SubscriptionManager;
 use App\Services\PaystackService;
 use Illuminate\Http\Request;
@@ -28,64 +29,43 @@ class SubscriptionController extends Controller
         $user = auth()->user();
         $canSubscribe = $user && ($user->isRegularUser() || $user->isSuperAdmin());
 
-        // Define subscription plans
-        $plans = [
-            'basic' => [
-                'name' => 'Basic',
-                'price' => 2000.00,
-                'currency' => 'GHS',
-                'cycle' => 'annual',
-                'features' => [
-                    'Up to 100 users',
-                    'Basic support',
-                    'Standard features',
-                    'Email notifications',
-                ],
+        // Get subscription pricing from settings
+        $basePrice = (float) SystemSetting::get('subscription_base_price', 5000.00);
+        $currency = SystemSetting::get('default_currency', 'GHS');
+        
+        $monthlyMultiplier = (float) SystemSetting::get('subscription_monthly_multiplier', 0.1);
+        $quarterlyMultiplier = (float) SystemSetting::get('subscription_quarterly_multiplier', 0.275);
+        $semiAnnualMultiplier = (float) SystemSetting::get('subscription_semi_annual_multiplier', 0.5);
+
+        // Calculate prices for each cycle
+        $pricing = [
+            'monthly' => [
+                'name' => 'Monthly',
+                'price' => round($basePrice * $monthlyMultiplier, 2),
+                'cycle' => 'monthly',
+                'description' => 'Billed monthly',
             ],
-            'standard' => [
-                'name' => 'Standard',
-                'price' => 3500.00,
-                'currency' => 'GHS',
-                'cycle' => 'annual',
-                'features' => [
-                    'Up to 500 users',
-                    'Priority support',
-                    'Advanced features',
-                    'SMS & Email notifications',
-                    'Custom branding',
-                ],
+            'quarterly' => [
+                'name' => 'Quarterly',
+                'price' => round($basePrice * $quarterlyMultiplier, 2),
+                'cycle' => 'quarterly',
+                'description' => 'Billed every 3 months',
             ],
-            'premium' => [
-                'name' => 'Premium',
-                'price' => 5000.00,
-                'currency' => 'GHS',
-                'cycle' => 'annual',
-                'features' => [
-                    'Unlimited users',
-                    '24/7 Priority support',
-                    'All features',
-                    'Multi-channel notifications',
-                    'Custom domain',
-                    'Advanced analytics',
-                ],
+            'semi_annual' => [
+                'name' => 'Semi-Annual',
+                'price' => round($basePrice * $semiAnnualMultiplier, 2),
+                'cycle' => 'semi_annual',
+                'description' => 'Billed every 6 months',
             ],
-            'enterprise' => [
-                'name' => 'Enterprise',
-                'price' => 8000.00,
-                'currency' => 'GHS',
+            'annual' => [
+                'name' => 'Annual',
+                'price' => $basePrice,
                 'cycle' => 'annual',
-                'features' => [
-                    'Unlimited everything',
-                    'Dedicated support',
-                    'Custom integrations',
-                    'White-label solution',
-                    'SLA guarantee',
-                    'On-site training',
-                ],
+                'description' => 'Billed yearly (Best Value)',
             ],
         ];
 
-        return view('subscription.locked', compact('plans', 'canSubscribe'));
+        return view('subscription.locked', compact('pricing', 'currency', 'canSubscribe'));
     }
 
     /**
@@ -101,19 +81,25 @@ class SubscriptionController extends Controller
 
         $validated = $request->validate([
             'institution_name' => 'required|string|max:255',
-            'subscription_plan' => 'required|in:basic,standard,premium,enterprise',
             'renewal_cycle' => 'required|in:monthly,quarterly,semi_annual,annual',
         ]);
 
-        // Calculate subscription dates and amount based on plan and cycle
-        $planPrices = [
-            'basic' => ['monthly' => 200, 'quarterly' => 550, 'semi_annual' => 1000, 'annual' => 2000],
-            'standard' => ['monthly' => 350, 'quarterly' => 950, 'semi_annual' => 1750, 'annual' => 3500],
-            'premium' => ['monthly' => 500, 'quarterly' => 1350, 'semi_annual' => 2500, 'annual' => 5000],
-            'enterprise' => ['monthly' => 800, 'quarterly' => 2200, 'semi_annual' => 4000, 'annual' => 8000],
-        ];
+        // Get subscription pricing from settings
+        $basePrice = (float) SystemSetting::get('subscription_base_price', 5000.00);
+        $currency = SystemSetting::get('default_currency', 'GHS');
+        
+        $monthlyMultiplier = (float) SystemSetting::get('subscription_monthly_multiplier', 0.1);
+        $quarterlyMultiplier = (float) SystemSetting::get('subscription_quarterly_multiplier', 0.275);
+        $semiAnnualMultiplier = (float) SystemSetting::get('subscription_semi_annual_multiplier', 0.5);
 
-        $amount = $planPrices[$validated['subscription_plan']][$validated['renewal_cycle']] ?? 2000.00;
+        // Calculate amount based on cycle
+        $amount = match($validated['renewal_cycle']) {
+            'monthly' => round($basePrice * $monthlyMultiplier, 2),
+            'quarterly' => round($basePrice * $quarterlyMultiplier, 2),
+            'semi_annual' => round($basePrice * $semiAnnualMultiplier, 2),
+            'annual' => $basePrice,
+            default => $basePrice,
+        };
         
         // Calculate end date based on cycle
         $startDate = now();
@@ -125,18 +111,21 @@ class SubscriptionController extends Controller
             default => $startDate->copy()->addYear(),
         };
 
-        // Create subscription
+        // Get grace period from settings
+        $gracePeriodDays = SystemSetting::getGracePeriodDays();
+
+        // Create subscription (using 'standard' as default plan since we only have one price now)
         $subscription = $this->subscriptionManager->createSubscription([
             'institution_name' => $validated['institution_name'],
             'institution_code' => Str::slug($validated['institution_name']),
-            'subscription_plan' => $validated['subscription_plan'],
+            'subscription_plan' => 'standard', // Default plan
             'subscription_start_date' => $startDate,
             'subscription_end_date' => $endDate,
             'renewal_cycle' => $validated['renewal_cycle'],
             'renewal_amount' => $amount,
-            'currency' => 'GHS',
-            'auto_renewal' => true,
-            'grace_period_days' => 7,
+            'currency' => $currency,
+            'auto_renewal' => SystemSetting::getAutoRenewalEnabled(),
+            'grace_period_days' => $gracePeriodDays,
             'created_by' => $user->id,
         ]);
 

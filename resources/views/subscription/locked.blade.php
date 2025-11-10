@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Subscription Required - {{ config('app.name') }}</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/icofont@1.0.1/dist/icofont.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/icofont.min.css') }}">
     <style>
         * {
             margin: 0;
@@ -14,8 +14,9 @@
         }
 
         body {
-            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            background: #f8f9fa;
+            color: #333;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -23,188 +24,191 @@
             padding: 2rem;
         }
 
-        .locked-container {
+        .page-container {
             max-width: 900px;
             width: 100%;
-            background: white;
-            border-radius: 2rem;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            animation: slideUp 0.5s ease-out;
         }
 
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .locked-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        .locked-icon {
-            font-size: 5rem;
-            margin-bottom: 1rem;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-        }
-
-        .locked-header h1 {
-            font-size: 2.5rem;
-            font-weight: 700;
+        .page-header-modern {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
             margin-bottom: 0.5rem;
         }
 
-        .locked-header p {
-            font-size: 1.125rem;
-            opacity: 0.9;
+        .page-header-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin: 0;
         }
 
-        .locked-body {
-            padding: 3rem 2rem;
+        .page-header-separator {
+            width: 1px;
+            height: 2rem;
+            background-color: #d1d5db;
+            margin: 0;
         }
 
-        .alert {
+        .page-header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin: 0;
+        }
+
+        .page-header-breadcrumb i {
+            font-size: 1rem;
+        }
+
+        .page-header-description {
+            margin-top: 0.5rem;
+            color: #6b7280;
+            font-size: 0.875rem;
+        }
+
+        .modern-card {
+            background: white;
             border-radius: 1rem;
-            border: none;
-            padding: 1.25rem;
-            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            border: 1px solid #e5e7eb;
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+        }
+
+        .modern-card-header {
+            background: #f9fafb;
+            color: #1f2937;
+            padding: 1.25rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .modern-card-header h5 {
+            margin: 0;
+            font-weight: 600;
+            font-size: 1.125rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .modern-card-body {
+            padding: 1.5rem;
         }
 
         .plans-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 1rem;
             margin-bottom: 2rem;
         }
 
         .plan-card {
-            background: #f8f9fa;
-            border-radius: 1rem;
+            background: white;
+            border-radius: 0.75rem;
             padding: 1.5rem;
-            border: 2px solid #e9ecef;
-            transition: all 0.3s ease;
+            border: 2px solid #e5e7eb;
+            transition: all 0.2s ease;
             cursor: pointer;
-            position: relative;
+            text-align: center;
         }
 
         .plan-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-color: #667eea;
+            border-color: #01b2ac;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            transform: translateY(-2px);
         }
 
         .plan-card.selected {
-            border-color: #667eea;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-color: #01b2ac;
+            background: #f0fdfa;
         }
 
         .plan-name {
-            font-size: 1.25rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 600;
             color: #1f2937;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
         }
 
         .plan-price {
-            font-size: 2rem;
+            font-size: 1.75rem;
             font-weight: 700;
-            color: #667eea;
+            color: #01b2ac;
             margin-bottom: 0.25rem;
         }
 
         .plan-cycle {
             font-size: 0.875rem;
             color: #6b7280;
-            margin-bottom: 1rem;
         }
 
-        .plan-features {
-            list-style: none;
-            margin-top: 1rem;
-        }
-
-        .plan-features li {
-            padding: 0.5rem 0;
-            font-size: 0.875rem;
-            color: #4b5563;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .plan-features li i {
-            color: #10b981;
-            font-size: 1rem;
+        .plan-badge {
+            display: inline-block;
+            background: #10b981;
+            color: white;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
         }
 
         .subscribe-form {
-            background: #f8f9fa;
-            border-radius: 1rem;
-            padding: 2rem;
-            margin-top: 2rem;
+            background: #f9fafb;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
         }
 
         .form-label {
             font-weight: 600;
             color: #374151;
             margin-bottom: 0.5rem;
+            font-size: 0.875rem;
         }
 
         .form-control {
             border-radius: 0.5rem;
             border: 1px solid #d1d5db;
             padding: 0.75rem 1rem;
-            font-size: 1rem;
+            font-size: 0.875rem;
             transition: all 0.2s;
         }
 
         .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            border-color: #01b2ac;
+            box-shadow: 0 0 0 3px rgba(1, 178, 172, 0.1);
             outline: none;
         }
 
         .btn-subscribe {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #01b2ac;
             color: white;
             border: none;
-            padding: 1rem 2rem;
-            font-size: 1.125rem;
+            padding: 0.875rem 1.5rem;
+            font-size: 0.875rem;
             font-weight: 600;
-            border-radius: 0.75rem;
+            border-radius: 0.5rem;
             width: 100%;
             cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1.5rem;
+            transition: all 0.2s;
+            margin-top: 1rem;
         }
 
         .btn-subscribe:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+            background: #019a94;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
         }
 
         .btn-subscribe:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
+            transform: none;
         }
 
         .info-text {
@@ -214,15 +218,37 @@
             margin-top: 1rem;
         }
 
+        .alert {
+            border-radius: 0.5rem;
+            border: 1px solid;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            border-color: #93c5fd;
+            color: #1e40af;
+        }
+
+        .alert-danger {
+            background: #fee2e2;
+            border-color: #fca5a5;
+            color: #991b1b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .empty-state-icon {
+            font-size: 3rem;
+            color: #d1d5db;
+            margin-bottom: 1rem;
+        }
+
         @media (max-width: 768px) {
-            .locked-header h1 {
-                font-size: 2rem;
-            }
-
-            .locked-icon {
-                font-size: 4rem;
-            }
-
             .plans-grid {
                 grid-template-columns: 1fr;
             }
@@ -230,91 +256,97 @@
     </style>
 </head>
 <body>
-    <div class="locked-container">
-        <div class="locked-header">
-            <div class="locked-icon">
+    <div class="page-container">
+        <div class="page-header-modern">
+            <h1 class="page-header-title">Subscription Required</h1>
+            <div class="page-header-separator"></div>
+            <div class="page-header-breadcrumb">
                 <i class="icofont-lock"></i>
+                <span>System Access</span>
             </div>
-            <h1>Subscription Required</h1>
-            <p>Please subscribe to continue using the system</p>
         </div>
+        <p class="page-header-description">Please subscribe to continue using the system</p>
 
-        <div class="locked-body">
-            @if(session('info'))
-            <div class="alert alert-info">
-                <i class="icofont-info-circle"></i> {{ session('info') }}
+        <div class="modern-card">
+            <div class="modern-card-header">
+                <h5>
+                    <i class="icofont-info-circle"></i>
+                    System Access
+                </h5>
             </div>
-            @endif
+            <div class="modern-card-body">
+                @if(session('info'))
+                <div class="alert alert-info">
+                    <i class="icofont-info-circle"></i> {{ session('info') }}
+                </div>
+                @endif
 
-            @if(session('error'))
-            <div class="alert alert-danger">
-                <i class="icofont-warning"></i> {{ session('error') }}
-            </div>
-            @endif
+                @if(session('error'))
+                <div class="alert alert-danger">
+                    <i class="icofont-warning"></i> {{ session('error') }}
+                </div>
+                @endif
 
-            @if($canSubscribe)
-                <h3 class="text-center mb-4" style="color: #1f2937; font-weight: 600;">Choose Your Plan</h3>
-                
-                <form action="{{ route('subscription.subscribe') }}" method="POST" id="subscribeForm">
-                    @csrf
+                @if($canSubscribe)
+                    <h6 class="mb-3" style="color: #374151; font-weight: 600;">Choose Your Billing Cycle</h6>
                     
-                    <div class="plans-grid" id="plansGrid">
-                        @foreach($plans as $planKey => $plan)
-                        <div class="plan-card" data-plan="{{ $planKey }}" onclick="selectPlan('{{ $planKey }}')">
-                            <div class="plan-name">{{ $plan['name'] }}</div>
-                            <div class="plan-price">{{ $plan['currency'] }} {{ number_format($plan['price'], 2) }}</div>
-                            <div class="plan-cycle">per year</div>
-                            <ul class="plan-features">
-                                @foreach($plan['features'] as $feature)
-                                <li>
-                                    <i class="icofont-check-circled"></i>
-                                    {{ $feature }}
-                                </li>
-                                @endforeach
-                            </ul>
-                        </div>
-                        @endforeach
-                    </div>
-
-                    <input type="hidden" name="subscription_plan" id="selectedPlan" required>
-                    <input type="hidden" name="renewal_cycle" value="annual">
-
-                    <div class="subscribe-form">
-                        <div class="mb-3">
-                            <label for="institution_name" class="form-label">
-                                <i class="icofont-building"></i> Institution Name <span class="text-danger">*</span>
-                            </label>
-                            <input type="text" 
-                                   class="form-control" 
-                                   id="institution_name" 
-                                   name="institution_name" 
-                                   placeholder="Enter your institution name"
-                                   required>
+                    <form action="{{ route('subscription.subscribe') }}" method="POST" id="subscribeForm">
+                        @csrf
+                        
+                        <div class="plans-grid" id="plansGrid">
+                            @foreach($pricing as $cycleKey => $cycle)
+                            <div class="plan-card" data-cycle="{{ $cycleKey }}" onclick="selectCycle('{{ $cycleKey }}')">
+                                <div class="plan-name">{{ $cycle['name'] }}</div>
+                                <div class="plan-price">{{ $currency }} {{ number_format($cycle['price'], 2) }}</div>
+                                <div class="plan-cycle">{{ $cycle['description'] }}</div>
+                                @if($cycleKey === 'annual')
+                                <div class="plan-badge">BEST VALUE</div>
+                                @endif
+                            </div>
+                            @endforeach
                         </div>
 
-                        <button type="submit" class="btn-subscribe" id="subscribeBtn" disabled>
-                            <i class="icofont-credit-card"></i> Subscribe Now
-                        </button>
+                        <input type="hidden" name="renewal_cycle" id="selectedCycle" required>
 
-                        <p class="info-text">
-                            <i class="icofont-shield"></i> Secure payment powered by Paystack
+                        <div class="subscribe-form">
+                            <div class="mb-3">
+                                <label for="institution_name" class="form-label">
+                                    <i class="icofont-building"></i> Institution Name <span class="text-danger">*</span>
+                                </label>
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="institution_name" 
+                                       name="institution_name" 
+                                       placeholder="Enter your institution name"
+                                       required>
+                            </div>
+
+                            <button type="submit" class="btn-subscribe" id="subscribeBtn" disabled>
+                                <i class="icofont-credit-card"></i> Subscribe Now
+                            </button>
+
+                            <p class="info-text">
+                                <i class="icofont-shield"></i> Secure payment powered by Paystack
+                            </p>
+                        </div>
+                    </form>
+                @else
+                    <div class="empty-state">
+                        <div class="empty-state-icon">
+                            <i class="icofont-info-circle"></i>
+                        </div>
+                        <h5 style="color: #1f2937; margin-bottom: 0.5rem;">Contact Administrator</h5>
+                        <p style="color: #6b7280;">
+                            Only administrators can create subscriptions. Please contact your system administrator to set up a subscription.
                         </p>
                     </div>
-                </form>
-            @else
-                <div class="text-center py-5">
-                    <i class="icofont-info-circle" style="font-size: 3rem; color: #6b7280;"></i>
-                    <h3 class="mt-3" style="color: #1f2937;">Contact Administrator</h3>
-                    <p class="text-muted mt-2">
-                        Only administrators can create subscriptions. Please contact your system administrator to set up a subscription.
-                    </p>
-                </div>
-            @endif
+                @endif
+            </div>
         </div>
     </div>
 
     <script>
-        function selectPlan(planKey) {
+        function selectCycle(cycleKey) {
             // Remove selected class from all cards
             document.querySelectorAll('.plan-card').forEach(card => {
                 card.classList.remove('selected');
@@ -324,7 +356,7 @@
             event.currentTarget.classList.add('selected');
 
             // Set hidden input value
-            document.getElementById('selectedPlan').value = planKey;
+            document.getElementById('selectedCycle').value = cycleKey;
 
             // Enable subscribe button
             document.getElementById('subscribeBtn').disabled = false;
@@ -332,16 +364,15 @@
 
         // Form validation
         document.getElementById('subscribeForm').addEventListener('submit', function(e) {
-            const plan = document.getElementById('selectedPlan').value;
+            const cycle = document.getElementById('selectedCycle').value;
             const institutionName = document.getElementById('institution_name').value;
 
-            if (!plan || !institutionName.trim()) {
+            if (!cycle || !institutionName.trim()) {
                 e.preventDefault();
-                alert('Please select a plan and enter your institution name.');
+                alert('Please select a billing cycle and enter your institution name.');
                 return false;
             }
         });
     </script>
 </body>
 </html>
-
