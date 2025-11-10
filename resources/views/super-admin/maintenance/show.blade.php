@@ -16,7 +16,7 @@
         padding: 0 1.5rem;
     }
 
-    /* Page Header Style */
+    /* Page Header Style. */
     .page-header-modern {
         display: flex;
         align-items: center;
