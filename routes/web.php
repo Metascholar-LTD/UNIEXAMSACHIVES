@@ -221,6 +221,11 @@ Route::middleware(['auth'])->group(function () {
     #Academic Year
     Route::post('/dashboard/academic-year/store', [AcademicController::class, 'store'])->name('dashboard.academic.store');
 
+    #Payment History
+    Route::get('/dashboard/payment-history', [\App\Http\Controllers\Dashboard\PaymentHistoryController::class, 'index'])->name('dashboard.payment-history.index');
+    Route::get('/dashboard/payment-history/{id}/invoice', [\App\Http\Controllers\Dashboard\PaymentHistoryController::class, 'viewInvoice'])->name('dashboard.payment-history.view-invoice');
+    Route::get('/dashboard/payment-history/{id}/invoice/download', [\App\Http\Controllers\Dashboard\PaymentHistoryController::class, 'downloadInvoice'])->name('dashboard.payment-history.download-invoice');
+
     #Advanced Communication System (Users Only)
     Route::prefix('admin/communication')->name('admin.communication.')->middleware('auth')->group(function () {
         Route::get('/', [AdvanceCommunicationController::class, 'index'])->name('index');
