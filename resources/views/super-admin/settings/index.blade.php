@@ -381,7 +381,7 @@
         @csrf
 
         @foreach($settings as $category => $categorySettings)
-        <div class="settings-card">
+        <div class="settings-card" id="{{ $category }}">
             <div class="settings-card-header">
                 <h5>
                     <i class="icofont-ui-settings"></i> 
@@ -539,6 +539,33 @@
         </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    // Smooth scroll to anchor on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        if (window.location.hash) {
+            const hash = window.location.hash.substring(1);
+            const element = document.getElementById(hash);
+            if (element) {
+                // Small delay to ensure page is fully rendered
+                setTimeout(function() {
+                    element.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start' 
+                    });
+                    // Add a highlight effect
+                    element.style.transition = 'box-shadow 0.3s ease';
+                    element.style.boxShadow = '0 0 0 3px rgba(1, 178, 172, 0.3)';
+                    setTimeout(function() {
+                        element.style.boxShadow = '';
+                    }, 2000);
+                }, 100);
+            }
+        }
+    });
+</script>
+@endpush
 
 @endsection
 
