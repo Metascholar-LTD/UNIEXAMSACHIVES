@@ -61,17 +61,34 @@
         .maintenance-container {
             position: relative;
             z-index: 1;
-            text-align: center;
             padding: 40px;
-            max-width: 600px;
+            max-width: 1200px;
             width: 100%;
+            display: flex;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .maintenance-left {
+            flex: 0 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .maintenance-right {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            padding-left: 40px;
+            border-left: 1px solid rgba(0, 0, 0, 0.1);
         }
 
         /* Bouncing image */
         .maintenance-image {
             width: 300px;
             height: 300px;
-            margin: 0 auto 40px;
             animation: bounce 3s ease-in-out infinite;
             filter: drop-shadow(0 20px 40px rgba(0, 0, 0, 0.3));
             position: relative;
@@ -106,7 +123,6 @@
             border-radius: 50px;
             border: 2px solid #01b2ac;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
-            margin-bottom: 30px;
             animation: pulse 2s ease-in-out infinite;
         }
 
@@ -146,9 +162,9 @@
             background: white;
             border-radius: 20px;
             padding: 30px;
-            margin-top: 30px;
             border: 1px solid #e0e0e0;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            text-align: left;
         }
 
         .maintenance-info h2 {
@@ -211,7 +227,30 @@
         }
 
         /* Responsive */
+        @media (max-width: 968px) {
+            .maintenance-container {
+                flex-direction: column;
+                gap: 30px;
+            }
+
+            .maintenance-left {
+                width: 100%;
+            }
+
+            .maintenance-right {
+                padding-left: 0;
+                border-left: none;
+                border-top: 1px solid rgba(0, 0, 0, 0.1);
+                padding-top: 30px;
+                width: 100%;
+            }
+        }
+
         @media (max-width: 768px) {
+            .maintenance-container {
+                padding: 20px;
+            }
+
             .maintenance-image {
                 width: 250px;
                 height: 250px;
@@ -245,19 +284,24 @@
 
     <!-- Main content -->
     <div class="maintenance-container">
-        <!-- Bouncing maintenance image -->
-        <div class="maintenance-image">
-            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762374398/20943392_yazt5t.jpg" alt="System Maintenance">
+        <!-- Left Side: Image and Maintenance Message -->
+        <div class="maintenance-left">
+            <!-- Bouncing maintenance image -->
+            <div class="maintenance-image">
+                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762374398/20943392_yazt5t.jpg" alt="System Maintenance">
+            </div>
+
+            <!-- Pill-style maintenance message -->
+            <div class="maintenance-pill">
+                <i class="icofont-gear"></i>
+                <span>System is Under Maintenance</span>
+            </div>
         </div>
 
-        <!-- Pill-style maintenance message -->
-        <div class="maintenance-pill">
-            <i class="icofont-gear"></i>
-            <span>System is Under Maintenance</span>
-        </div>
-
-        <!-- Additional information -->
-        <div class="maintenance-info">
+        <!-- Right Side: All Information -->
+        <div class="maintenance-right">
+            <!-- Additional information -->
+            <div class="maintenance-info">
             <h2>We're Making Things Better!</h2>
             <p>Our team is currently performing scheduled maintenance to improve your experience.</p>
             
@@ -350,6 +394,7 @@
                 <span></span>
             </div>
         </div>
+        </div>
     </div>
 
     <!-- Icofont for icons -->
@@ -360,6 +405,7 @@
         .maintenance-countdown-section {
             text-align: center;
             margin: 30px 0;
+            width: 100%;
         }
 
         .countdown-title {
