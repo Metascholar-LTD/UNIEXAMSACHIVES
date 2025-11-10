@@ -271,9 +271,9 @@
                                 @if($user->isSuperAdmin())
                                     <span class="badge-modern badge-super-admin">Super Admin</span>
                                 @elseif($user->role == 'admin')
-                                    <span class="badge-modern badge-admin">Admin</span>
+                                    <span class="badge-modern badge-admin">User</span>
                                 @else
-                                    <span class="badge-modern badge-user">User</span>
+                                    <span class="badge-modern badge-user">Admin</span>
                                 @endif
                             </td>
                             <td>{{ $user->department->name ?? 'N/A' }}</td>
