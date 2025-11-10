@@ -82,13 +82,14 @@ class SubscriptionController extends Controller
         $years = (int) $validated['years'];
         $amount = $basePrice * $years;
         
-        // Calculate end date: add the selected number of years from today
+        // Calculate dates: start today, end after selected number of years
         // Examples (if created on Nov 10, 2025):
-        // - 1 year: ends on Nov 10, 2026 (1 year from today, same day)
-        // - 2 years: ends on Nov 10, 2027 (2 years from today, same day)
-        // - 3 years: ends on Nov 10, 2028 (3 years from today, same day)
-        $startDate = now()->startOfDay(); // Start of today
-        $endDate = $startDate->copy()->addYears($years)->endOfDay(); // Add years and set to end of day
+        // - 1 year: starts Nov 10, 2025, ends Nov 10, 2026
+        // - 2 years: starts Nov 10, 2025, ends Nov 10, 2027
+        // - 3 years: starts Nov 10, 2025, ends Nov 10, 2028
+        $startDate = now()->startOfDay(); // Today at 00:00:00
+        // Add exactly the number of years selected (2 years = 2025 + 2 = 2027)
+        $endDate = $startDate->copy()->addYears($years)->startOfDay(); // Add years, keep as date (not datetime)
 
         // Get grace period from settings
         $gracePeriodDays = SystemSetting::getGracePeriodDays();
