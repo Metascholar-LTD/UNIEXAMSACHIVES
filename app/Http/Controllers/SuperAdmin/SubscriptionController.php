@@ -4,6 +4,7 @@ namespace App\Http\Controllers\SuperAdmin;
 
 use App\Http\Controllers\Controller;
 use App\Models\SystemSubscription;
+use App\Models\SystemSetting;
 use App\Services\SubscriptionManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -58,7 +59,26 @@ class SubscriptionController extends Controller
             'suspended' => SystemSubscription::where('status', 'suspended')->count(),
         ];
 
-        return view('super-admin.subscriptions.index', compact('subscriptions', 'stats'));
+        // Get subscription pricing settings
+        $basePrice = (float) SystemSetting::get('subscription_base_price', 5000.00);
+        $currency = SystemSetting::get('default_currency', 'GHS');
+        $monthlyMultiplier = (float) SystemSetting::get('subscription_monthly_multiplier', 0.1);
+        $quarterlyMultiplier = (float) SystemSetting::get('subscription_quarterly_multiplier', 0.275);
+        $semiAnnualMultiplier = (float) SystemSetting::get('subscription_semi_annual_multiplier', 0.5);
+
+        $pricing = [
+            'base_price' => $basePrice,
+            'currency' => $currency,
+            'monthly' => round($basePrice * $monthlyMultiplier, 2),
+            'quarterly' => round($basePrice * $quarterlyMultiplier, 2),
+            'semi_annual' => round($basePrice * $semiAnnualMultiplier, 2),
+            'annual' => $basePrice,
+            'monthly_multiplier' => $monthlyMultiplier,
+            'quarterly_multiplier' => $quarterlyMultiplier,
+            'semi_annual_multiplier' => $semiAnnualMultiplier,
+        ];
+
+        return view('super-admin.subscriptions.index', compact('subscriptions', 'stats', 'pricing'));
     }
 
     /**

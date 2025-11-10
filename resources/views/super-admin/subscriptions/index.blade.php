@@ -240,6 +240,49 @@
         </div>
     </div>
 
+    {{-- Subscription Pricing Card --}}
+    <div class="modern-card">
+        <div class="modern-card-header">
+            <h5>
+                <i class="icofont-money-bag"></i>
+                Subscription Pricing
+            </h5>
+        </div>
+        <div class="modern-card-body">
+            <div class="row">
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Monthly</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['monthly'], 2) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Quarterly</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['quarterly'], 2) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Semi-Annual</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['semi_annual'], 2) }}</div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-card-label">Annual (Base)</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['annual'], 2) }}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3">
+                <a href="{{ route('super-admin.settings.index') }}#subscription" class="btn-modern btn-modern-primary">
+                    <i class="icofont-settings"></i> Configure Pricing Settings
+                </a>
+            </div>
+        </div>
+    </div>
+
     {{-- Statistics --}}
     <div class="stats-grid">
         <div class="stat-card">
