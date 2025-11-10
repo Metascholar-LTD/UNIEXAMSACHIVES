@@ -165,32 +165,10 @@ class SystemSetting extends Model
         return (float) static::get('subscription_base_price', 5000.00);
     }
 
-    public static function getSubscriptionMonthlyMultiplier(): float
-    {
-        return (float) static::get('subscription_monthly_multiplier', 0.1);
-    }
-
-    public static function getSubscriptionQuarterlyMultiplier(): float
-    {
-        return (float) static::get('subscription_quarterly_multiplier', 0.275);
-    }
-
-    public static function getSubscriptionSemiAnnualMultiplier(): float
-    {
-        return (float) static::get('subscription_semi_annual_multiplier', 0.5);
-    }
-
-    public static function getSubscriptionPriceForCycle(string $cycle): float
+    public static function getSubscriptionPriceForYears(int $years): float
     {
         $basePrice = static::getSubscriptionBasePrice();
-        
-        return match($cycle) {
-            'monthly' => round($basePrice * static::getSubscriptionMonthlyMultiplier(), 2),
-            'quarterly' => round($basePrice * static::getSubscriptionQuarterlyMultiplier(), 2),
-            'semi_annual' => round($basePrice * static::getSubscriptionSemiAnnualMultiplier(), 2),
-            'annual' => $basePrice,
-            default => $basePrice,
-        };
+        return $basePrice * $years;
     }
 
     // Business Logic

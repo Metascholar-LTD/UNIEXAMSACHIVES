@@ -250,34 +250,31 @@
         </div>
         <div class="modern-card-body">
             <div class="row">
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="stat-card">
-                        <div class="stat-card-label">Monthly</div>
-                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['monthly'], 2) }}</div>
+                        <div class="stat-card-label">1 Year</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['1_year'], 2) }}</div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="stat-card">
-                        <div class="stat-card-label">Quarterly</div>
-                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['quarterly'], 2) }}</div>
+                        <div class="stat-card-label">2 Years</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['2_years'], 2) }}</div>
                     </div>
                 </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-4 mb-3">
                     <div class="stat-card">
-                        <div class="stat-card-label">Semi-Annual</div>
-                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['semi_annual'], 2) }}</div>
-                    </div>
-                </div>
-                <div class="col-md-3 mb-3">
-                    <div class="stat-card">
-                        <div class="stat-card-label">Annual (Base)</div>
-                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['annual'], 2) }}</div>
+                        <div class="stat-card-label">3 Years</div>
+                        <div class="stat-card-value" style="font-size: 1.5rem;">{{ $pricing['currency'] }} {{ number_format($pricing['3_years'], 2) }}</div>
                     </div>
                 </div>
             </div>
             <div class="mt-3">
+                <p class="text-muted mb-2" style="font-size: 0.875rem;">
+                    <i class="icofont-info-circle"></i> Base annual price: <strong>{{ $pricing['currency'] }} {{ number_format($pricing['base_price'], 2) }}</strong> per year
+                </p>
                 <a href="{{ route('super-admin.settings.index') }}#subscription" class="btn-modern btn-modern-primary">
-                    <i class="icofont-settings"></i> Configure Pricing Settings
+                    <i class="icofont-settings"></i> Configure Annual Price
                 </a>
             </div>
         </div>

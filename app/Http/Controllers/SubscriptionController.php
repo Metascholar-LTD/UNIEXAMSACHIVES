@@ -32,36 +32,26 @@ class SubscriptionController extends Controller
         // Get subscription pricing from settings
         $basePrice = (float) SystemSetting::get('subscription_base_price', 5000.00);
         $currency = SystemSetting::get('default_currency', 'GHS');
-        
-        $monthlyMultiplier = (float) SystemSetting::get('subscription_monthly_multiplier', 0.1);
-        $quarterlyMultiplier = (float) SystemSetting::get('subscription_quarterly_multiplier', 0.275);
-        $semiAnnualMultiplier = (float) SystemSetting::get('subscription_semi_annual_multiplier', 0.5);
 
-        // Calculate prices for each cycle
+        // Calculate prices for different year options
         $pricing = [
-            'monthly' => [
-                'name' => 'Monthly',
-                'price' => round($basePrice * $monthlyMultiplier, 2),
-                'cycle' => 'monthly',
-                'description' => 'Billed monthly',
-            ],
-            'quarterly' => [
-                'name' => 'Quarterly',
-                'price' => round($basePrice * $quarterlyMultiplier, 2),
-                'cycle' => 'quarterly',
-                'description' => 'Billed every 3 months',
-            ],
-            'semi_annual' => [
-                'name' => 'Semi-Annual',
-                'price' => round($basePrice * $semiAnnualMultiplier, 2),
-                'cycle' => 'semi_annual',
-                'description' => 'Billed every 6 months',
-            ],
-            'annual' => [
-                'name' => 'Annual',
+            '1' => [
+                'years' => 1,
+                'name' => '1 Year',
                 'price' => $basePrice,
-                'cycle' => 'annual',
-                'description' => 'Billed yearly (Best Value)',
+                'description' => 'Annual subscription',
+            ],
+            '2' => [
+                'years' => 2,
+                'name' => '2 Years',
+                'price' => $basePrice * 2,
+                'description' => 'Two-year subscription',
+            ],
+            '3' => [
+                'years' => 3,
+                'name' => '3 Years',
+                'price' => $basePrice * 3,
+                'description' => 'Three-year subscription (Best Value)',
             ],
         ];
 
@@ -81,47 +71,32 @@ class SubscriptionController extends Controller
 
         $validated = $request->validate([
             'institution_name' => 'required|string|max:255',
-            'renewal_cycle' => 'required|in:monthly,quarterly,semi_annual,annual',
+            'years' => 'required|integer|min:1|max:3',
         ]);
 
         // Get subscription pricing from settings
         $basePrice = (float) SystemSetting::get('subscription_base_price', 5000.00);
         $currency = SystemSetting::get('default_currency', 'GHS');
-        
-        $monthlyMultiplier = (float) SystemSetting::get('subscription_monthly_multiplier', 0.1);
-        $quarterlyMultiplier = (float) SystemSetting::get('subscription_quarterly_multiplier', 0.275);
-        $semiAnnualMultiplier = (float) SystemSetting::get('subscription_semi_annual_multiplier', 0.5);
 
-        // Calculate amount based on cycle
-        $amount = match($validated['renewal_cycle']) {
-            'monthly' => round($basePrice * $monthlyMultiplier, 2),
-            'quarterly' => round($basePrice * $quarterlyMultiplier, 2),
-            'semi_annual' => round($basePrice * $semiAnnualMultiplier, 2),
-            'annual' => $basePrice,
-            default => $basePrice,
-        };
+        // Calculate amount based on number of years
+        $years = (int) $validated['years'];
+        $amount = $basePrice * $years;
         
-        // Calculate end date based on cycle
+        // Calculate end date based on years
         $startDate = now();
-        $endDate = match($validated['renewal_cycle']) {
-            'monthly' => $startDate->copy()->addMonth(),
-            'quarterly' => $startDate->copy()->addMonths(3),
-            'semi_annual' => $startDate->copy()->addMonths(6),
-            'annual' => $startDate->copy()->addYear(),
-            default => $startDate->copy()->addYear(),
-        };
+        $endDate = $startDate->copy()->addYears($years);
 
         // Get grace period from settings
         $gracePeriodDays = SystemSetting::getGracePeriodDays();
 
-        // Create subscription (using 'standard' as default plan since we only have one price now)
+        // Create subscription
         $subscription = $this->subscriptionManager->createSubscription([
             'institution_name' => $validated['institution_name'],
             'institution_code' => Str::slug($validated['institution_name']),
-            'subscription_plan' => 'standard', // Default plan
+            'subscription_plan' => 'standard',
             'subscription_start_date' => $startDate,
             'subscription_end_date' => $endDate,
-            'renewal_cycle' => $validated['renewal_cycle'],
+            'renewal_cycle' => 'annual', // Always annual
             'renewal_amount' => $amount,
             'currency' => $currency,
             'auto_renewal' => SystemSetting::getAutoRenewalEnabled(),

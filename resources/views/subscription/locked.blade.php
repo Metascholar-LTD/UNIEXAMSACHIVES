@@ -288,25 +288,25 @@
                 @endif
 
                 @if($canSubscribe)
-                    <h6 class="mb-3" style="color: #374151; font-weight: 600;">Choose Your Billing Cycle</h6>
+                    <h6 class="mb-3" style="color: #374151; font-weight: 600;">Choose Subscription Duration</h6>
                     
                     <form action="{{ route('subscription.subscribe') }}" method="POST" id="subscribeForm">
                         @csrf
                         
                         <div class="plans-grid" id="plansGrid">
-                            @foreach($pricing as $cycleKey => $cycle)
-                            <div class="plan-card" data-cycle="{{ $cycleKey }}" onclick="selectCycle('{{ $cycleKey }}')">
-                                <div class="plan-name">{{ $cycle['name'] }}</div>
-                                <div class="plan-price">{{ $currency }} {{ number_format($cycle['price'], 2) }}</div>
-                                <div class="plan-cycle">{{ $cycle['description'] }}</div>
-                                @if($cycleKey === 'annual')
+                            @foreach($pricing as $yearKey => $option)
+                            <div class="plan-card" data-years="{{ $yearKey }}" onclick="selectYears('{{ $yearKey }}')">
+                                <div class="plan-name">{{ $option['name'] }}</div>
+                                <div class="plan-price">{{ $currency }} {{ number_format($option['price'], 2) }}</div>
+                                <div class="plan-cycle">{{ $option['description'] }}</div>
+                                @if($yearKey === '3')
                                 <div class="plan-badge">BEST VALUE</div>
                                 @endif
                             </div>
                             @endforeach
                         </div>
 
-                        <input type="hidden" name="renewal_cycle" id="selectedCycle" required>
+                        <input type="hidden" name="years" id="selectedYears" required>
 
                         <div class="subscribe-form">
                             <div class="mb-3">
@@ -346,7 +346,7 @@
     </div>
 
     <script>
-        function selectCycle(cycleKey) {
+        function selectYears(yearKey) {
             // Remove selected class from all cards
             document.querySelectorAll('.plan-card').forEach(card => {
                 card.classList.remove('selected');
@@ -356,7 +356,7 @@
             event.currentTarget.classList.add('selected');
 
             // Set hidden input value
-            document.getElementById('selectedCycle').value = cycleKey;
+            document.getElementById('selectedYears').value = yearKey;
 
             // Enable subscribe button
             document.getElementById('subscribeBtn').disabled = false;
@@ -364,12 +364,12 @@
 
         // Form validation
         document.getElementById('subscribeForm').addEventListener('submit', function(e) {
-            const cycle = document.getElementById('selectedCycle').value;
+            const years = document.getElementById('selectedYears').value;
             const institutionName = document.getElementById('institution_name').value;
 
-            if (!cycle || !institutionName.trim()) {
+            if (!years || !institutionName.trim()) {
                 e.preventDefault();
-                alert('Please select a billing cycle and enter your institution name.');
+                alert('Please select a subscription duration and enter your institution name.');
                 return false;
             }
         });
