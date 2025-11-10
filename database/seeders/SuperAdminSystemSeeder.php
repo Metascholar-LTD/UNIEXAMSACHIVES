@@ -234,7 +234,7 @@ class SuperAdminSystemSeeder extends Seeder
         ];
 
         foreach ($settings as $setting) {
-            SystemSetting::firstOrCreate(
+            SystemSetting::updateOrCreate(
                 ['key' => $setting['key']],
                 $setting
             );
