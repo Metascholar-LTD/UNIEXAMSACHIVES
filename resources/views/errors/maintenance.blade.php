@@ -190,7 +190,8 @@
 
         /* Loading dots */
         .loading-dots {
-            display: inline-flex;
+            display: flex;
+            justify-content: center;
             gap: 8px;
             margin-top: 20px;
         }
@@ -382,11 +383,6 @@
                 <p style="margin-top: 15px;">We'll be back shortly. Thank you for your patience!</p>
             @endif
 
-            <!-- Manual Refresh Button -->
-            <button class="refresh-button" id="check-maintenance-btn" onclick="checkMaintenanceStatus()">
-                <i class="icofont-refresh"></i> Check Status
-            </button>
-
             <!-- Loading animation -->
             <div class="loading-dots">
                 <span></span>
@@ -526,46 +522,6 @@
             z-index: 2;
         }
 
-        /* Refresh Button */
-        .refresh-button {
-            margin-top: 20px;
-            padding: 12px 30px;
-            background: linear-gradient(135deg, #01b2ac 0%, #008b87 100%);
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 15px rgba(1, 178, 172, 0.3);
-        }
-
-        .refresh-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(1, 178, 172, 0.4);
-        }
-
-        .refresh-button:active {
-            transform: translateY(0);
-        }
-
-        .refresh-button i {
-            font-size: 18px;
-            animation: spin 2s linear infinite;
-        }
-
-        .refresh-button.checking i {
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
 
         @media (max-width: 768px) {
             .countdown-container {
@@ -707,12 +663,6 @@
         }
 
         function checkMaintenanceStatus() {
-            const btn = document.getElementById('check-maintenance-btn');
-            if (btn) {
-                btn.classList.add('checking');
-                btn.disabled = true;
-            }
-
             fetch('/api/check-maintenance-status', {
                 method: 'GET',
                 headers: {
@@ -725,21 +675,10 @@
                 if (!data.maintenance_active) {
                     // Maintenance is over, redirect to home
                     window.location.href = '/';
-                } else {
-                    // Still in maintenance, show message
-                    if (btn) {
-                        btn.classList.remove('checking');
-                        btn.disabled = false;
-                    }
-                    // Optionally show a message that maintenance is still active
                 }
             })
             .catch(error => {
                 console.error('Error checking maintenance status:', error);
-                if (btn) {
-                    btn.classList.remove('checking');
-                    btn.disabled = false;
-                }
             });
         }
 
