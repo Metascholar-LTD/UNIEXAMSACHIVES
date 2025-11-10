@@ -49,9 +49,37 @@ class SystemSettingsController extends Controller
         $updated = 0;
         $requiresRestart = false;
 
+        // Handle renewal_reminder_days separately (comes as array)
+        if ($request->has('renewal_reminder_days') && is_array($request->renewal_reminder_days)) {
+            $days = array_filter($request->renewal_reminder_days, function($day) {
+                return is_numeric($day) && $day >= 0 && $day <= 365;
+            });
+            $days = array_values(array_map('intval', $days));
+            
+            // Ensure we have exactly 4 values, pad with defaults if needed
+            while (count($days) < 4) {
+                $days[] = [30, 14, 7, 1][count($days)];
+            }
+            
+            $days = array_slice($days, 0, 4); // Take only first 4
+            sort($days, SORT_NUMERIC); // Sort descending
+            $days = array_reverse($days); // Reverse to get descending order
+            
+            $setting = SystemSetting::where('key', 'renewal_reminder_days')->first();
+            if ($setting && $setting->is_editable) {
+                $value = json_encode($days);
+                $oldValue = $setting->value;
+                SystemSetting::set('renewal_reminder_days', $value, auth()->id());
+                
+                if ($oldValue !== $value) {
+                    $updated++;
+                }
+            }
+        }
+
         foreach ($request->all() as $key => $value) {
-            // Skip CSRF token and other non-setting fields
-            if (in_array($key, ['_token', '_method'])) {
+            // Skip CSRF token, renewal_reminder_days (handled above), and other non-setting fields
+            if (in_array($key, ['_token', '_method', 'renewal_reminder_days'])) {
                 continue;
             }
 

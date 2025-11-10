@@ -274,6 +274,29 @@
         outline: none;
     }
 
+    /* Reminder Day Input Boxes - Verification Code Style */
+    .reminder-day-input {
+        border: 2px solid #d1d5db;
+        border-radius: 0.5rem;
+        padding: 0.75rem;
+        font-size: 1.1rem;
+        font-weight: 600;
+        text-align: center;
+        transition: all 0.2s ease;
+        background: white;
+    }
+
+    .reminder-day-input:focus {
+        border-color: #01b2ac;
+        box-shadow: 0 0 0 3px rgba(1, 178, 172, 0.1);
+        outline: none;
+        transform: scale(1.05);
+    }
+
+    .reminder-day-input:hover {
+        border-color: #01b2ac;
+    }
+
     /* Danger Zone Card */
     .settings-card-danger {
         border-color: #ef4444;
@@ -391,10 +414,59 @@
                                     </label>
                                 </div>
                             @elseif($setting->data_type === 'json')
-                                <textarea class="form-control" 
-                                          name="{{ $setting->key }}" 
-                                          rows="3"
-                                          {{ !$setting->is_editable ? 'readonly' : '' }}>{{ $setting->value }}</textarea>
+                                @if($setting->key === 'renewal_reminder_days')
+                                    @php
+                                        $days = is_array($setting->typed_value) ? $setting->typed_value : json_decode($setting->value, true) ?? [30, 14, 7, 1];
+                                        $day1 = $days[0] ?? 30;
+                                        $day2 = $days[1] ?? 14;
+                                        $day3 = $days[2] ?? 7;
+                                        $day4 = $days[3] ?? 1;
+                                    @endphp
+                                    <div class="d-flex gap-2 align-items-center">
+                                        <input type="number" 
+                                               class="reminder-day-input" 
+                                               name="renewal_reminder_days[]" 
+                                               value="{{ $day1 }}"
+                                               min="0"
+                                               max="365"
+                                               style="width: 80px;"
+                                               {{ !$setting->is_editable ? 'readonly' : '' }}
+                                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3); if(this.nextElementSibling && this.value.length === 3) this.nextElementSibling.focus();">
+                                        <input type="number" 
+                                               class="reminder-day-input" 
+                                               name="renewal_reminder_days[]" 
+                                               value="{{ $day2 }}"
+                                               min="0"
+                                               max="365"
+                                               style="width: 80px;"
+                                               {{ !$setting->is_editable ? 'readonly' : '' }}
+                                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3); if(this.nextElementSibling && this.value.length === 3) this.nextElementSibling.focus();">
+                                        <input type="number" 
+                                               class="reminder-day-input" 
+                                               name="renewal_reminder_days[]" 
+                                               value="{{ $day3 }}"
+                                               min="0"
+                                               max="365"
+                                               style="width: 80px;"
+                                               {{ !$setting->is_editable ? 'readonly' : '' }}
+                                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3); if(this.nextElementSibling && this.value.length === 3) this.nextElementSibling.focus();">
+                                        <input type="number" 
+                                               class="reminder-day-input" 
+                                               name="renewal_reminder_days[]" 
+                                               value="{{ $day4 }}"
+                                               min="0"
+                                               max="365"
+                                               style="width: 80px;"
+                                               {{ !$setting->is_editable ? 'readonly' : '' }}
+                                               oninput="this.value = this.value.replace(/[^0-9]/g, '').slice(0, 3);">
+                                        <span class="text-muted ms-2" style="font-size: 0.875rem;">days before expiry</span>
+                                    </div>
+                                @else
+                                    <textarea class="form-control" 
+                                              name="{{ $setting->key }}" 
+                                              rows="3"
+                                              {{ !$setting->is_editable ? 'readonly' : '' }}>{{ $setting->value }}</textarea>
+                                @endif
                             @else
                                 <input type="{{ $setting->data_type === 'integer' ? 'number' : 'text' }}" 
                                        class="form-control" 
