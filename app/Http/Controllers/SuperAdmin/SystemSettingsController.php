@@ -51,27 +51,39 @@ class SystemSettingsController extends Controller
 
         // Handle renewal_reminder_days separately (comes as array)
         if ($request->has('renewal_reminder_days') && is_array($request->renewal_reminder_days)) {
-            $days = array_filter($request->renewal_reminder_days, function($day) {
-                return is_numeric($day) && $day >= 0 && $day <= 365;
-            });
-            $days = array_values(array_map('intval', $days));
+            // Process each value - convert empty strings to 0, then validate
+            $days = [];
+            foreach ($request->renewal_reminder_days as $day) {
+                $day = trim($day);
+                if ($day === '' || $day === null) {
+                    continue; // Skip empty values
+                }
+                if (is_numeric($day) && $day >= 0 && $day <= 365) {
+                    $days[] = (int) $day;
+                }
+            }
             
             // Ensure we have exactly 4 values, pad with defaults if needed
+            $defaults = [30, 14, 7, 1];
             while (count($days) < 4) {
-                $days[] = [30, 14, 7, 1][count($days)];
+                $days[] = $defaults[count($days)];
             }
             
             $days = array_slice($days, 0, 4); // Take only first 4
-            sort($days, SORT_NUMERIC); // Sort descending
-            $days = array_reverse($days); // Reverse to get descending order
+            // Don't sort - preserve user's order
             
             $setting = SystemSetting::where('key', 'renewal_reminder_days')->first();
             if ($setting && $setting->is_editable) {
-                $value = json_encode($days);
+                // Pass the array directly - setTypedValue will handle JSON encoding
                 $oldValue = $setting->value;
-                SystemSetting::set('renewal_reminder_days', $value, auth()->id());
+                $setting->setTypedValue($days);
+                $setting->updated_by = auth()->id();
+                $setting->save();
                 
-                if ($oldValue !== $value) {
+                // Clear cache
+                \Illuminate\Support\Facades\Cache::forget("system_setting_renewal_reminder_days");
+                
+                if ($oldValue !== $setting->value) {
                     $updated++;
                 }
             }

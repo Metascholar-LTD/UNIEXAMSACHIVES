@@ -416,11 +416,21 @@
                             @elseif($setting->data_type === 'json')
                                 @if($setting->key === 'renewal_reminder_days')
                                     @php
-                                        $days = is_array($setting->typed_value) ? $setting->typed_value : json_decode($setting->value, true) ?? [30, 14, 7, 1];
-                                        $day1 = $days[0] ?? 30;
-                                        $day2 = $days[1] ?? 14;
-                                        $day3 = $days[2] ?? 7;
-                                        $day4 = $days[3] ?? 1;
+                                        // Get the days array - try typed_value first, then decode JSON
+                                        $days = $setting->typed_value;
+                                        if (!is_array($days)) {
+                                            $days = json_decode($setting->value, true);
+                                        }
+                                        if (!is_array($days) || empty($days)) {
+                                            $days = [30, 14, 7, 1];
+                                        }
+                                        // Ensure we have 4 values
+                                        $days = array_pad($days, 4, 0);
+                                        $days = array_slice($days, 0, 4);
+                                        $day1 = (int) ($days[0] ?? 30);
+                                        $day2 = (int) ($days[1] ?? 14);
+                                        $day3 = (int) ($days[2] ?? 7);
+                                        $day4 = (int) ($days[3] ?? 1);
                                     @endphp
                                     <div class="d-flex gap-2 align-items-center">
                                         <input type="number" 
