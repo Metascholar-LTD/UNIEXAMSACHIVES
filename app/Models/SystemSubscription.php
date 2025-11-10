@@ -194,11 +194,10 @@ class SystemSubscription extends Model
         $this->save();
     }
 
-    public function renew($years = null): void
+    public function renew($months = null): void
     {
-        // Calculate years from original subscription period if not provided
-        if (!$years) {
-            $years = $this->getRenewalYears();
+        if (!$months) {
+            $months = $this->getRenewalMonths();
         }
 
         $startDate = $this->subscription_end_date->isFuture() 
@@ -206,7 +205,7 @@ class SystemSubscription extends Model
             : now();
 
         $this->subscription_start_date = $startDate;
-        $this->subscription_end_date = $startDate->copy()->addYears($years);
+        $this->subscription_end_date = $startDate->copy()->addMonths($months);
         $this->status = 'active';
         $this->failed_payment_attempts = 0;
         $this->last_payment_date = now();
@@ -258,19 +257,15 @@ class SystemSubscription extends Model
         ]);
     }
 
-    private function getRenewalYears(): int
+    private function getRenewalMonths(): int
     {
-        // Calculate years from the original subscription period
-        // This ensures renewals maintain the same duration (1, 2, or 3 years)
-        if ($this->subscription_start_date && $this->subscription_end_date) {
-            $years = $this->subscription_start_date->diffInYears($this->subscription_end_date);
-            // Round to nearest integer and ensure it's between 1 and 3
-            $years = max(1, min(3, (int) round($years)));
-            return $years;
-        }
-        
-        // Fallback: if dates are not available, default to 1 year
-        return 1;
+        return match($this->renewal_cycle) {
+            'monthly' => 1,
+            'quarterly' => 3,
+            'semi_annual' => 6,
+            'annual' => 12,
+            default => 12
+        };
     }
 
     public function getTotalRevenue(): float
