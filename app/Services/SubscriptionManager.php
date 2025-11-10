@@ -390,22 +390,63 @@ class SubscriptionManager
             // Verify with Paystack
             $result = $this->paystack->verifyPayment($reference);
 
-            if ($result['success'] && $result['data']['status'] === 'success') {
-                // Mark transaction as completed
-                if ($transaction->status !== 'completed') {
-                    $transaction->markAsCompleted($result['data']);
+            // If API call was successful, check the actual payment status
+            if ($result['success']) {
+                $paymentData = $result['data'];
+                $paymentStatus = $paymentData['status'] ?? null;
+
+                // Payment was successful
+                if ($paymentStatus === 'success') {
+                    // Mark transaction as completed only if not already completed
+                    if ($transaction->status !== 'completed') {
+                        $transaction->markAsCompleted($paymentData);
+                    }
+
+                    return [
+                        'success' => true,
+                        'transaction' => $transaction,
+                        'message' => 'Payment verified and subscription renewed successfully',
+                    ];
+                }
+
+                // Payment was failed, cancelled, or not successful
+                // Mark transaction as failed if it's still pending
+                if ($transaction->status === 'pending' || $transaction->status === 'processing') {
+                    $failureReason = $paymentData['gateway_response'] ?? 
+                                    $paymentData['message'] ?? 
+                                    'Payment was not completed';
+                    
+                    $transaction->markAsFailed($failureReason, $paymentData);
+
+                    Log::info('Payment marked as failed', [
+                        'transaction_id' => $transaction->id,
+                        'reference' => $reference,
+                        'payment_status' => $paymentStatus,
+                        'reason' => $failureReason
+                    ]);
                 }
 
                 return [
-                    'success' => true,
-                    'transaction' => $transaction,
-                    'message' => 'Payment verified and subscription renewed successfully',
+                    'success' => false,
+                    'message' => 'Payment was not completed. Status: ' . ($paymentStatus ?? 'unknown'),
                 ];
+            }
+
+            // API call failed - mark transaction as failed if still pending
+            if ($transaction->status === 'pending' || $transaction->status === 'processing') {
+                $failureReason = $result['message'] ?? 'Payment verification failed';
+                $transaction->markAsFailed($failureReason);
+
+                Log::info('Payment verification failed', [
+                    'transaction_id' => $transaction->id,
+                    'reference' => $reference,
+                    'reason' => $failureReason
+                ]);
             }
 
             return [
                 'success' => false,
-                'message' => 'Payment verification failed',
+                'message' => $result['message'] ?? 'Payment verification failed',
             ];
 
         } catch (Exception $e) {
@@ -413,6 +454,19 @@ class SubscriptionManager
                 'reference' => $reference,
                 'error' => $e->getMessage()
             ]);
+
+            // Try to find and mark transaction as failed
+            try {
+                $transaction = PaymentTransaction::where('transaction_reference', $reference)
+                    ->orWhere('gateway_reference', $reference)
+                    ->first();
+
+                if ($transaction && ($transaction->status === 'pending' || $transaction->status === 'processing')) {
+                    $transaction->markAsFailed('Verification error: ' . $e->getMessage());
+                }
+            } catch (Exception $ex) {
+                // Ignore errors when trying to mark as failed
+            }
 
             return [
                 'success' => false,
