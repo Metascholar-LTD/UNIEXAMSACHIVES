@@ -31,17 +31,20 @@
             position: fixed;
             inset: 0;
             pointer-events: none;
-            z-index: 0;
-            opacity: 0.6;
+            z-index: 1;
+            opacity: 0.4;
         }
 
         .background-paths-container svg {
             width: 100%;
             height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
         }
 
         .background-paths-container path {
-            stroke: rgba(15, 23, 42, 0.1);
+            stroke: rgba(1, 178, 172, 0.15);
             fill: none;
             stroke-linecap: round;
             stroke-linejoin: round;
@@ -50,14 +53,14 @@
         @keyframes pathDraw {
             0% {
                 stroke-dashoffset: 1000;
-                opacity: 0.3;
+                opacity: 0.2;
             }
             50% {
-                opacity: 0.6;
+                opacity: 0.4;
             }
             100% {
                 stroke-dashoffset: 0;
-                opacity: 0.3;
+                opacity: 0.2;
             }
         }
 
@@ -73,7 +76,7 @@
             max-width: 900px;
             width: 100%;
             position: relative;
-            z-index: 10;
+            z-index: 100;
         }
 
         .page-header-modern {
@@ -81,6 +84,8 @@
             align-items: center;
             gap: 1rem;
             margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 100;
         }
 
         .page-header-title {
@@ -134,6 +139,8 @@
             margin-top: 0.5rem;
             color: #6b7280;
             font-size: 0.875rem;
+            position: relative;
+            z-index: 100;
         }
 
         .modern-card {
@@ -143,6 +150,8 @@
             border: 1px solid #e5e7eb;
             margin-bottom: 1.5rem;
             overflow: hidden;
+            position: relative;
+            z-index: 100;
         }
 
         .modern-card-header {
@@ -475,11 +484,16 @@
         // Background Paths Animation
         function createBackgroundPaths(containerId, position) {
             const container = document.getElementById(containerId);
+            if (!container) return;
+            
             const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
             svg.setAttribute('viewBox', '0 0 696 316');
-            svg.setAttribute('class', 'w-full h-full');
+            svg.setAttribute('preserveAspectRatio', 'xMidYMid slice');
             svg.style.width = '100%';
             svg.style.height = '100%';
+            svg.style.position = 'absolute';
+            svg.style.top = '0';
+            svg.style.left = '0';
             
             for (let i = 0; i < 36; i++) {
                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
@@ -496,9 +510,10 @@
                 const d = `M-${xOffset} -${yOffset1}C-${xOffset} -${yOffset1} -${312 - i * 5 * position} ${yOffset2} ${xOffset2} ${yOffset3}C${xOffset3} ${yOffset4} ${xOffset4} ${yOffset5} ${xOffset4} ${yOffset5}`;
                 
                 path.setAttribute('d', d);
-                path.setAttribute('stroke', 'currentColor');
-                path.setAttribute('stroke-width', 0.5 + i * 0.03);
-                path.setAttribute('stroke-opacity', 0.1 + i * 0.03);
+                path.setAttribute('stroke', '#01b2ac');
+                path.setAttribute('stroke-width', (0.5 + i * 0.03).toString());
+                path.setAttribute('stroke-opacity', (0.1 + i * 0.02).toString());
+                path.setAttribute('fill', 'none');
                 path.style.strokeDasharray = '1000';
                 path.style.strokeDashoffset = '1000';
                 
@@ -514,9 +529,11 @@
             container.appendChild(svg);
         }
 
-        // Initialize background paths
-        createBackgroundPaths('backgroundPaths1', 1);
-        createBackgroundPaths('backgroundPaths2', -1);
+        // Initialize background paths on page load
+        window.addEventListener('DOMContentLoaded', () => {
+            createBackgroundPaths('backgroundPaths1', 1);
+            createBackgroundPaths('backgroundPaths2', -1);
+        });
 
         // Title Letter Animation
         function animateTitle() {
@@ -529,9 +546,13 @@
         }
 
         // Start title animation on load
-        window.addEventListener('DOMContentLoaded', () => {
+        if (document.readyState === 'loading') {
+            window.addEventListener('DOMContentLoaded', () => {
+                animateTitle();
+            });
+        } else {
             animateTitle();
-        });
+        }
 
         function selectYears(yearKey) {
             // Remove selected class from all cards
