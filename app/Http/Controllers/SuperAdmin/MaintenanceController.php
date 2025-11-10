@@ -86,7 +86,6 @@ class MaintenanceController extends Controller
             'impact_level' => 'required|in:low,medium,high,critical',
             'affected_services' => 'nullable|array',
             'requires_downtime' => 'boolean',
-            'estimated_downtime_minutes' => 'nullable|integer|min:0',
             'display_banner' => 'boolean',
             'banner_display_from' => 'nullable|date',
             'banner_display_until' => 'nullable|date',
@@ -101,6 +100,13 @@ class MaintenanceController extends Controller
         $validated['requires_downtime'] = $request->has('requires_downtime');
         $validated['display_banner'] = $request->has('display_banner');
         $validated['rollback_available'] = $request->has('rollback_available');
+
+        // Automatically calculate estimated_downtime_minutes from scheduled_start and scheduled_end
+        if ($validated['requires_downtime']) {
+            $start = \Carbon\Carbon::parse($validated['scheduled_start']);
+            $end = \Carbon\Carbon::parse($validated['scheduled_end']);
+            $validated['estimated_downtime_minutes'] = $start->diffInMinutes($end);
+        }
 
         $maintenance = SystemMaintenanceLog::create($validated);
 
@@ -166,7 +172,6 @@ class MaintenanceController extends Controller
             'impact_level' => 'required|in:low,medium,high,critical',
             'affected_services' => 'nullable|array',
             'requires_downtime' => 'boolean',
-            'estimated_downtime_minutes' => 'nullable|integer|min:0',
             'display_banner' => 'boolean',
             'banner_display_from' => 'nullable|date',
             'banner_display_until' => 'nullable|date',
@@ -179,6 +184,16 @@ class MaintenanceController extends Controller
         $validated['requires_downtime'] = $request->has('requires_downtime');
         $validated['display_banner'] = $request->has('display_banner');
         $validated['rollback_available'] = $request->has('rollback_available');
+
+        // Automatically calculate estimated_downtime_minutes from scheduled_start and scheduled_end
+        if ($validated['requires_downtime']) {
+            $start = \Carbon\Carbon::parse($validated['scheduled_start']);
+            $end = \Carbon\Carbon::parse($validated['scheduled_end']);
+            $validated['estimated_downtime_minutes'] = $start->diffInMinutes($end);
+        } else {
+            // Clear estimated_downtime_minutes if requires_downtime is false
+            $validated['estimated_downtime_minutes'] = null;
+        }
 
         $maintenance->update($validated);
 

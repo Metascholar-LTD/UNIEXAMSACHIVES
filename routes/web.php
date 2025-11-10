@@ -47,10 +47,21 @@ Route::post('/clear-session-messages', [App\Http\Controllers\NotificationControl
 // Maintenance Status Check API (accessible during maintenance)
 Route::get('/api/check-maintenance-status', function() {
     $maintenanceMode = \App\Models\SystemSetting::getMaintenanceMode();
-    $activeMaintenance = \App\Models\SystemMaintenanceLog::active()->first();
+    
+    // Also check for active scheduled maintenance that requires downtime
+    $activeScheduledMaintenance = \App\Models\SystemMaintenanceLog::whereIn('status', ['in_progress', 'notified'])
+        ->where('requires_downtime', true)
+        ->where('scheduled_start', '<=', now())
+        ->where('scheduled_end', '>', now())
+        ->first();
+    
+    $activeMaintenance = $activeScheduledMaintenance ?? \App\Models\SystemMaintenanceLog::active()->first();
+    
+    // Maintenance is active if maintenance mode is enabled OR if there's active scheduled maintenance requiring downtime
+    $maintenanceActive = $maintenanceMode || $activeScheduledMaintenance !== null;
     
     return response()->json([
-        'maintenance_active' => $maintenanceMode && $activeMaintenance !== null,
+        'maintenance_active' => $maintenanceActive,
         'maintenance_mode' => $maintenanceMode,
         'has_active_maintenance' => $activeMaintenance !== null,
         'scheduled_end' => $activeMaintenance?->scheduled_end?->toIso8601String(),

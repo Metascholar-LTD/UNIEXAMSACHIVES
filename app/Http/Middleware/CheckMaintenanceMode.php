@@ -46,12 +46,20 @@ class CheckMaintenanceMode
             return $next($request);
         }
 
-        // Check if system is in maintenance mode
+        // Check if system is in maintenance mode OR if there's an active scheduled maintenance that requires downtime
         $maintenanceMode = SystemSetting::getMaintenanceMode();
+        
+        // Also check for active scheduled maintenance that requires downtime
+        $activeScheduledMaintenance = SystemMaintenanceLog::whereIn('status', ['in_progress', 'notified'])
+            ->where('requires_downtime', true)
+            ->where('scheduled_start', '<=', now())
+            ->where('scheduled_end', '>', now())
+            ->first();
 
-        if ($maintenanceMode) {
-            // Get active maintenance log
-            $activeMaintenance = SystemMaintenanceLog::active()->first();
+        // Lock out users if maintenance mode is enabled OR if there's active scheduled maintenance requiring downtime
+        if ($maintenanceMode || $activeScheduledMaintenance) {
+            // Get active maintenance log (prefer the scheduled one if it exists)
+            $activeMaintenance = $activeScheduledMaintenance ?? SystemMaintenanceLog::active()->first();
 
             if ($request->expectsJson()) {
                 return response()->json([

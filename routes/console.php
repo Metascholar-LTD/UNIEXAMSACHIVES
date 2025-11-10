@@ -44,3 +44,10 @@ Schedule::command('subscriptions:suspend-expired')
     ->name('suspend-expired-subscriptions')
     ->withoutOverlapping()
     ->runInBackground();
+
+// Process scheduled maintenance every minute to auto-start/end maintenance
+Schedule::command('maintenance:process-scheduled')
+    ->everyMinute()
+    ->name('process-scheduled-maintenance')
+    ->withoutOverlapping()
+    ->runInBackground();

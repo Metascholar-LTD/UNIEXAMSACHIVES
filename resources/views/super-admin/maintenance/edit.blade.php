@@ -298,11 +298,12 @@
                     <label for="requires_downtime">Requires Downtime</label>
                 </div>
 
-                <div class="form-group-modern" id="downtime_minutes" style="display: {{ $maintenance->requires_downtime ? 'block' : 'none' }};">
-                    <label class="form-label-modern">Estimated Downtime (minutes)</label>
-                    <input type="number" name="estimated_downtime_minutes" 
-                           class="form-control form-control-modern" min="0" 
-                           value="{{ $maintenance->estimated_downtime_minutes }}" placeholder="e.g., 60">
+                <div class="form-group-modern" id="downtime_info" style="display: {{ $maintenance->requires_downtime ? 'block' : 'none' }};">
+                    <label class="form-label-modern">Estimated Downtime</label>
+                    <div class="alert alert-info" style="margin: 0; padding: 12px; background: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 6px; color: #0066cc;">
+                        <i class="icofont-info-circle"></i> 
+                        <span id="calculated_downtime">Calculated automatically from Scheduled Start and End times</span>
+                    </div>
                 </div>
 
                 <div class="checkbox-modern">
@@ -376,10 +377,57 @@
 
 @push('scripts')
 <script>
-    // Toggle downtime minutes field
+    // Toggle downtime info display
     document.getElementById('requires_downtime')?.addEventListener('change', function() {
-        document.getElementById('downtime_minutes').style.display = this.checked ? 'block' : 'none';
+        document.getElementById('downtime_info').style.display = this.checked ? 'block' : 'none';
+        if (this.checked) {
+            calculateDowntime();
+        }
     });
+
+    // Calculate downtime from scheduled start and end
+    function calculateDowntime() {
+        const startInput = document.querySelector('input[name="scheduled_start"]');
+        const endInput = document.querySelector('input[name="scheduled_end"]');
+        const downtimeDisplay = document.getElementById('calculated_downtime');
+        
+        if (!startInput || !endInput || !downtimeDisplay) return;
+        
+        function updateDowntime() {
+            const start = new Date(startInput.value);
+            const end = new Date(endInput.value);
+            
+            if (start && end && end > start) {
+                const diffMs = end - start;
+                const diffMinutes = Math.floor(diffMs / (1000 * 60));
+                const hours = Math.floor(diffMinutes / 60);
+                const minutes = diffMinutes % 60;
+                
+                let displayText = '';
+                if (hours > 0) {
+                    displayText = `${hours} hour${hours > 1 ? 's' : ''}`;
+                    if (minutes > 0) {
+                        displayText += ` ${minutes} minute${minutes > 1 ? 's' : ''}`;
+                    }
+                } else {
+                    displayText = `${minutes} minute${minutes > 1 ? 's' : ''}`;
+                }
+                
+                downtimeDisplay.textContent = `Estimated Downtime: ${displayText} (${diffMinutes} minutes)`;
+            } else {
+                downtimeDisplay.textContent = 'Please set both Scheduled Start and End times';
+            }
+        }
+        
+        startInput.addEventListener('change', updateDowntime);
+        endInput.addEventListener('change', updateDowntime);
+        updateDowntime();
+    }
+    
+    // Initialize on page load if requires_downtime is checked
+    if (document.getElementById('requires_downtime')?.checked) {
+        calculateDowntime();
+    }
 
     // Toggle banner options
     document.getElementById('display_banner')?.addEventListener('change', function() {
