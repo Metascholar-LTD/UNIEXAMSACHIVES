@@ -32,6 +32,10 @@ Route::post('/forgot-password', [PagesController::class, 'sendResetLink'])->name
 Route::get('/reset-password/{token}', [PagesController::class, 'resetPassword'])->name('password.reset');
 Route::post('/reset-password', [PagesController::class, 'updatePassword'])->name('password.update');
 
+// Subscription Routes (accessible when no subscription exists)
+Route::get('/subscription/locked', [\App\Http\Controllers\SubscriptionController::class, 'locked'])->name('subscription.locked');
+Route::post('/subscription/subscribe', [\App\Http\Controllers\SubscriptionController::class, 'subscribe'])->name('subscription.subscribe');
+
 // Legacy redirect for old login-form URL
 Route::get('/login-form', function() {
     return redirect('/login', 301);

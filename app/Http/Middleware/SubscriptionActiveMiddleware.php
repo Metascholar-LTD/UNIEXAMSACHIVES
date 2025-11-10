@@ -22,6 +22,8 @@ class SubscriptionActiveMiddleware
         'super-admin.*', // Super admin routes (separate system)
         'dashboard.profile',
         'dashboard.settings',
+        'subscription.locked', // Subscription locked page
+        'subscription.subscribe', // Subscription creation/payment
     ];
 
     /**
@@ -69,10 +71,11 @@ class SubscriptionActiveMiddleware
                 return $next($request);
             }
 
-            // Suspended - block access
-            $suspendedSubscription = SystemSubscription::where('status', 'suspended')->first();
+            // Check if there's any subscription at all (suspended, expired, etc.)
+            $anySubscription = SystemSubscription::first();
             
-            if ($suspendedSubscription) {
+            if ($anySubscription && $anySubscription->status === 'suspended') {
+                // Suspended - block access
                 if ($request->expectsJson()) {
                     return response()->json([
                         'error' => 'System suspended due to expired subscription. Please contact administrator.',
@@ -82,6 +85,19 @@ class SubscriptionActiveMiddleware
 
                 return redirect()->route('subscription.suspended')
                     ->with('error', 'System access suspended. Please contact your administrator to renew the subscription.');
+            }
+
+            // No subscription exists at all - show locked page
+            if (!$anySubscription) {
+                if ($request->expectsJson()) {
+                    return response()->json([
+                        'error' => 'No active subscription. Please subscribe to continue.',
+                        'status' => 'locked',
+                    ], 403);
+                }
+
+                return redirect()->route('subscription.locked')
+                    ->with('info', 'Please subscribe to access the system.');
             }
         }
 
