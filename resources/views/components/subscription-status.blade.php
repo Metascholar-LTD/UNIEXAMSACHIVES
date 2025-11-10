@@ -161,8 +161,6 @@
         </div>
     </div>
 
-    {{-- Progress Section --}}
-    @if($subscription->status !== 'suspended')
     @php
         // Calculate progress based on remaining time (not elapsed)
         // Full bar (100%) when subscription is new, empty (0%) when about to expire
@@ -176,7 +174,13 @@
         // Color based on remaining time (reverse of elapsed)
         // Green when plenty of time left, red when about to expire
         $progressColor = $progress < 10 ? '#ef4444' : ($progress < 25 ? '#f59e0b' : '#10b981');
+        
+        // Show renew button only when less than 30 days remaining or progress < 25%
+        $showRenewButton = $daysRemaining <= 30 || $progress < 25;
     @endphp
+
+    {{-- Progress Section --}}
+    @if($subscription->status !== 'suspended')
     <div class="progress-section">
         <div class="progress-header">
             <span class="progress-label">Subscription Period</span>
@@ -196,8 +200,9 @@
     {{-- Note: isRegularUser() checks for role='user' which is displayed as "Admin" in UI --}}
     {{-- See ROLE_TERMINOLOGY.md for role terminology documentation --}}
     <div class="subscription-actions">
+        
         @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
-            @if(auth()->user()->isRegularUser())
+            @if(auth()->user()->isRegularUser() && $showRenewButton)
             <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
                 @csrf
                 <button type="submit" class="modern-btn btn-primary">
