@@ -410,7 +410,7 @@
             </div>
             <div class="mt-3">
                 <a href="{{ route('super-admin.subscriptions.show', $payment->subscription->id) }}" class="btn-modern btn-modern-primary">
-                    <i class="icofont-eye"></i> View Subscription
+                    View Subscription
                 </a>
             </div>
         </div>
