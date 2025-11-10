@@ -259,37 +259,84 @@
     {{-- Actions --}}
     <div class="mb-4">
         <a href="{{ route('super-admin.maintenance.index') }}" class="btn-modern btn-modern-primary">
-            <i class="icofont-arrow-left"></i> Back to List
+<i class="icofont-arrow-left"></i> Back to List
         </a>
 
+        @php
+            $now = now();
+            $scheduledStartPassed = $maintenance->scheduled_start->isPast();
+            $scheduledEndPassed = $maintenance->scheduled_end->isPast();
+            $shouldBeInProgress = $scheduledStartPassed && !$scheduledEndPassed;
+            $shouldBeCompleted = $scheduledEndPassed;
+        @endphp
+
         @if(in_array($maintenance->status, ['planned', 'notified']))
-            <a href="{{ route('super-admin.maintenance.edit', $maintenance->id) }}" class="btn-modern btn-modern-primary">
-                <i class="icofont-edit"></i> Edit
-            </a>
-            <form method="POST" action="{{ route('super-admin.maintenance.start', $maintenance->id) }}" class="d-inline">
-                @csrf
-                <button type="submit" class="btn-modern btn-modern-success" 
-                        onclick="return confirm('Are you sure you want to start this maintenance?')">
-                    <i class="icofont-play"></i> Start Maintenance
-                </button>
-            </form>
-            <form method="POST" action="{{ route('super-admin.maintenance.cancel', $maintenance->id) }}" class="d-inline">
-                @csrf
-                <button type="submit" class="btn-modern btn-modern-danger" 
-                        onclick="return confirm('Are you sure you want to cancel this maintenance?')">
-                    <i class="icofont-close"></i> Cancel
-                </button>
-            </form>
+            @if(!$scheduledStartPassed)
+                {{-- Before scheduled start time --}}
+                <a href="{{ route('super-admin.maintenance.edit', $maintenance->id) }}" class="btn-modern btn-modern-primary">
+                    <i class="icofont-edit"></i> Edit
+                </a>
+                <form method="POST" action="{{ route('super-admin.maintenance.start', $maintenance->id) }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn-modern btn-modern-success" 
+                            onclick="return confirm('Are you sure you want to start this maintenance?')">
+                        <i class="icofont-play"></i> Start Maintenance (Manual)
+                    </button>
+                </form>
+                <form method="POST" action="{{ route('super-admin.maintenance.cancel', $maintenance->id) }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn-modern btn-modern-danger" 
+                            onclick="return confirm('Are you sure you want to cancel this maintenance?')">
+                        <i class="icofont-close"></i> Cancel
+                    </button>
+                </form>
+            @else
+                {{-- Scheduled start time has passed but status not updated yet --}}
+                <div class="alert alert-warning d-inline-block" style="margin: 0; padding: 12px 20px; border-radius: 8px;">
+                    <i class="icofont-info-circle"></i> 
+                    <strong>Auto-start pending:</strong> Maintenance should have started automatically. The page will refresh shortly to update the status.
+                    <span id="auto-start-countdown"></span>
+                </div>
+            @endif
         @endif
 
         @if($maintenance->status === 'in_progress')
-            <form method="POST" action="{{ route('super-admin.maintenance.complete', $maintenance->id) }}" class="d-inline">
-                @csrf
-                <button type="submit" class="btn-modern btn-modern-success" 
-                        onclick="return confirm('Are you sure you want to mark this maintenance as completed?')">
-                    <i class="icofont-check"></i> Complete Maintenance
-                </button>
-            </form>
+            @if(!$scheduledEndPassed)
+                {{-- In progress, scheduled end not reached --}}
+                <div class="alert alert-info d-inline-block" style="margin: 0; padding: 12px 20px; border-radius: 8px; margin-right: 10px;">
+                    <i class="icofont-clock-time"></i> 
+                    <strong>Maintenance in Progress</strong> - Will complete automatically at {{ $maintenance->scheduled_end->format('h:i A') }}
+                    <span id="auto-complete-countdown"></span>
+                </div>
+                <form method="POST" action="{{ route('super-admin.maintenance.complete', $maintenance->id) }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn-modern btn-modern-success" 
+                            onclick="return confirm('Are you sure you want to mark this maintenance as completed?')">
+                        <i class="icofont-check"></i> Complete Maintenance (Manual)
+                    </button>
+                </form>
+            @else
+                {{-- Scheduled end passed but status not updated yet --}}
+                <div class="alert alert-warning d-inline-block" style="margin: 0; padding: 12px 20px; border-radius: 8px; margin-right: 10px;">
+                    <i class="icofont-info-circle"></i> 
+                    <strong>Auto-complete pending:</strong> Maintenance will complete automatically. 
+                    <span id="auto-complete-pending"></span>
+                </div>
+                <form method="POST" action="{{ route('super-admin.maintenance.complete', $maintenance->id) }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn-modern btn-modern-success" 
+                            onclick="return confirm('Are you sure you want to mark this maintenance as completed?')">
+                        <i class="icofont-check"></i> Complete Maintenance (Manual)
+                    </button>
+                </form>
+            @endif
+        @endif
+
+        @if($maintenance->status === 'completed' && $scheduledEndPassed)
+            <div class="alert alert-success d-inline-block" style="margin: 0; padding: 12px 20px; border-radius: 8px;">
+                <i class="icofont-check-circled"></i> 
+                <strong>Maintenance Completed</strong> - Finished at {{ $maintenance->actual_end ? $maintenance->actual_end->format('M d, Y h:i A') : $maintenance->scheduled_end->format('M d, Y h:i A') }}
+            </div>
         @endif
 
         @if($maintenance->rollback_available && $maintenance->status === 'completed')
@@ -531,5 +578,101 @@
     </div>
     @endif
 </div>
+
+@push('scripts')
+<script>
+    (function() {
+        const scheduledStart = new Date('{{ $maintenance->scheduled_start->toIso8601String() }}');
+        const scheduledEnd = new Date('{{ $maintenance->scheduled_end->toIso8601String() }}');
+        const currentStatus = '{{ $maintenance->status }}';
+        let refreshInterval;
+        let countdownInterval;
+
+        // Auto-refresh page when scheduled times are reached
+        function checkAndRefresh() {
+            const now = new Date().getTime();
+            const startTime = scheduledStart.getTime();
+            const endTime = scheduledEnd.getTime();
+
+            // If scheduled start has passed and status is still planned/notified, refresh
+            if (now >= startTime && ['planned', 'notified'].includes(currentStatus)) {
+                console.log('Scheduled start time reached, refreshing page...');
+                window.location.reload();
+                return;
+            }
+
+            // If scheduled end has passed and status is still in_progress, refresh
+            if (now >= endTime && currentStatus === 'in_progress') {
+                console.log('Scheduled end time reached, refreshing page...');
+                window.location.reload();
+                return;
+            }
+        }
+
+        // Update countdown displays
+        function updateCountdowns() {
+            const now = new Date().getTime();
+            
+            // Auto-start countdown (shows when start time has passed but status not updated)
+            const autoStartEl = document.getElementById('auto-start-countdown');
+            if (autoStartEl && (currentStatus === 'planned' || currentStatus === 'notified')) {
+                const startTime = scheduledStart.getTime();
+                const distance = now - startTime; // Time since start time passed
+                
+                if (distance > 0) {
+                    // Start time has passed, show refresh message
+                    const secondsSinceStart = Math.floor(distance / 1000);
+                    if (secondsSinceStart < 60) {
+                        autoStartEl.textContent = `(refreshing in ${60 - secondsSinceStart}s...)`;
+                    } else {
+                        autoStartEl.textContent = '(refreshing...)';
+                    }
+                }
+            }
+
+            // Auto-complete countdown
+            const autoCompleteEl = document.getElementById('auto-complete-countdown');
+            if (autoCompleteEl && currentStatus === 'in_progress') {
+                const endTime = scheduledEnd.getTime();
+                const distance = endTime - now;
+                
+                if (distance > 0) {
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+                    
+                    if (hours > 0) {
+                        autoCompleteEl.textContent = `(${hours}h ${minutes}m ${seconds}s remaining)`;
+                    } else {
+                        autoCompleteEl.textContent = `(${minutes}m ${seconds}s remaining)`;
+                    }
+                } else {
+                    autoCompleteEl.textContent = '(completing...)';
+                }
+            }
+
+            // Auto-complete pending
+            const autoCompletePendingEl = document.getElementById('auto-complete-pending');
+            if (autoCompletePendingEl) {
+                autoCompletePendingEl.textContent = '(refreshing...)';
+            }
+        }
+
+        // Check every 5 seconds if we need to refresh
+        refreshInterval = setInterval(checkAndRefresh, 5000);
+
+        // Update countdowns every second
+        countdownInterval = setInterval(updateCountdowns, 1000);
+        updateCountdowns(); // Initial call
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', function() {
+            if (refreshInterval) clearInterval(refreshInterval);
+            if (countdownInterval) clearInterval(countdownInterval);
+        });
+    })();
+</script>
+@endpush
+
 @endsection
 
