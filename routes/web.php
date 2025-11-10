@@ -274,6 +274,12 @@ Route::get('/super-admin/login', function() {
 
 Route::post('/super-admin/login', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'login'])->name('super-admin.login.post');
 
+// Payment callback (no auth required - payment reference is used for verification)
+// MUST be defined BEFORE the super-admin group to avoid middleware conflicts
+// This is needed because Paystack redirects back and session might be lost
+Route::get('/super-admin/payments/callback', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'callback'])
+    ->name('super-admin.payments.callback');
+
 // Protected Super Admin Routes
 // Note: Only using 'super_admin' middleware which handles auth check and redirects to super-admin.login
 Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])->group(function () {
@@ -325,12 +331,6 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])-
     Route::post('/settings/import', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'import'])->name('settings.import');
     Route::post('/settings/reset', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'reset'])->name('settings.reset');
 });
-
-// Payment callback (accessible to authenticated users, not just super admins)
-// This is needed because Paystack redirects back and session might be lost
-Route::get('/super-admin/payments/callback', [\App\Http\Controllers\SuperAdmin\PaymentController::class, 'callback'])
-    ->middleware(['auth'])
-    ->name('super-admin.payments.callback');
 
 // Webhook endpoints (no auth required)
 Route::post('/webhooks/paystack', [\App\Http\Controllers\SuperAdmin\WebhookController::class, 'paystack'])->name('webhooks.paystack');
