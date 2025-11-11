@@ -136,7 +136,7 @@
         }
 
         .invoice-table th {
-            padding: 10pt 8pt;
+            padding: 10pt 6pt;
             text-align: left;
             font-weight: bold;
             font-size: 7.5pt;
@@ -144,34 +144,35 @@
             color: #000;
             border-bottom: 1px solid #e5e7eb;
             letter-spacing: 0.2pt;
+            white-space: nowrap;
         }
 
         .invoice-table th:nth-child(1) {
-            width: 30%;
+            width: 28%;
         }
 
         .invoice-table th:nth-child(2) {
-            width: 12%;
+            width: 11%;
         }
 
         .invoice-table th:nth-child(3) {
-            width: 12%;
+            width: 11%;
         }
 
         .invoice-table th:nth-child(4) {
-            width: 15%;
+            width: 16%;
         }
 
         .invoice-table th:nth-child(5) {
-            width: 10%;
+            width: 8%;
         }
 
         .invoice-table th:nth-child(6) {
-            width: 21%;
+            width: 26%;
         }
 
         .invoice-table td {
-            padding: 12pt 8pt;
+            padding: 12pt 6pt;
             border-bottom: 1px solid #f3f4f6;
             font-size: 8.5pt;
             color: #1f2937;
