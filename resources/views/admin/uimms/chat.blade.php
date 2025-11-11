@@ -51,7 +51,8 @@
                                         {{ $memo->memo_status ?? 'pending' }}
                                     </span>
                                     @if(($memo->memo_status ?? 'pending') === 'pending')
-                                        <i class="icofont-flag urgency-flag-icon" onclick="showUrgencyAlertDialog({{ $memo->id }})" title="Send Urgency Alert" style="color: #dc3545; font-size: 1.1rem; cursor: pointer; transition: all 0.2s ease; margin-left: 8px;"></i>
+                                        <span class="memo-status-separator" style="width: 1px; height: 16px; background-color: #dee2e6; margin: 0 6px; display: inline-block;"></span>
+                                        <i class="icofont-flag urgency-flag-icon" onclick="showUrgencyAlertDialog({{ $memo->id }})" title="Send Urgency Alert" style="color: #dc3545; font-size: 1.1rem; cursor: pointer; transition: all 0.2s ease; margin-left: 0; padding: 4px; border: 1px solid #dc3545; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center;"></i>
                                     @endif
                                 </div>
                                 <div class="chat-actions">

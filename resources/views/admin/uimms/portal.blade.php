@@ -704,12 +704,28 @@
                                             font-size: 1.1rem;
                                             cursor: pointer;
                                             transition: all 0.2s ease;
-                                            margin-left: 4px;
+                                            margin-left: 8px;
+                                            padding: 4px;
+                                            border: 1px solid #dc3545;
+                                            border-radius: 4px;
+                                            display: inline-flex;
+                                            align-items: center;
+                                            justify-content: center;
                                         }
                                         
                                         .urgency-flag-icon:hover {
-                                            transform: scale(1.2);
+                                            transform: scale(1.1);
                                             color: #c82333;
+                                            border-color: #c82333;
+                                            background-color: rgba(220, 53, 69, 0.1);
+                                        }
+                                        
+                                        .memo-status-separator {
+                                            width: 1px;
+                                            height: 16px;
+                                            background-color: #dee2e6;
+                                            margin: 0 6px;
+                                            display: inline-block;
                                         }
                                         
                                         /* Urgency Alert Dialog Styles */
@@ -991,7 +1007,7 @@
                                                                                 ` : ''}
                                                                                 <div class="memo-right-badges">
                                                                                     <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
-                                                                                    ${memo.memo_status === 'pending' ? `<i class="icofont-flag urgency-flag-icon" onclick="event.stopPropagation(); showUrgencyAlertDialog(${memo.id})" title="Send Urgency Alert"></i>` : ''}
+                                                                                    ${memo.memo_status === 'pending' ? `<span class="memo-status-separator"></span><i class="icofont-flag urgency-flag-icon" onclick="event.stopPropagation(); showUrgencyAlertDialog(${memo.id})" title="Send Urgency Alert"></i>` : ''}
                                                                                     ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
                                                                                     <i class="icofont-bookmark bookmark-icon ${memo.is_bookmarked ? 'bookmarked' : ''}" onclick="event.stopPropagation(); toggleBookmark(${memo.id}, this)" title="${memo.is_bookmarked ? 'Remove from Keep in View' : 'Add to Keep in View'}"></i>
                                                                                 </div>
