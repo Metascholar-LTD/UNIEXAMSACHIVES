@@ -296,7 +296,7 @@
         }
 
         .summary-table td {
-            padding: 2pt 0;
+            padding: 0.5pt 0;
             font-size: 8.5pt;
             vertical-align: top;
         }
@@ -322,12 +322,12 @@
 
         .summary-total {
             border-top: 1px solid #e5e7eb;
-            padding-top: 4pt;
-            margin-top: 4pt;
+            padding-top: 1pt;
+            margin-top: 1pt;
         }
 
         .summary-total td {
-            padding-top: 4pt;
+            padding-top: 1pt;
         }
 
         /* PDF-specific optimizations */
