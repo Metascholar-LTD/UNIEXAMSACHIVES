@@ -125,99 +125,117 @@
             color: #4b5563;
         }
 
-        /* Table Section */
+        /* Table Section - Inspired by shadcn/ui table structure */
+        .table-wrapper {
+            width: 100%;
+            position: relative;
+            margin-bottom: 20pt;
+        }
+
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 20pt;
-            margin-left: 0;
-            margin-right: 0;
+            margin: 0;
             padding: 0;
             table-layout: fixed;
+            caption-side: bottom;
+            font-size: 8.5pt;
         }
 
         .invoice-table thead {
             background: transparent;
         }
 
-        .invoice-table th {
+        .table-row-header {
+            border-bottom: 1px solid #e5e7eb;
+            transition: none;
+        }
+
+        .table-head {
             padding: 10pt 14pt;
             text-align: left;
             font-weight: bold;
             font-size: 7.5pt;
             text-transform: uppercase;
             color: #000;
-            border-bottom: 1px solid #e5e7eb;
+            vertical-align: middle;
             letter-spacing: 0.2pt;
             white-space: nowrap;
         }
 
-        .invoice-table th:nth-child(1) {
+        .table-head:nth-child(1),
+        .table-cell:nth-child(1) {
             width: 22%;
+        }
+
+        .table-head:nth-child(1) {
             padding-left: 0;
         }
 
-        .invoice-table th:nth-child(2) {
+        .table-head:nth-child(2),
+        .table-cell:nth-child(2) {
             width: 10%;
         }
 
-        .invoice-table th:nth-child(3) {
+        .table-head:nth-child(3),
+        .table-cell:nth-child(3) {
             width: 15%;
             padding-left: 24pt;
         }
 
-        .invoice-table th:nth-child(4) {
+        .table-head:nth-child(4),
+        .table-cell:nth-child(4) {
             width: 19%;
             padding-left: 24pt;
         }
 
-        .invoice-table th:nth-child(5) {
+        .table-head:nth-child(5),
+        .table-cell:nth-child(5) {
             width: 10%;
             padding-left: 24pt;
         }
 
-        .invoice-table th:nth-child(6) {
+        .table-head:nth-child(6),
+        .table-cell:nth-child(6) {
             width: 24%;
             padding-left: 24pt;
+        }
+
+        .table-head:nth-child(6) {
             padding-right: 0;
         }
 
-        .invoice-table td {
+        .table-row {
+            border-bottom: 1px solid #f3f4f6;
+            transition: none;
+        }
+
+        .table-row:last-child {
+            border-bottom: 0;
+        }
+
+        .table-cell {
             padding: 12pt 14pt;
             text-align: left;
-            border-bottom: 1px solid #f3f4f6;
             font-size: 8.5pt;
             color: #1f2937;
             vertical-align: top;
         }
 
-        .invoice-table td:nth-child(1) {
+        .table-cell:nth-child(1) {
             word-wrap: break-word;
             padding-left: 0;
         }
 
-        .invoice-table td:nth-child(2) {
+        .table-cell:nth-child(2),
+        .table-cell:nth-child(3),
+        .table-cell:nth-child(4),
+        .table-cell:nth-child(5),
+        .table-cell:nth-child(6) {
             white-space: nowrap;
         }
 
-        .invoice-table td:nth-child(3) {
-            white-space: nowrap;
-            padding-left: 24pt;
-        }
-
-        .invoice-table td:nth-child(4) {
-            white-space: nowrap;
-            padding-left: 24pt;
-        }
-
-        .invoice-table td:nth-child(5) {
-            white-space: nowrap;
-            padding-left: 24pt;
-        }
-
-        .invoice-table td:nth-child(6) {
-            white-space: nowrap;
-            padding-left: 24pt;
+        .table-cell:nth-child(6) {
             padding-right: 0;
         }
 
@@ -354,53 +372,55 @@
             </div>
         </div>
 
-        <!-- Invoice Table -->
-        <table class="invoice-table">
-            <thead>
-                <tr>
-                    <th>Description</th>
-                    <th>Price</th>
-                    <th>Discount</th>
-                    <th>Total Excl. VAT</th>
-                    <th>VAT</th>
-                    <th>Amount ({{ $payment->currency }})</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <div class="service-description">
-                            {{ ucfirst(str_replace('_', ' ', $payment->transaction_type)) }}
-                            @if($payment->subscription)
-                                (billed every {{ $payment->subscription->renewal_cycle == 'annual' ? 'year' : $payment->subscription->renewal_cycle }})
-                            @endif
-                        </div>
-                        @if($payment->subscription)
-                            <div class="service-dates">
-                                {{ $payment->subscription->subscription_start_date->format('M d, Y') }} to {{ $payment->subscription->subscription_end_date->format('M d, Y') }}
+        <!-- Invoice Table - Clean structure inspired by shadcn/ui -->
+        <div class="table-wrapper">
+            <table class="invoice-table">
+                <thead class="table-header">
+                    <tr class="table-row-header">
+                        <th class="table-head">Description</th>
+                        <th class="table-head">Price</th>
+                        <th class="table-head">Discount</th>
+                        <th class="table-head">Total Excl. VAT</th>
+                        <th class="table-head">VAT</th>
+                        <th class="table-head">Amount ({{ $payment->currency }})</th>
+                    </tr>
+                </thead>
+                <tbody class="table-body">
+                    <tr class="table-row">
+                        <td class="table-cell">
+                            <div class="service-description">
+                                {{ ucfirst(str_replace('_', ' ', $payment->transaction_type)) }}
+                                @if($payment->subscription)
+                                    (billed every {{ $payment->subscription->renewal_cycle == 'annual' ? 'year' : $payment->subscription->renewal_cycle }})
+                                @endif
                             </div>
-                        @endif
-                    </td>
-                    <td>
-                        @if($payment->original_amount && $payment->original_amount != $payment->amount)
-                            {{ $payment->currency }} {{ number_format($payment->original_amount, 2) }} x 1
-                        @else
-                            {{ $payment->currency }} {{ number_format($payment->amount, 2) }} x 1
-                        @endif
-                    </td>
-                    <td>
-                        @if($payment->discount_amount && $payment->discount_amount > 0)
-                            ({{ $payment->currency }} {{ number_format($payment->discount_amount, 2) }})
-                        @else
-                            -
-                        @endif
-                    </td>
-                    <td>{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</td>
-                    <td>{{ $payment->currency }} 0.00</td>
-                    <td class="amount-bold">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</td>
-                </tr>
-            </tbody>
-        </table>
+                            @if($payment->subscription)
+                                <div class="service-dates">
+                                    {{ $payment->subscription->subscription_start_date->format('M d, Y') }} to {{ $payment->subscription->subscription_end_date->format('M d, Y') }}
+                                </div>
+                            @endif
+                        </td>
+                        <td class="table-cell">
+                            @if($payment->original_amount && $payment->original_amount != $payment->amount)
+                                {{ $payment->currency }} {{ number_format($payment->original_amount, 2) }} x 1
+                            @else
+                                {{ $payment->currency }} {{ number_format($payment->amount, 2) }} x 1
+                            @endif
+                        </td>
+                        <td class="table-cell">
+                            @if($payment->discount_amount && $payment->discount_amount > 0)
+                                ({{ $payment->currency }} {{ number_format($payment->discount_amount, 2) }})
+                            @else
+                                -
+                            @endif
+                        </td>
+                        <td class="table-cell">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</td>
+                        <td class="table-cell">{{ $payment->currency }} 0.00</td>
+                        <td class="table-cell amount-bold">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
         <!-- Summary -->
         <table class="summary-table invoice-summary">
