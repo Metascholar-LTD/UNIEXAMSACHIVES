@@ -296,7 +296,7 @@
         }
 
         .summary-table td {
-            padding: 6pt 0;
+            padding: 2pt 0;
             font-size: 8.5pt;
             vertical-align: top;
         }
@@ -322,12 +322,12 @@
 
         .summary-total {
             border-top: 1px solid #e5e7eb;
-            padding-top: 10pt;
-            margin-top: 6pt;
+            padding-top: 4pt;
+            margin-top: 4pt;
         }
 
         .summary-total td {
-            padding-top: 10pt;
+            padding-top: 4pt;
         }
 
         /* PDF-specific optimizations */
@@ -364,7 +364,7 @@
                         <div>P.O Box SY649, Sunyani</div>
                         <div>BS-0272-8085, Berekum Road</div>
                         <div>www.metascholar.academicdigital.space</div>
-                        <div class="vat-reg">VAT Reg #: CY10301365E</div>
+                        <div class="vat-reg">VAT Reg #: <strong>CY10301365E</strong></div>
                     </div>
                 </td>
                 <td class="invoice-details">
