@@ -28,7 +28,7 @@
                 </li>
                 <li>
                     <a class="{{ request()->routeIs('dashboard.profile') ? 'active' : '' }}" href="{{route('dashboard.profile')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873488/profile_pouo8w.png" alt="My Profile" style="width: 24px; height: 24px; object-fit: contain;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873707/profile_xhxr7e.gif" alt="My Profile" style="width: 24px; height: 24px; object-fit: contain;">
                         My Profile</a>
                 </li>
                 {{-- Memos Portal - Single Link (No Dropdown) --}}
