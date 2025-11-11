@@ -105,7 +105,12 @@ class PaymentHistoryController extends Controller
             $payment->generateInvoiceNumber();
         }
 
-        $pdf = Pdf::loadView('dashboard.payment-history.invoice-pdf', compact('payment'));
+        $pdf = Pdf::loadView('dashboard.payment-history.invoice-pdf', compact('payment'))
+            ->setPaper('a4', 'portrait')
+            ->setOption('margin-top', 20)
+            ->setOption('margin-right', 20)
+            ->setOption('margin-bottom', 20)
+            ->setOption('margin-left', 20);
 
         return $pdf->download("invoice-{$payment->invoice_number}.pdf");
     }
