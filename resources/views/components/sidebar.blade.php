@@ -90,22 +90,12 @@
                 </li>
                 <li>
                     <a class="{{ request()->routeIs('dashboard.approve.exams') ? 'active' : '' }}" href="{{route('dashboard.approve.exams')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-bookmark">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892670/exam_esftn0.png" alt="Approved Exams" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Approved Exams </a><span class="dashboard__label">{{$approvedCount}}</span>
                 </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.upload.document') ? 'active' : '' }}" href="{{route('dashboard.upload.document')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-bookmark">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                            </svg>
+                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892811/exam_1_jho0sq.png" alt="All Exams Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                             All Exams Archive</a><span class="dashboard__label">{{$allExansCount}}</span>
                     </li>
                 @endif
@@ -126,24 +116,14 @@
                     </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.all.approve.exams') ? 'active' : '' }}" href="{{route('dashboard.all.approve.exams')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-bookmark">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                            </svg>
+                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892670/exam_esftn0.png" alt="Approved Exams" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                             Approved Exams
                         </a><span class="dashboard__label">{{$approvedCount}}</span>
 
                     </li>
                         <li>
                             <a class="{{ request()->routeIs('dashboard.all.upload.document') ? 'active' : '' }}" href="{{route('dashboard.all.upload.document')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-bookmark">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                                </svg>
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892811/exam_1_jho0sq.png" alt="All Exams Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 All Exams Archive
                             </a><span class="dashboard__label">{{$allExansCount}}</span>
 
