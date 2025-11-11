@@ -158,11 +158,12 @@
         }
 
         .invoice-table th:nth-child(2) {
-            width: 12%;
+            width: 11%;
         }
 
         .invoice-table th:nth-child(3) {
-            width: 15%;
+            width: 16%;
+            padding-left: 18pt;
         }
 
         .invoice-table th:nth-child(4) {
@@ -193,10 +194,14 @@
         }
 
         .invoice-table td:nth-child(2),
-        .invoice-table td:nth-child(3),
         .invoice-table td:nth-child(4),
         .invoice-table td:nth-child(5) {
             white-space: nowrap;
+        }
+
+        .invoice-table td:nth-child(3) {
+            white-space: nowrap;
+            padding-left: 18pt;
         }
 
         .invoice-table td:nth-child(6) {
