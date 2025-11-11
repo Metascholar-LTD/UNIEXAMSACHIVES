@@ -148,27 +148,27 @@
         }
 
         .invoice-table th:nth-child(1) {
-            width: 28%;
+            width: 24%;
         }
 
         .invoice-table th:nth-child(2) {
-            width: 11%;
+            width: 13%;
         }
 
         .invoice-table th:nth-child(3) {
-            width: 11%;
+            width: 13%;
         }
 
         .invoice-table th:nth-child(4) {
-            width: 16%;
+            width: 17%;
         }
 
         .invoice-table th:nth-child(5) {
-            width: 8%;
+            width: 9%;
         }
 
         .invoice-table th:nth-child(6) {
-            width: 26%;
+            width: 24%;
         }
 
         .invoice-table td {
