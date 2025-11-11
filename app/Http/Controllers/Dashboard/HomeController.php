@@ -1922,4 +1922,94 @@ class HomeController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Send urgency alert email for a pending memo
+     */
+    public function sendUrgencyAlert(EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        $sender = Auth::user();
+        
+        try {
+            // Check if memo is pending
+            if ($memo->memo_status !== 'pending') {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Urgency alerts can only be sent for pending memos.'
+                ], 400);
+            }
+            
+            // Check if user is a participant in this memo
+            $isActiveParticipant = $memo->isActiveParticipant($userId);
+            $isRecipient = $memo->recipients()->where('user_id', $userId)->exists();
+            $isCreator = $memo->created_by === $userId;
+            
+            if (!$isActiveParticipant && !$isRecipient && !$isCreator) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'You are not a participant in this memo.'
+                ], 403);
+            }
+            
+            // Get all active participants and recipients
+            $recipients = collect();
+            
+            // Add active participants
+            $activeParticipants = $memo->activeParticipants()->with('user')->get();
+            foreach ($activeParticipants as $participant) {
+                if ($participant->user && $participant->user->id !== $userId) {
+                    $recipients->push($participant->user);
+                }
+            }
+            
+            // Add other recipients
+            $otherRecipients = $memo->recipients()->with('user')->get();
+            foreach ($otherRecipients as $recipient) {
+                if ($recipient->user && $recipient->user->id !== $userId && !$recipients->contains('id', $recipient->user->id)) {
+                    $recipients->push($recipient->user);
+                }
+            }
+            
+            // Add creator if different from sender
+            if ($memo->creator && $memo->creator->id !== $userId && !$recipients->contains('id', $memo->creator->id)) {
+                $recipients->push($memo->creator);
+            }
+            
+            // Send email to each recipient
+            $sentCount = 0;
+            foreach ($recipients as $recipient) {
+                try {
+                    Mail::to($recipient->email)->send(new \App\Mail\MemoUrgencyReminder(
+                        $memo,
+                        $sender,
+                        $recipient
+                    ));
+                    $sentCount++;
+                } catch (\Exception $e) {
+                    \Log::error('Failed to send urgency alert to ' . $recipient->email . ': ' . $e->getMessage());
+                }
+            }
+            
+            if ($sentCount === 0) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No recipients found to send the urgency alert to.'
+                ], 400);
+            }
+            
+            return response()->json([
+                'success' => true,
+                'message' => "Urgency alert sent successfully to {$sentCount} recipient(s).",
+                'sent_count' => $sentCount
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in sendUrgencyAlert: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to send urgency alert. Please try again.'
+            ], 500);
+        }
+    }
 }

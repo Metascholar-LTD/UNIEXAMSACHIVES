@@ -50,6 +50,9 @@
                                     <span class="status-badge status-{{ $memo->memo_status ?? 'pending' }}">
                                         {{ $memo->memo_status ?? 'pending' }}
                                     </span>
+                                    @if(($memo->memo_status ?? 'pending') === 'pending')
+                                        <i class="icofont-flag urgency-flag-icon" onclick="showUrgencyAlertDialog({{ $memo->id }})" title="Send Urgency Alert" style="color: #dc3545; font-size: 1.1rem; cursor: pointer; transition: all 0.2s ease; margin-left: 8px;"></i>
+                                    @endif
                                 </div>
                                 <div class="chat-actions">
                                     @php
@@ -3470,5 +3473,99 @@ function exportChatConversation() {
     }
 }
 </style>
+
+<!-- Urgency Alert Dialog -->
+<div class="urgency-dialog-overlay" id="urgency-alert-dialog" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0, 0, 0, 0.5); z-index: 10000; align-items: center; justify-content: center;">
+    <div class="urgency-dialog" onclick="event.stopPropagation()" style="background: white; border-radius: 12px; padding: 24px; max-width: 400px; width: 90%; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);">
+        <div class="urgency-dialog-header" style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+            <i class="icofont-flag" style="font-size: 24px; color: #dc3545;"></i>
+            <h3 style="font-size: 18px; font-weight: 600; color: #333; margin: 0;">Send Urgency Alert</h3>
+        </div>
+        <p style="font-size: 14px; color: #666; margin-bottom: 24px; line-height: 1.5;">
+            You are about to send an urgency alert email to all participants of this pending memo. This will notify them that the memo requires immediate attention.
+        </p>
+        <div style="display: flex; gap: 12px; justify-content: flex-end;">
+            <button class="urgency-dialog-btn-cancel" id="urgency-cancel-btn" onclick="closeUrgencyAlertDialog()" style="padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; background-color: #e9ecef; color: #495057;">Cancel</button>
+            <button class="urgency-dialog-btn-confirm" id="urgency-confirm-btn" onclick="sendUrgencyAlert()" style="padding: 10px 20px; border: none; border-radius: 6px; font-size: 14px; font-weight: 600; cursor: pointer; background-color: #dc3545; color: white;">Yes, Send Alert</button>
+        </div>
+    </div>
+</div>
+
+<script>
+// Urgency Alert Dialog Functions for Chat View
+let currentUrgencyMemoId = null;
+
+function showUrgencyAlertDialog(memoId) {
+    currentUrgencyMemoId = memoId;
+    const dialog = document.getElementById('urgency-alert-dialog');
+    if (dialog) {
+        dialog.style.display = 'flex';
+    }
+}
+
+function closeUrgencyAlertDialog() {
+    const dialog = document.getElementById('urgency-alert-dialog');
+    if (dialog) {
+        dialog.style.display = 'none';
+    }
+    currentUrgencyMemoId = null;
+}
+
+function sendUrgencyAlert() {
+    if (!currentUrgencyMemoId) return;
+    
+    const confirmBtn = document.getElementById('urgency-confirm-btn');
+    const cancelBtn = document.getElementById('urgency-cancel-btn');
+    
+    // Disable buttons
+    confirmBtn.disabled = true;
+    cancelBtn.disabled = true;
+    confirmBtn.textContent = 'Sending...';
+    
+    fetch(`/dashboard/uimms/memo/${currentUrgencyMemoId}/send-urgency-alert`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Accept': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        credentials: 'same-origin'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('Urgency alert sent successfully!');
+            closeUrgencyAlertDialog();
+        } else {
+            alert('Error: ' + (data.message || 'Failed to send urgency alert'));
+            // Re-enable buttons on error
+            confirmBtn.disabled = false;
+            cancelBtn.disabled = false;
+            confirmBtn.textContent = 'Yes, Send Alert';
+        }
+    })
+    .catch(error => {
+        console.error('Error sending urgency alert:', error);
+        alert('Error sending urgency alert. Please try again.');
+        // Re-enable buttons on error
+        confirmBtn.disabled = false;
+        cancelBtn.disabled = false;
+        confirmBtn.textContent = 'Yes, Send Alert';
+    });
+}
+
+// Close dialog when clicking overlay
+document.addEventListener('DOMContentLoaded', function() {
+    const overlay = document.getElementById('urgency-alert-dialog');
+    if (overlay) {
+        overlay.addEventListener('click', function(e) {
+            if (e.target === overlay) {
+                closeUrgencyAlertDialog();
+            }
+        });
+    }
+});
+</script>
 
 @endsection

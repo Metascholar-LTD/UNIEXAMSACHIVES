@@ -698,6 +698,123 @@
                                         .bookmark-icon:not(.bookmarked):hover {
                                             color: #ffc107;
                                         }
+                                        
+                                        .urgency-flag-icon {
+                                            color: #dc3545;
+                                            font-size: 1.1rem;
+                                            cursor: pointer;
+                                            transition: all 0.2s ease;
+                                            margin-left: 4px;
+                                        }
+                                        
+                                        .urgency-flag-icon:hover {
+                                            transform: scale(1.2);
+                                            color: #c82333;
+                                        }
+                                        
+                                        /* Urgency Alert Dialog Styles */
+                                        .urgency-dialog-overlay {
+                                            display: none;
+                                            position: fixed;
+                                            top: 0;
+                                            left: 0;
+                                            width: 100%;
+                                            height: 100%;
+                                            background-color: rgba(0, 0, 0, 0.5);
+                                            z-index: 10000;
+                                            align-items: center;
+                                            justify-content: center;
+                                        }
+                                        
+                                        .urgency-dialog-overlay.show {
+                                            display: flex;
+                                        }
+                                        
+                                        .urgency-dialog {
+                                            background: white;
+                                            border-radius: 12px;
+                                            padding: 24px;
+                                            max-width: 400px;
+                                            width: 90%;
+                                            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+                                            animation: slideIn 0.3s ease;
+                                        }
+                                        
+                                        @keyframes slideIn {
+                                            from {
+                                                transform: translateY(-20px);
+                                                opacity: 0;
+                                            }
+                                            to {
+                                                transform: translateY(0);
+                                                opacity: 1;
+                                            }
+                                        }
+                                        
+                                        .urgency-dialog-header {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 12px;
+                                            margin-bottom: 16px;
+                                        }
+                                        
+                                        .urgency-dialog-icon {
+                                            font-size: 24px;
+                                            color: #dc3545;
+                                        }
+                                        
+                                        .urgency-dialog-title {
+                                            font-size: 18px;
+                                            font-weight: 600;
+                                            color: #333;
+                                            margin: 0;
+                                        }
+                                        
+                                        .urgency-dialog-message {
+                                            font-size: 14px;
+                                            color: #666;
+                                            margin-bottom: 24px;
+                                            line-height: 1.5;
+                                        }
+                                        
+                                        .urgency-dialog-actions {
+                                            display: flex;
+                                            gap: 12px;
+                                            justify-content: flex-end;
+                                        }
+                                        
+                                        .urgency-dialog-btn {
+                                            padding: 10px 20px;
+                                            border: none;
+                                            border-radius: 6px;
+                                            font-size: 14px;
+                                            font-weight: 600;
+                                            cursor: pointer;
+                                            transition: all 0.2s ease;
+                                        }
+                                        
+                                        .urgency-dialog-btn-cancel {
+                                            background-color: #e9ecef;
+                                            color: #495057;
+                                        }
+                                        
+                                        .urgency-dialog-btn-cancel:hover {
+                                            background-color: #dee2e6;
+                                        }
+                                        
+                                        .urgency-dialog-btn-confirm {
+                                            background-color: #dc3545;
+                                            color: white;
+                                        }
+                                        
+                                        .urgency-dialog-btn-confirm:hover {
+                                            background-color: #c82333;
+                                        }
+                                        
+                                        .urgency-dialog-btn:disabled {
+                                            opacity: 0.6;
+                                            cursor: not-allowed;
+                                        }
                                         </style>
 
                                         <script>
@@ -874,6 +991,7 @@
                                                                                 ` : ''}
                                                                                 <div class="memo-right-badges">
                                                                                     <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
+                                                                                    ${memo.memo_status === 'pending' ? `<i class="icofont-flag urgency-flag-icon" onclick="event.stopPropagation(); showUrgencyAlertDialog(${memo.id})" title="Send Urgency Alert"></i>` : ''}
                                                                                     ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
                                                                                     <i class="icofont-bookmark bookmark-icon ${memo.is_bookmarked ? 'bookmarked' : ''}" onclick="event.stopPropagation(); toggleBookmark(${memo.id}, this)" title="${memo.is_bookmarked ? 'Remove from Keep in View' : 'Add to Keep in View'}"></i>
                                                                                 </div>
@@ -1155,6 +1273,81 @@
                                             });
                                         }
 
+                                        // Urgency Alert Dialog Functions
+                                        let currentUrgencyMemoId = null;
+                                        
+                                        function showUrgencyAlertDialog(memoId) {
+                                            currentUrgencyMemoId = memoId;
+                                            const dialog = document.getElementById('urgency-alert-dialog');
+                                            if (dialog) {
+                                                dialog.classList.add('show');
+                                            }
+                                        }
+                                        
+                                        function closeUrgencyAlertDialog() {
+                                            const dialog = document.getElementById('urgency-alert-dialog');
+                                            if (dialog) {
+                                                dialog.classList.remove('show');
+                                            }
+                                            currentUrgencyMemoId = null;
+                                        }
+                                        
+                                        function sendUrgencyAlert() {
+                                            if (!currentUrgencyMemoId) return;
+                                            
+                                            const confirmBtn = document.getElementById('urgency-confirm-btn');
+                                            const cancelBtn = document.getElementById('urgency-cancel-btn');
+                                            
+                                            // Disable buttons
+                                            confirmBtn.disabled = true;
+                                            cancelBtn.disabled = true;
+                                            confirmBtn.textContent = 'Sending...';
+                                            
+                                            fetch(`/dashboard/uimms/memo/${currentUrgencyMemoId}/send-urgency-alert`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                                    'Accept': 'application/json',
+                                                    'X-Requested-With': 'XMLHttpRequest'
+                                                },
+                                                credentials: 'same-origin'
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    alert('Urgency alert sent successfully!');
+                                                    closeUrgencyAlertDialog();
+                                                } else {
+                                                    alert('Error: ' + (data.message || 'Failed to send urgency alert'));
+                                                    // Re-enable buttons on error
+                                                    confirmBtn.disabled = false;
+                                                    cancelBtn.disabled = false;
+                                                    confirmBtn.textContent = 'Yes, Send Alert';
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error sending urgency alert:', error);
+                                                alert('Error sending urgency alert. Please try again.');
+                                                // Re-enable buttons on error
+                                                confirmBtn.disabled = false;
+                                                cancelBtn.disabled = false;
+                                                confirmBtn.textContent = 'Yes, Send Alert';
+                                            });
+                                        }
+                                        
+                                        // Close dialog when clicking overlay
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const overlay = document.getElementById('urgency-alert-dialog');
+                                            if (overlay) {
+                                                overlay.addEventListener('click', function(e) {
+                                                    if (e.target === overlay) {
+                                                        closeUrgencyAlertDialog();
+                                                    }
+                                                });
+                                            }
+                                        });
+
                                         // Auto-refresh every 30 seconds
                                         setInterval(() => {
                                             if (currentStatus) {
@@ -1371,4 +1564,22 @@
         </div>
     </div>
 </div>
+
+<!-- Urgency Alert Dialog -->
+<div class="urgency-dialog-overlay" id="urgency-alert-dialog">
+    <div class="urgency-dialog" onclick="event.stopPropagation()">
+        <div class="urgency-dialog-header">
+            <i class="icofont-flag urgency-dialog-icon"></i>
+            <h3 class="urgency-dialog-title">Send Urgency Alert</h3>
+        </div>
+        <p class="urgency-dialog-message">
+            You are about to send an urgency alert email to all participants of this pending memo. This will notify them that the memo requires immediate attention.
+        </p>
+        <div class="urgency-dialog-actions">
+            <button class="urgency-dialog-btn urgency-dialog-btn-cancel" id="urgency-cancel-btn" onclick="closeUrgencyAlertDialog()">Cancel</button>
+            <button class="urgency-dialog-btn urgency-dialog-btn-confirm" id="urgency-confirm-btn" onclick="sendUrgencyAlert()">Yes, Send Alert</button>
+        </div>
+    </div>
+</div>
+
 @endsection

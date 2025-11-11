@@ -160,6 +160,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/uimms/memos/{status}', [HomeController::class, 'getMemosByStatus'])->name('dashboard.uimms.memos.byStatus');
     Route::get('/dashboard/uimms/bookmarked-memos', [HomeController::class, 'getBookmarkedMemos'])->name('dashboard.uimms.bookmarked-memos');
     Route::post('/dashboard/uimms/memo/{memo}/toggle-bookmark', [HomeController::class, 'toggleBookmark'])->name('dashboard.uimms.toggle-bookmark');
+    Route::post('/dashboard/uimms/memo/{memo}/send-urgency-alert', [HomeController::class, 'sendUrgencyAlert'])->name('dashboard.uimms.send-urgency-alert');
     Route::get('/dashboard/uimms/chat/{memo}', [HomeController::class, 'memoChat'])->name('dashboard.uimms.chat');
     Route::post('/dashboard/uimms/chat/{memo}/message', [HomeController::class, 'sendChatMessage'])->name('dashboard.uimms.chat.message');
     Route::post('/dashboard/uimms/chat/{memo}/assign', [HomeController::class, 'assignMemo'])->name('dashboard.uimms.chat.assign');
