@@ -63,13 +63,13 @@
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-weight: normal;
             margin-bottom: 2pt;
-            font-size: 10pt;
+            font-size: 7.5pt;
             color: #4b5563;
         }
 
         .company-details {
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 10pt;
+            font-size: 7.5pt;
             color: #4b5563;
             line-height: 1.3;
         }
@@ -91,7 +91,7 @@
 
         .invoice-title {
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 24pt;
+            font-size: 20pt;
             font-weight: bold;
             margin-bottom: 6pt;
             color: #000;
@@ -100,7 +100,7 @@
 
         .invoice-info {
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 10pt;
+            font-size: 7.5pt;
             line-height: 1.3;
             color: #4b5563;
         }
@@ -120,7 +120,7 @@
             color: #059669;
             font-weight: 600;
             margin-top: 4pt;
-            font-size: 10pt;
+            font-size: 8pt;
         }
 
         /* Billed To Section */
@@ -133,13 +133,13 @@
             font-weight: bold;
             margin-bottom: 6pt;
             color: #000;
-            font-size: 10pt;
+            font-size: 8.5pt;
             letter-spacing: 0.3pt;
         }
 
         .billed-to-content {
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-            font-size: 10pt;
+            font-size: 8pt;
             line-height: 1.3;
             color: #4b5563;
         }
@@ -178,7 +178,7 @@
             padding: 10pt 14pt;
             text-align: left;
             font-weight: bold;
-            font-size: 7.5pt;
+            font-size: 8.5pt;
             text-transform: uppercase;
             color: #000;
             vertical-align: middle;
@@ -240,7 +240,7 @@
         .table-cell {
             padding: 12pt 14pt;
             text-align: left;
-            font-size: 8.5pt;
+            font-size: 7.5pt;
             color: #1f2937;
             vertical-align: top;
         }
@@ -297,16 +297,18 @@
 
         .summary-table td {
             padding: 0.5pt 0;
-            font-size: 8.5pt;
+            font-size: 7.5pt;
             vertical-align: top;
         }
 
         .summary-label {
+            font-size: 8.5pt;
             color: #4b5563;
             text-align: left;
         }
 
         .summary-value {
+            font-size: 7.5pt;
             color: #1f2937;
             text-align: right;
         }
