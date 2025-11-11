@@ -18,7 +18,7 @@
                 <div class="col-xl-9 col-lg-9 col-md-12">
                     <div class="dashboard__message__content__main">
                         <div class="dashboard__message__content__main__title dashboard__message__content__main__title__2">
-                            <h3 style="text-align: center; margin-bottom: 20px;">Keep in View - Bookmarked Memos</h3>
+                            <h3 style="text-align: center; margin-bottom: 20px;">Keep in View - Memos Portal</h3>
                         </div>
                         
                         <div class="dashboard__meessage__wraper">
@@ -27,7 +27,7 @@
                                     <div class="dashboard__meessage">
                                         <div class="dashboard__meessage__chat memos-toolbar">
                                             <div class="memos-title-container">
-                                                <span class="memos-badge" id="section-badge">🔖 Bookmarked Memos</span>
+                                                <span class="memos-badge" id="section-badge">🔖 Keep in View </span>
                                             </div>
                                             <div class="memos-actions">
                                                 <button class="responsive-btn refresh-btn" onclick="refreshMemos()">
@@ -44,7 +44,7 @@
                                         <div class="dashboard__meessage__contact" id="memos-container">
                                             <div class="text-center py-5">
                                                 <i class="icofont-chat" style="font-size: 48px; color: #ddd;"></i>
-                                                <p class="text-muted mt-3">Loading bookmarked memos...</p>
+                                                <p class="text-muted mt-3">Loading keep in view memos...</p>
                                             </div>
                                         </div>
 
