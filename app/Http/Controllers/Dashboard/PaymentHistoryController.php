@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PaymentTransaction;
 use App\Models\SystemSubscription;
 use Illuminate\Http\Request;
-use Barryvdh\Snappy\Facades\SnappyPdf as PDF;
+use Barryvdh\Snappy\Facades\SnappyPdf;
 
 class PaymentHistoryController extends Controller
 {
@@ -108,7 +108,7 @@ class PaymentHistoryController extends Controller
         // Use the same HTML template for PDF (Snappy renders HTML perfectly)
         $html = view('dashboard.payment-history.invoice', compact('payment'))->render();
         
-        $pdf = PDF::loadHTML($html)
+        $pdf = SnappyPdf::loadHTML($html)
             ->setOption('page-size', 'A4')
             ->setOption('orientation', 'Portrait')
             ->setOption('margin-top', 15)
