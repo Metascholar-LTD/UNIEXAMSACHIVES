@@ -63,21 +63,21 @@
             font-family: Georgia, serif;
             font-weight: normal;
             margin-bottom: 4pt;
-            color: #000;
-            font-size: 11.5pt;
+            font-size: 10pt;
+            color: #4b5563;
         }
 
         .company-details {
             font-family: Georgia, serif;
-            font-size: 9.5pt;
+            font-size: 10pt;
             color: #4b5563;
             line-height: 1.4;
         }
 
         .vat-reg {
             font-family: Georgia, serif;
-            font-weight: bold;
-            color: #000;
+            font-weight: normal;
+            color: #4b5563;
         }
 
         .invoice-details {
