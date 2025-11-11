@@ -168,7 +168,7 @@
         }
 
         .invoice-table th:nth-child(6) {
-            width: 24%;
+            width: 20%;
         }
 
         .invoice-table td {
