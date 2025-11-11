@@ -21,8 +21,8 @@
             color: #000;
             background: #fff;
             padding: 20px;
-            line-height: 1.4;
-            font-size: 12px;
+            line-height: 1.5;
+            font-size: 13px;
         }
 
         .invoice-container {
@@ -46,23 +46,23 @@
         }
 
         .company-logo {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: 700;
-            margin-bottom: 5px;
+            margin-bottom: 6px;
             color: #000;
         }
 
         .company-name {
             font-weight: 600;
-            margin-bottom: 3px;
-            font-size: 13px;
+            margin-bottom: 4px;
+            font-size: 14px;
             color: #000;
         }
 
         .company-details {
-            font-size: 11px;
+            font-size: 12px;
             color: #4b5563;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .vat-reg {
@@ -75,16 +75,16 @@
         }
 
         .invoice-title {
-            font-size: 32px;
+            font-size: 36px;
             font-weight: 700;
             font-family: Georgia, serif;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
             color: #000;
         }
 
         .invoice-info {
-            font-size: 11px;
-            line-height: 1.6;
+            font-size: 12px;
+            line-height: 1.7;
             color: #4b5563;
         }
 
@@ -96,8 +96,8 @@
         .payment-status {
             color: #059669;
             font-weight: 600;
-            margin-top: 5px;
-            font-size: 12px;
+            margin-top: 6px;
+            font-size: 13px;
         }
 
         /* Billed To Section */
@@ -107,14 +107,14 @@
 
         .billed-to-title {
             font-weight: 700;
-            margin-bottom: 5px;
-            font-size: 11px;
+            margin-bottom: 6px;
+            font-size: 12px;
             color: #000;
         }
 
         .billed-to-content {
-            font-size: 11px;
-            line-height: 1.5;
+            font-size: 12px;
+            line-height: 1.6;
             color: #4b5563;
         }
 
@@ -123,7 +123,7 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 15px;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .invoice-table thead {
@@ -131,33 +131,33 @@
         }
 
         .invoice-table th {
-            padding: 8px 6px;
+            padding: 10px 8px;
             text-align: left;
             font-weight: 700;
-            font-size: 10px;
+            font-size: 11px;
             text-transform: uppercase;
             color: #000;
             border-bottom: 1px solid #e5e7eb;
         }
 
         .invoice-table td {
-            padding: 10px 6px;
+            padding: 12px 8px;
             border-bottom: 1px solid #f3f4f6;
-            font-size: 11px;
+            font-size: 12px;
             color: #1f2937;
         }
 
         .service-description {
             font-weight: 700;
             color: #000;
-            font-size: 11px;
+            font-size: 12px;
         }
 
         .service-dates {
-            font-size: 10px;
+            font-size: 11px;
             color: #6b7280;
             font-weight: normal;
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         .amount-bold {
@@ -174,13 +174,14 @@
 
         .summary-content {
             width: 280px;
+            text-align: right;
         }
 
         .summary-row {
             display: flex;
             justify-content: space-between;
-            padding: 4px 0;
-            font-size: 11px;
+            padding: 5px 0;
+            font-size: 12px;
         }
 
         .summary-label {
