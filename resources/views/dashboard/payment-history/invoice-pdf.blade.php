@@ -62,7 +62,7 @@
         .company-name {
             font-family: Georgia, serif;
             font-weight: normal;
-            margin-bottom: 4pt;
+            margin-bottom: 2pt;
             font-size: 10pt;
             color: #4b5563;
         }
