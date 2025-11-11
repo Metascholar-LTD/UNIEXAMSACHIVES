@@ -50,14 +50,17 @@
         }
 
         .company-logo {
-            font-size: 16pt;
-            font-weight: bold;
             margin-bottom: 10pt;
-            color: #000;
-            letter-spacing: 0.5pt;
+        }
+
+        .logo-image {
+            max-width: 200pt;
+            height: auto;
+            display: block;
         }
 
         .company-name {
+            font-family: Georgia, serif;
             font-weight: 600;
             margin-bottom: 6pt;
             color: #000;
@@ -65,12 +68,14 @@
         }
 
         .company-details {
+            font-family: Georgia, serif;
             font-size: 8.5pt;
             color: #4b5563;
             line-height: 1.7;
         }
 
         .vat-reg {
+            font-family: Georgia, serif;
             font-weight: bold;
             color: #000;
         }
@@ -81,6 +86,7 @@
         }
 
         .invoice-title {
+            font-family: Georgia, serif;
             font-size: 24pt;
             font-weight: bold;
             margin-bottom: 14pt;
@@ -89,17 +95,20 @@
         }
 
         .invoice-info {
+            font-family: Georgia, serif;
             font-size: 8.5pt;
             line-height: 2;
             color: #4b5563;
         }
 
         .invoice-info strong {
+            font-family: Georgia, serif;
             color: #000;
             font-weight: bold;
         }
 
         .payment-status {
+            font-family: Georgia, serif;
             color: #059669;
             font-weight: 600;
             margin-top: 8pt;
@@ -333,11 +342,13 @@
         <table class="header-table invoice-header">
             <tr>
                 <td class="company-info">
-                    <div class="company-logo">UNIEXAMS ARCHIVES</div>
-                    <div class="company-name">UniExams Archives Ltd.</div>
+                    <div class="company-logo">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1759601411/a49b4ad9-f1b7-4474-b96a-9b2b7bb3784d_afqtge.png" alt="UniExams Archives" class="logo-image">
+                    </div>
+                    <div class="company-name">Metascholar Consult Ltd.</div>
                     <div class="company-details">
                         <div>Ghana</div>
-                        <div class="vat-reg">VAT Reg #: N/A</div>
+                        <div class="vat-reg">VAT Reg #: CY10301365E</div>
                     </div>
                 </td>
                 <td class="invoice-details">
