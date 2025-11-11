@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice - {{ $payment->invoice_number ?? $payment->transaction_reference }}</title>
     <style>
-        @page {
-            margin: 20mm;
-            size: A4;
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -20,27 +15,23 @@
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
             color: #000;
             background: #fff;
-            padding: 0;
+            padding: 2rem;
             line-height: 1.6;
-            font-size: 12pt;
         }
 
         .invoice-container {
-            width: 100%;
-            max-width: 100%;
+            max-width: 900px;
             margin: 0 auto;
             background: white;
-            padding: 0;
         }
 
         /* Header Section */
         .invoice-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
             border-bottom: 1px solid #e5e7eb;
-            page-break-inside: avoid;
         }
 
         .company-info {
@@ -76,10 +67,10 @@
         }
 
         .invoice-title {
-            font-size: 2rem;
+            font-size: 2.5rem;
             font-weight: 700;
             font-family: Georgia, serif;
-            margin-bottom: 1rem;
+            margin-bottom: 1.5rem;
             color: #000;
         }
 
@@ -104,7 +95,6 @@
         /* Billed To Section */
         .billed-to {
             margin-bottom: 2rem;
-            page-break-inside: avoid;
         }
 
         .billed-to-title {
@@ -124,7 +114,6 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 2rem;
-            page-break-inside: avoid;
         }
 
         .invoice-table thead {
@@ -169,7 +158,6 @@
             display: flex;
             justify-content: flex-end;
             margin-top: 1rem;
-            page-break-inside: avoid;
         }
 
         .summary-content {
@@ -204,6 +192,24 @@
             border-top: 1px solid #e5e7eb;
             padding-top: 0.75rem;
             margin-top: 0.5rem;
+        }
+
+        /* PDF-specific optimizations */
+        @page {
+            margin: 20mm;
+        }
+
+        /* Ensure proper rendering in PDF */
+        .invoice-header {
+            page-break-inside: avoid;
+        }
+
+        .invoice-table {
+            page-break-inside: avoid;
+        }
+
+        .invoice-summary {
+            page-break-inside: avoid;
         }
     </style>
 </head>
