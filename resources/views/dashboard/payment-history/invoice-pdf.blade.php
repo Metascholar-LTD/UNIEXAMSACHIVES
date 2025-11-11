@@ -158,24 +158,27 @@
         }
 
         .invoice-table th:nth-child(2) {
-            width: 11%;
+            width: 10%;
         }
 
         .invoice-table th:nth-child(3) {
-            width: 16%;
-            padding-left: 18pt;
+            width: 15%;
+            padding-left: 24pt;
         }
 
         .invoice-table th:nth-child(4) {
             width: 19%;
+            padding-left: 24pt;
         }
 
         .invoice-table th:nth-child(5) {
             width: 10%;
+            padding-left: 24pt;
         }
 
         .invoice-table th:nth-child(6) {
-            width: 22%;
+            width: 24%;
+            padding-left: 24pt;
             padding-right: 0;
         }
 
@@ -193,19 +196,28 @@
             padding-left: 0;
         }
 
-        .invoice-table td:nth-child(2),
-        .invoice-table td:nth-child(4),
-        .invoice-table td:nth-child(5) {
+        .invoice-table td:nth-child(2) {
             white-space: nowrap;
         }
 
         .invoice-table td:nth-child(3) {
             white-space: nowrap;
-            padding-left: 18pt;
+            padding-left: 24pt;
+        }
+
+        .invoice-table td:nth-child(4) {
+            white-space: nowrap;
+            padding-left: 24pt;
+        }
+
+        .invoice-table td:nth-child(5) {
+            white-space: nowrap;
+            padding-left: 24pt;
         }
 
         .invoice-table td:nth-child(6) {
             white-space: nowrap;
+            padding-left: 24pt;
             padding-right: 0;
         }
 
