@@ -61,7 +61,7 @@
 
         .company-name {
             font-family: Georgia, serif;
-            font-weight: 600;
+            font-weight: normal;
             margin-bottom: 4pt;
             color: #000;
             font-size: 11.5pt;
@@ -345,9 +345,11 @@
                     <div class="company-logo">
                         <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1759601411/a49b4ad9-f1b7-4474-b96a-9b2b7bb3784d_afqtge.png" alt="UniExams Archives" class="logo-image">
                     </div>
-                    <div class="company-name">Metascholar Consult Ltd.</div>
+                    <div class="company-name">Metascholar Consult Limited</div>
                     <div class="company-details">
-                        <div>Ghana</div>
+                        <div>P.O Box SY649, Sunyani</div>
+                        <div>BS-0272-8085, Berekum Road</div>
+                        <div>www.metascholar.academicdigital.space</div>
                         <div class="vat-reg">VAT Reg #: CY10301365E</div>
                     </div>
                 </td>
