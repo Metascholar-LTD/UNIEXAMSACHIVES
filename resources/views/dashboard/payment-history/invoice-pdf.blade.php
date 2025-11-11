@@ -136,7 +136,7 @@
         }
 
         .invoice-table th {
-            padding: 10pt 10pt;
+            padding: 10pt 14pt;
             text-align: left;
             font-weight: bold;
             font-size: 7.5pt;
@@ -172,7 +172,7 @@
         }
 
         .invoice-table td {
-            padding: 12pt 10pt;
+            padding: 12pt 14pt;
             text-align: left;
             border-bottom: 1px solid #f3f4f6;
             font-size: 8.5pt;
