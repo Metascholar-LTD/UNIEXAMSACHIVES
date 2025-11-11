@@ -23,6 +23,8 @@
             width: 100%;
             max-width: 100%;
             background: white;
+            margin: 0;
+            padding: 0;
         }
 
         /* Header Section - Using Table for Layout */
@@ -130,6 +132,7 @@
             margin-bottom: 20pt;
             margin-left: 0;
             margin-right: 0;
+            padding: 0;
             table-layout: fixed;
         }
 
@@ -171,7 +174,7 @@
         }
 
         .invoice-table th:nth-child(6) {
-            width: 20%;
+            width: 24%;
             padding-right: 0;
         }
 
