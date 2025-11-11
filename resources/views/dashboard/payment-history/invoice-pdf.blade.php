@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Invoice - {{ $payment->invoice_number ?? $payment->transaction_reference }}</title>
     <style>
         * {
@@ -11,113 +12,100 @@
         }
 
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
             color: #000;
             background: #fff;
-            padding: 15mm;
-            font-size: 12pt;
-            line-height: 1.5;
+            padding: 2rem;
+            line-height: 1.6;
         }
 
         .invoice-container {
-            width: 100%;
-            max-width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
             background: white;
         }
 
-        /* Header Section - Using Table for Layout */
+        /* Header Section */
         .invoice-header {
-            width: 100%;
-            margin-bottom: 20pt;
-            padding-bottom: 15pt;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
             border-bottom: 1px solid #e5e7eb;
         }
 
-        .header-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .header-table td {
-            vertical-align: top;
-            padding: 0;
-        }
-
         .company-info {
-            width: 50%;
+            flex: 1;
         }
 
         .company-logo {
-            font-size: 18pt;
-            font-weight: bold;
-            margin-bottom: 8pt;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
             color: #000;
         }
 
         .company-name {
             font-weight: 600;
-            margin-bottom: 5pt;
+            margin-bottom: 0.5rem;
             color: #000;
-            font-size: 11pt;
         }
 
         .company-details {
-            font-size: 9pt;
+            font-size: 0.875rem;
             color: #4b5563;
-            line-height: 1.6;
+            line-height: 1.8;
         }
 
         .vat-reg {
-            font-weight: bold;
+            font-weight: 700;
             color: #000;
         }
 
         .invoice-details {
             text-align: right;
-            width: 50%;
         }
 
         .invoice-title {
-            font-size: 32pt;
-            font-weight: bold;
+            font-size: 2.5rem;
+            font-weight: 700;
             font-family: Georgia, serif;
-            margin-bottom: 12pt;
+            margin-bottom: 1.5rem;
             color: #000;
         }
 
         .invoice-info {
-            font-size: 9pt;
-            line-height: 1.8;
+            font-size: 0.875rem;
+            line-height: 2;
             color: #4b5563;
         }
 
         .invoice-info strong {
             color: #000;
-            font-weight: bold;
+            font-weight: 700;
         }
 
         .payment-status {
             color: #059669;
             font-weight: 600;
-            margin-top: 5pt;
-            font-size: 11pt;
+            margin-top: 0.5rem;
+            font-size: 1rem;
         }
 
         /* Billed To Section */
         .billed-to {
-            margin-bottom: 15pt;
+            margin-bottom: 2rem;
         }
 
         .billed-to-title {
-            font-weight: bold;
-            margin-bottom: 8pt;
+            font-weight: 700;
+            margin-bottom: 1rem;
             color: #000;
-            font-size: 10pt;
         }
 
         .billed-to-content {
-            font-size: 9pt;
-            line-height: 1.6;
+            font-size: 0.875rem;
+            line-height: 1.8;
             color: #4b5563;
         }
 
@@ -125,7 +113,7 @@
         .invoice-table {
             width: 100%;
             border-collapse: collapse;
-            margin-bottom: 15pt;
+            margin-bottom: 2rem;
         }
 
         .invoice-table thead {
@@ -133,69 +121,66 @@
         }
 
         .invoice-table th {
-            padding: 8pt 6pt;
+            padding: 0.75rem 0.5rem;
             text-align: left;
-            font-weight: bold;
-            font-size: 8pt;
+            font-weight: 700;
+            font-size: 0.75rem;
             text-transform: uppercase;
             color: #000;
             border-bottom: 1px solid #e5e7eb;
         }
 
         .invoice-table td {
-            padding: 10pt 6pt;
+            padding: 1rem 0.5rem;
             border-bottom: 1px solid #f3f4f6;
-            font-size: 9pt;
+            font-size: 0.875rem;
             color: #1f2937;
         }
 
         .service-description {
-            font-weight: bold;
+            font-weight: 700;
             color: #000;
         }
 
         .service-dates {
-            font-size: 8pt;
+            font-size: 0.75rem;
             color: #6b7280;
             font-weight: normal;
-            margin-top: 3pt;
         }
 
         .amount-bold {
-            font-weight: bold;
+            font-weight: 700;
             color: #000;
         }
 
-        /* Summary Section - Using Table for Layout */
+        /* Summary Section */
         .invoice-summary {
-            width: 100%;
-            margin-top: 10pt;
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 1rem;
         }
 
-        .summary-table {
-            width: 280pt;
-            margin-left: auto;
-            border-collapse: collapse;
+        .summary-content {
+            width: 300px;
         }
 
-        .summary-table td {
-            padding: 5pt 0;
-            font-size: 9pt;
-            vertical-align: top;
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            font-size: 0.875rem;
         }
 
         .summary-label {
             color: #4b5563;
-            text-align: left;
         }
 
         .summary-value {
             color: #1f2937;
-            text-align: right;
         }
 
         .summary-value.bold {
-            font-weight: bold;
+            font-weight: 700;
             color: #000;
         }
 
@@ -205,62 +190,37 @@
 
         .summary-total {
             border-top: 1px solid #e5e7eb;
-            padding-top: 8pt;
-            margin-top: 5pt;
-        }
-
-        .summary-total td {
-            padding-top: 8pt;
-        }
-
-        /* PDF-specific optimizations */
-        @page {
-            margin: 15mm;
-            size: A4 portrait;
-        }
-
-        /* Ensure proper rendering in PDF */
-        .invoice-header {
-            page-break-inside: avoid;
-        }
-
-        .invoice-table {
-            page-break-inside: avoid;
-        }
-
-        .invoice-summary {
-            page-break-inside: avoid;
+            padding-top: 0.75rem;
+            margin-top: 0.5rem;
         }
     </style>
 </head>
 <body>
     <div class="invoice-container">
         <!-- Header -->
-        <table class="header-table invoice-header">
-            <tr>
-                <td class="company-info">
-                    <div class="company-logo">UNIEXAMS ARCHIVES</div>
-                    <div class="company-name">UniExams Archives Ltd.</div>
-                    <div class="company-details">
-                        <div>Ghana</div>
-                        <div class="vat-reg">VAT Reg #: N/A</div>
-                    </div>
-                </td>
-                <td class="invoice-details">
-                    <div class="invoice-title">INVOICE</div>
-                    <div class="invoice-info">
-                        <div>Invoice # <strong>{{ $payment->invoice_number ?? $payment->transaction_reference }}</strong></div>
-                        <div>Invoice Issued # <strong>{{ $payment->paid_at ? $payment->paid_at->format('M d, Y') : $payment->created_at->format('M d, Y') }}</strong></div>
-                        <div>Invoice Amount # <strong>{{ $payment->currency }} {{ number_format($payment->amount, 2) }} ({{ $payment->currency }})</strong></div>
-                        @if($payment->subscription)
-                            <div>Next Billing Date # <strong>{{ $payment->subscription->subscription_end_date->format('M d, Y') }}</strong></div>
-                        @endif
-                        <div>Order Nr. # <strong>{{ $payment->transaction_reference }}</strong></div>
-                    </div>
-                    <div class="payment-status">PAID</div>
-                </td>
-            </tr>
-        </table>
+        <div class="invoice-header">
+            <div class="company-info">
+                <div class="company-logo">UNIEXAMS ARCHIVES</div>
+                <div class="company-name">UniExams Archives Ltd.</div>
+                <div class="company-details">
+                    <div>Ghana</div>
+                    <div class="vat-reg">VAT Reg #: N/A</div>
+                </div>
+            </div>
+            <div class="invoice-details">
+                <div class="invoice-title">INVOICE</div>
+                <div class="invoice-info">
+                    <div>Invoice # <strong>{{ $payment->invoice_number ?? $payment->transaction_reference }}</strong></div>
+                    <div>Invoice Issued # <strong>{{ $payment->paid_at ? $payment->paid_at->format('M d, Y') : $payment->created_at->format('M d, Y') }}</strong></div>
+                    <div>Invoice Amount # <strong>{{ $payment->currency }} {{ number_format($payment->amount, 2) }} ({{ $payment->currency }})</strong></div>
+                    @if($payment->subscription)
+                        <div>Next Billing Date # <strong>{{ $payment->subscription->subscription_end_date->format('M d, Y') }}</strong></div>
+                    @endif
+                    <div>Order Nr. # <strong>{{ $payment->transaction_reference }}</strong></div>
+                </div>
+                <div class="payment-status">PAID</div>
+            </div>
+        </div>
 
         <!-- Billed To -->
         <div class="billed-to">
@@ -327,24 +287,26 @@
         </table>
 
         <!-- Summary -->
-        <table class="summary-table invoice-summary">
-            <tr>
-                <td class="summary-label">Total excl. VAT:</td>
-                <td class="summary-value">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</td>
-            </tr>
-            <tr>
-                <td class="summary-label">Total:</td>
-                <td class="summary-value bold">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</td>
-            </tr>
-            <tr>
-                <td class="summary-label">Payments:</td>
-                <td class="summary-value negative">({{ $payment->currency }} {{ number_format($payment->amount, 2) }})</td>
-            </tr>
-            <tr class="summary-total">
-                <td class="summary-label">Amount Due ({{ $payment->currency }}):</td>
-                <td class="summary-value bold">{{ $payment->currency }} 0.00</td>
-            </tr>
-        </table>
+        <div class="invoice-summary">
+            <div class="summary-content">
+                <div class="summary-row">
+                    <span class="summary-label">Total excl. VAT:</span>
+                    <span class="summary-value">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Total:</span>
+                    <span class="summary-value bold">{{ $payment->currency }} {{ number_format($payment->amount, 2) }}</span>
+                </div>
+                <div class="summary-row">
+                    <span class="summary-label">Payments:</span>
+                    <span class="summary-value negative">({{ $payment->currency }} {{ number_format($payment->amount, 2) }})</span>
+                </div>
+                <div class="summary-row summary-total">
+                    <span class="summary-label">Amount Due ({{ $payment->currency }}):</span>
+                    <span class="summary-value bold">{{ $payment->currency }} 0.00</span>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>
