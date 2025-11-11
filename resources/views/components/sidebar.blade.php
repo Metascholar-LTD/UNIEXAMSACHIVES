@@ -23,32 +23,32 @@
             <ul>
                 <li>
                     <a class="{{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{route('dashboard')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872840/dashboard_r0by47.png" alt="Dashboard" style="width: 20px; height: 20px; object-fit: contain;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872840/dashboard_r0by47.png" alt="Dashboard" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Dashboard</a>
                 </li>
                 <li>
                     <a class="{{ request()->routeIs('dashboard.profile') ? 'active' : '' }}" href="{{route('dashboard.profile')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873945/profile_1_srj1hi.png" alt="My Profile" style="width: 20px; height: 20px; object-fit: contain;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873945/profile_1_srj1hi.png" alt="My Profile" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         My Profile</a>
                 </li>
                 {{-- Memos Portal - Single Link (No Dropdown) --}}
                 <li>
                     <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873198/resume_bipphk.png" alt="Memos Portal" style="width: 20px; height: 20px; object-fit: contain;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873198/resume_bipphk.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Memos Portal
                     </a><span class="dashboard__label">{{ $newMessagesCount ?? 0 }}</span>
                 </li>
                 {{-- Keep in View - Bookmarked Memos --}}
                 <li>
                     <a class="{{ request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.keep-in-view')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 20px; height: 20px; object-fit: contain;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Keep in View
                     </a>
                 </li>
 
                 <li>
                     <a class="{{ request()->routeIs('dashboard.document') ? 'active' : '' }}" href="{{route('dashboard.document')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873294/folder_smk8rg.png" alt="All Documents" style="width: 20px; height: 20px; object-fit: contain;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873294/folder_smk8rg.png" alt="All Documents" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         All Documents</a>
                 </li>
 
