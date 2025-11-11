@@ -121,17 +121,23 @@
         }
 
         .billed-to-title {
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-weight: bold;
-            margin-bottom: 10pt;
+            margin-bottom: 6pt;
             color: #000;
-            font-size: 9.5pt;
+            font-size: 10pt;
             letter-spacing: 0.3pt;
         }
 
         .billed-to-content {
-            font-size: 8.5pt;
-            line-height: 1.7;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-size: 10pt;
+            line-height: 1.3;
             color: #4b5563;
+        }
+
+        .billed-to-content div {
+            margin-bottom: 2pt;
         }
 
         /* Table Section - Inspired by shadcn/ui table structure */
@@ -373,10 +379,9 @@
         <div class="billed-to">
             <div class="billed-to-title">BILLED TO</div>
             <div class="billed-to-content">
-                <div>{{ $payment->customer_name ?? ($payment->subscription->institution_name ?? 'N/A') }}</div>
-                @if($payment->subscription)
-                    <div>{{ $payment->subscription->institution_code ?? '' }}</div>
-                @endif
+                <div>{{ $payment->customer_name ?? ($payment->subscription->institution_name ?? 'Catholic University of Ghana') }}</div>
+                <div>P.O. Box 363, Fiapre</div>
+                <div>Sunyani, Bono Region</div>
                 <div>Ghana</div>
                 <div>{{ $payment->customer_email ?? ($payment->user->email ?? 'N/A') }}</div>
                 @if($payment->customer_phone)
