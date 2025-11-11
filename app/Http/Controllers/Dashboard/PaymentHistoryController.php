@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\PaymentTransaction;
 use App\Models\SystemSubscription;
 use Illuminate\Http\Request;
-use Barryvdh\Snappy\Facades\SnappyPdf;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PaymentHistoryController extends Controller
 {
@@ -105,19 +105,11 @@ class PaymentHistoryController extends Controller
             $payment->generateInvoiceNumber();
         }
 
-        // Use the same HTML template for PDF (Snappy renders HTML perfectly)
-        $html = view('dashboard.payment-history.invoice', compact('payment'))->render();
-        
-        $pdf = SnappyPdf::loadHTML($html)
-            ->setOption('page-size', 'A4')
-            ->setOption('orientation', 'Portrait')
-            ->setOption('margin-top', 15)
-            ->setOption('margin-bottom', 15)
-            ->setOption('margin-left', 15)
-            ->setOption('margin-right', 15)
+        $pdf = Pdf::loadView('dashboard.payment-history.invoice-pdf', compact('payment'))
+            ->setPaper('a4', 'portrait')
             ->setOption('enable-local-file-access', true)
-            ->setOption('disable-smart-shrinking', true)
-            ->setOption('print-media-type', true);
+            ->setOption('isHtml5ParserEnabled', true)
+            ->setOption('isRemoteEnabled', true);
 
         return $pdf->download("invoice-{$payment->invoice_number}.pdf");
     }
