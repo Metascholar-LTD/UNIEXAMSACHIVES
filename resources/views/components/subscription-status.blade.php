@@ -196,42 +196,55 @@
     {{-- Note: isRegularUser() checks for role='user' which is displayed as "Admin" in UI --}}
     {{-- See ROLE_TERMINOLOGY.md for role terminology documentation --}}
     <div class="subscription-actions">
-        @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
-            @if(auth()->user()->isRegularUser())
-            <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
-                @csrf
-                <button type="submit" class="modern-btn btn-primary">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
-                        <path d="M21 3v5h-5"/>
+        <div class="actions-group">
+            @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
+                @if(auth()->user()->isRegularUser())
+                <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="modern-btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                            <path d="M21 3v5h-5"/>
+                        </svg>
+                        <span>Renew Now</span>
+                    </button>
+                </form>
+                @endif
+            @elseif($subscription->status === 'expired' || $subscription->status === 'suspended')
+                @if(auth()->user()->isRegularUser())
+                <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
+                    @csrf
+                    <button type="submit" class="modern-btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
+                            <path d="M21 3v5h-5"/>
+                        </svg>
+                        <span>Renew Immediately</span>
+                    </button>
+                </form>
+                @else
+                <div class="contact-admin-notice">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M12 16v-4"/>
+                        <path d="M12 8h.01"/>
                     </svg>
-                    <span>Renew Now</span>
-                </button>
-            </form>
+                    <span>Please contact your administrator to renew the subscription.</span>
+                </div>
+                @endif
             @endif
-        @elseif($subscription->status === 'expired' || $subscription->status === 'suspended')
+            
             @if(auth()->user()->isRegularUser())
-            <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
-                @csrf
-                <button type="submit" class="modern-btn btn-danger">
+                <div class="action-separator"></div>
+                <a href="{{ route('dashboard.payment-history.index') }}" class="modern-btn btn-secondary">
                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"/>
-                        <path d="M21 3v5h-5"/>
+                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+                        <line x1="1" y1="10" x2="23" y2="10"></line>
                     </svg>
-                    <span>Renew Immediately</span>
-                </button>
-            </form>
-            @else
-            <div class="contact-admin-notice">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <path d="M12 16v-4"/>
-                    <path d="M12 8h.01"/>
-                </svg>
-                <span>Please contact your administrator to renew the subscription.</span>
-            </div>
+                    <span>View All Payment History</span>
+                </a>
             @endif
-        @endif
+        </div>
     </div>
 
     {{-- Auto-Renewal Badge --}}
@@ -567,10 +580,23 @@
 /* Action Buttons */
 .subscription-actions {
     padding: 24px;
-    display: flex;
-    gap: 12px;
     border-top: 1px solid #f0f1f3;
     background: #fafbfc;
+}
+
+.actions-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.action-separator {
+    width: 1px;
+    height: 32px;
+    background: #dee2e6;
+    margin: 0 4px;
+    flex-shrink: 0;
 }
 
 .modern-btn {
@@ -689,7 +715,18 @@
     }
     
     .subscription-actions {
+        padding: 20px;
+    }
+    
+    .actions-group {
         flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .action-separator {
+        width: 100%;
+        height: 1px;
+        margin: 8px 0;
     }
     
     .modern-btn {
