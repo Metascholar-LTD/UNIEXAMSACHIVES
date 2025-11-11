@@ -60,7 +60,7 @@
         }
 
         .company-name {
-            font-family: Georgia, serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-weight: normal;
             margin-bottom: 2pt;
             font-size: 10pt;
@@ -68,14 +68,18 @@
         }
 
         .company-details {
-            font-family: Georgia, serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-size: 10pt;
             color: #4b5563;
-            line-height: 1.4;
+            line-height: 1.3;
+        }
+
+        .company-details div {
+            margin-bottom: 2pt;
         }
 
         .vat-reg {
-            font-family: Georgia, serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-weight: normal;
             color: #4b5563;
         }
@@ -86,33 +90,37 @@
         }
 
         .invoice-title {
-            font-family: Georgia, serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             font-size: 24pt;
             font-weight: bold;
-            margin-bottom: 10pt;
+            margin-bottom: 6pt;
             color: #000;
             letter-spacing: 0.5pt;
         }
 
         .invoice-info {
-            font-family: Georgia, serif;
-            font-size: 9.5pt;
-            line-height: 1.5;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+            font-size: 10pt;
+            line-height: 1.3;
             color: #4b5563;
         }
 
+        .invoice-info div {
+            margin-bottom: 2pt;
+        }
+
         .invoice-info strong {
-            font-family: Georgia, serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             color: #000;
             font-weight: bold;
         }
 
         .payment-status {
-            font-family: Georgia, serif;
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             color: #059669;
             font-weight: 600;
-            margin-top: 5pt;
-            font-size: 11pt;
+            margin-top: 4pt;
+            font-size: 10pt;
         }
 
         /* Billed To Section */
