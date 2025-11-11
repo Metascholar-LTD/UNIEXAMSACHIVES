@@ -180,25 +180,25 @@
         .table-head:nth-child(3),
         .table-cell:nth-child(3) {
             width: 15%;
-            padding-left: 36pt;
+            padding-left: 44pt;
         }
 
         .table-head:nth-child(4),
         .table-cell:nth-child(4) {
             width: 19%;
-            padding-left: 36pt;
+            padding-left: 44pt;
         }
 
         .table-head:nth-child(5),
         .table-cell:nth-child(5) {
             width: 10%;
-            padding-left: 36pt;
+            padding-left: 44pt;
         }
 
         .table-head:nth-child(6),
         .table-cell:nth-child(6) {
             width: 24%;
-            padding-left: 36pt;
+            padding-left: 44pt;
         }
 
         .table-head:nth-child(6) {
