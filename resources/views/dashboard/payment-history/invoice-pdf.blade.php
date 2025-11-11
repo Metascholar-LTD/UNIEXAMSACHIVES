@@ -30,8 +30,8 @@
         /* Header Section - Using Table for Layout */
         .invoice-header {
             width: 100%;
-            margin-bottom: 25pt;
-            padding-bottom: 18pt;
+            margin-bottom: 20pt;
+            padding-bottom: 12pt;
             border-bottom: 1px solid #e5e7eb;
         }
 
@@ -50,7 +50,7 @@
         }
 
         .company-logo {
-            margin-bottom: 10pt;
+            margin-bottom: 6pt;
         }
 
         .logo-image {
@@ -62,16 +62,16 @@
         .company-name {
             font-family: Georgia, serif;
             font-weight: 600;
-            margin-bottom: 6pt;
+            margin-bottom: 4pt;
             color: #000;
-            font-size: 10pt;
+            font-size: 11.5pt;
         }
 
         .company-details {
             font-family: Georgia, serif;
-            font-size: 8.5pt;
+            font-size: 9.5pt;
             color: #4b5563;
-            line-height: 1.7;
+            line-height: 1.4;
         }
 
         .vat-reg {
@@ -89,15 +89,15 @@
             font-family: Georgia, serif;
             font-size: 24pt;
             font-weight: bold;
-            margin-bottom: 14pt;
+            margin-bottom: 10pt;
             color: #000;
             letter-spacing: 0.5pt;
         }
 
         .invoice-info {
             font-family: Georgia, serif;
-            font-size: 8.5pt;
-            line-height: 2;
+            font-size: 9.5pt;
+            line-height: 1.5;
             color: #4b5563;
         }
 
@@ -111,8 +111,8 @@
             font-family: Georgia, serif;
             color: #059669;
             font-weight: 600;
-            margin-top: 8pt;
-            font-size: 10pt;
+            margin-top: 5pt;
+            font-size: 11pt;
         }
 
         /* Billed To Section */
