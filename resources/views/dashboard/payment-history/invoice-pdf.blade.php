@@ -128,6 +128,8 @@
             width: 100%;
             border-collapse: collapse;
             margin-bottom: 20pt;
+            margin-left: 0;
+            margin-right: 0;
             table-layout: fixed;
         }
 
@@ -149,6 +151,7 @@
 
         .invoice-table th:nth-child(1) {
             width: 24%;
+            padding-left: 0;
         }
 
         .invoice-table th:nth-child(2) {
@@ -169,6 +172,7 @@
 
         .invoice-table th:nth-child(6) {
             width: 20%;
+            padding-right: 0;
         }
 
         .invoice-table td {
@@ -182,14 +186,19 @@
 
         .invoice-table td:nth-child(1) {
             word-wrap: break-word;
+            padding-left: 0;
         }
 
         .invoice-table td:nth-child(2),
         .invoice-table td:nth-child(3),
         .invoice-table td:nth-child(4),
-        .invoice-table td:nth-child(5),
+        .invoice-table td:nth-child(5) {
+            white-space: nowrap;
+        }
+
         .invoice-table td:nth-child(6) {
             white-space: nowrap;
+            padding-right: 0;
         }
 
         .service-description {
