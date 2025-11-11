@@ -674,6 +674,30 @@
                                         .memo-item.selected:hover {
                                             background: #bbdefb;
                                         }
+                                        
+                                        .bookmark-icon {
+                                            color: #ccc;
+                                            font-size: 1.2rem;
+                                            cursor: pointer;
+                                            transition: all 0.2s ease;
+                                            margin-left: 4px;
+                                        }
+                                        
+                                        .bookmark-icon:hover {
+                                            transform: scale(1.2);
+                                        }
+                                        
+                                        .bookmark-icon.bookmarked {
+                                            color: #ffc107;
+                                        }
+                                        
+                                        .bookmark-icon:not(.bookmarked) {
+                                            color: #ccc;
+                                        }
+                                        
+                                        .bookmark-icon:not(.bookmarked):hover {
+                                            color: #ffc107;
+                                        }
                                         </style>
 
                                         <script>
@@ -851,6 +875,7 @@
                                                                                 <div class="memo-right-badges">
                                                                                     <span class="memo-status-badge status-${memo.memo_status}">${memo.memo_status}</span>
                                                                                     ${isUnread ? '<span class="badge bg-success">New</span>' : ''}
+                                                                                    <i class="icofont-bookmark bookmark-icon ${memo.is_bookmarked ? 'bookmarked' : ''}" onclick="event.stopPropagation(); toggleBookmark(${memo.id}, this)" title="${memo.is_bookmarked ? 'Remove from Keep in View' : 'Add to Keep in View'}"></i>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -1094,6 +1119,39 @@
                                                 type: 'warning',
                                                 confirmText: 'Archive',
                                                 subtitle: 'This will move the selected memos to the archive.'
+                                            });
+                                        }
+
+                                        // Toggle bookmark function
+                                        function toggleBookmark(memoId, iconElement) {
+                                            fetch(`/dashboard/uimms/memo/${memoId}/toggle-bookmark`, {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                                                    'Accept': 'application/json',
+                                                    'X-Requested-With': 'XMLHttpRequest'
+                                                },
+                                                credentials: 'same-origin'
+                                            })
+                                            .then(response => response.json())
+                                            .then(data => {
+                                                if (data.success) {
+                                                    // Toggle the bookmarked class
+                                                    if (data.is_bookmarked) {
+                                                        iconElement.classList.add('bookmarked');
+                                                        iconElement.setAttribute('title', 'Remove from Keep in View');
+                                                    } else {
+                                                        iconElement.classList.remove('bookmarked');
+                                                        iconElement.setAttribute('title', 'Add to Keep in View');
+                                                    }
+                                                } else {
+                                                    alert('Error: ' + (data.message || 'Failed to update bookmark'));
+                                                }
+                                            })
+                                            .catch(error => {
+                                                console.error('Error toggling bookmark:', error);
+                                                alert('Error updating bookmark. Please try again.');
                                             });
                                         }
 

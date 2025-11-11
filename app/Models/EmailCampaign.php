@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class EmailCampaign extends Model
 {
@@ -370,6 +371,23 @@ class EmailCampaign extends Model
     public function scopeCreatedBy($query, $userId)
     {
         return $query->where('created_by', $userId);
+    }
+
+    /**
+     * Get users who have bookmarked this memo
+     */
+    public function bookmarkedBy(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'memo_user_bookmarks', 'campaign_id', 'user_id')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Check if a user has bookmarked this memo
+     */
+    public function isBookmarkedBy($userId): bool
+    {
+        return $this->bookmarkedBy()->where('user_id', $userId)->exists();
     }
 
     /**

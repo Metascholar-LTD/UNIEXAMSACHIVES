@@ -316,4 +316,14 @@ class User extends Authenticatable
             ->orderBy('created_at', 'desc')
             ->get();
     }
+
+    /**
+     * Get memos bookmarked by this user
+     */
+    public function bookmarkedMemos()
+    {
+        return $this->belongsToMany(EmailCampaign::class, 'memo_user_bookmarks', 'user_id', 'campaign_id')
+                    ->withTimestamps()
+                    ->orderBy('memo_user_bookmarks.created_at', 'desc');
+    }
 }

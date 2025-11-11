@@ -880,6 +880,9 @@ class HomeController extends Controller
                 // Get last message
                 $lastMessage = $memo->replies->sortByDesc('created_at')->first();
                 
+                // Check if memo is bookmarked by current user
+                $isBookmarked = $memo->isBookmarkedBy($userId);
+                
                 return [
                     'id' => $memo->id,
                     'subject' => $memo->subject,
@@ -892,6 +895,7 @@ class HomeController extends Controller
                     'active_participants' => $activeParticipants->values(),
                     'last_message' => $lastMessage,
                     'attachments' => $memo->attachments,
+                    'is_bookmarked' => $isBookmarked,
                 ];
             });
 
@@ -1817,6 +1821,105 @@ class HomeController extends Controller
         } catch (\Exception $e) {
             \Log::error('Error in bulkReactivateSelected: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Failed to reactivate selected memos'], 500);
+        }
+    }
+
+    /**
+     * Keep in View page - Show all bookmarked memos
+     */
+    public function keepInView()
+    {
+        $userId = Auth::id();
+        
+        try {
+            $bookmarkedCount = Auth::user()->bookmarkedMemos()->count();
+            
+            return view('admin.uimms.keep-in-view', compact('bookmarkedCount'));
+        } catch (\Exception $e) {
+            \Log::error('Error in keepInView: ' . $e->getMessage());
+            $bookmarkedCount = 0;
+            return view('admin.uimms.keep-in-view', compact('bookmarkedCount'));
+        }
+    }
+
+    /**
+     * Get bookmarked memos for the current user
+     */
+    public function getBookmarkedMemos()
+    {
+        $userId = Auth::id();
+        
+        try {
+            $memos = Auth::user()->bookmarkedMemos()
+                ->with(['creator', 'currentAssignee', 'recipients.user', 'replies.user'])
+                ->orderBy('memo_user_bookmarks.created_at', 'desc')
+                ->get();
+
+            // Transform the data to include UIMMS-specific information
+            $memos = $memos->map(function($memo) use ($userId) {
+                // Get active participants (only those with is_active_participant = true)
+                $activeParticipants = $memo->activeParticipants;
+                
+                // Get last message
+                $lastMessage = $memo->replies->sortByDesc('created_at')->first();
+                
+                return [
+                    'id' => $memo->id,
+                    'subject' => $memo->subject,
+                    'message' => $memo->message,
+                    'created_at' => $memo->created_at,
+                    'updated_at' => $memo->updated_at,
+                    'memo_status' => $memo->memo_status ?? 'pending',
+                    'creator' => $memo->creator,
+                    'current_assignee' => $memo->currentAssignee,
+                    'active_participants' => $activeParticipants->values(),
+                    'last_message' => $lastMessage,
+                    'attachments' => $memo->attachments,
+                    'is_bookmarked' => true, // Always true for bookmarked memos
+                ];
+            });
+
+            return response()->json($memos);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in getBookmarkedMemos: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to load bookmarked memos'], 500);
+        }
+    }
+
+    /**
+     * Toggle bookmark status for a memo
+     */
+    public function toggleBookmark(EmailCampaign $memo)
+    {
+        $userId = Auth::id();
+        
+        try {
+            $user = Auth::user();
+            $isBookmarked = $memo->isBookmarkedBy($userId);
+            
+            if ($isBookmarked) {
+                // Remove bookmark
+                $user->bookmarkedMemos()->detach($memo->id);
+                $message = 'Memo removed from Keep in View';
+            } else {
+                // Add bookmark
+                $user->bookmarkedMemos()->attach($memo->id);
+                $message = 'Memo added to Keep in View';
+            }
+            
+            return response()->json([
+                'success' => true,
+                'is_bookmarked' => !$isBookmarked,
+                'message' => $message
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Error in toggleBookmark: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Failed to update bookmark status'
+            ], 500);
         }
     }
 }
