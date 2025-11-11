@@ -14,7 +14,7 @@
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
             color: #000;
             background: #fff;
-            padding: 8mm;
+            padding: 12mm;
             font-size: 10pt;
             line-height: 1.6;
         }
@@ -136,7 +136,8 @@
         }
 
         .invoice-table th {
-            padding: 8pt 4pt;
+            padding: 10pt 10pt;
+            text-align: left;
             font-weight: bold;
             font-size: 7.5pt;
             text-transform: uppercase;
@@ -148,15 +149,6 @@
 
         .invoice-table th:nth-child(1) {
             width: 28%;
-            text-align: left;
-        }
-
-        .invoice-table th:nth-child(2),
-        .invoice-table th:nth-child(3),
-        .invoice-table th:nth-child(4),
-        .invoice-table th:nth-child(5),
-        .invoice-table th:nth-child(6) {
-            text-align: right;
         }
 
         .invoice-table th:nth-child(2) {
@@ -180,7 +172,8 @@
         }
 
         .invoice-table td {
-            padding: 10pt 4pt;
+            padding: 12pt 10pt;
+            text-align: left;
             border-bottom: 1px solid #f3f4f6;
             font-size: 8.5pt;
             color: #1f2937;
@@ -188,7 +181,6 @@
         }
 
         .invoice-table td:nth-child(1) {
-            text-align: left;
             word-wrap: break-word;
         }
 
@@ -197,7 +189,6 @@
         .invoice-table td:nth-child(4),
         .invoice-table td:nth-child(5),
         .invoice-table td:nth-child(6) {
-            text-align: right;
             white-space: nowrap;
         }
 
@@ -271,7 +262,7 @@
 
         /* PDF-specific optimizations */
         @page {
-            margin: 8mm;
+            margin: 12mm;
             size: A4 portrait;
         }
 
