@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\View;
 use App\Models\Message;
 use App\Models\EmailCampaignRecipient;
 use App\Models\EmailCampaign;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -36,7 +37,11 @@ class AppServiceProvider extends ServiceProvider
                 $userId = Auth::id();
                 
                 // Get bookmarked memo IDs for the current user
-                $bookmarkedMemoIds = Auth::user()->bookmarkedMemos()->pluck('id')->toArray();
+                // Query pivot table directly to avoid ambiguous column error
+                $bookmarkedMemoIds = DB::table('memo_user_bookmarks')
+                    ->where('user_id', $userId)
+                    ->pluck('campaign_id')
+                    ->toArray();
                 
                 // Calculate message counts for all authenticated users, excluding bookmarked memos
                 $newMessagesQuery = EmailCampaignRecipient::where('user_id', $userId)
