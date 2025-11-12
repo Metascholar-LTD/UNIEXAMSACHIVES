@@ -1026,24 +1026,27 @@
     
     .chat-header-right {
         width: 100%;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: center;
         gap: 8px;
         flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
     }
     
     .memo-status {
-        order: 1;
+        order: 0;
         flex-shrink: 0;
     }
     
     .chat-actions {
-        order: 2;
-        width: 100%;
+        order: 0;
+        width: auto;
         justify-content: flex-start;
         gap: 4px;
         flex-wrap: wrap;
-        margin-top: 8px;
+        margin-top: 0;
+        margin-left: 8px;
     }
     
     .chat-actions .btn-outline-primary,
@@ -1138,25 +1141,27 @@
 @media (min-width: 1200px) {
     .chat-header-top {
         padding: 15px 15px 10px 15px;
-        flex-direction: row;
-        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: stretch;
         gap: 12px;
     }
     
     .chat-header-left {
-        width: auto;
+        width: 100%;
         gap: 10px;
         flex-shrink: 0;
+        justify-content: flex-start;
     }
     
     .chat-header-right {
-        width: auto;
+        width: 100%;
         gap: 10px;
         flex-wrap: wrap;
-        flex: 1;
-        justify-content: flex-end;
-        min-width: 0;
+        justify-content: flex-start;
         align-items: center;
+        min-width: 0;
+        display: flex;
+        flex-direction: row;
     }
     
     .memo-status {
@@ -1164,7 +1169,6 @@
         flex-shrink: 0;
         display: flex;
         align-items: center;
-        align-self: center;
         gap: 4px;
     }
     
@@ -1183,10 +1187,10 @@
         width: auto;
         gap: 5px;
         flex-wrap: wrap;
-        justify-content: flex-end;
+        justify-content: flex-start;
         align-items: center;
-        align-self: center;
         margin-top: 0;
+        margin-left: 10px;
     }
     
     .chat-actions .btn-outline-primary,
@@ -1267,10 +1271,32 @@
 @media (min-width: 1600px) {
     .chat-header-top {
         padding: 20px 20px 15px 20px;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .chat-header-left {
+        width: auto;
+        justify-content: flex-start;
+    }
+    
+    .chat-header-right {
+        width: auto;
+        flex: 1;
+        justify-content: flex-end;
+        align-items: center;
+    }
+    
+    .memo-status {
+        align-self: center;
     }
     
     .chat-actions {
         gap: 8px;
+        justify-content: flex-end;
+        align-self: center;
+        width: auto;
     }
     
     .chat-actions .btn-outline-primary,
