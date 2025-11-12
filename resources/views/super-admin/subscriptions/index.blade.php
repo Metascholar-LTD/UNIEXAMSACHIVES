@@ -408,13 +408,6 @@
             @endif
         </div>
     </div>
-
-    {{-- Quick Actions --}}
-    <div class="text-right mb-4">
-        <a href="{{ route('super-admin.subscriptions.create') }}" class="btn-modern btn-modern-primary">
-            <i class="icofont-plus"></i> New Subscription
-        </a>
-    </div>
 </div>
 @endsection
 
