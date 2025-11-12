@@ -359,7 +359,7 @@
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('positions.index') ? 'active' : '' }}" href="{{route('positions.index')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762944556/48e4d7be-3f74-4aa9-9b87-8a7b435683d5.png" alt="Positions" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762944556/48e4d7be-3f74-4aa9-9b87-8a7b435683d5.png" alt="Positions" style="width: 22px; height: 22px; object-fit: contain; margin-right: 10px;">
                                 Positions</a>
                         </li>
                         <li>
