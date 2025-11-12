@@ -711,7 +711,8 @@
 /* Neumorphic Button Styling for Complete, Suspend, Archive */
 .chat-actions .btn-outline-success,
 .chat-actions .btn-outline-warning,
-.chat-actions .btn-outline-secondary {
+.chat-actions .btn-outline-secondary,
+.chat-actions .btn-outline-info {
     background-color: #e4e4e4;
     border: none;
     border-radius: 10px;
@@ -736,13 +737,15 @@
 
 .chat-actions .btn-outline-success:hover,
 .chat-actions .btn-outline-warning:hover,
-.chat-actions .btn-outline-secondary:hover {
+.chat-actions .btn-outline-secondary:hover,
+.chat-actions .btn-outline-info:hover {
     box-shadow: none;
 }
 
 .chat-actions .btn-outline-success i,
 .chat-actions .btn-outline-warning i,
-.chat-actions .btn-outline-secondary i {
+.chat-actions .btn-outline-secondary i,
+.chat-actions .btn-outline-info i {
     width: 20px;
     height: 20px;
     margin-right: 5px;
@@ -800,6 +803,24 @@
 }
 
 .chat-actions .btn-outline-secondary:hover i {
+    color: #e4e4e4;
+}
+
+/* Keep in View (K.I.V) Button */
+.chat-actions .btn-outline-info {
+    color: #17a2b8;
+}
+
+.chat-actions .btn-outline-info:hover {
+    background-color: #17a2b8;
+    color: #e4e4e4;
+}
+
+.chat-actions .btn-outline-info i {
+    color: #17a2b8;
+}
+
+.chat-actions .btn-outline-info:hover i {
     color: #e4e4e4;
 }
 
