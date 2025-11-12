@@ -349,25 +349,8 @@
                     @unless(auth()->user()->is_admin)
                         <li>
                             <a class="{{ request()->routeIs('dashboard.users') ? 'active' : '' }}" href="{{route('dashboard.users')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-user">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762942427/776ed950-3ea3-4bdb-97e6-8ade766c6ebd.png" alt="Manage Users" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Manage Users</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.details.store') ? 'active' : '' }}" href="#" id="triggerLogoModal">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-user">
-                                    <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
-                                    <circle cx="12" cy="7" r="4"></circle>
-                                </svg>
-                                Set Logo / Title</a>
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('departments.index') ? 'active' : '' }}" href="{{route('departments.index')}}">
@@ -424,13 +407,7 @@
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                     <a href="{{route('logout')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-volume-1">
-                            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-                            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-                        </svg>
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762942345/d8fc56f0-cf0d-4ba9-b441-8d19dc1623d3.png" alt="Logout" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Logout</a>
                     </form>
                 </li>
