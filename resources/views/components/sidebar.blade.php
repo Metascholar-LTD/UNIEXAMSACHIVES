@@ -179,22 +179,12 @@
                 </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.upload.file') ? 'active' : '' }}" href="{{route('dashboard.upload.file')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-bookmark">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                            </svg>
+                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939473/file_k1pnab.png" alt="All Files Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                             All Files Archive</a><span class="dashboard__label">{{$allFilesCount}}</span>
                     </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.folders.*') ? 'active' : '' }}" href="{{route('dashboard.folders.index')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-folder">
-                                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                            </svg>
+                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939707/folder_vta5tl.png" alt="My Folders" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                             My Folders</a>
                     </li>
                 @endif
@@ -227,24 +217,14 @@
                     </li>
                         <li>
                             <a class="{{ request()->routeIs('dashboard.all.upload.file') ? 'active' : '' }}" href="{{route('dashboard.all.upload.file')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-bookmark">
-                                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                                </svg>
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939473/file_k1pnab.png" alt="All Files Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 All Files Archive
                             </a><span class="dashboard__label">{{$allFilesCount}}</span>
 
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('dashboard.folders.*') ? 'active' : '' }}" href="{{route('dashboard.folders.index')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-folder">
-                                    <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                                </svg>
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939707/folder_vta5tl.png" alt="My Folders" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 My Folders</a>
                         </li>
                     @endunless
