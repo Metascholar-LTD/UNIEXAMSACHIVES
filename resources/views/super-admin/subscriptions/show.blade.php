@@ -716,25 +716,6 @@
                     <i class="icofont-arrow-left"></i> Back to Subscriptions
                 </a>
 
-                <a href="{{ route('super-admin.subscriptions.edit', $subscription->id) }}" class="btn-modern btn-modern-primary">
-                    <i class="icofont-edit"></i> Edit Subscription
-                </a>
-
-                @if($subscription->status !== 'suspended' && $subscription->status !== 'cancelled')
-                    <form action="{{ route('super-admin.subscriptions.renew', $subscription->id) }}" method="POST" class="d-inline">
-                        @csrf
-                        <button type="submit" class="btn-modern btn-modern-success">
-                            <i class="icofont-refresh"></i> Renew Subscription
-                        </button>
-                    </form>
-
-                    @if($subscription->status !== 'suspended')
-                    <button type="button" class="btn-modern btn-modern-warning" data-bs-toggle="modal" data-bs-target="#suspendModal">
-                        <i class="icofont-ban"></i> Suspend Subscription
-                    </button>
-                    @endif
-                @endif
-
                 @if($subscription->status == 'suspended' || $subscription->status == 'expired')
                     <form action="{{ route('super-admin.subscriptions.reactivate', $subscription->id) }}" method="POST" class="d-inline">
                         @csrf
@@ -744,31 +725,6 @@
                     </form>
                 @endif
             </div>
-        </div>
-    </div>
-</div>
-
-{{-- Suspend Modal --}}
-<div class="modal fade" id="suspendModal" tabindex="-1" aria-labelledby="suspendModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <form action="{{ route('super-admin.subscriptions.suspend', $subscription->id) }}" method="POST">
-                @csrf
-                <div class="modal-header">
-                    <h5 class="modal-title" id="suspendModalLabel">Suspend Subscription</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="mb-3">
-                        <label for="reason" class="form-label">Reason for Suspension <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="reason" name="reason" rows="4" required placeholder="Please provide a reason for suspending this subscription..."></textarea>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                    <button type="submit" class="btn btn-warning">Suspend Subscription</button>
-                </div>
-            </form>
         </div>
     </div>
 </div>
