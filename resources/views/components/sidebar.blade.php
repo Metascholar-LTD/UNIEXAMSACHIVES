@@ -169,12 +169,7 @@
                 </li>
                 <li>
                     <a class="{{ request()->routeIs('dashboard.approve.files') ? 'active' : '' }}" href="{{route('dashboard.approve.files')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-bookmark">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939971/approved_jjmla9.png" alt="Files Approved" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Files Approved</a><span class="dashboard__label">{{$approvedFilesCount}}</span>
                 </li>
                     <li>
@@ -205,12 +200,7 @@
                     </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.all.approve.files') ? 'active' : '' }}" href="{{route('dashboard.all.approve.files')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-bookmark">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                            </svg>
+                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939971/approved_jjmla9.png" alt="Approved Files" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                             Approved Files
                         </a><span class="dashboard__label">{{$approvedFilesCount}}</span>
 
