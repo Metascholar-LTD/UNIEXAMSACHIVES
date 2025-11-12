@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\View;
 use App\Models\Message;
 use App\Models\EmailCampaignRecipient;
+use App\Models\EmailCampaign;
 use Illuminate\Support\Facades\URL;
 
 class AppServiceProvider extends ServiceProvider
@@ -32,14 +33,28 @@ class AppServiceProvider extends ServiceProvider
         
         View::composer('*', function ($view) {
             if(Auth::check()){
-                // Calculate message counts for all authenticated users
-                $newMessagesCount = EmailCampaignRecipient::where('user_id', Auth::id())
-                    ->where('is_read', false)
-                    ->count();
-                $totalMemosCount = EmailCampaignRecipient::where('user_id', Auth::id())->count();
+                $userId = Auth::id();
+                
+                // Get bookmarked memo IDs for the current user
+                $bookmarkedMemoIds = Auth::user()->bookmarkedMemos()->pluck('id')->toArray();
+                
+                // Calculate message counts for all authenticated users, excluding bookmarked memos
+                $newMessagesQuery = EmailCampaignRecipient::where('user_id', $userId)
+                    ->where('is_read', false);
+                    
+                if (!empty($bookmarkedMemoIds)) {
+                    $newMessagesQuery->whereNotIn('comm_campaign_id', $bookmarkedMemoIds);
+                }
+                $newMessagesCount = $newMessagesQuery->count();
+                
+                $totalMemosQuery = EmailCampaignRecipient::where('user_id', $userId);
+                if (!empty($bookmarkedMemoIds)) {
+                    $totalMemosQuery->whereNotIn('comm_campaign_id', $bookmarkedMemoIds);
+                }
+                $totalMemosCount = $totalMemosQuery->count();
                 
                 // Calculate bookmarked memos count
-                $bookmarkedCount = Auth::user()->bookmarkedMemos()->count();
+                $bookmarkedCount = count($bookmarkedMemoIds);
                 
                 if (Auth::user()->is_admin) {
                     $exams = Exam::where('user_id', Auth::user()->id)->get();
