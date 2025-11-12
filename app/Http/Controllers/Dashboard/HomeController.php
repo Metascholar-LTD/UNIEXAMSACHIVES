@@ -869,6 +869,10 @@ class HomeController extends Controller
                         $query->where('memo_status', $status);
                     }
                 })
+                // Exclude bookmarked memos from portal - they should only appear in Keep in View
+                ->whereDoesntHave('bookmarkedBy', function($query) use ($userId) {
+                    $query->where('user_id', $userId);
+                })
                 ->orderBy('updated_at', 'desc')
                 ->get();
 

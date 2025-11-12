@@ -38,6 +38,9 @@ class AppServiceProvider extends ServiceProvider
                     ->count();
                 $totalMemosCount = EmailCampaignRecipient::where('user_id', Auth::id())->count();
                 
+                // Calculate bookmarked memos count
+                $bookmarkedCount = Auth::user()->bookmarkedMemos()->count();
+                
                 if (Auth::user()->is_admin) {
                     $exams = Exam::where('user_id', Auth::user()->id)->get();
                     $files = File::where('user_id', Auth::user()->id)->get();
@@ -45,6 +48,7 @@ class AppServiceProvider extends ServiceProvider
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
+                        'bookmarkedCount' => $bookmarkedCount,
                         'allExansCount' => $exams->count(),
                         'approvedCount' => $exams->where('is_approve', 1)->count(),
                         'pendingCount' => $exams->where('is_approve', 0)->count(),
@@ -60,6 +64,7 @@ class AppServiceProvider extends ServiceProvider
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
+                        'bookmarkedCount' => $bookmarkedCount,
                         'allExansCount' => $exams->count(),
                         'approvedCount' => $exams->where('is_approve', 1)->count(),
                         'pendingCount' => $exams->where('is_approve', 0)->count(),

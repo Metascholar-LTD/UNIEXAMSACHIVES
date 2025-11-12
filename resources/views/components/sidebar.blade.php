@@ -43,7 +43,7 @@
                     <a class="{{ request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.keep-in-view')}}">
                         <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Keep in View
-                    </a>
+                    </a><span class="dashboard__label">{{ $bookmarkedCount ?? 0 }}</span>
                 </li>
 
                 <li>
