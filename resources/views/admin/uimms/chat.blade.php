@@ -581,6 +581,9 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex-wrap: wrap;
+    gap: 15px;
+    overflow: visible;
 }
 
 .chat-header-left {
@@ -593,6 +596,8 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-wrap: wrap;
+    min-width: 0;
 }
 
 .chat-header-separator {
@@ -663,6 +668,14 @@
 .chat-actions {
     display: flex;
     gap: 8px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.chat-actions .btn-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
     align-items: center;
 }
 
@@ -904,6 +917,224 @@
 .export-btn:hover {
     background: linear-gradient(135deg, #20c997 0%, #17a2b8 100%);
     box-shadow: 2px 2px 12px rgba(40, 167, 69, 0.3);
+}
+
+/* ============================================
+   RESPONSIVE DESIGN FOR TABLETS AND LAPTOPS
+   ============================================ */
+
+/* Large Laptops (1367px - 1600px) - Slight adjustments */
+@media (max-width: 1600px) {
+    .chat-header-top {
+        padding: 18px 18px 12px 18px;
+    }
+    
+    .chat-actions {
+        gap: 6px;
+    }
+    
+    .chat-actions .btn-outline-primary,
+    .chat-actions .btn-outline-success,
+    .chat-actions .btn-outline-warning,
+    .chat-actions .btn-outline-secondary,
+    .chat-actions .btn-outline-info {
+        padding: 8px 12px;
+        font-size: 12px;
+        min-width: 70px;
+    }
+}
+
+/* Standard Laptops (1025px - 1366px) - More compact */
+@media (max-width: 1366px) {
+    .chat-header-top {
+        padding: 15px 15px 10px 15px;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+    
+    .chat-header-left {
+        gap: 10px;
+        flex-shrink: 0;
+    }
+    
+    .chat-header-right {
+        gap: 10px;
+        flex-wrap: wrap;
+        flex: 1;
+        justify-content: flex-end;
+        min-width: 0;
+    }
+    
+    .memo-status {
+        flex-shrink: 0;
+    }
+    
+    .chat-actions {
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+    
+    .chat-actions .btn-outline-primary,
+    .chat-actions .btn-outline-success,
+    .chat-actions .btn-outline-warning,
+    .chat-actions .btn-outline-secondary,
+    .chat-actions .btn-outline-info {
+        padding: 7px 10px;
+        font-size: 11px;
+        min-width: 60px;
+        margin: 2px;
+    }
+    
+    .chat-actions .btn-outline-primary i,
+    .chat-actions .btn-outline-success i,
+    .chat-actions .btn-outline-warning i,
+    .chat-actions .btn-outline-secondary i,
+    .chat-actions .btn-outline-info i,
+    .chat-actions .btn-outline-info img {
+        width: 16px;
+        height: 16px;
+        font-size: 14px;
+        margin-right: 4px;
+    }
+    
+    .responsive-btn {
+        padding: 6px 12px;
+        min-width: 70px;
+    }
+    
+    .responsive-btn .text {
+        font-size: 12px;
+    }
+    
+    .header-separator {
+        height: 24px;
+        margin: 0 8px;
+    }
+}
+
+/* Tablets (769px - 1024px) - Stack and optimize */
+@media (max-width: 1024px) {
+    .chat-header-top {
+        padding: 12px 12px 8px 12px;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+    
+    .chat-header-left {
+        width: 100%;
+        justify-content: flex-start;
+        gap: 8px;
+    }
+    
+    .chat-header-right {
+        width: 100%;
+        justify-content: space-between;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    
+    .memo-status {
+        order: 1;
+        flex-shrink: 0;
+    }
+    
+    .chat-actions {
+        order: 2;
+        width: 100%;
+        justify-content: flex-start;
+        gap: 4px;
+        flex-wrap: wrap;
+        margin-top: 8px;
+    }
+    
+    .chat-actions .btn-outline-primary,
+    .chat-actions .btn-outline-success,
+    .chat-actions .btn-outline-warning,
+    .chat-actions .btn-outline-secondary,
+    .chat-actions .btn-outline-info {
+        padding: 6px 8px;
+        font-size: 10px;
+        min-width: 55px;
+        margin: 2px;
+    }
+    
+    .chat-actions .btn-outline-primary i,
+    .chat-actions .btn-outline-success i,
+    .chat-actions .btn-outline-warning i,
+    .chat-actions .btn-outline-secondary i,
+    .chat-actions .btn-outline-info i,
+    .chat-actions .btn-outline-info img {
+        width: 14px;
+        height: 14px;
+        font-size: 12px;
+        margin-right: 3px;
+    }
+    
+    .responsive-btn {
+        padding: 6px 10px;
+        min-width: 60px;
+    }
+    
+    .responsive-btn .text {
+        font-size: 11px;
+    }
+    
+    .header-separator {
+        height: 20px;
+        margin: 0 6px;
+    }
+    
+    .status-badge {
+        padding: 4px 10px;
+        font-size: 0.75rem;
+    }
+}
+
+/* Small Tablets (481px - 768px) - Further optimization */
+@media (max-width: 768px) {
+    .chat-header-top {
+        padding: 10px 10px 6px 10px;
+    }
+    
+    .chat-header-left {
+        flex-wrap: wrap;
+    }
+    
+    .chat-actions {
+        gap: 3px;
+    }
+    
+    .chat-actions .btn-outline-primary,
+    .chat-actions .btn-outline-success,
+    .chat-actions .btn-outline-warning,
+    .chat-actions .btn-outline-secondary,
+    .chat-actions .btn-outline-info {
+        padding: 5px 6px;
+        font-size: 9px;
+        min-width: 50px;
+        margin: 1px;
+    }
+    
+    .chat-actions .btn-outline-primary i,
+    .chat-actions .btn-outline-success i,
+    .chat-actions .btn-outline-warning i,
+    .chat-actions .btn-outline-secondary i,
+    .chat-actions .btn-outline-info i,
+    .chat-actions .btn-outline-info img {
+        width: 12px;
+        height: 12px;
+        font-size: 11px;
+        margin-right: 2px;
+    }
+    
+    .btn-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 3px;
+    }
 }
 
 /* Memo Details Section */
