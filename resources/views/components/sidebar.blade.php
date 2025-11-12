@@ -387,7 +387,7 @@
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('dashboard.payment-history.*') ? 'active' : '' }}" href="{{route('dashboard.payment-history.index')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762942944/fad007d4-0d21-4c41-9351-c06d179223f6.png" alt="Payment History" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943254/4c43ca3d-5584-4acc-ab5f-6ddd02ec657e.png" alt="Payment History" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Payment History</a>
                         </li>
                     @endunless
