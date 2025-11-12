@@ -80,6 +80,9 @@
                                             </button>
                                         @elseif(!in_array($memo->memo_status, ['completed', 'archived', 'suspended']) && $canManageMemo)
                                             {{-- When not suspended, completed, or archived, show normal buttons --}}
+                                            <button class="btn btn-sm btn-outline-info" onclick="keepInViewMemo()">
+                                                <i class="icofont-eye"></i> K.I.V
+                                            </button>
                                             <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
                                                 <i class="icofont-check-circled"></i> Complete
                                             </button>
@@ -2773,6 +2776,11 @@ function updateMemoStatus(status, reason = null) {
         console.error('Error updating status:', error);
         alert('Error updating memo status. Please try again.');
     });
+}
+
+// Keep in View function
+function keepInViewMemo() {
+    alert('This memo will be sent to the Keep in View page for future reference. You can access it later from the Keep in View section.');
 }
 
 // Confirmation function for completing memo
