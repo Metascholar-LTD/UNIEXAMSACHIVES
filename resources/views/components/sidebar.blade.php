@@ -34,7 +34,7 @@
                 {{-- Memos Portal - Single Link (No Dropdown) --}}
                 <li>
                     <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762873198/resume_bipphk.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                         Memos Portal
                     </a><span class="dashboard__label">{{ $newMessagesCount ?? 0 }}</span>
                 </li>
