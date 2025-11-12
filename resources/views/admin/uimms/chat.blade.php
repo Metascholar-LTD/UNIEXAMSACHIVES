@@ -81,7 +81,7 @@
                                         @elseif(!in_array($memo->memo_status, ['completed', 'archived', 'suspended']) && $canManageMemo)
                                             {{-- When not suspended, completed, or archived, show normal buttons --}}
                                             <button class="btn btn-sm btn-outline-info" onclick="keepInViewMemo()">
-                                                <i class="icofont-eye"></i> K.I.V
+                                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762945824/d1e9fdc7-98db-4942-9fa9-caded4373da5.png" alt="K.I.V"> K.I.V
                                             </button>
                                             <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
                                                 <i class="icofont-check-circled"></i> Complete
@@ -816,12 +816,21 @@
     color: #e4e4e4;
 }
 
-.chat-actions .btn-outline-info i {
+.chat-actions .btn-outline-info i,
+.chat-actions .btn-outline-info img {
     color: #17a2b8;
+    width: 20px;
+    height: 20px;
+    margin-right: 5px;
+    object-fit: contain;
 }
 
 .chat-actions .btn-outline-info:hover i {
     color: #e4e4e4;
+}
+
+.chat-actions .btn-outline-info:hover img {
+    filter: brightness(0) invert(1);
 }
 
 /* Responsive Button Styling for Back Button */
