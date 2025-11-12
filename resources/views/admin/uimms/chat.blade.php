@@ -3248,7 +3248,7 @@ function keepInViewMemo() {
         'Are you sure you want to mark this memo as Keep in View?',
         function() {
             // TODO: Implement keep in view functionality
-            alert('This memo will be sent to the Keep in View page for future reference. You can access it later from the Keep in View section.');
+            // Memo will be sent to Keep in View page
         },
         null,
         {
