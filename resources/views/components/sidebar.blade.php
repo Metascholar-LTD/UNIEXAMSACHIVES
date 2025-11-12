@@ -248,13 +248,7 @@
                     <ul>
                         <li>
                             <a class="{{ request()->routeIs('admin.communication.index') ? 'active' : '' }}" href="{{route('admin.communication.index')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-mail">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Memos</a>
                         </li>
                         <li>
@@ -310,13 +304,7 @@
                     <ul>
                         <li>
                             <a class="{{ request()->routeIs('admin.communication-admin.index') ? 'active' : '' }}" href="{{route('admin.communication-admin.index')}}">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                    viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                    stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                    class="feather feather-mail">
-                                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                                    <polyline points="22,6 12,13 2,6"></polyline>
-                                </svg>
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Memos</a>
                         </li>
                         <li>
