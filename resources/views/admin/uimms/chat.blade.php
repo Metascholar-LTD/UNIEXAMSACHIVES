@@ -3247,8 +3247,7 @@ function keepInViewMemo() {
     confirmAction(
         'Are you sure you want to mark this memo as Keep in View?',
         function() {
-            // TODO: Implement keep in view functionality
-            // Memo will be sent to Keep in View page
+            bookmarkMemo();
         },
         null,
         {
@@ -3258,6 +3257,31 @@ function keepInViewMemo() {
             subtitle: 'This memo will be sent to the Keep in View page for future reference. You can access it later from the Keep in View section.'
         }
     );
+}
+
+// Bookmark memo function
+function bookmarkMemo() {
+    const formData = new FormData();
+    formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+    
+    fetch(`/dashboard/uimms/memo/${memoId}/toggle-bookmark`, {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Successfully bookmarked - memo will now appear in Keep in View section
+            // Optionally reload or show success message
+            location.reload();
+        } else {
+            alert(data.message || 'Error adding memo to Keep in View. Please try again.');
+        }
+    })
+    .catch(error => {
+        console.error('Error bookmarking memo:', error);
+        alert('Error adding memo to Keep in View. Please try again.');
+    });
 }
 
 // Confirmation function for completing memo
