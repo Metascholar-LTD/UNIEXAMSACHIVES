@@ -946,151 +946,71 @@
 }
 
 /* ============================================
-   RESPONSIVE DESIGN FOR TABLETS AND LAPTOPS
+   RESPONSIVE DESIGN - MOBILE FIRST APPROACH
    ============================================ */
 
-/* Large Laptops (1367px - 1600px) - Slight adjustments */
-@media (max-width: 1600px) {
-    .chat-header-top {
-        padding: 18px 18px 12px 18px;
-    }
-    
-    .chat-actions {
-        gap: 6px;
-    }
-    
-    .chat-actions .btn-outline-primary,
-    .chat-actions .btn-outline-success,
-    .chat-actions .btn-outline-warning,
-    .chat-actions .btn-outline-secondary,
-    .chat-actions .btn-outline-info {
-        padding: 8px 12px;
-        font-size: 12px;
-        min-width: 70px;
-    }
+/* Mobile (0px - 767px) - Base styles */
+.chat-header-top {
+    padding: 10px 10px 6px 10px;
 }
 
-/* Standard Laptops (1025px - 1366px) - More compact */
-@media (max-width: 1366px) {
-    .chat-header-top {
-        padding: 15px 15px 10px 15px;
-        flex-wrap: wrap;
-        gap: 12px;
-    }
-    
-    .chat-header-left {
-        gap: 10px;
-        flex-shrink: 0;
-    }
-    
-    .chat-header-right {
-        gap: 10px;
-        flex-wrap: wrap;
-        flex: 1;
-        justify-content: flex-end;
-        min-width: 0;
-        align-items: center;
-    }
-    
-    .memo-status {
-        flex-shrink: 0;
-        display: flex;
-        align-items: center;
-        align-self: center;
-        gap: 4px;
-    }
-    
-    .memo-status-separator {
-        height: 14px;
-        margin: 0 4px;
-    }
-    
-    .urgency-flag-icon {
-        font-size: 0.95rem !important;
-        padding: 3px !important;
-    }
-    
-    .chat-actions {
-        gap: 5px;
-        flex-wrap: wrap;
-        justify-content: flex-end;
-        align-items: center;
-        align-self: center;
-    }
-    
-    .chat-actions .btn-outline-primary,
-    .chat-actions .btn-outline-success,
-    .chat-actions .btn-outline-warning,
-    .chat-actions .btn-outline-secondary,
-    .chat-actions .btn-outline-info {
-        padding: 7px 10px;
-        font-size: 11px;
-        min-width: 60px;
-        margin: 2px;
-    }
-    
-    .chat-actions .btn-outline-primary i,
-    .chat-actions .btn-outline-success i,
-    .chat-actions .btn-outline-warning i,
-    .chat-actions .btn-outline-secondary i,
-    .chat-actions .btn-outline-info i,
-    .chat-actions .btn-outline-info img {
-        width: 16px;
-        height: 16px;
-        font-size: 14px;
-        margin-right: 4px;
-    }
-    
-    .responsive-btn {
-        padding: 6px 12px;
-        min-width: 70px;
-    }
-    
-    .responsive-btn .text {
-        font-size: 12px;
-    }
-    
-    .header-separator {
-        height: 24px;
-        margin: 0 8px;
-    }
-    
-    .chat-header-bottom {
-        padding: 12px 15px 15px 15px;
-    }
-    
-    .chat-title {
-        flex: 1;
-        min-width: 0;
-    }
-    
-    .chat-title h4 {
-        font-size: 1rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-    }
-    
-    .chat-participants {
-        max-width: 50%;
-        flex-shrink: 1;
-    }
-    
-    .participant-avatar {
-        width: 24px;
-        height: 24px;
-        flex-shrink: 0;
-    }
-    
-    .recipients-count {
-        font-size: 0.7rem;
-        padding: 3px 6px;
-        white-space: nowrap;
-    }
+.chat-header-left {
+    flex-wrap: wrap;
 }
 
-/* Tablets (769px - 1024px) - Stack and optimize */
-@media (max-width: 1024px) {
+.chat-actions {
+    gap: 3px;
+}
+
+.chat-actions .btn-outline-primary,
+.chat-actions .btn-outline-success,
+.chat-actions .btn-outline-warning,
+.chat-actions .btn-outline-secondary,
+.chat-actions .btn-outline-info {
+    padding: 5px 6px;
+    font-size: 9px;
+    min-width: 50px;
+    margin: 1px;
+}
+
+.chat-actions .btn-outline-primary i,
+.chat-actions .btn-outline-success i,
+.chat-actions .btn-outline-warning i,
+.chat-actions .btn-outline-secondary i,
+.chat-actions .btn-outline-info i,
+.chat-actions .btn-outline-info img {
+    width: 12px;
+    height: 12px;
+    font-size: 11px;
+    margin-right: 2px;
+}
+
+.btn-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px;
+}
+
+.chat-header-bottom {
+    padding: 8px 10px 10px 10px;
+}
+
+.chat-title h4 {
+    font-size: 0.9rem;
+}
+
+.participant-avatar {
+    width: 20px;
+    height: 20px;
+}
+
+.recipients-count {
+    font-size: 0.6rem;
+    padding: 2px 4px;
+}
+
+/* Tablet - 768px to 1199px */
+@media (min-width: 768px) {
     .chat-header-top {
         padding: 12px 12px 8px 12px;
         flex-direction: column;
@@ -1214,18 +1134,59 @@
     }
 }
 
-/* Small Tablets (481px - 768px) - Further optimization */
-@media (max-width: 768px) {
+/* Desktop - 1200px to 1599px */
+@media (min-width: 1200px) {
     .chat-header-top {
-        padding: 10px 10px 6px 10px;
+        padding: 15px 15px 10px 15px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 12px;
     }
     
     .chat-header-left {
+        width: auto;
+        gap: 10px;
+        flex-shrink: 0;
+    }
+    
+    .chat-header-right {
+        width: auto;
+        gap: 10px;
         flex-wrap: wrap;
+        flex: 1;
+        justify-content: flex-end;
+        min-width: 0;
+        align-items: center;
+    }
+    
+    .memo-status {
+        order: 0;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        align-self: center;
+        gap: 4px;
+    }
+    
+    .memo-status-separator {
+        height: 14px;
+        margin: 0 4px;
+    }
+    
+    .urgency-flag-icon {
+        font-size: 0.95rem !important;
+        padding: 3px !important;
     }
     
     .chat-actions {
-        gap: 3px;
+        order: 0;
+        width: auto;
+        gap: 5px;
+        flex-wrap: wrap;
+        justify-content: flex-end;
+        align-items: center;
+        align-self: center;
+        margin-top: 0;
     }
     
     .chat-actions .btn-outline-primary,
@@ -1233,10 +1194,10 @@
     .chat-actions .btn-outline-warning,
     .chat-actions .btn-outline-secondary,
     .chat-actions .btn-outline-info {
-        padding: 5px 6px;
-        font-size: 9px;
-        min-width: 50px;
-        margin: 1px;
+        padding: 7px 10px;
+        font-size: 11px;
+        min-width: 60px;
+        margin: 2px;
     }
     
     .chat-actions .btn-outline-primary i,
@@ -1245,34 +1206,111 @@
     .chat-actions .btn-outline-secondary i,
     .chat-actions .btn-outline-info i,
     .chat-actions .btn-outline-info img {
-        width: 12px;
-        height: 12px;
-        font-size: 11px;
-        margin-right: 2px;
+        width: 16px;
+        height: 16px;
+        font-size: 14px;
+        margin-right: 4px;
     }
     
-    .btn-group {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 3px;
+    .responsive-btn {
+        padding: 6px 12px;
+        min-width: 70px;
+    }
+    
+    .responsive-btn .text {
+        font-size: 12px;
+    }
+    
+    .header-separator {
+        height: 24px;
+        margin: 0 8px;
     }
     
     .chat-header-bottom {
-        padding: 8px 10px 10px 10px;
+        padding: 12px 15px 15px 15px;
+        flex-direction: row;
+    }
+    
+    .chat-title {
+        flex: 1;
+        min-width: 0;
+        width: auto;
     }
     
     .chat-title h4 {
-        font-size: 0.9rem;
+        font-size: 1rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    .chat-participants {
+        max-width: 50%;
+        flex-shrink: 1;
+        width: auto;
     }
     
     .participant-avatar {
-        width: 20px;
-        height: 20px;
+        width: 24px;
+        height: 24px;
+        flex-shrink: 0;
     }
     
     .recipients-count {
-        font-size: 0.6rem;
-        padding: 2px 4px;
+        font-size: 0.7rem;
+        padding: 3px 6px;
+        white-space: nowrap;
+    }
+}
+
+/* Large screens - 1600px and above */
+@media (min-width: 1600px) {
+    .chat-header-top {
+        padding: 20px 20px 15px 20px;
+    }
+    
+    .chat-actions {
+        gap: 8px;
+    }
+    
+    .chat-actions .btn-outline-primary,
+    .chat-actions .btn-outline-success,
+    .chat-actions .btn-outline-warning,
+    .chat-actions .btn-outline-secondary,
+    .chat-actions .btn-outline-info {
+        padding: 10px 15px;
+        font-size: 13px;
+        min-width: 80px;
+    }
+    
+    .chat-actions .btn-outline-primary i,
+    .chat-actions .btn-outline-success i,
+    .chat-actions .btn-outline-warning i,
+    .chat-actions .btn-outline-secondary i,
+    .chat-actions .btn-outline-info i,
+    .chat-actions .btn-outline-info img {
+        width: 20px;
+        height: 20px;
+        font-size: 16px;
+        margin-right: 5px;
+    }
+    
+    .chat-header-bottom {
+        padding: 15px 20px 20px 20px;
+    }
+    
+    .chat-title h4 {
+        font-size: 1.1rem;
+    }
+    
+    .participant-avatar {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .recipients-count {
+        font-size: 0.75rem;
+        padding: 4px 8px;
     }
 }
 
