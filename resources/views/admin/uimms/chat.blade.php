@@ -81,7 +81,7 @@
                                         @elseif(!in_array($memo->memo_status, ['completed', 'archived', 'suspended']) && $canManageMemo)
                                             {{-- When not suspended, completed, or archived, show normal buttons --}}
                                             <button class="btn btn-sm btn-outline-info" onclick="keepInViewMemo()">
-                                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762945824/d1e9fdc7-98db-4942-9fa9-caded4373da5.png" alt="K.I.V"> K.I.V
+                                                K.I.V
                                             </button>
                                             <button class="btn btn-sm btn-outline-success" onclick="confirmCompleteMemo()">
                                                 <i class="icofont-check-circled"></i> Complete
