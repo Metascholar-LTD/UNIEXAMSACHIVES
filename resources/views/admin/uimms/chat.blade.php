@@ -2810,7 +2810,20 @@ function updateMemoStatus(status, reason = null) {
 
 // Keep in View function
 function keepInViewMemo() {
-    alert('This memo will be sent to the Keep in View page for future reference. You can access it later from the Keep in View section.');
+    confirmAction(
+        'Are you sure you want to mark this memo as Keep in View?',
+        function() {
+            // TODO: Implement keep in view functionality
+            alert('This memo will be sent to the Keep in View page for future reference. You can access it later from the Keep in View section.');
+        },
+        null,
+        {
+            title: 'Keep in View',
+            type: 'info',
+            confirmText: 'Keep in View',
+            subtitle: 'This memo will be sent to the Keep in View page for future reference. You can access it later from the Keep in View section.'
+        }
+    );
 }
 
 // Confirmation function for completing memo
