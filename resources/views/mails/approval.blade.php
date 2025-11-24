@@ -249,9 +249,10 @@
                     </div>
                     <div class="credentials-message">
                         <strong>Email:</strong> {{ $email }}<br>
-                        <strong>Temporary Password:</strong> {{ $temporaryPassword }}<br><br>
+                        {{-- <strong>Temporary Password:</strong> {{ $temporaryPassword }}<br><br> --}}
+                        <strong>Password:</strong> Use the password you created during registration.<br><br>
                         <span style="color: #92400e; background-color: #fef3c7; padding: 5px; border-radius: 3px; display: inline-block;">
-                            ⚠️ Please change your password after your first login for security.
+                            ⚠️ Please change your password periodically to keep your account secure.
                         </span>
                     </div>
                 </div>
@@ -261,9 +262,11 @@
                         Getting Started
                     </div>
                     <ul class="steps-list">
-                        <li>Log in to the system using your registered email and temporary password</li>
+                        {{-- <li>Log in to the system using your registered email and temporary password</li> --}}
+                        <li>Log in using the password you created during registration</li>
                         <li>Explore your dashboard to see available features and options</li>
-                        <li>Change your password for security (recommended)</li>
+                        {{-- <li>Change your password for security (recommended)</li> --}}
+                        <li>Update your password whenever needed to keep your account safe</li>
                         <li>Upload and manage exam materials as needed</li>
                         <li>Contact support if you have any questions or need assistance</li>
                     </ul>

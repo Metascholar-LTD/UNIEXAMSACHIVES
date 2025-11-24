@@ -52,9 +52,9 @@ class TestApprovalEmail extends Command
         $this->line("MAIL_FROM_ADDRESS: " . config('mail.from.address'));
         
         // Generate temporary password for testing (firstname + 5 random numbers)
-        $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
-        $temporaryPassword = strtolower($user->first_name) . $randomNumbers;
-        $this->line("\nGenerated temporary password: {$temporaryPassword}");
+        // $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+        // $temporaryPassword = strtolower($user->first_name) . $randomNumbers;
+        // $this->line("\nGenerated temporary password: {$temporaryPassword}");
         
         // Test email sending
         if (env('MAIL_MAILER') == 'resend') {
@@ -76,7 +76,7 @@ class TestApprovalEmail extends Command
                     $htmlContent = view('mails.approval', [
                         'firstname' => $user->first_name,
                         'email' => $user->email,
-                        'temporaryPassword' => $temporaryPassword
+                        // 'temporaryPassword' => $temporaryPassword
                     ])->render();
                     
                     $subject = 'TEST - Account Successfully Approved - Your Login Credentials';

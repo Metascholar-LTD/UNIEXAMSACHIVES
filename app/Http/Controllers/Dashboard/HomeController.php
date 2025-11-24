@@ -661,20 +661,21 @@ class HomeController extends Controller
     {
         try {
             // Generate a temporary password for the user (firstname + 5 random numbers)
-            $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
-            $temporaryPassword = strtolower($user->first_name) . $randomNumbers;
+            // $randomNumbers = str_pad(rand(0, 99999), 5, '0', STR_PAD_LEFT);
+            // $temporaryPassword = strtolower($user->first_name) . $randomNumbers;
             
             \Log::info('Starting user approval process', [
                 'user_id' => $user->id,
                 'user_email' => $user->email,
-                'temporary_password' => $temporaryPassword
+                // 'temporary_password' => $temporaryPassword
             ]);
             
             // Update user with temporary password and approval status
             $user->update([
                 'is_approve' => true,
-                'password' => Hash::make($temporaryPassword),
-                'password_changed' => false
+                // 'password' => Hash::make($temporaryPassword),
+                // 'password_changed' => false
+                'password_changed' => true
             ]);
             
             \Log::info('User database updated successfully', [
@@ -691,7 +692,7 @@ class HomeController extends Controller
                 $htmlContent = view('mails.approval', [
                     'firstname' => $user->first_name,
                     'email' => $user->email,
-                    'temporaryPassword' => $temporaryPassword
+                    // 'temporaryPassword' => $temporaryPassword
                 ])->render();
                 
                 \Log::info('Attempting to send approval email', [
