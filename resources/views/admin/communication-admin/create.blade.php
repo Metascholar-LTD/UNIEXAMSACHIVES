@@ -434,7 +434,7 @@
                                         <div class="form-group">
                                             <label class="form-label">Actions</label>
                                             <div class="form-actions">
-                                                <button type="submit" name="action" value="send" class="action-btn send-btn">
+                                                <button type="button" id="send-memo-btn" class="action-btn send-btn">
                                                     <i class="icofont-send-mail"></i> Send Memo
                                                 </button>
                                                 <button type="submit" name="action" value="draft" class="action-btn draft-btn">
@@ -449,6 +449,44 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Send Memo Confirmation Modal -->
+<div id="sendMemoModal" class="memo-confirm-modal">
+    <div class="memo-confirm-modal-overlay"></div>
+    <div class="memo-confirm-modal-content">
+        <div class="memo-confirm-modal-header">
+            <div class="memo-confirm-icon">
+                <i class="icofont-send-mail"></i>
+            </div>
+            <h3>Confirm Send Memo</h3>
+        </div>
+        <div class="memo-confirm-modal-body">
+            <p>Are you sure you want to send this memo?</p>
+            <div class="memo-preview-info">
+                <div class="info-item">
+                    <i class="icofont-email"></i>
+                    <span id="modal-subject-preview">Subject will appear here</span>
+                </div>
+                <div class="info-item">
+                    <i class="icofont-users-alt-3"></i>
+                    <span id="modal-recipients-preview">Recipients will appear here</span>
+                </div>
+            </div>
+            <p class="memo-warning-text">
+                <i class="icofont-warning"></i>
+                This action cannot be undone. The memo will be sent immediately.
+            </p>
+        </div>
+        <div class="memo-confirm-modal-footer">
+            <button type="button" class="memo-confirm-btn memo-cancel-btn" id="cancelSendBtn">
+                <i class="icofont-close"></i> Cancel
+            </button>
+            <button type="button" class="memo-confirm-btn memo-send-confirm-btn" id="confirmSendBtn">
+                <i class="icofont-send-mail"></i> Yes, Send Memo
+            </button>
         </div>
     </div>
 </div>
@@ -1537,6 +1575,268 @@
   color: white;
 }
 
+/* Send Memo Confirmation Modal */
+.memo-confirm-modal {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease;
+}
+
+.memo-confirm-modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.memo-confirm-modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+  animation: fadeIn 0.3s ease;
+}
+
+.memo-confirm-modal-content {
+  position: relative;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 10001;
+}
+
+.memo-confirm-modal-header {
+  text-align: center;
+  padding: 32px 32px 24px;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.memo-confirm-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 24px rgba(16, 185, 129, 0.3);
+  animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.memo-confirm-icon i {
+  font-size: 36px;
+  color: white;
+}
+
+.memo-confirm-modal-header h3 {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+
+.memo-confirm-modal-body {
+  padding: 24px 32px;
+}
+
+.memo-confirm-modal-body > p:first-child {
+  font-size: 16px;
+  color: #475569;
+  text-align: center;
+  margin: 0 0 24px;
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.memo-preview-info {
+  background: #f8fafc;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border: 1px solid #e2e8f0;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.info-item:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.info-item i {
+  font-size: 18px;
+  color: #3b82f6;
+  width: 24px;
+  flex-shrink: 0;
+}
+
+.info-item span {
+  font-size: 14px;
+  color: #1e293b;
+  font-weight: 500;
+  word-break: break-word;
+}
+
+.memo-warning-text {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+  background: #fef3c7;
+  border: 1px solid #fcd34d;
+  border-radius: 12px;
+  color: #92400e;
+  font-size: 14px;
+  margin: 0;
+  font-weight: 500;
+}
+
+.memo-warning-text i {
+  font-size: 20px;
+  color: #f59e0b;
+  flex-shrink: 0;
+}
+
+.memo-confirm-modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 24px 32px 32px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.memo-confirm-btn {
+  flex: 1;
+  padding: 14px 24px;
+  border: none;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  letter-spacing: 0.02em;
+}
+
+.memo-cancel-btn {
+  background: #f1f5f9;
+  color: #64748b;
+  border: 2px solid #e2e8f0;
+}
+
+.memo-cancel-btn:hover {
+  background: #e2e8f0;
+  color: #475569;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.memo-send-confirm-btn {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.memo-send-confirm-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.memo-send-confirm-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Responsive Modal */
+@media (max-width: 576px) {
+  .memo-confirm-modal-content {
+    width: 95%;
+    max-height: 95vh;
+  }
+  
+  .memo-confirm-modal-header {
+    padding: 24px 24px 20px;
+  }
+  
+  .memo-confirm-icon {
+    width: 64px;
+    height: 64px;
+  }
+  
+  .memo-confirm-icon i {
+    font-size: 28px;
+  }
+  
+  .memo-confirm-modal-header h3 {
+    font-size: 20px;
+  }
+  
+  .memo-confirm-modal-body {
+    padding: 20px 24px;
+  }
+  
+  .memo-confirm-modal-footer {
+    flex-direction: column;
+    padding: 20px 24px 24px;
+  }
+  
+  .memo-confirm-btn {
+    width: 100%;
+  }
+}
+
 /* Preview Card */
 .preview-card {
   background: #f8fafc;
@@ -2246,33 +2546,102 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSelectedCount();
     updatePreview();
     
-    // Form submission
-    document.getElementById('emailForm').addEventListener('submit', function(e) {
+    // Send Memo Button - Show Confirmation Modal
+    const sendMemoBtn = document.getElementById('send-memo-btn');
+    const sendMemoModal = document.getElementById('sendMemoModal');
+    const cancelSendBtn = document.getElementById('cancelSendBtn');
+    const confirmSendBtn = document.getElementById('confirmSendBtn');
+    const modalSubjectPreview = document.getElementById('modal-subject-preview');
+    const modalRecipientsPreview = document.getElementById('modal-recipients-preview');
+    
+    function updateModalPreview() {
+        const subject = subjectInput.value || 'No subject';
+        modalSubjectPreview.textContent = subject.length > 50 ? subject.substring(0, 50) + '...' : subject;
+        
+        const recipientType = document.querySelector('input[name="recipient_type"]:checked');
+        if (recipientType) {
+            if (recipientType.value === 'all') {
+                modalRecipientsPreview.textContent = `All Registered Users ({{ $users->count() }} users)`;
+            } else if (recipientType.value === 'selected') {
+                const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
+                modalRecipientsPreview.textContent = `${selectedCount} Selected User${selectedCount !== 1 ? 's' : ''}`;
+            } else {
+                // Staff category
+                const categoryLabels = {
+                    'junior_staff': 'Junior Staff',
+                    'senior_staff': 'Senior Staff',
+                    'senior_member_non_teaching': 'Senior Member (Non-Teaching)',
+                    'senior_member_teaching': 'Senior Member (Teaching)'
+                };
+                modalRecipientsPreview.textContent = categoryLabels[recipientType.value] || recipientType.value;
+            }
+        }
+    }
+    
+    sendMemoBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        updateModalPreview();
+        sendMemoModal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    });
+    
+    function closeModal() {
+        sendMemoModal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    
+    cancelSendBtn.addEventListener('click', closeModal);
+    
+    sendMemoModal.addEventListener('click', function(e) {
+        if (e.target === sendMemoModal || e.target.classList.contains('memo-confirm-modal-overlay')) {
+            closeModal();
+        }
+    });
+    
+    confirmSendBtn.addEventListener('click', function() {
         // Ensure the textarea has the latest content
         updateTextareaContent();
         
-        const action = e.submitter.value;
-        
-        // Preserve clicked action value even if the submit button is disabled
-        // Some browsers exclude disabled controls from form submission
+        // Create hidden input for action
         const actionInput = document.createElement('input');
         actionInput.type = 'hidden';
         actionInput.name = 'action';
-        actionInput.value = action;
-        this.appendChild(actionInput);
+        actionInput.value = 'send';
+        document.getElementById('emailForm').appendChild(actionInput);
         
-        // Set the hidden input for send_immediately (only for send action, not draft)
-        if (action === 'send') {
-            const sendImmediatelyInput = document.createElement('input');
-            sendImmediatelyInput.type = 'hidden';
-            sendImmediatelyInput.name = 'send_immediately';
-            sendImmediatelyInput.value = document.getElementById('send_now').checked ? '1' : '0';
-            this.appendChild(sendImmediatelyInput);
-        }
+        // Set the hidden input for send_immediately
+        const sendImmediatelyInput = document.createElement('input');
+        sendImmediatelyInput.type = 'hidden';
+        sendImmediatelyInput.name = 'send_immediately';
+        sendImmediatelyInput.value = document.getElementById('send_now').checked ? '1' : '0';
+        document.getElementById('emailForm').appendChild(sendImmediatelyInput);
         
         // Show loading state
-        e.submitter.disabled = true;
-        e.submitter.innerHTML = '<i class="icofont-spinner fa-spin"></i> Processing...';
+        confirmSendBtn.disabled = true;
+        confirmSendBtn.innerHTML = '<i class="icofont-spinner fa-spin"></i> Sending...';
+        
+        // Submit the form
+        document.getElementById('emailForm').submit();
+    });
+    
+    // Close modal on Escape key
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && sendMemoModal.classList.contains('show')) {
+            closeModal();
+        }
+    });
+    
+    // Form submission (for draft button)
+    document.getElementById('emailForm').addEventListener('submit', function(e) {
+        // Only handle draft submissions here, send is handled by modal
+        if (e.submitter && e.submitter.value === 'draft') {
+            // Ensure the textarea has the latest content
+            updateTextareaContent();
+            
+            // Show loading state
+            e.submitter.disabled = true;
+            e.submitter.innerHTML = '<i class="icofont-spinner fa-spin"></i> Processing...';
+        }
     });
 });
 
