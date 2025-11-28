@@ -93,6 +93,11 @@
 </div>
 
 <style>
+/* Modern Calendar Modal Styles - Matching Compose Memo */
+* {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
 .calendar-modal {
     position: fixed;
     top: 0;
@@ -169,29 +174,32 @@
     gap: 6px;
     padding: 8px 16px;
     background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
     font-size: 14px;
     font-weight: 600;
     color: #374151;
     cursor: pointer;
-    transition: all 0.2s;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .calendar-nav-btn-header:hover {
-    background: #f3f4f6;
-    border-color: #d1d5db;
+    background: #f8fafc;
+    border-color: #3b82f6;
+    color: #3b82f6;
     transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.1);
 }
 
 .calendar-month-display-header {
     font-size: 20px;
     font-weight: 700;
-    color: #111827;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     min-width: 180px;
     text-align: center;
+    letter-spacing: -0.02em;
 }
 
 .calendar-hamburger-sidebar {
@@ -413,16 +421,16 @@
 .calendar-day-number {
     font-size: 14px;
     font-weight: 700;
-    color: #111827;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .calendar-day-name {
     font-size: 9px;
-    color: #6b7280;
+    color: #64748b;
     text-transform: uppercase;
     font-weight: 600;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .calendar-day-events {
@@ -468,10 +476,10 @@
 
 .calendar-event-count {
     font-size: 9px;
-    color: #6b7280;
+    color: #64748b;
     margin-top: 2px;
     font-weight: 600;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .calendar-day-card.other-month {
@@ -480,16 +488,16 @@
 }
 
 .calendar-day-card.today {
-    border-color: #5f2ded;
+    border-color: #3b82f6;
     border-width: 2px;
-    background: linear-gradient(135deg, rgba(95, 45, 237, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%);
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(29, 78, 216, 0.05) 100%);
 }
 
 .calendar-add-form {
-    padding: 24px;
-    background: #f9fafb;
-    border-radius: 12px;
-    border: 1px solid #e5e7eb;
+    padding: 32px;
+    background: #ffffff;
+    border-radius: 16px;
+    border: 1px solid #f1f5f9;
     margin-top: 0;
     margin-left: 0;
     margin-right: 0;
@@ -501,6 +509,7 @@
     width: 100%;
     max-width: none;
     will-change: transform, opacity;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .calendar-add-form.show {
@@ -510,18 +519,19 @@
 }
 
 .form-title {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 700;
-    color: #111827;
-    margin: 0 0 20px 0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    color: #1e293b;
+    margin: 0 0 24px 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    letter-spacing: -0.02em;
 }
 
 .form-grid {
     display: grid;
     grid-template-columns: 2fr 1.5fr 1fr;
-    gap: 16px;
-    margin-bottom: 20px;
+    gap: 24px;
+    margin-bottom: 24px;
 }
 
 .form-group-full {
@@ -529,11 +539,12 @@
 }
 
 .form-label {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: 600;
     color: #374151;
-    margin-bottom: 6px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    margin-bottom: 8px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    letter-spacing: 0.01em;
 }
 
 .form-group {
@@ -544,48 +555,59 @@
 .form-input,
 .form-textarea,
 .form-select {
-    padding: 10px 12px;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
-    transition: all 0.2s;
-    background: white;
+    padding: 16px 20px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
+    color: #1e293b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    transition: all 0.3s ease;
+    background: #ffffff;
+    font-weight: 500;
+}
+
+.form-input::placeholder,
+.form-textarea::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
 }
 
 .form-input:focus,
 .form-textarea:focus,
 .form-select:focus {
     outline: none;
-    border-color: #5f2ded;
-    box-shadow: 0 0 0 3px rgba(95, 45, 237, 0.1);
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
 }
 
 .form-textarea {
     resize: vertical;
-    min-height: 60px;
+    min-height: 80px;
+    line-height: 1.6;
 }
 
 .calendar-add-btn {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px;
-    background: linear-gradient(135deg, #5f2ded 0%, #7c3aed 100%);
+    padding: 16px 24px;
+    background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
     color: white;
     border: none;
-    border-radius: 8px;
-    font-size: 14px;
+    border-radius: 12px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     white-space: nowrap;
+    letter-spacing: 0.02em;
 }
 
 .calendar-add-btn:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(95, 45, 237, 0.3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .calendar-add-btn:active {
@@ -602,21 +624,24 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 10px 20px;
+    padding: 16px 24px;
     background: white;
-    color: #6b7280;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
+    color: #64748b;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    letter-spacing: 0.02em;
 }
 
 .calendar-cancel-btn:hover {
-    background: #f3f4f6;
-    border-color: #d1d5db;
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .calendar-day-card {
@@ -629,7 +654,8 @@
 
 .calendar-day-card.clickable:hover {
     background: #f0f9ff;
-    border-color: #5f2ded;
+    border-color: #3b82f6;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.1);
 }
 
 .calendar-day-card.past-date {
@@ -670,23 +696,23 @@
 .event-popover-title {
     font-size: 14px;
     font-weight: 700;
-    color: #111827;
+    color: #1e293b;
     margin-bottom: 4px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .event-popover-date {
     font-size: 12px;
-    color: #6b7280;
+    color: #64748b;
     margin-bottom: 8px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .event-popover-description {
     font-size: 12px;
     color: #374151;
     margin-bottom: 8px;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .event-popover-actions {
@@ -702,13 +728,13 @@
     background: #ef4444;
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     padding: 6px 12px;
     font-size: 12px;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    transition: all 0.3s ease;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .event-popover-delete:hover {
