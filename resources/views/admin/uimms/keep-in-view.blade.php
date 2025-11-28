@@ -178,6 +178,12 @@
                                             gap: 12px;
                                         }
                                         
+                                        .memo-right-info {
+                                            display: flex;
+                                            align-items: center;
+                                            gap: 12px;
+                                        }
+                                        
                                         .chat__time {
                                             font-size: 0.8rem;
                                             color: #999;
@@ -436,6 +442,9 @@
                                                                         <div class="memo-preview">${memo.message ? memo.message.substring(0, 120) : 'No content'}...</div>
                                                                         <div class="memo-footer">
                                                                             <div class="memo-left-info">
+                                                                                <!-- Left side can be used for other info if needed -->
+                                                                            </div>
+                                                                            <div class="memo-right-info">
                                                                                 <span class="memo-received-datetime">${receivedDateTime}</span>
                                                                             </div>
                                                                         </div>
