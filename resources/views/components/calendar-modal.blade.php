@@ -4,7 +4,7 @@
     <div class="calendar-modal-content">
         <div class="calendar-modal-header">
             <!-- Month Navigation in Header -->
-            <div class="calendar-nav-header">
+            <div class="calendar-nav-header" id="calendarNavHeader">
                 <button class="calendar-nav-btn-header" onclick="changeMonth(-1)">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <polyline points="15 18 9 12 15 6"></polyline>
@@ -19,6 +19,14 @@
                     </svg>
                 </button>
             </div>
+            <!-- Hamburger Menu Button (shown when calendar is collapsed) -->
+            <button class="calendar-hamburger-btn" id="calendarHamburgerBtn" onclick="expandCalendar()" style="display: none;" aria-label="Show calendar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="3" y1="12" x2="21" y2="12"></line>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <line x1="3" y1="18" x2="21" y2="18"></line>
+                </svg>
+            </button>
             <button class="calendar-modal-close" onclick="closeCalendarModal()" aria-label="Close calendar">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -180,6 +188,30 @@
     text-align: center;
 }
 
+.calendar-hamburger-btn {
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #6b7280;
+    position: absolute;
+    right: 70px;
+    z-index: 10;
+}
+
+.calendar-hamburger-btn:hover {
+    background: #e5e7eb;
+    border-color: #d1d5db;
+    color: #111827;
+    transform: scale(1.05);
+}
+
 .calendar-modal-close {
     background: #f3f4f6;
     border: 1px solid #e5e7eb;
@@ -226,6 +258,40 @@
     justify-content: center;
     align-items: flex-start;
     position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+.calendar-wall-container.collapsed {
+    width: 0;
+    height: 0;
+    min-height: 0;
+    max-height: 0;
+    padding: 0;
+    margin: 0;
+    opacity: 0;
+    transform: scale(0.1) translateY(-200px) translateX(calc(50vw - 70px));
+    overflow: hidden;
+    pointer-events: none;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.calendar-wall.collapsed {
+    transform: scale(0.1);
+    opacity: 0;
+}
+
+.calendar-nav-header {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.calendar-nav-header.hidden {
+    opacity: 0;
+    transform: translateX(-20px);
+    pointer-events: none;
 }
 
 .calendar-wall-container::-webkit-scrollbar {
@@ -253,10 +319,16 @@
     gap: 8px;
     transform-style: flat;
     transform: none !important;
-    transition: none;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     padding: 5px 8px 20px 8px;
     width: fit-content;
     margin: 0;
+    opacity: 1;
+}
+
+.calendar-wall.collapsed {
+    transform: scale(0.1) !important;
+    opacity: 0;
 }
 
 .calendar-day-card {
@@ -364,7 +436,33 @@
     background: #f9fafb;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
-    margin-top: 20px;
+    margin-top: 0;
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    display: none;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+}
+
+.calendar-add-form.show {
+    display: block;
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    animation: formSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+@keyframes formSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
 }
 
 .form-title {
@@ -692,11 +790,37 @@ function openCalendarModal() {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
     }, 10);
-    // Hide form when modal opens
+    
+    // Ensure calendar is expanded and form is hidden
     const form = document.getElementById('calendarAddForm');
+    const container = document.getElementById('calendarWallContainer');
+    const wall = document.getElementById('calendarWall');
+    const navHeader = document.getElementById('calendarNavHeader');
+    const hamburgerBtn = document.getElementById('calendarHamburgerBtn');
+    
     if (form) {
         form.style.display = 'none';
+        form.classList.remove('show');
     }
+    
+    if (container) {
+        container.classList.remove('collapsed');
+    }
+    
+    if (wall) {
+        wall.classList.remove('collapsed');
+    }
+    
+    if (navHeader) {
+        navHeader.classList.remove('hidden');
+    }
+    
+    if (hamburgerBtn) {
+        hamburgerBtn.style.display = 'none';
+        hamburgerBtn.style.opacity = '1';
+        hamburgerBtn.style.transform = 'scale(1)';
+    }
+    
     loadEvents();
     renderCalendar();
     setTimeout(() => {
@@ -834,7 +958,7 @@ function createDayCard(date, isOtherMonth) {
     return card;
 }
 
-// Handle date click - pre-fill form
+// Handle date click - collapse calendar and show form
 function handleDateClick(date) {
     // Format date for datetime-local input (YYYY-MM-DDTHH:mm)
     const year = date.getFullYear();
@@ -842,34 +966,98 @@ function handleDateClick(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}T09:00`; // Default to 9 AM
     
-    // Reset form fields (but don't hide it yet)
+    // Reset form fields
     document.getElementById('eventTitle').value = '';
     document.getElementById('eventDate').value = dateStr;
     document.getElementById('eventDescription').value = '';
     document.getElementById('eventType').value = 'appointment';
     
-    // Show the form
-    const form = document.getElementById('calendarAddForm');
-    form.style.display = 'block';
+    // Collapse calendar
+    collapseCalendar();
     
-    // Scroll to form
+    // Show the form after animation
     setTimeout(() => {
-        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        // Focus on title input
-        document.getElementById('eventTitle').focus();
-    }, 100);
+        const form = document.getElementById('calendarAddForm');
+        form.style.display = 'block';
+        setTimeout(() => {
+            form.classList.add('show');
+            // Focus on title input
+            document.getElementById('eventTitle').focus();
+        }, 50);
+    }, 300);
 }
 
-// Reset event form
+// Collapse calendar into hamburger
+function collapseCalendar() {
+    const container = document.getElementById('calendarWallContainer');
+    const wall = document.getElementById('calendarWall');
+    const navHeader = document.getElementById('calendarNavHeader');
+    const hamburgerBtn = document.getElementById('calendarHamburgerBtn');
+    
+    if (container && navHeader && hamburgerBtn) {
+        // Add collapsed class
+        container.classList.add('collapsed');
+        if (wall) {
+            wall.classList.add('collapsed');
+        }
+        navHeader.classList.add('hidden');
+        
+        // Show hamburger button with animation
+        setTimeout(() => {
+            hamburgerBtn.style.display = 'flex';
+            hamburgerBtn.style.opacity = '0';
+            hamburgerBtn.style.transform = 'scale(0.8)';
+            setTimeout(() => {
+                hamburgerBtn.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+                hamburgerBtn.style.opacity = '1';
+                hamburgerBtn.style.transform = 'scale(1)';
+            }, 50);
+        }, 250);
+    }
+}
+
+// Expand calendar from hamburger
+function expandCalendar() {
+    const container = document.getElementById('calendarWallContainer');
+    const wall = document.getElementById('calendarWall');
+    const navHeader = document.getElementById('calendarNavHeader');
+    const hamburgerBtn = document.getElementById('calendarHamburgerBtn');
+    const form = document.getElementById('calendarAddForm');
+    
+    if (container && navHeader && hamburgerBtn) {
+        // Hide form first
+        if (form) {
+            form.classList.remove('show');
+            setTimeout(() => {
+                form.style.display = 'none';
+            }, 300);
+        }
+        
+        // Hide hamburger button with animation
+        hamburgerBtn.style.opacity = '0';
+        hamburgerBtn.style.transform = 'scale(0.8)';
+        setTimeout(() => {
+            hamburgerBtn.style.display = 'none';
+        }, 200);
+        
+        // Remove collapsed class
+        container.classList.remove('collapsed');
+        if (wall) {
+            wall.classList.remove('collapsed');
+        }
+        navHeader.classList.remove('hidden');
+    }
+}
+
+// Reset event form and expand calendar
 function resetEventForm() {
     document.getElementById('eventTitle').value = '';
     document.getElementById('eventDate').value = '';
     document.getElementById('eventDescription').value = '';
     document.getElementById('eventType').value = 'appointment';
     
-    // Hide the form
-    const form = document.getElementById('calendarAddForm');
-    form.style.display = 'none';
+    // Expand calendar back
+    expandCalendar();
 }
 
 // Get events for a specific day
