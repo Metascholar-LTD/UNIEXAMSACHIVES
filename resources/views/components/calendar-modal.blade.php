@@ -116,9 +116,9 @@
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    max-width: 1200px;
+    max-width: 1400px;
     width: 100%;
-    max-height: 90vh;
+    max-height: 95vh;
     overflow: hidden;
     transform: scale(0.9) translateY(20px);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -204,7 +204,7 @@
 }
 
 .calendar-modal-body {
-    padding: 20px;
+    padding: 16px 20px;
     overflow-y: auto;
     flex: 1;
 }
@@ -212,12 +212,12 @@
 
 .calendar-wall-container {
     width: 100%;
-    overflow: auto;
+    overflow: visible;
     margin: 0 auto 16px;
     perspective: 1200px;
-    min-height: 350px;
-    max-height: 480px;
-    padding: 15px 20px;
+    min-height: 400px;
+    max-height: 550px;
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
