@@ -210,22 +210,46 @@
 
 .calendar-wall-container {
     width: 100%;
-    overflow: hidden;
-    margin-bottom: 16px;
+    overflow: auto;
+    margin: 0 auto 16px;
     perspective: 1200px;
-    min-height: 320px;
-    max-height: 420px;
-    padding: 10px 0;
+    min-height: 350px;
+    max-height: 480px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.calendar-wall-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.calendar-wall-container::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.calendar-wall-container::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+.calendar-wall-container::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 
 .calendar-wall {
-    margin: 0 auto;
     display: grid;
     grid-template-columns: repeat(7, 100px);
     gap: 8px;
     transform-style: preserve-3d;
     transition: transform 120ms linear;
     padding: 8px;
+    width: fit-content;
+    margin: 0;
 }
 
 .calendar-day-card {
