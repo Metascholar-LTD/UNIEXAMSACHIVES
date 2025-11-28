@@ -204,24 +204,27 @@
 }
 
 .calendar-modal-body {
-    padding: 20px 20px 16px 20px;
-    overflow-y: auto;
+    padding: 20px 20px 20px 20px;
+    overflow: visible;
     flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 
 .calendar-wall-container {
     width: 100%;
     overflow: visible;
-    margin: 10px auto 16px;
+    margin: 10px auto 10px;
     perspective: none;
-    min-height: 450px;
-    max-height: 600px;
-    padding: 15px 20px 20px 20px;
+    min-height: 500px;
+    max-height: 620px;
+    padding: 15px 20px 25px 20px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     position: relative;
+    flex: 1;
 }
 
 .calendar-wall-container::-webkit-scrollbar {
@@ -250,7 +253,7 @@
     transform-style: flat;
     transform: none !important;
     transition: none;
-    padding: 12px 8px 8px 8px;
+    padding: 12px 8px 15px 8px;
     width: fit-content;
     margin: 0;
 }
