@@ -29,6 +29,7 @@
                     cugadmin@cug.edu.gh
                 </span>
                 <div class="clock-social">
+                    <a href="https://cug.edu.gh" target="_blank" rel="noreferrer" aria-label="CUG Website"><i class="icofont-globe"></i></a>
                     <a href="https://www.facebook.com/p/Catholic-University-of-Ghanafiapre-100063596018619/" target="_blank" rel="noreferrer" aria-label="Facebook"><i class="icofont-facebook"></i></a>
                 </div>
             </div>
