@@ -34,10 +34,7 @@
                     Hotline: (+233) 352 094 658
                 </span>
                 <span class="clock-item">
-                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
-                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-3.8-11.4"></path>
-                        <path d="M8 12h5l3 3"></path>
-                    </svg>
+                    <i class="icofont-brand-whatsapp" aria-hidden="true"></i>
                     WhatsApp: (+233) 249 260 857
                 </span>
                 <span class="clock-item">
@@ -325,6 +322,12 @@
 
 .uda-clock-bar .clock-social .lucide-icon {
     margin-right: 0;
+}
+
+.uda-clock-bar .clock-item i {
+    font-size: 16px;
+    margin-right: 6px;
+    color: inherit;
 }
 
 .uda-clock-bar .clock-item-time {
