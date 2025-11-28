@@ -3,15 +3,22 @@
     <div class="calendar-modal-overlay" onclick="closeCalendarModal()"></div>
     <div class="calendar-modal-content">
         <div class="calendar-modal-header">
-            <h2 class="calendar-modal-title">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 8px;">
-                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                    <line x1="16" y1="2" x2="16" y2="6"></line>
-                    <line x1="8" y1="2" x2="8" y2="6"></line>
-                    <line x1="3" y1="10" x2="21" y2="10"></line>
-                </svg>
-                Calendar & Events
-            </h2>
+            <!-- Month Navigation in Header -->
+            <div class="calendar-nav-header">
+                <button class="calendar-nav-btn-header" onclick="changeMonth(-1)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <span>Prev Month</span>
+                </button>
+                <div class="calendar-month-display-header" id="calendarMonthDisplay">January 2025</div>
+                <button class="calendar-nav-btn-header" onclick="changeMonth(1)">
+                    <span>Next Month</span>
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
             <button class="calendar-modal-close" onclick="closeCalendarModal()" aria-label="Close calendar">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -21,22 +28,6 @@
         </div>
 
         <div class="calendar-modal-body">
-            <!-- Month Navigation -->
-            <div class="calendar-nav">
-                <button class="calendar-nav-btn" onclick="changeMonth(-1)">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                    Prev Month
-                </button>
-                <div class="calendar-month-display" id="calendarMonthDisplay">January 2025</div>
-                <button class="calendar-nav-btn" onclick="changeMonth(1)">
-                    Next Month
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-            </div>
 
             <!-- 3D Wall Calendar Container -->
             <div class="calendar-wall-container" id="calendarWallContainer">
@@ -46,30 +37,42 @@
             </div>
 
             <!-- Add Event Form -->
-            <div class="calendar-add-form">
-                <div class="form-group">
-                    <input type="text" id="eventTitle" class="form-input" placeholder="Event title (e.g., Meeting, Appointment)" required>
+            <div class="calendar-add-form" id="calendarAddForm">
+                <h3 class="form-title">Add New Event</h3>
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label class="form-label">Event Title</label>
+                        <input type="text" id="eventTitle" class="form-input" placeholder="e.g., Meeting, Appointment" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Date & Time</label>
+                        <input type="datetime-local" id="eventDate" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Type</label>
+                        <select id="eventType" class="form-select">
+                            <option value="appointment">Appointment</option>
+                            <option value="meeting">Meeting</option>
+                            <option value="event">Event</option>
+                        </select>
+                    </div>
+                    <div class="form-group form-group-full">
+                        <label class="form-label">Description (optional)</label>
+                        <textarea id="eventDescription" class="form-textarea" placeholder="Add event description..." rows="2"></textarea>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <input type="datetime-local" id="eventDate" class="form-input" required>
+                <div class="form-actions">
+                    <button class="calendar-add-btn" onclick="addEvent()">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="12" y1="5" x2="12" y2="19"></line>
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                        </svg>
+                        Add Event
+                    </button>
+                    <button class="calendar-cancel-btn" onclick="resetEventForm()">
+                        Cancel
+                    </button>
                 </div>
-                <div class="form-group">
-                    <textarea id="eventDescription" class="form-textarea" placeholder="Description (optional)" rows="2"></textarea>
-                </div>
-                <div class="form-group">
-                    <select id="eventType" class="form-select">
-                        <option value="appointment">Appointment</option>
-                        <option value="meeting">Meeting</option>
-                        <option value="event">Event</option>
-                    </select>
-                </div>
-                <button class="calendar-add-btn" onclick="addEvent()">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                    </svg>
-                    Add Event
-                </button>
             </div>
         </div>
     </div>
@@ -132,19 +135,48 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid #e5e7eb;
+    padding: 16px 24px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     background: linear-gradient(135deg, #5f2ded 0%, #7c3aed 100%);
     color: white;
 }
 
-.calendar-modal-title {
+.calendar-nav-header {
     display: flex;
     align-items: center;
+    gap: 20px;
+    flex: 1;
+}
+
+.calendar-nav-btn-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: white;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+}
+
+.calendar-nav-btn-header:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: rgba(255, 255, 255, 0.4);
+    transform: translateY(-1px);
+}
+
+.calendar-month-display-header {
     font-size: 20px;
     font-weight: 700;
-    margin: 0;
+    color: white;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+    min-width: 180px;
+    text-align: center;
 }
 
 .calendar-modal-close {
@@ -172,41 +204,6 @@
     flex: 1;
 }
 
-.calendar-nav {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 16px;
-    gap: 12px;
-}
-
-.calendar-nav-btn {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: #f3f4f6;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    color: #374151;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
-}
-
-.calendar-nav-btn:hover {
-    background: #e5e7eb;
-    border-color: #d1d5db;
-}
-
-.calendar-month-display {
-    font-size: 18px;
-    font-weight: 700;
-    color: #111827;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
-}
 
 .calendar-wall-container {
     width: 100%;
@@ -352,14 +349,38 @@
 }
 
 .calendar-add-form {
-    display: grid;
-    grid-template-columns: 2fr 1.5fr 1fr auto;
-    gap: 12px;
-    align-items: end;
-    padding: 20px;
+    padding: 24px;
     background: #f9fafb;
     border-radius: 12px;
     border: 1px solid #e5e7eb;
+    margin-top: 20px;
+}
+
+.form-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: #111827;
+    margin: 0 0 20px 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: 2fr 1.5fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.form-group-full {
+    grid-column: 1 / -1;
+}
+
+.form-label {
+    font-size: 13px;
+    font-weight: 600;
+    color: #374151;
+    margin-bottom: 6px;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
 }
 
 .form-group {
@@ -416,6 +437,51 @@
 
 .calendar-add-btn:active {
     transform: translateY(0);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.calendar-cancel-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: white;
+    color: #6b7280;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
+}
+
+.calendar-cancel-btn:hover {
+    background: #f3f4f6;
+    border-color: #d1d5db;
+}
+
+.calendar-day-card {
+    cursor: pointer;
+}
+
+.calendar-day-card.clickable {
+    cursor: pointer;
+}
+
+.calendar-day-card.clickable:hover {
+    background: #f0f9ff;
+    border-color: #5f2ded;
+}
+
+.calendar-day-card.past-date {
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 /* Event Popover */
@@ -508,8 +574,22 @@
         padding: 6px;
     }
     
-    .calendar-add-form {
+    .calendar-add-form .form-grid {
         grid-template-columns: 1fr;
+    }
+    
+    .calendar-nav-header {
+        gap: 12px;
+    }
+    
+    .calendar-nav-btn-header {
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+    
+    .calendar-month-display-header {
+        font-size: 16px;
+        min-width: 140px;
     }
 }
 
@@ -517,6 +597,25 @@
     .calendar-modal-content {
         max-width: 100%;
         max-height: 95vh;
+    }
+    
+    .calendar-modal-header {
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
+    }
+    
+    .calendar-nav-header {
+        justify-content: space-between;
+    }
+    
+    .calendar-nav-btn-header span {
+        display: none;
+    }
+    
+    .calendar-month-display-header {
+        font-size: 16px;
+        min-width: auto;
     }
     
     .calendar-wall {
@@ -541,6 +640,20 @@
     
     .calendar-day-name {
         font-size: 8px;
+    }
+    
+    .calendar-add-form .form-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .calendar-add-btn,
+    .calendar-cancel-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 </style>
@@ -658,8 +771,28 @@ function createDayCard(date, isOtherMonth) {
     if (isOtherMonth) card.classList.add('other-month');
     
     const today = new Date();
-    if (date.toDateString() === today.toDateString() && !isOtherMonth) {
+    today.setHours(0, 0, 0, 0);
+    const cardDate = new Date(date);
+    cardDate.setHours(0, 0, 0, 0);
+    
+    // Check if date is in the past
+    const isPastDate = cardDate < today;
+    
+    if (cardDate.toDateString() === today.toDateString() && !isOtherMonth) {
         card.classList.add('today');
+    }
+    
+    // Make clickable if not past date and not other month
+    if (!isPastDate && !isOtherMonth) {
+        card.classList.add('clickable');
+        card.onclick = (e) => {
+            // Don't trigger if clicking on event dots
+            if (!e.target.closest('.calendar-event-dot')) {
+                handleDateClick(date);
+            }
+        };
+    } else if (isPastDate) {
+        card.classList.add('past-date');
     }
     
     const dayEvents = getEventsForDay(date);
@@ -677,6 +810,35 @@ function createDayCard(date, isOtherMonth) {
     `;
     
     return card;
+}
+
+// Handle date click - pre-fill form
+function handleDateClick(date) {
+    // Format date for datetime-local input (YYYY-MM-DDTHH:mm)
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const dateStr = `${year}-${month}-${day}T09:00`; // Default to 9 AM
+    
+    // Set the date in the form
+    document.getElementById('eventDate').value = dateStr;
+    
+    // Scroll to form
+    const form = document.getElementById('calendarAddForm');
+    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    
+    // Focus on title input
+    setTimeout(() => {
+        document.getElementById('eventTitle').focus();
+    }, 300);
+}
+
+// Reset event form
+function resetEventForm() {
+    document.getElementById('eventTitle').value = '';
+    document.getElementById('eventDate').value = '';
+    document.getElementById('eventDescription').value = '';
+    document.getElementById('eventType').value = 'appointment';
 }
 
 // Get events for a specific day
@@ -869,10 +1031,7 @@ async function addEvent() {
         
         if (data.success) {
             // Reset form
-            document.getElementById('eventTitle').value = '';
-            document.getElementById('eventDate').value = '';
-            document.getElementById('eventDescription').value = '';
-            document.getElementById('eventType').value = 'appointment';
+            resetEventForm();
             
             // Reload events
             await loadEvents();
