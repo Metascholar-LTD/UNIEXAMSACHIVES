@@ -204,7 +204,7 @@
 }
 
 .calendar-modal-body {
-    padding: 20px 20px 20px 20px;
+    padding: 12px 20px 20px 20px;
     overflow: visible;
     flex: 1;
     display: flex;
@@ -215,11 +215,11 @@
 .calendar-wall-container {
     width: 100%;
     overflow: visible;
-    margin: 10px auto 10px;
+    margin: 5px auto 10px;
     perspective: none;
     min-height: 500px;
     max-height: 620px;
-    padding: 15px 20px 25px 20px;
+    padding: 8px 20px 25px 20px;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -253,7 +253,7 @@
     transform-style: flat;
     transform: none !important;
     transition: none;
-    padding: 12px 8px 15px 8px;
+    padding: 5px 8px 15px 8px;
     width: fit-content;
     margin: 0;
 }
