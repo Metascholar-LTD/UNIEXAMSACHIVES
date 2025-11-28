@@ -62,22 +62,24 @@
 
 .uda-search-box {
   display: grid;
-  grid-template-columns: 32px 1fr auto;
+  grid-template-columns: 28px 1fr auto;
   align-items: center;
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 9999px;
-  padding: 8px 8px 8px 12px;
-  gap: 10px;
+  padding: 6px 6px 6px 10px;
+  gap: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  max-width: 480px;
+  margin: 0 auto;
 }
-.uda-search-icon { color: #6b7280; font-size: 18px; text-align: center; }
+.uda-search-icon { color: #6b7280; font-size: 16px; text-align: center; }
 .uda-search-input {
   border: none;
   outline: none;
   background: transparent;
-  padding: 6px 4px;
-  font-size: 14px;
+  padding: 4px 6px;
+  font-size: 13px;
   color: #111827;
 }
 .uda-search-input::placeholder { color: #9ca3af; }
@@ -85,9 +87,9 @@
 
 /* Make search button smaller, outlined and cute */
 .uda-search-btn {
-  padding: 6px 12px;
-  min-height: 34px;
-  font-size: 13px;
+  padding: 5px 10px;
+  min-height: 30px;
+  font-size: 12px;
   border-radius: 9999px;
   background: #f7f7ff;
   color: #4b22bb;
@@ -1455,7 +1457,10 @@ select.animated-input::-webkit-scrollbar-thumb:hover {
 @media (max-width: 575.98px) {
   .uda-name { font-size: 16px; }
   .uda-avatar-wrap { width: 48px; height: 48px; }
-  .uda-search-box { grid-template-columns: 24px 1fr auto; }
+  .uda-search-box { 
+    grid-template-columns: 24px 1fr auto; 
+    max-width: 100%;
+  }
 }
 .uda-title-pill {
   display: inline-block;
