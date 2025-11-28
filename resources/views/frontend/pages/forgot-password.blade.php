@@ -1,5 +1,12 @@
 @extends('layout.app')
 
+@php
+    $context = $context ?? 'default';
+    $isSuperAdminContext = $context === 'super-admin';
+    $defaultEmail = $defaultEmail ?? '';
+    $redirectRoute = $redirectRoute ?? 'frontend.login';
+@endphp
+
 @push('styles')
 <style>
     /* Custom styling for the university crest in orbit */
@@ -45,6 +52,36 @@
         color: #3b82f6;
         border-bottom-color: #3b82f6;
         text-decoration: none;
+    }
+
+    .context-note {
+        margin-bottom: 1.25rem;
+        padding: 0.85rem 1rem;
+        border-radius: 0.75rem;
+        background: rgba(59, 130, 246, 0.08);
+        border: 1px solid rgba(59, 130, 246, 0.35);
+        color: #1d4ed8;
+        font-size: 0.9rem;
+        display: flex;
+        gap: 0.5rem;
+        align-items: flex-start;
+    }
+
+    .context-note i {
+        font-size: 1rem;
+        margin-top: 0.15rem;
+    }
+
+    .context-note strong {
+        display: block;
+        font-size: 0.95rem;
+        margin-bottom: 0.15rem;
+    }
+
+    .context-note small {
+        color: #1e3a8a;
+        display: block;
+        margin-top: 0.35rem;
     }
 </style>
 @endpush
@@ -103,8 +140,23 @@
                 <div class="form-container">
                     <div class="form-header">
                         <h2 class="form-title">Forgot Password?</h2>
-                        <p class="form-subtitle">No worries! Enter your email address and we'll send you a link to reset your password.</p>
+                        @if($isSuperAdminContext)
+                            <p class="form-subtitle">Enter the super admin email address and we’ll send a secure reset link to restore your dashboard access.</p>
+                        @else
+                            <p class="form-subtitle">No worries! Enter your email address and we'll send you a link to reset your password.</p>
+                        @endif
                     </div>
+
+                    @if($isSuperAdminContext)
+                        <div class="context-note">
+                            <i class="icofont-shield"></i>
+                            <div>
+                                <strong>Super Admin Recovery Mode</strong>
+                                Please use the official super admin mailbox to receive the reset instructions. If the mailbox has changed, update it via the CLI reset command first.
+                                <small>Need help? Contact the system owner or run <code>php artisan super-admin:reset-password</code>.</small>
+                            </div>
+                        </div>
+                    @endif
 
                     @if ($errors->any())
                         <div class="alert alert-danger">
@@ -130,9 +182,17 @@
 
                     <form method="POST" action="{{ route('password.email') }}" class="animated-form">
                         @csrf
+                        <input type="hidden" name="redirect_to" value="{{ $redirectRoute }}">
                         <div class="form-group">
                             <div class="input-container">
-                                <input type="email" name="email" id="forgot-email" class="animated-input" placeholder="Enter your email address" value="{{ old('email') }}" required autofocus>
+                                <input type="email"
+                                       name="email"
+                                       id="forgot-email"
+                                       class="animated-input"
+                                       placeholder="{{ $isSuperAdminContext ? 'Enter super admin email address' : 'Enter your email address' }}"
+                                       value="{{ old('email', $defaultEmail) }}"
+                                       required
+                                       autofocus>
                             </div>
                         </div>
 
@@ -143,7 +203,9 @@
                     </form>
 
                     <div class="back-to-login">
-                        <a href="{{ route('frontend.login') }}">← Back to Login</a>
+                        <a href="{{ route($redirectRoute) }}">
+                            {{ $isSuperAdminContext ? '← Back to Super Admin Login' : '← Back to Login' }}
+                        </a>
                     </div>
                 </div>
             </div>

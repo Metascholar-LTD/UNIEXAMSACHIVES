@@ -49,6 +49,28 @@
         .modern-auth-container {
             min-height: 100vh;
         }
+
+        .form-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            gap: 0.5rem;
+        }
+
+        .forgot-password-link {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid transparent;
+            transition: color 0.2s ease, border-color 0.2s ease;
+        }
+
+        .forgot-password-link:hover {
+            color: #1d4ed8;
+            border-bottom-color: #1d4ed8;
+        }
     </style>
 </head>
 <body>
@@ -165,6 +187,10 @@
                                     <span class="checkmark"></span>
                                     Remember me
                                 </label>
+                                <a class="forgot-password-link"
+                                   href="{{ route('password.request', ['context' => 'super-admin', 'email' => old('email', 'metascholarlimited@gmail.com')]) }}">
+                                    Forgot password?
+                                </a>
                             </div>
 
                             <button type="submit" class="submit-btn">

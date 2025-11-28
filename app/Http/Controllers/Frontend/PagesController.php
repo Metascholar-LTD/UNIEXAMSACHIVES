@@ -239,22 +239,44 @@ class PagesController extends Controller
     }
 
     // Password Reset Methods
-    public function forgotPassword()
+    public function forgotPassword(Request $request)
     {
-        return view('frontend.pages.forgot-password');
+        $context = $request->query('context', 'default');
+        $defaultEmail = $request->query('email', '');
+        $redirectRoute = $context === 'super-admin' ? 'super-admin.login' : 'frontend.login';
+
+        return view('frontend.pages.forgot-password', [
+            'context' => $context,
+            'defaultEmail' => $defaultEmail,
+            'redirectRoute' => $redirectRoute,
+        ]);
     }
 
     public function sendResetLink(Request $request)
     {
-        $request->validate(['email' => 'required|email']);
+        $request->validate([
+            'email' => 'required|email',
+            'redirect_to' => 'nullable|string',
+        ]);
 
         $status = Password::sendResetLink(
             $request->only('email')
         );
 
-        return $status === Password::RESET_LINK_SENT
-                    ? redirect()->back()->with('success', __($status))
-                    : redirect()->back()->withErrors(['email' => __($status)]);
+        if ($status === Password::RESET_LINK_SENT) {
+            $redirectRoute = $request->input('redirect_to');
+
+            if ($redirectRoute && in_array($redirectRoute, ['frontend.login', 'super-admin.login'], true)) {
+                return redirect()->route($redirectRoute)->with('success', __($status));
+            }
+
+            return redirect()->back()->with('success', __($status));
+        }
+
+        return redirect()
+            ->back()
+            ->withErrors(['email' => __($status)])
+            ->withInput($request->only('email'));
     }
 
     public function resetPassword($token)
