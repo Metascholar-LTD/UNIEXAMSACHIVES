@@ -3,34 +3,63 @@
         <div class="uda-clock-bar" data-live-clock="navbar">
             <div class="clock-left">
                 <span class="clock-item">
-                    <i class="icofont-location-pin"></i>
+                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M12 21s-6-5.686-6-10a6 6 0 1 1 12 0c0 4.314-6 10-6 10Z"></path>
+                        <circle cx="12" cy="11" r="2"></circle>
+                    </svg>
                     Fiapre - Sunyani, Bono Region, Ghana
                 </span>
                 <span class="clock-item">
-                    <i class="icofont-clock-time"></i>
+                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                        <line x1="16" y1="2" x2="16" y2="6"></line>
+                        <line x1="8" y1="2" x2="8" y2="6"></line>
+                        <line x1="3" y1="10" x2="21" y2="10"></line>
+                    </svg>
                     <span class="live-date">Fetching date...</span>
                 </span>
                 <span class="clock-item clock-item-time">
-                    <i class="icofont-ui-calendar"></i>
+                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <polyline points="12 6 12 12 16 14"></polyline>
+                    </svg>
                     <span class="live-time">--:-- --</span>
                 </span>
             </div>
             <div class="clock-right">
                 <span class="clock-item">
-                    <i class="icofont-iphone"></i>
+                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6A19.79 19.79 0 0 1 2.08 5.18 2 2 0 0 1 4.05 3h3a2 2 0 0 1 2 1.72 12.44 12.44 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 5 5l1.27-1.27a2 2 0 0 1 2.11-.45 12.44 12.44 0 0 0 2.81.7 2 2 0 0 1 1.72 2z"></path>
+                    </svg>
                     Hotline: (+233) 352 094 658
                 </span>
                 <span class="clock-item">
-                    <i class="icofont-brand-whatsapp"></i>
+                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 1 1-3.8-11.4"></path>
+                        <path d="M8 12h5l3 3"></path>
+                    </svg>
                     WhatsApp: (+233) 249 260 857
                 </span>
                 <span class="clock-item">
-                    <i class="icofont-email"></i>
+                    <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                        <polyline points="3 7 12 13 21 7"></polyline>
+                    </svg>
                     cugadmin@cug.edu.gh
                 </span>
                 <div class="clock-social">
-                    <a href="https://cug.edu.gh" target="_blank" rel="noreferrer" aria-label="CUG Website"><i class="icofont-globe"></i></a>
-                    <a href="https://www.facebook.com/p/Catholic-University-of-Ghanafiapre-100063596018619/" target="_blank" rel="noreferrer" aria-label="Facebook"><i class="icofont-facebook"></i></a>
+                    <a href="https://cug.edu.gh" target="_blank" rel="noreferrer" aria-label="CUG Website">
+                        <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <path d="M2 12h20"></path>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                        </svg>
+                    </a>
+                    <a href="https://www.facebook.com/p/Catholic-University-of-Ghanafiapre-100063596018619/" target="_blank" rel="noreferrer" aria-label="Facebook">
+                        <svg class="lucide-icon" viewBox="0 0 24 24" aria-hidden="true">
+                            <path d="M18 2h-3a4 4 0 0 0-4 4v3H8v4h3v9h4v-9h3l1-4h-4V6a1 1 0 0 1 1-1h3z"></path>
+                        </svg>
+                    </a>
                 </div>
             </div>
         </div>
@@ -282,9 +311,20 @@
     color: #1f2937;
 }
 
-.uda-clock-bar .clock-item i {
-    font-size: 15px;
-    color: #0f172a;
+.uda-clock-bar .clock-item .lucide-icon,
+.uda-clock-bar .clock-social .lucide-icon {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+    stroke: currentColor;
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    fill: none;
+}
+
+.uda-clock-bar .clock-social .lucide-icon {
+    margin-right: 0;
 }
 
 .uda-clock-bar .clock-item-time {
