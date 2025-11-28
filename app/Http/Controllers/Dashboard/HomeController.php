@@ -206,9 +206,14 @@ class HomeController extends Controller
             ->get();
 
         $memos = $recentMemos->map(function($rm) {
+            // Strip HTML tags and get plain text preview
+            $messagePreview = strip_tags($rm->campaign->message ?? '');
+            $messagePreview = \Str::limit($messagePreview, 100);
+            
             return [
                 'id' => $rm->id,
                 'subject' => \Str::limit($rm->campaign->subject, 40),
+                'message' => $messagePreview,
                 'created_at' => $rm->created_at->diffForHumans(),
                 'is_read' => $rm->is_read,
                 'url' => route('dashboard.memo.read', $rm->id)

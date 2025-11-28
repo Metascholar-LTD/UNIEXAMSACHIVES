@@ -340,7 +340,7 @@
             color: #6b7280;
             line-height: 1.5;
             margin: 0;
-            display: none; /* Hide description to reduce clutter - title is enough */
+            margin-top: 8px;
         }
 
         /* List view styles */
@@ -356,15 +356,21 @@
 
         .notification-list-item {
             display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
             padding: 12px 16px;
             border-bottom: 1px solid #f3f4f6;
             transition: background-color 0.2s;
             text-decoration: none;
             color: inherit;
+        }
+
+        .notification-list-item-top {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
             gap: 12px;
+            margin-bottom: 4px;
         }
 
         .notification-list-item:hover {
@@ -413,7 +419,15 @@
         }
 
         .notification-list-item-description {
-            display: none; /* Hide description in list view to reduce clutter */
+            font-size: 12px;
+            color: #6b7280;
+            line-height: 1.4;
+            margin-top: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
 
         .notification-empty {
@@ -590,8 +604,11 @@
             const icon = getNotificationIcon(item.type, item.title);
             const url = item.url || '#';
 
-            // Only show title, not duplicate description
-            const displayTitle = item.title || item.description || item.message || 'Notification';
+            // Show title and message preview for memos
+            const displayTitle = item.title || 'Notification';
+            const showMessage = item.type === 'memo' && item.message && item.message.trim() !== '';
+            const messagePreview = showMessage ? item.message : '';
+            
             card.innerHTML = `
                 <div class="notification-carousel-card-header">
                     <div class="notification-carousel-card-title-row">
@@ -600,6 +617,7 @@
                     </div>
                     <span class="notification-carousel-card-time">${item.time || 'just now'}</span>
                 </div>
+                ${showMessage ? `<p class="notification-carousel-card-description">${messagePreview}</p>` : ''}
             `;
 
             // Make card clickable
@@ -626,20 +644,24 @@
             notificationTrayState.items.forEach(item => {
                 const icon = getNotificationIcon(item.type, item.title);
                 const url = item.url || '#';
-                // Only show title, not duplicate description
-                const displayTitle = item.title || item.description || item.message || 'Notification';
+                const displayTitle = item.title || 'Notification';
+                const showMessage = item.type === 'memo' && item.message && item.message.trim() !== '';
+                const messagePreview = showMessage ? item.message : '';
                 const unreadDot = !item.is_read ? '<span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; flex-shrink: 0;"></span>' : '';
 
                 html += `
                     <a href="${url}" class="notification-list-item">
-                        <div class="notification-list-item-header">
-                            <div class="notification-list-item-title-row">
-                                ${icon}
-                                <span class="notification-list-item-title">${displayTitle}</span>
-                                ${unreadDot}
+                        <div class="notification-list-item-top">
+                            <div class="notification-list-item-header">
+                                <div class="notification-list-item-title-row">
+                                    ${icon}
+                                    <span class="notification-list-item-title">${displayTitle}</span>
+                                    ${unreadDot}
+                                </div>
                             </div>
+                            <span class="notification-list-item-time">${item.time || 'just now'}</span>
                         </div>
-                        <span class="notification-list-item-time">${item.time || 'just now'}</span>
+                        ${showMessage ? `<p class="notification-list-item-description">${messagePreview}</p>` : ''}
                     </a>
                 `;
             });
@@ -674,13 +696,14 @@
                     // Combine and format items
                     const items = [];
                     
-                    // Add memos - only store title, no duplicate description
+                    // Add memos - include message preview
                     if (memoData.memos && memoData.memos.length > 0) {
                         memoData.memos.forEach(memo => {
                             items.push({
                                 id: memo.id,
                                 type: 'memo',
                                 title: memo.subject,
+                                message: memo.message || '', // Message preview for memos
                                 time: memo.created_at,
                                 is_read: memo.is_read,
                                 url: memo.url
@@ -728,6 +751,7 @@
                                 id: memo.id,
                                 type: 'memo',
                                 title: memo.subject,
+                                message: memo.message || '', // Message preview for memos
                                 time: memo.created_at,
                                 is_read: memo.is_read,
                                 url: memo.url
