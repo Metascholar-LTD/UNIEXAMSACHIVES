@@ -202,12 +202,13 @@
     align-items: flex-start;
     justify-content: center;
     padding-top: 20px;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 0;
     transform: translateX(-100px);
     flex-shrink: 0;
     align-self: stretch;
     min-height: 100%;
+    will-change: transform, opacity;
 }
 
 .calendar-hamburger-sidebar.show {
@@ -243,10 +244,11 @@
     min-width: 1px;
     background: #e5e7eb;
     opacity: 0;
-    transition: opacity 0.3s ease;
+    transition: opacity 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     flex-shrink: 0;
     align-self: stretch;
     min-height: 100%;
+    will-change: opacity;
 }
 
 .calendar-sidebar-separator.show {
@@ -285,6 +287,7 @@
     flex-direction: column;
     min-height: 0;
     position: relative;
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .calendar-modal-body.with-sidebar {
@@ -306,9 +309,10 @@
     justify-content: center;
     align-items: flex-start;
     position: relative;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 1;
     transform: scale(1) translateY(0);
+    will-change: transform, opacity, width, height;
 }
 
 .calendar-wall-container.collapsed {
@@ -322,7 +326,7 @@
     transform: scale(0.1) translateY(-200px) translateX(-45vw);
     overflow: hidden;
     pointer-events: none;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .calendar-wall.collapsed {
@@ -331,9 +335,10 @@
 }
 
 .calendar-nav-header {
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     opacity: 1;
     transform: translateX(0);
+    will-change: transform, opacity;
 }
 
 .calendar-nav-header.hidden {
@@ -367,11 +372,12 @@
     gap: 8px;
     transform-style: flat;
     transform: none !important;
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     padding: 5px 8px 20px 8px;
     width: fit-content;
     margin: 0;
     opacity: 1;
+    will-change: transform, opacity;
 }
 
 .calendar-wall.collapsed {
@@ -489,29 +495,18 @@
     margin-right: 0;
     opacity: 0;
     transform: translateY(20px) scale(0.95);
-    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
     display: none;
     flex: 1;
     width: 100%;
     max-width: none;
+    will-change: transform, opacity;
 }
 
 .calendar-add-form.show {
     display: block;
     opacity: 1;
     transform: translateY(0) scale(1);
-    animation: formSlideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-@keyframes formSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.9);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
 }
 
 .form-title {
@@ -1011,7 +1006,7 @@ function createDayCard(date, isOtherMonth) {
         <div class="calendar-day-events" id="events-${date.toISOString()}">
             ${renderDayEvents(dayEvents, date)}
         </div>
-        <div class="calendar-event-count">${dayEvents.length} event(s)</div>
+        ${dayEvents.length > 0 ? `<div class="calendar-event-count">${dayEvents.length} event(s)</div>` : ''}
     `;
     
     return card;
@@ -1031,19 +1026,8 @@ function handleDateClick(date) {
     document.getElementById('eventDescription').value = '';
     document.getElementById('eventType').value = 'appointment';
     
-    // Collapse calendar
+    // Collapse calendar with smooth transition
     collapseCalendar();
-    
-    // Show the form after animation
-    setTimeout(() => {
-        const form = document.getElementById('calendarAddForm');
-        form.style.display = 'block';
-        setTimeout(() => {
-            form.classList.add('show');
-            // Focus on title input
-            document.getElementById('eventTitle').focus();
-        }, 50);
-    }, 300);
 }
 
 // Collapse calendar into hamburger
@@ -1053,37 +1037,61 @@ function collapseCalendar() {
     const navHeader = document.getElementById('calendarNavHeader');
     const sidebar = document.getElementById('calendarHamburgerSidebar');
     const separator = document.getElementById('calendarSidebarSeparator');
+    const form = document.getElementById('calendarAddForm');
     const modalBody = document.querySelector('.calendar-modal-body');
     
     if (container && navHeader) {
-        // Add collapsed class
-        container.classList.add('collapsed');
-        if (wall) {
-            wall.classList.add('collapsed');
-        }
-        navHeader.classList.add('hidden');
-        
-        // Show sidebar and separator with animation
-        setTimeout(() => {
-            if (sidebar) {
-                sidebar.style.display = 'flex';
-                setTimeout(() => {
-                    sidebar.classList.add('show');
-                }, 50);
+        // Use requestAnimationFrame for smoother start
+        requestAnimationFrame(() => {
+            // Start calendar collapse
+            container.classList.add('collapsed');
+            if (wall) {
+                wall.classList.add('collapsed');
             }
+            navHeader.classList.add('hidden');
             
-            if (separator) {
-                separator.style.display = 'block';
-                setTimeout(() => {
-                    separator.classList.add('show');
-                }, 100);
-            }
-            
-            // Update modal body layout
+            // Update modal body layout immediately for smooth transition
             if (modalBody) {
                 modalBody.classList.add('with-sidebar');
             }
-        }, 250);
+            
+            // Show sidebar and separator with coordinated timing
+            requestAnimationFrame(() => {
+                if (sidebar) {
+                    sidebar.style.display = 'flex';
+                    // Force reflow
+                    sidebar.offsetHeight;
+                    requestAnimationFrame(() => {
+                        sidebar.classList.add('show');
+                    });
+                }
+                
+                if (separator) {
+                    separator.style.display = 'block';
+                    // Force reflow
+                    separator.offsetHeight;
+                    requestAnimationFrame(() => {
+                        separator.classList.add('show');
+                    });
+                }
+            });
+            
+            // Show form with perfect timing - after calendar starts collapsing
+            setTimeout(() => {
+                if (form) {
+                    form.style.display = 'block';
+                    // Force reflow
+                    form.offsetHeight;
+                    requestAnimationFrame(() => {
+                        form.classList.add('show');
+                        // Focus on title input after animation
+                        setTimeout(() => {
+                            document.getElementById('eventTitle').focus();
+                        }, 100);
+                    });
+                }
+            }, 200);
+        });
     }
 }
 
@@ -1098,40 +1106,47 @@ function expandCalendar() {
     const modalBody = document.querySelector('.calendar-modal-body');
     
     if (container && navHeader) {
-        // Hide form first
-        if (form) {
-            form.classList.remove('show');
+        // Use requestAnimationFrame for smoother start
+        requestAnimationFrame(() => {
+            // Hide form first with smooth fade out
+            if (form) {
+                form.classList.remove('show');
+                setTimeout(() => {
+                    form.style.display = 'none';
+                }, 400);
+            }
+            
+            // Hide sidebar and separator with coordinated timing
+            if (sidebar) {
+                sidebar.classList.remove('show');
+                setTimeout(() => {
+                    sidebar.style.display = 'none';
+                }, 400);
+            }
+            
+            if (separator) {
+                separator.classList.remove('show');
+                setTimeout(() => {
+                    separator.style.display = 'none';
+                }, 350);
+            }
+            
+            // Update modal body layout after sidebar starts hiding
             setTimeout(() => {
-                form.style.display = 'none';
-            }, 300);
-        }
-        
-        // Hide sidebar and separator with animation
-        if (sidebar) {
-            sidebar.classList.remove('show');
-            setTimeout(() => {
-                sidebar.style.display = 'none';
-            }, 300);
-        }
-        
-        if (separator) {
-            separator.classList.remove('show');
-            setTimeout(() => {
-                separator.style.display = 'none';
-            }, 250);
-        }
-        
-        // Update modal body layout
-        if (modalBody) {
-            modalBody.classList.remove('with-sidebar');
-        }
-        
-        // Remove collapsed class
-        container.classList.remove('collapsed');
-        if (wall) {
-            wall.classList.remove('collapsed');
-        }
-        navHeader.classList.remove('hidden');
+                if (modalBody) {
+                    modalBody.classList.remove('with-sidebar');
+                }
+                
+                // Expand calendar after layout change
+                requestAnimationFrame(() => {
+                    container.classList.remove('collapsed');
+                    if (wall) {
+                        wall.classList.remove('collapsed');
+                    }
+                    navHeader.classList.remove('hidden');
+                });
+            }, 200);
+        });
     }
 }
 
