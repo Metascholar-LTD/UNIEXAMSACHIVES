@@ -291,6 +291,7 @@
     font-weight: 600;
     color: #111827;
     z-index: 20;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
 }
 
 .uda-clock-bar .clock-left,
