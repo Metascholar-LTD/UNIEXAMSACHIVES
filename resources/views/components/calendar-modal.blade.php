@@ -19,14 +19,6 @@
                     </svg>
                 </button>
             </div>
-            <!-- Hamburger Menu Button (shown when calendar is collapsed) -->
-            <button class="calendar-hamburger-btn" id="calendarHamburgerBtn" onclick="expandCalendar()" style="display: none;" aria-label="Show calendar">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <line x1="3" y1="12" x2="21" y2="12"></line>
-                    <line x1="3" y1="6" x2="21" y2="6"></line>
-                    <line x1="3" y1="18" x2="21" y2="18"></line>
-                </svg>
-            </button>
             <button class="calendar-modal-close" onclick="closeCalendarModal()" aria-label="Close calendar">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -43,6 +35,20 @@
                     <!-- Days will be dynamically generated here -->
                 </div>
             </div>
+
+            <!-- Hamburger Sidebar (shown when calendar is collapsed) -->
+            <div class="calendar-hamburger-sidebar" id="calendarHamburgerSidebar" style="display: none;">
+                <button class="calendar-hamburger-btn" id="calendarHamburgerBtn" onclick="expandCalendar()" aria-label="Show calendar">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="3" y1="12" x2="21" y2="12"></line>
+                        <line x1="3" y1="6" x2="21" y2="6"></line>
+                        <line x1="3" y1="18" x2="21" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Vertical Separator -->
+            <div class="calendar-sidebar-separator" id="calendarSidebarSeparator" style="display: none;"></div>
 
             <!-- Add Event Form -->
             <div class="calendar-add-form" id="calendarAddForm" style="display: none;">
@@ -188,28 +194,63 @@
     text-align: center;
 }
 
+.calendar-hamburger-sidebar {
+    width: 80px;
+    min-width: 80px;
+    background: #f8f9fa;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: 20px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+    transform: translateX(-100px);
+    flex-shrink: 0;
+    align-self: stretch;
+    min-height: 100%;
+}
+
+.calendar-hamburger-sidebar.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
 .calendar-hamburger-btn {
-    background: #f3f4f6;
+    background: white;
     border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    width: 40px;
-    height: 40px;
+    border-radius: 12px;
+    width: 50px;
+    height: 50px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     color: #6b7280;
-    position: absolute;
-    right: 70px;
-    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
 .calendar-hamburger-btn:hover {
-    background: #e5e7eb;
+    background: #f3f4f6;
     border-color: #d1d5db;
     color: #111827;
     transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.calendar-sidebar-separator {
+    width: 1px;
+    min-width: 1px;
+    background: #e5e7eb;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    flex-shrink: 0;
+    align-self: stretch;
+    min-height: 100%;
+}
+
+.calendar-sidebar-separator.show {
+    opacity: 1;
 }
 
 .calendar-modal-close {
@@ -243,6 +284,13 @@
     display: flex;
     flex-direction: column;
     min-height: 0;
+    position: relative;
+}
+
+.calendar-modal-body.with-sidebar {
+    flex-direction: row;
+    padding: 20px;
+    gap: 0;
 }
 
 
@@ -271,7 +319,7 @@
     padding: 0;
     margin: 0;
     opacity: 0;
-    transform: scale(0.1) translateY(-200px) translateX(calc(50vw - 70px));
+    transform: scale(0.1) translateY(-200px) translateX(-45vw);
     overflow: hidden;
     pointer-events: none;
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
@@ -437,14 +485,15 @@
     border-radius: 12px;
     border: 1px solid #e5e7eb;
     margin-top: 0;
+    margin-left: 0;
+    margin-right: 0;
     opacity: 0;
     transform: translateY(20px) scale(0.95);
     transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
     display: none;
-    max-width: 800px;
-    margin-left: auto;
-    margin-right: auto;
+    flex: 1;
     width: 100%;
+    max-width: none;
 }
 
 .calendar-add-form.show {
@@ -796,7 +845,9 @@ function openCalendarModal() {
     const container = document.getElementById('calendarWallContainer');
     const wall = document.getElementById('calendarWall');
     const navHeader = document.getElementById('calendarNavHeader');
-    const hamburgerBtn = document.getElementById('calendarHamburgerBtn');
+    const sidebar = document.getElementById('calendarHamburgerSidebar');
+    const separator = document.getElementById('calendarSidebarSeparator');
+    const modalBody = document.querySelector('.calendar-modal-body');
     
     if (form) {
         form.style.display = 'none';
@@ -815,10 +866,18 @@ function openCalendarModal() {
         navHeader.classList.remove('hidden');
     }
     
-    if (hamburgerBtn) {
-        hamburgerBtn.style.display = 'none';
-        hamburgerBtn.style.opacity = '1';
-        hamburgerBtn.style.transform = 'scale(1)';
+    if (sidebar) {
+        sidebar.style.display = 'none';
+        sidebar.classList.remove('show');
+    }
+    
+    if (separator) {
+        separator.style.display = 'none';
+        separator.classList.remove('show');
+    }
+    
+    if (modalBody) {
+        modalBody.classList.remove('with-sidebar');
     }
     
     loadEvents();
@@ -992,9 +1051,11 @@ function collapseCalendar() {
     const container = document.getElementById('calendarWallContainer');
     const wall = document.getElementById('calendarWall');
     const navHeader = document.getElementById('calendarNavHeader');
-    const hamburgerBtn = document.getElementById('calendarHamburgerBtn');
+    const sidebar = document.getElementById('calendarHamburgerSidebar');
+    const separator = document.getElementById('calendarSidebarSeparator');
+    const modalBody = document.querySelector('.calendar-modal-body');
     
-    if (container && navHeader && hamburgerBtn) {
+    if (container && navHeader) {
         // Add collapsed class
         container.classList.add('collapsed');
         if (wall) {
@@ -1002,16 +1063,26 @@ function collapseCalendar() {
         }
         navHeader.classList.add('hidden');
         
-        // Show hamburger button with animation
+        // Show sidebar and separator with animation
         setTimeout(() => {
-            hamburgerBtn.style.display = 'flex';
-            hamburgerBtn.style.opacity = '0';
-            hamburgerBtn.style.transform = 'scale(0.8)';
-            setTimeout(() => {
-                hamburgerBtn.style.transition = 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
-                hamburgerBtn.style.opacity = '1';
-                hamburgerBtn.style.transform = 'scale(1)';
-            }, 50);
+            if (sidebar) {
+                sidebar.style.display = 'flex';
+                setTimeout(() => {
+                    sidebar.classList.add('show');
+                }, 50);
+            }
+            
+            if (separator) {
+                separator.style.display = 'block';
+                setTimeout(() => {
+                    separator.classList.add('show');
+                }, 100);
+            }
+            
+            // Update modal body layout
+            if (modalBody) {
+                modalBody.classList.add('with-sidebar');
+            }
         }, 250);
     }
 }
@@ -1021,10 +1092,12 @@ function expandCalendar() {
     const container = document.getElementById('calendarWallContainer');
     const wall = document.getElementById('calendarWall');
     const navHeader = document.getElementById('calendarNavHeader');
-    const hamburgerBtn = document.getElementById('calendarHamburgerBtn');
+    const sidebar = document.getElementById('calendarHamburgerSidebar');
+    const separator = document.getElementById('calendarSidebarSeparator');
     const form = document.getElementById('calendarAddForm');
+    const modalBody = document.querySelector('.calendar-modal-body');
     
-    if (container && navHeader && hamburgerBtn) {
+    if (container && navHeader) {
         // Hide form first
         if (form) {
             form.classList.remove('show');
@@ -1033,12 +1106,25 @@ function expandCalendar() {
             }, 300);
         }
         
-        // Hide hamburger button with animation
-        hamburgerBtn.style.opacity = '0';
-        hamburgerBtn.style.transform = 'scale(0.8)';
-        setTimeout(() => {
-            hamburgerBtn.style.display = 'none';
-        }, 200);
+        // Hide sidebar and separator with animation
+        if (sidebar) {
+            sidebar.classList.remove('show');
+            setTimeout(() => {
+                sidebar.style.display = 'none';
+            }, 300);
+        }
+        
+        if (separator) {
+            separator.classList.remove('show');
+            setTimeout(() => {
+                separator.style.display = 'none';
+            }, 250);
+        }
+        
+        // Update modal body layout
+        if (modalBody) {
+            modalBody.classList.remove('with-sidebar');
+        }
         
         // Remove collapsed class
         container.classList.remove('collapsed');
