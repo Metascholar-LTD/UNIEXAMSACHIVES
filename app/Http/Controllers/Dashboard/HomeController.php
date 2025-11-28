@@ -201,6 +201,7 @@ class HomeController extends Controller
     {
         $recentMemos = EmailCampaignRecipient::with('campaign')
             ->where('user_id', Auth::id())
+            ->where('is_read', false) // Only show unread memos in notification tray
             ->orderBy('created_at','desc')
             ->limit(5)
             ->get();
@@ -411,6 +412,7 @@ class HomeController extends Controller
     public function getNotifications()
     {
         $notifications = Notification::forUser(Auth::id())
+            ->where('is_read', false) // Only show unread notifications in tray
             ->orderBy('created_at', 'desc')
             ->limit(20)
             ->get()
@@ -497,8 +499,13 @@ class HomeController extends Controller
         // Delete all notifications for the user
         Notification::forUser(Auth::id())->delete();
 
-        // Note: We don't delete memos, just notifications
-        // Memos are actual messages that should remain in the system
+        // Mark all memos as read so they don't show in the tray
+        EmailCampaignRecipient::where('user_id', Auth::id())
+            ->where('is_read', false)
+            ->update([
+                'is_read' => true,
+                'read_at' => now(),
+            ]);
 
         return response()->json(['success' => true, 'message' => 'All notifications cleared']);
     }

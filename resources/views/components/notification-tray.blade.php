@@ -788,32 +788,38 @@
                     // Combine and format items
                     const items = [];
                     
-                    // Add memos - include message preview
+                    // Add memos - include message preview (only unread)
                     if (memoData.memos && memoData.memos.length > 0) {
                         memoData.memos.forEach(memo => {
-                            items.push({
-                                id: memo.id,
-                                type: 'memo',
-                                title: memo.subject,
-                                message: memo.message || '', // Message preview for memos
-                                time: memo.created_at,
-                                is_read: memo.is_read,
-                                url: memo.url
-                            });
+                            // Only add unread memos
+                            if (!memo.is_read) {
+                                items.push({
+                                    id: memo.id,
+                                    type: 'memo',
+                                    title: memo.subject,
+                                    message: memo.message || '', // Message preview for memos
+                                    time: memo.created_at,
+                                    is_read: memo.is_read,
+                                    url: memo.url
+                                });
+                            }
                         });
                     }
                     
-                    // Add reply notifications - only store title, no duplicate description
+                    // Add reply notifications - only unread (only store title, no duplicate description)
                     if (notificationData.notifications && notificationData.notifications.length > 0) {
                         notificationData.notifications.forEach(notification => {
-                            items.push({
-                                id: notification.id,
-                                type: 'reply',
-                                title: notification.title || notification.message,
-                                time: notification.time_ago,
-                                is_read: notification.is_read,
-                                url: notification.url
-                            });
+                            // Only add unread notifications
+                            if (!notification.is_read) {
+                                items.push({
+                                    id: notification.id,
+                                    type: 'reply',
+                                    title: notification.title || notification.message,
+                                    time: notification.time_ago,
+                                    is_read: notification.is_read,
+                                    url: notification.url
+                                });
+                            }
                         });
                     }
 
@@ -854,19 +860,22 @@
                 })
                 .catch(err => {
                     console.log('Error fetching notifications:', err);
-                    // Fallback to just memos
+                    // Fallback to just memos (only unread)
                     const items = [];
                     if (memoData.memos && memoData.memos.length > 0) {
                         memoData.memos.forEach(memo => {
-                            items.push({
-                                id: memo.id,
-                                type: 'memo',
-                                title: memo.subject,
-                                message: memo.message || '', // Message preview for memos
-                                time: memo.created_at,
-                                is_read: memo.is_read,
-                                url: memo.url
-                            });
+                            // Only add unread memos
+                            if (!memo.is_read) {
+                                items.push({
+                                    id: memo.id,
+                                    type: 'memo',
+                                    title: memo.subject,
+                                    message: memo.message || '', // Message preview for memos
+                                    time: memo.created_at,
+                                    is_read: memo.is_read,
+                                    url: memo.url
+                                });
+                            }
                         });
                     }
                     
