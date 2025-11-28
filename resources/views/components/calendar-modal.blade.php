@@ -37,7 +37,7 @@
             </div>
 
             <!-- Add Event Form -->
-            <div class="calendar-add-form" id="calendarAddForm">
+            <div class="calendar-add-form" id="calendarAddForm" style="display: none;">
                 <h3 class="form-title">Add New Event</h3>
                 <div class="form-grid">
                     <div class="form-group">
@@ -134,18 +134,19 @@
 .calendar-modal-header {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
     padding: 16px 24px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-    background: linear-gradient(135deg, #5f2ded 0%, #7c3aed 100%);
-    color: white;
+    border-bottom: 1px solid #e5e7eb;
+    background: #f8f9fa;
+    color: #111827;
+    position: relative;
 }
 
 .calendar-nav-header {
     display: flex;
     align-items: center;
     gap: 20px;
-    flex: 1;
+    justify-content: center;
 }
 
 .calendar-nav-btn-header {
@@ -153,35 +154,35 @@
     align-items: center;
     gap: 6px;
     padding: 8px 16px;
-    background: rgba(255, 255, 255, 0.15);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: white;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
     font-size: 14px;
     font-weight: 600;
-    color: white;
+    color: #374151;
     cursor: pointer;
     transition: all 0.2s;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
 }
 
 .calendar-nav-btn-header:hover {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.4);
+    background: #f3f4f6;
+    border-color: #d1d5db;
     transform: translateY(-1px);
 }
 
 .calendar-month-display-header {
     font-size: 20px;
     font-weight: 700;
-    color: white;
+    color: #111827;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
     min-width: 180px;
     text-align: center;
 }
 
 .calendar-modal-close {
-    background: rgba(255, 255, 255, 0.2);
-    border: none;
+    background: #f3f4f6;
+    border: 1px solid #e5e7eb;
     border-radius: 50%;
     width: 36px;
     height: 36px;
@@ -190,11 +191,15 @@
     justify-content: center;
     cursor: pointer;
     transition: all 0.2s;
-    color: white;
+    color: #6b7280;
+    position: absolute;
+    right: 24px;
 }
 
 .calendar-modal-close:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: #e5e7eb;
+    border-color: #d1d5db;
+    color: #111827;
     transform: scale(1.1);
 }
 
@@ -602,11 +607,17 @@
     .calendar-modal-header {
         flex-direction: column;
         gap: 12px;
-        align-items: stretch;
+        align-items: center;
     }
     
     .calendar-nav-header {
-        justify-content: space-between;
+        justify-content: center;
+    }
+    
+    .calendar-modal-close {
+        position: absolute;
+        right: 16px;
+        top: 16px;
     }
     
     .calendar-nav-btn-header span {
@@ -675,6 +686,11 @@ function openCalendarModal() {
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
     }, 10);
+    // Hide form when modal opens
+    const form = document.getElementById('calendarAddForm');
+    if (form) {
+        form.style.display = 'none';
+    }
     loadEvents();
     renderCalendar();
     setTimeout(() => {
@@ -820,17 +836,22 @@ function handleDateClick(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const dateStr = `${year}-${month}-${day}T09:00`; // Default to 9 AM
     
-    // Set the date in the form
+    // Reset form fields (but don't hide it yet)
+    document.getElementById('eventTitle').value = '';
     document.getElementById('eventDate').value = dateStr;
+    document.getElementById('eventDescription').value = '';
+    document.getElementById('eventType').value = 'appointment';
+    
+    // Show the form
+    const form = document.getElementById('calendarAddForm');
+    form.style.display = 'block';
     
     // Scroll to form
-    const form = document.getElementById('calendarAddForm');
-    form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    
-    // Focus on title input
     setTimeout(() => {
+        form.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Focus on title input
         document.getElementById('eventTitle').focus();
-    }, 300);
+    }, 100);
 }
 
 // Reset event form
@@ -839,6 +860,10 @@ function resetEventForm() {
     document.getElementById('eventDate').value = '';
     document.getElementById('eventDescription').value = '';
     document.getElementById('eventType').value = 'appointment';
+    
+    // Hide the form
+    const form = document.getElementById('calendarAddForm');
+    form.style.display = 'none';
 }
 
 // Get events for a specific day
