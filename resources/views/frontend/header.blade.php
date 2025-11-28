@@ -4,7 +4,7 @@
             <div class="clock-left">
                 <span class="clock-item">
                     <i class="icofont-location-pin"></i>
-                    Accra, Ghana
+                    Fiapre - Sunyani, Bono Region, Ghana
                 </span>
                 <span class="clock-item">
                     <i class="icofont-clock-time"></i>
@@ -17,17 +17,21 @@
             </div>
             <div class="clock-right">
                 <span class="clock-item">
-                    <i class="icofont-email"></i>
-                    info@gnrs.gov.gh
+                    <i class="icofont-iphone"></i>
+                    Hotline: (+233) 352 094 658
                 </span>
                 <span class="clock-item">
-                    <i class="icofont-ui-call"></i>
-                    +233 XX XXX XXXX
+                    <i class="icofont-brand-whatsapp"></i>
+                    WhatsApp: (+233) 249 260 857
+                </span>
+                <span class="clock-item">
+                    <i class="icofont-email"></i>
+                    cugadmin@cug.edu.gh
                 </span>
                 <div class="clock-social">
-                    <a href="#" aria-label="Facebook"><i class="icofont-facebook"></i></a>
-                    <a href="#" aria-label="Twitter"><i class="icofont-twitter"></i></a>
-                    <a href="#" aria-label="LinkedIn"><i class="icofont-linkedin"></i></a>
+                    <a href="https://www.facebook.com/cugacademics" target="_blank" rel="noreferrer" aria-label="Facebook"><i class="icofont-facebook"></i></a>
+                    <a href="https://twitter.com/cugacademics" target="_blank" rel="noreferrer" aria-label="Twitter"><i class="icofont-twitter"></i></a>
+                    <a href="https://www.linkedin.com/company/catholic-university-of-ghana" target="_blank" rel="noreferrer" aria-label="LinkedIn"><i class="icofont-linkedin"></i></a>
                 </div>
             </div>
         </div>
