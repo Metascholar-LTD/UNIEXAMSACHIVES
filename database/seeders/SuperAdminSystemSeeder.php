@@ -38,7 +38,7 @@ class SuperAdminSystemSeeder extends Seeder
         $this->command->info('Creating Super Admin user...');
 
         $superAdmin = User::firstOrCreate(
-            ['email' => 'superadmin@metascholar.com'],
+            ['email' => 'metascholarlimited@gmail.com'],
             [
                 'first_name' => 'Meta',
                 'last_name' => 'Scholar',
@@ -53,7 +53,7 @@ class SuperAdminSystemSeeder extends Seeder
         );
 
         $this->command->warn('⚠️  IMPORTANT: Super Admin Credentials');
-        $this->command->info('Email: superadmin@metascholar.com');
+        $this->command->info('Email: metascholarlimited@gmail.com');
         $this->command->info('Password: SuperAdmin@2025');
         $this->command->warn('⚠️  CHANGE THIS PASSWORD IMMEDIATELY AFTER FIRST LOGIN!');
     }
