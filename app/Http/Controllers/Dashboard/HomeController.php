@@ -911,11 +911,16 @@ class HomeController extends Controller
                 // Check if memo is bookmarked by current user
                 $isBookmarked = $memo->isBookmarkedBy($userId);
                 
+                // Get when the memo was received by the current user (recipient's created_at)
+                $recipient = $memo->recipients->where('user_id', $userId)->first();
+                $receivedAt = $recipient ? $recipient->created_at : $memo->created_at;
+                
                 return [
                     'id' => $memo->id,
                     'subject' => $memo->subject,
                     'message' => $memo->message,
                     'created_at' => $memo->created_at,
+                    'received_at' => $receivedAt, // When user received the memo
                     'updated_at' => $memo->updated_at,
                     'memo_status' => $memo->memo_status ?? 'pending',
                     'creator' => $memo->creator,
@@ -1891,11 +1896,16 @@ class HomeController extends Controller
                 // Get last message
                 $lastMessage = $memo->replies->sortByDesc('created_at')->first();
                 
+                // Get when the memo was received by the current user (recipient's created_at)
+                $recipient = $memo->recipients->where('user_id', $userId)->first();
+                $receivedAt = $recipient ? $recipient->created_at : $memo->created_at;
+                
                 return [
                     'id' => $memo->id,
                     'subject' => $memo->subject,
                     'message' => $memo->message,
                     'created_at' => $memo->created_at,
+                    'received_at' => $receivedAt, // When user received the memo
                     'updated_at' => $memo->updated_at,
                     'memo_status' => $memo->memo_status ?? 'pending',
                     'creator' => $memo->creator,

@@ -494,6 +494,19 @@
                                             font-weight: 500;
                                         }
                                         
+                                        .memo-received-datetime {
+                                            font-size: 0.75rem;
+                                            color: #6b7280;
+                                            font-weight: 500;
+                                            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                                            letter-spacing: 0.3px;
+                                            white-space: nowrap;
+                                        }
+                                        
+                                        .memo-received-datetime:hover {
+                                            color: #4b5563;
+                                        }
+                                        
                                         .memo-right-section {
                                             display: flex;
                                             align-items: center;
@@ -972,9 +985,22 @@
                                                             : 'System';
                                                         const creatorAvatar = creator.profile_picture_url || '/profile_pictures/default-profile.png';
                                                         const lastMessage = memo.last_message;
-                                                        const lastMessageTime = lastMessage 
-                                                            ? new Date(lastMessage.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-                                                            : new Date(memo.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+                                                        
+                                                        // Format received date and time like chat system: "M d, Y H:i"
+                                                        const receivedAt = memo.received_at || memo.created_at;
+                                                        const receivedDate = new Date(receivedAt);
+                                                        const receivedDateFormatted = receivedDate.toLocaleDateString('en-US', { 
+                                                            month: 'short', 
+                                                            day: 'numeric', 
+                                                            year: 'numeric' 
+                                                        });
+                                                        const receivedTimeFormatted = receivedDate.toLocaleTimeString('en-US', { 
+                                                            hour: '2-digit', 
+                                                            minute: '2-digit',
+                                                            hour12: false 
+                                                        });
+                                                        const receivedDateTime = `${receivedDateFormatted} ${receivedTimeFormatted}`;
+                                                        
                                                         const participants = memo.active_participants || [];
                                                         const isUnread = false; // You can add unread logic here
                                                         
@@ -1017,7 +1043,7 @@
                                                                         <div class="memo-preview">${memo.message ? memo.message.substring(0, 120) : 'No content'}...</div>
                                                                         <div class="memo-footer">
                                                                             <div class="memo-left-info">
-                                                                                <span class="chat__time">${lastMessageTime}</span>
+                                                                                <span class="memo-received-datetime">${receivedDateTime}</span>
                                                                             </div>
                                                                         </div>
                                                                     </div>
