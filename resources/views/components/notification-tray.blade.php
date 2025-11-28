@@ -130,7 +130,7 @@
             position: absolute;
             right: 0;
             top: 44px;
-            width: 320px;
+            width: 420px;
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 12px;
@@ -293,39 +293,46 @@
             background: #fff;
             border: 1px solid #e5e7eb;
             border-radius: 8px;
-            padding: 16px;
+            padding: 20px;
             transition: all 0.3s;
         }
 
         .notification-carousel-card-header {
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: space-between;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
         }
 
         .notification-carousel-card-title-row {
             display: flex;
-            align-items: center;
-            gap: 8px;
+            align-items: flex-start;
+            gap: 10px;
+            flex: 1;
         }
 
         .notification-carousel-card-icon {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             color: #6b7280;
+            flex-shrink: 0;
+            margin-top: 2px;
         }
 
         .notification-carousel-card-title {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 600;
             color: #111827;
             margin: 0;
+            line-height: 1.4;
+            flex: 1;
         }
 
         .notification-carousel-card-time {
             font-size: 12px;
             color: #9ca3af;
+            white-space: nowrap;
+            margin-left: 12px;
         }
 
         .notification-carousel-card-description {
@@ -333,6 +340,7 @@
             color: #6b7280;
             line-height: 1.5;
             margin: 0;
+            display: none; /* Hide description to reduce clutter - title is enough */
         }
 
         /* List view styles */
@@ -348,12 +356,15 @@
 
         .notification-list-item {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
             padding: 12px 16px;
             border-bottom: 1px solid #f3f4f6;
             transition: background-color 0.2s;
             text-decoration: none;
             color: inherit;
+            gap: 12px;
         }
 
         .notification-list-item:hover {
@@ -362,38 +373,47 @@
 
         .notification-list-item-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            margin-bottom: 4px;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
         }
 
         .notification-list-item-title-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
+            flex: 1;
+            min-width: 0;
         }
 
         .notification-list-item-icon {
-            width: 16px;
-            height: 16px;
+            width: 18px;
+            height: 18px;
             color: #6b7280;
+            flex-shrink: 0;
         }
 
         .notification-list-item-title {
             font-size: 14px;
             font-weight: 600;
             color: #111827;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
         }
 
         .notification-list-item-time {
             font-size: 12px;
             color: #9ca3af;
+            white-space: nowrap;
+            flex-shrink: 0;
         }
 
         .notification-list-item-description {
-            font-size: 12px;
-            color: #6b7280;
-            line-height: 1.5;
+            display: none; /* Hide description in list view to reduce clutter */
         }
 
         .notification-empty {
@@ -403,14 +423,9 @@
             font-size: 14px;
         }
 
-        /* Section headers for list view */
+        /* Section headers for list view - removed to reduce clutter */
         .notification-section-header {
-            padding: 8px 16px;
-            font-size: 12px;
-            font-weight: 600;
-            color: #6b7280;
-            background: #f3f4f6;
-            border-bottom: 1px solid #e5e7eb;
+            display: none;
         }
 
         /* Dark mode support */
@@ -575,15 +590,16 @@
             const icon = getNotificationIcon(item.type, item.title);
             const url = item.url || '#';
 
+            // Only show title, not duplicate description
+            const displayTitle = item.title || item.description || item.message || 'Notification';
             card.innerHTML = `
                 <div class="notification-carousel-card-header">
                     <div class="notification-carousel-card-title-row">
                         ${icon}
-                        <h3 class="notification-carousel-card-title">${item.title || 'Notification'}</h3>
+                        <h3 class="notification-carousel-card-title">${displayTitle}</h3>
                     </div>
                     <span class="notification-carousel-card-time">${item.time || 'just now'}</span>
                 </div>
-                <p class="notification-carousel-card-description">${item.description || item.message || ''}</p>
             `;
 
             // Make card clickable
@@ -606,34 +622,24 @@
             }
 
             let html = '';
-            let currentSection = '';
 
             notificationTrayState.items.forEach(item => {
-                const section = item.type === 'memo' ? 'memo' : 'notification';
-                
-                if (section !== currentSection) {
-                    if (currentSection !== '') {
-                        html += '</div>';
-                    }
-                    html += `<div class="notification-section-header">${section === 'memo' ? '📧 Memos' : '💬 Reply Notifications'}</div>`;
-                    currentSection = section;
-                }
-
                 const icon = getNotificationIcon(item.type, item.title);
                 const url = item.url || '#';
-                const unreadDot = !item.is_read ? '<span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; margin-left: 8px;"></span>' : '';
+                // Only show title, not duplicate description
+                const displayTitle = item.title || item.description || item.message || 'Notification';
+                const unreadDot = !item.is_read ? '<span style="width: 8px; height: 8px; background: #10b981; border-radius: 50%; display: inline-block; flex-shrink: 0;"></span>' : '';
 
                 html += `
                     <a href="${url}" class="notification-list-item">
                         <div class="notification-list-item-header">
                             <div class="notification-list-item-title-row">
                                 ${icon}
-                                <span class="notification-list-item-title">${item.title || 'Notification'}</span>
+                                <span class="notification-list-item-title">${displayTitle}</span>
                                 ${unreadDot}
                             </div>
-                            <span class="notification-list-item-time">${item.time || 'just now'}</span>
                         </div>
-                        <p class="notification-list-item-description">${item.description || item.message || ''}</p>
+                        <span class="notification-list-item-time">${item.time || 'just now'}</span>
                     </a>
                 `;
             });
@@ -668,14 +674,13 @@
                     // Combine and format items
                     const items = [];
                     
-                    // Add memos
+                    // Add memos - only store title, no duplicate description
                     if (memoData.memos && memoData.memos.length > 0) {
                         memoData.memos.forEach(memo => {
                             items.push({
                                 id: memo.id,
                                 type: 'memo',
                                 title: memo.subject,
-                                description: memo.subject,
                                 time: memo.created_at,
                                 is_read: memo.is_read,
                                 url: memo.url
@@ -683,14 +688,13 @@
                         });
                     }
                     
-                    // Add reply notifications
+                    // Add reply notifications - only store title, no duplicate description
                     if (notificationData.notifications && notificationData.notifications.length > 0) {
                         notificationData.notifications.forEach(notification => {
                             items.push({
                                 id: notification.id,
                                 type: 'reply',
-                                title: notification.title,
-                                description: notification.message || notification.title,
+                                title: notification.title || notification.message,
                                 time: notification.time_ago,
                                 is_read: notification.is_read,
                                 url: notification.url
@@ -724,7 +728,6 @@
                                 id: memo.id,
                                 type: 'memo',
                                 title: memo.subject,
-                                description: memo.subject,
                                 time: memo.created_at,
                                 is_read: memo.is_read,
                                 url: memo.url
