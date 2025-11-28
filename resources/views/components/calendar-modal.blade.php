@@ -483,22 +483,22 @@
 }
 
 .calendar-day-card.other-month {
-    opacity: 0.3;
+    opacity: 0.4;
     background: #f8fafc;
-    filter: grayscale(0.5);
+    filter: grayscale(0.3);
 }
 
 .calendar-day-card.other-month .calendar-day-number {
-    color: #cbd5e1 !important;
+    color: #94a3b8 !important;
     font-weight: 500;
 }
 
 .calendar-day-card.other-month .calendar-day-name {
-    color: #e2e8f0 !important;
+    color: #94a3b8 !important;
 }
 
 .calendar-day-card.other-month .calendar-event-count {
-    color: #e2e8f0 !important;
+    color: #94a3b8 !important;
 }
 
 .calendar-day-card.today {
@@ -674,9 +674,9 @@
 
 .calendar-day-card.past-date {
     cursor: not-allowed;
-    opacity: 0.25;
+    opacity: 0.45;
     background: #f8fafc !important;
-    filter: grayscale(0.6);
+    filter: grayscale(0.4);
 }
 
 .calendar-day-card.past-date .calendar-day-number {
@@ -685,16 +685,16 @@
 }
 
 .calendar-day-card.past-date .calendar-day-name {
-    color: #cbd5e1 !important;
+    color: #94a3b8 !important;
 }
 
 .calendar-day-card.past-date .calendar-event-count {
-    color: #cbd5e1 !important;
+    color: #94a3b8 !important;
 }
 
 .calendar-day-card.past-date .calendar-event-dot {
-    opacity: 0.4;
-    filter: grayscale(0.8);
+    opacity: 0.5;
+    filter: grayscale(0.6);
 }
 
 /* Event Popover */
