@@ -30,6 +30,12 @@
                 <!-- Right: Auth Buttons & Notifications -->
                 <div class="uda-nav-right">
                     @if (Auth::check())
+                        <div class="uda-live-clock" data-live-clock="navbar">
+                            <span class="live-date">Fetching date...</span>
+                            <span class="live-time">--:-- --</span>
+                        </div>
+                    @endif
+                    @if (Auth::check())
                         <div class="uda-notify">
                             <button class="uda-bell" onclick="toggleMemoDropdown(event)">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
@@ -215,6 +221,30 @@
 .uda-link { background: none; border: none; padding: 0; color: #2563eb; font-weight: 600; cursor: pointer; text-decoration: none; }
 .uda-empty { padding: 14px; font-size: 13px; color: #6b7280; text-align: center; }
 .uda-section-header { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #6b7280; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; }
+.uda-live-clock {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 6px 12px;
+    margin-right: 16px;
+    background: rgba(15, 118, 110, 0.08);
+    border-radius: 10px;
+    font-size: 12px;
+    color: #0f172a;
+    font-weight: 600;
+    min-width: 150px;
+}
+
+.uda-live-clock .live-time {
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: #047857;
+    font-weight: 700;
+}
+
+.uda-live-clock .live-date {
+    color: #334155;
+}
 </style>
 
 <script>
@@ -403,6 +433,45 @@ function refreshMemoList(){
     });
 }
 
+const liveClockDateFormatter = new Intl.DateTimeFormat(undefined, {
+  weekday: 'long',
+  month: 'short',
+  day: 'numeric',
+  year: 'numeric'
+});
+
+const liveClockTimeFormatter = new Intl.DateTimeFormat(undefined, {
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit'
+});
+
+function updateLiveDateTimeWidgets() {
+  const now = new Date();
+  const dateText = liveClockDateFormatter.format(now);
+  const timeText = liveClockTimeFormatter.format(now);
+  
+  document.querySelectorAll('[data-live-clock]').forEach(clock => {
+    const dateEl = clock.querySelector('.live-date');
+    const timeEl = clock.querySelector('.live-time');
+    
+    if (dateEl) {
+      dateEl.textContent = dateText;
+    }
+    if (timeEl) {
+      timeEl.textContent = timeText;
+    }
+  });
+}
+
+function startLiveDateTimeTicker() {
+  updateLiveDateTimeWidgets();
+  if (window.__liveClockInterval) {
+    clearInterval(window.__liveClockInterval);
+  }
+  window.__liveClockInterval = setInterval(updateLiveDateTimeWidgets, 1000);
+}
+
 // Handle unified "Mark all as read" button
 document.addEventListener('DOMContentLoaded', function(){
   const markAllForm = document.querySelector('.uda-mark-all-form');
@@ -457,6 +526,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();
+  startLiveDateTimeTicker();
   
   // Poll immediately on page load
   setTimeout(pollUnread, 100);

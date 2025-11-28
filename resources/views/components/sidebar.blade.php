@@ -11,6 +11,10 @@
                 <div class="section-text">
                     <h6 class="section-title">Welcome, {{auth()->user()->first_name}} {{auth()->user()->last_name}}</h6>
                     <span class="section-subtitle">Dashboard Overview</span>
+                    <div class="live-clock-widget" data-live-clock="sidebar">
+                        <span class="live-date">Fetching date...</span>
+                        <span class="live-time">--:-- --</span>
+                    </div>
                 </div>
                 <div class="section-arrow">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
@@ -547,4 +551,21 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <style>
 /* Dropdown styles removed - using direct link now */
+.live-clock-widget {
+    margin-top: 6px;
+    padding: 6px 10px;
+    background: rgba(59, 130, 246, 0.08);
+    border-radius: 8px;
+    display: inline-flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 12px;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.live-clock-widget .live-time {
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
 </style>
