@@ -492,6 +492,17 @@ class HomeController extends Controller
         return response()->json(['success' => true]);
     }
 
+    public function clearAllNotifications()
+    {
+        // Delete all notifications for the user
+        Notification::forUser(Auth::id())->delete();
+
+        // Note: We don't delete memos, just notifications
+        // Memos are actual messages that should remain in the system
+
+        return response()->json(['success' => true, 'message' => 'All notifications cleared']);
+    }
+
     public function profile(){
 
         return view('admin.profile',[

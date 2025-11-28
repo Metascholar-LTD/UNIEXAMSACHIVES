@@ -583,58 +583,62 @@
 
         // Clear notification tray
         function clearNotificationTray() {
-            if (!confirm('Are you sure you want to clear all notifications? This will mark all as read.')) {
+            if (!confirm('Are you sure you want to delete all notifications? This action cannot be undone.')) {
                 return;
             }
             
-            // Mark all as read
-            const form = document.querySelector('.notification-mark-all-form');
-            if (form) {
-                const button = form.querySelector('.notification-mark-all-btn');
-                const originalHTML = button.innerHTML;
-                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>Clearing...</span>';
-                button.disabled = true;
-                
-                fetch(form.action, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                    },
-                    body: new URLSearchParams(new FormData(form))
-                })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        // Clear the notification tray
-                        notificationTrayState.items = [];
-                        notificationTrayState.currentIndex = 0;
-                        
-                        // Update UI
-                        const emptyState = document.getElementById('notification-empty');
-                        const content = document.getElementById('notification-tray-content');
-                        if (emptyState) emptyState.style.display = 'block';
-                        if (content) content.style.display = 'none';
-                        
-                        // Update badge
-                        if (typeof updateNotificationBadge === 'function') {
-                            updateNotificationBadge(0, 0);
-                        } else {
-                            const badge = document.querySelector('.notification-badge');
-                            if (badge) badge.style.display = 'none';
-                        }
-                        
-                        // Reset button
-                        button.innerHTML = originalHTML;
-                        button.disabled = false;
+            const clearBtn = document.querySelector('.notification-clear-btn');
+            if (!clearBtn) return;
+            
+            const originalHTML = clearBtn.innerHTML;
+            clearBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>Clearing...</span>';
+            clearBtn.disabled = true;
+            
+            // Delete all notifications
+            fetch('{{ route("dashboard.notifications.clearAll") }}', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Clear the notification tray
+                    notificationTrayState.items = [];
+                    notificationTrayState.currentIndex = 0;
+                    
+                    // Update UI
+                    const emptyState = document.getElementById('notification-empty');
+                    const content = document.getElementById('notification-tray-content');
+                    if (emptyState) emptyState.style.display = 'block';
+                    if (content) content.style.display = 'none';
+                    
+                    // Update badge
+                    if (typeof updateNotificationBadge === 'function') {
+                        updateNotificationBadge(0, 0);
+                    } else {
+                        const badge = document.querySelector('.notification-badge');
+                        if (badge) badge.style.display = 'none';
                     }
-                })
-                .catch(error => {
-                    console.error('Error clearing notifications:', error);
-                    button.innerHTML = originalHTML;
-                    button.disabled = false;
-                });
-            }
+                    
+                    // Refresh the tray to reflect changes
+                    if (typeof refreshNotificationTray === 'function') {
+                        refreshNotificationTray();
+                    }
+                }
+                
+                // Reset button
+                clearBtn.innerHTML = originalHTML;
+                clearBtn.disabled = false;
+            })
+            .catch(error => {
+                console.error('Error clearing notifications:', error);
+                alert('Error clearing notifications. Please try again.');
+                clearBtn.innerHTML = originalHTML;
+                clearBtn.disabled = false;
+            });
         }
 
         // Toggle between carousel and list view

@@ -186,6 +186,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/calendar/events', [\App\Http\Controllers\Dashboard\CalendarController::class, 'store'])->name('dashboard.calendar.store');
     Route::delete('/dashboard/calendar/events/{id}', [\App\Http\Controllers\Dashboard\CalendarController::class, 'destroy'])->name('dashboard.calendar.destroy');
     Route::post('/dashboard/notifications/mark-all-unified', [HomeController::class, 'markAllUnifiedAsRead'])->name('dashboard.notifications.markAllUnified');
+    Route::delete('/dashboard/notifications/clear-all', [HomeController::class, 'clearAllNotifications'])->name('dashboard.notifications.clearAll');
 
     #profile
     Route::get('/dashboard/profile',[HomeController::class, 'profile'])->name('dashboard.profile');
