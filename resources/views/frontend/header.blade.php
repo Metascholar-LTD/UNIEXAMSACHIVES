@@ -284,10 +284,10 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 6px 32px;
+    padding: 6px 24px;
     border-bottom: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.15);
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 600;
     color: #111827;
     z-index: 20;
@@ -298,27 +298,31 @@
 .uda-clock-bar .clock-right {
     display: flex;
     align-items: center;
-    gap: 18px;
-    flex-wrap: wrap;
+    gap: 12px;
+    flex-wrap: nowrap;
+    flex-shrink: 0;
 }
 
 .uda-clock-bar .clock-item {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 5px;
     color: #1f2937;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .uda-clock-bar .clock-item .lucide-icon,
 .uda-clock-bar .clock-social .lucide-icon {
-    width: 16px;
-    height: 16px;
-    margin-right: 6px;
+    width: 15px;
+    height: 15px;
+    margin-right: 5px;
     stroke: currentColor;
     stroke-width: 1.8;
     stroke-linecap: round;
     stroke-linejoin: round;
     fill: none;
+    flex-shrink: 0;
 }
 
 .uda-clock-bar .clock-social .lucide-icon {
@@ -326,9 +330,10 @@
 }
 
 .uda-clock-bar .clock-item i {
-    font-size: 16px;
-    margin-right: 6px;
+    font-size: 15px;
+    margin-right: 5px;
     color: inherit;
+    flex-shrink: 0;
 }
 
 .uda-clock-bar .clock-item-time {
@@ -337,12 +342,13 @@
 
 .uda-clock-bar .clock-social {
     display: inline-flex;
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
 }
 
 .uda-clock-bar .clock-social a {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     border-radius: 999px;
     background: rgba(99, 102, 241, 0.15);
     display: flex;
@@ -350,21 +356,65 @@
     justify-content: center;
     color: #374151;
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .uda-clock-bar .clock-social a:hover {
     background: rgba(99, 102, 241, 0.3);
 }
 
+/* Medium desktop screens - ensure no wrapping */
+@media (min-width: 993px) and (max-width: 1400px) {
+    .uda-clock-bar {
+        padding: 6px 16px;
+        font-size: 12px;
+    }
+    
+    .uda-clock-bar .clock-left,
+    .uda-clock-bar .clock-right {
+        gap: 10px;
+    }
+    
+    .uda-clock-bar .clock-item {
+        gap: 4px;
+    }
+    
+    .uda-clock-bar .clock-item .lucide-icon,
+    .uda-clock-bar .clock-item i {
+        width: 14px;
+        height: 14px;
+        font-size: 14px;
+    }
+    
+    /* Ensure clock-right doesn't overflow */
+    .uda-clock-bar .clock-right {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+    
+    .uda-clock-bar .clock-left {
+        flex-shrink: 1;
+        min-width: 0;
+    }
+}
+
+/* Tablet and below - allow wrapping */
 @media (max-width: 992px) {
     .uda-clock-bar {
         flex-direction: column;
         align-items: flex-start;
         gap: 8px;
+        padding: 8px 16px;
+    }
+    
+    .uda-clock-bar .clock-left,
+    .uda-clock-bar .clock-right {
+        flex-wrap: wrap;
+        width: 100%;
+        gap: 10px;
     }
     
     .uda-clock-bar .clock-right {
-        width: 100%;
         justify-content: space-between;
     }
 }
