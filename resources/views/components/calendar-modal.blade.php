@@ -699,25 +699,33 @@
 
 /* Event Hover Card */
 .event-hover-card {
-    position: fixed;
-    z-index: 10001;
+    position: fixed !important;
+    z-index: 99999 !important;
     width: 320px;
-    background: #ffffff;
+    background: #ffffff !important;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
     padding: 16px;
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
-    pointer-events: none;
+    pointer-events: auto;
     opacity: 0;
+    visibility: hidden;
     transform: scale(0.95) translateY(-4px);
-    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
-                transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0s 0.15s;
+    display: block !important;
 }
 
 .event-hover-card.show {
-    opacity: 1;
-    transform: scale(1) translateY(0);
-    pointer-events: auto;
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: scale(1) translateY(0) !important;
+    pointer-events: auto !important;
+    display: block !important;
+    transition: opacity 0.15s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.15s cubic-bezier(0.16, 1, 0.3, 1),
+                visibility 0s;
 }
 
 .event-hover-card-content {
@@ -1221,16 +1229,23 @@ function createDayCard(date, isOtherMonth) {
     
     // Add hover card functionality for dates with events
     if (dayEvents.length > 0) {
+        let hoverTimeout = null;
+        
         card.addEventListener('mouseenter', (e) => {
-            clearTimeout(hoverCardTimeout);
-            hoverCardTimeout = setTimeout(() => {
+            clearTimeout(hoverTimeout);
+            hoverTimeout = setTimeout(() => {
                 showEventHoverCard(e, date, dayEvents);
-            }, 300); // Small delay for better UX
+            }, 150); // Reduced delay for faster response
         });
         
-        card.addEventListener('mouseleave', () => {
-            clearTimeout(hoverCardTimeout);
-            hideEventHoverCard();
+        card.addEventListener('mouseleave', (e) => {
+            clearTimeout(hoverTimeout);
+            // Only hide if not moving to hover card
+            setTimeout(() => {
+                if (activeHoverCard && !activeHoverCard.matches(':hover') && !card.matches(':hover')) {
+                    hideEventHoverCard();
+                }
+            }, 100);
         });
     }
     
@@ -1484,10 +1499,14 @@ function showEventTooltip(e, title) {
 
 // Show event hover card
 function showEventHoverCard(e, date, events) {
-    // Hide existing hover card
-    hideEventHoverCard();
+    // Hide existing hover card first
+    if (activeHoverCard) {
+        hideEventHoverCard();
+    }
     
-    if (!events || events.length === 0) return;
+    if (!events || events.length === 0) {
+        return;
+    }
     
     const hoverCard = document.createElement('div');
     hoverCard.className = 'event-hover-card';
@@ -1526,7 +1545,7 @@ function showEventHoverCard(e, date, events) {
         eventsHTML = `
             <div class="event-hover-card-content">
                 <div class="event-hover-card-header">
-                    <h3 class="event-hover-card-title">${escapeHtml(event.title)}</h3>
+                    <h3 class="event-hover-card-title">${escapeHtml(event.title || 'Untitled Event')}</h3>
                     ${event.description ? `<p class="event-hover-card-description">${escapeHtml(event.description)}</p>` : ''}
                 </div>
                 <div class="event-hover-card-meta">
@@ -1562,8 +1581,8 @@ function showEventHoverCard(e, date, events) {
             };
             
             eventsHTML += `
-                <div class="event-hover-card-event-item ${event.type}">
-                    <div class="event-hover-card-event-title">${escapeHtml(event.title)}</div>
+                <div class="event-hover-card-event-item ${event.type || 'appointment'}">
+                    <div class="event-hover-card-event-title">${escapeHtml(event.title || 'Untitled Event')}</div>
                     <div class="event-hover-card-event-time">${timeStr} · ${typeLabels[event.type] || 'Event'}</div>
                     ${event.description ? `<div class="event-hover-card-event-description">${escapeHtml(event.description)}</div>` : ''}
                 </div>
@@ -1576,34 +1595,65 @@ function showEventHoverCard(e, date, events) {
     hoverCard.innerHTML = eventsHTML;
     document.body.appendChild(hoverCard);
     
-    // Position the hover card
-    const cardRect = e.currentTarget.getBoundingClientRect();
-    const hoverCardRect = hoverCard.getBoundingClientRect();
+    // Position the hover card - use the card element from the event
+    const cardElement = e.currentTarget || e.target?.closest('.calendar-day-card');
+    if (!cardElement) {
+        // Fallback positioning
+        hoverCard.style.left = '50%';
+        hoverCard.style.top = '50%';
+        hoverCard.style.transform = 'translate(-50%, -50%)';
+        activeHoverCard = hoverCard;
+        setTimeout(() => {
+            requestAnimationFrame(() => {
+                hoverCard.classList.add('show');
+            });
+        }, 10);
+        return;
+    }
+    
+    const cardRect = cardElement.getBoundingClientRect();
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
     
-    let left = cardRect.left + cardRect.width / 2 - hoverCardRect.width / 2;
+    // Get dimensions after adding to DOM
+    const hoverCardRect = hoverCard.getBoundingClientRect();
+    const cardWidth = hoverCardRect.width || 320;
+    const cardHeight = hoverCardRect.height || 200;
+    
+    let left = cardRect.left + (cardRect.width / 2) - (cardWidth / 2);
     let top = cardRect.bottom + 12;
     
-    // Adjust if card goes off screen
-    if (left + hoverCardRect.width > viewportWidth) {
-        left = viewportWidth - hoverCardRect.width - 20;
+    // Adjust if card goes off screen horizontally
+    if (left + cardWidth > viewportWidth - 20) {
+        left = viewportWidth - cardWidth - 20;
     }
     if (left < 20) {
         left = 20;
     }
     
     // If card would go below viewport, show above instead
-    if (top + hoverCardRect.height > viewportHeight) {
-        top = cardRect.top - hoverCardRect.height - 12;
+    if (top + cardHeight > viewportHeight - 20) {
+        top = cardRect.top - cardHeight - 12;
+        if (top < 20) {
+            top = 20;
+        }
     }
     
     hoverCard.style.left = left + 'px';
     hoverCard.style.top = top + 'px';
+    hoverCard.style.display = 'block';
+    hoverCard.style.visibility = 'visible';
+    hoverCard.style.opacity = '0';
     
-    // Trigger animation
+    // Force reflow to ensure styles are applied
+    hoverCard.offsetHeight;
+    
+    // Trigger animation immediately
     requestAnimationFrame(() => {
-        hoverCard.classList.add('show');
+        requestAnimationFrame(() => {
+            hoverCard.classList.add('show');
+            hoverCard.style.opacity = '1';
+        });
     });
     
     activeHoverCard = hoverCard;
@@ -1622,12 +1672,18 @@ function showEventHoverCard(e, date, events) {
 function hideEventHoverCard() {
     if (activeHoverCard) {
         activeHoverCard.classList.remove('show');
+        activeHoverCard.style.opacity = '0';
+        activeHoverCard.style.visibility = 'hidden';
         setTimeout(() => {
             if (activeHoverCard && activeHoverCard.parentNode) {
-                activeHoverCard.parentNode.removeChild(activeHoverCard);
+                try {
+                    activeHoverCard.parentNode.removeChild(activeHoverCard);
+                } catch (e) {
+                    // Element might already be removed
+                }
             }
             activeHoverCard = null;
-        }, 200);
+        }, 250);
     }
 }
 
