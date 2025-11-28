@@ -167,7 +167,7 @@
 }
 
 .calendar-modal-body {
-    padding: 24px;
+    padding: 20px;
     overflow-y: auto;
     flex: 1;
 }
@@ -176,7 +176,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 24px;
+    margin-bottom: 16px;
     gap: 12px;
 }
 
@@ -210,30 +210,30 @@
 
 .calendar-wall-container {
     width: 100%;
-    overflow: auto;
-    margin-bottom: 24px;
+    overflow: hidden;
+    margin-bottom: 16px;
     perspective: 1200px;
-    min-height: 400px;
-    max-height: 500px;
-    padding: 20px 0;
+    min-height: 320px;
+    max-height: 420px;
+    padding: 10px 0;
 }
 
 .calendar-wall {
     margin: 0 auto;
     display: grid;
-    grid-template-columns: repeat(7, 160px);
-    gap: 12px;
+    grid-template-columns: repeat(7, 100px);
+    gap: 8px;
     transform-style: preserve-3d;
     transition: transform 120ms linear;
-    padding: 12px;
+    padding: 8px;
 }
 
 .calendar-day-card {
     background: white;
     border: 1px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 12px;
-    min-height: 120px;
+    border-radius: 8px;
+    padding: 8px;
+    min-height: 75px;
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     transition: all 0.2s;
@@ -249,18 +249,18 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 4px;
 }
 
 .calendar-day-number {
-    font-size: 16px;
+    font-size: 14px;
     font-weight: 700;
     color: #111827;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
 }
 
 .calendar-day-name {
-    font-size: 11px;
+    font-size: 9px;
     color: #6b7280;
     text-transform: uppercase;
     font-weight: 600;
@@ -269,20 +269,20 @@
 
 .calendar-day-events {
     position: relative;
-    min-height: 60px;
-    margin-top: 8px;
+    min-height: 40px;
+    margin-top: 4px;
 }
 
 .calendar-event-dot {
     position: absolute;
-    width: 28px;
-    height: 28px;
+    width: 20px;
+    height: 20px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     color: white;
-    font-size: 10px;
+    font-size: 8px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
@@ -309,9 +309,9 @@
 }
 
 .calendar-event-count {
-    font-size: 11px;
+    font-size: 9px;
     color: #6b7280;
-    margin-top: 4px;
+    margin-top: 2px;
     font-weight: 600;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif;
 }
@@ -475,12 +475,13 @@
 /* Responsive */
 @media (max-width: 1024px) {
     .calendar-wall {
-        grid-template-columns: repeat(7, 120px);
+        grid-template-columns: repeat(7, 90px);
+        gap: 6px;
     }
     
     .calendar-day-card {
-        min-height: 100px;
-        padding: 8px;
+        min-height: 70px;
+        padding: 6px;
     }
     
     .calendar-add-form {
@@ -495,18 +496,26 @@
     }
     
     .calendar-wall {
-        grid-template-columns: repeat(7, 100px);
-        gap: 8px;
+        grid-template-columns: repeat(7, 80px);
+        gap: 6px;
     }
     
     .calendar-day-card {
-        min-height: 80px;
-        padding: 6px;
+        min-height: 65px;
+        padding: 5px;
     }
     
     .calendar-event-dot {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
+        font-size: 7px;
+    }
+    
+    .calendar-day-number {
+        font-size: 12px;
+    }
+    
+    .calendar-day-name {
         font-size: 8px;
     }
 }
@@ -659,13 +668,13 @@ function getEventsForDay(date) {
 function renderDayEvents(events, date) {
     if (events.length === 0) return '';
     
-    const panelWidth = 160;
-    const gap = 12;
-    const availableWidth = panelWidth - 24;
+    const panelWidth = 100;
+    const gap = 8;
+    const availableWidth = panelWidth - 16;
     
     return events.map((event, index) => {
-        const left = 8 + (index * 34) % (availableWidth - 40);
-        const top = 8 + Math.floor((index * 34) / (availableWidth - 40)) * 28;
+        const left = 4 + (index * 24) % (availableWidth - 30);
+        const top = 4 + Math.floor((index * 24) / (availableWidth - 30)) * 22;
         const colorMap = {
             'appointment': '#3b82f6',
             'meeting': '#10b981',
