@@ -180,6 +180,11 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/notifications/check', [HomeController::class, 'checkNewNotifications'])->name('dashboard.notifications.check');
     Route::post('/dashboard/notifications/{id}/mark-read', [HomeController::class, 'markNotificationAsRead'])->name('dashboard.notification.markAsRead');
     Route::post('/dashboard/notifications/mark-all-read', [HomeController::class, 'markAllNotificationsAsRead'])->name('dashboard.notifications.markAllRead');
+
+    # Calendar Events
+    Route::get('/dashboard/calendar/events', [\App\Http\Controllers\Dashboard\CalendarController::class, 'index'])->name('dashboard.calendar.events');
+    Route::post('/dashboard/calendar/events', [\App\Http\Controllers\Dashboard\CalendarController::class, 'store'])->name('dashboard.calendar.store');
+    Route::delete('/dashboard/calendar/events/{id}', [\App\Http\Controllers\Dashboard\CalendarController::class, 'destroy'])->name('dashboard.calendar.destroy');
     Route::post('/dashboard/notifications/mark-all-unified', [HomeController::class, 'markAllUnifiedAsRead'])->name('dashboard.notifications.markAllUnified');
 
     #profile

@@ -55,6 +55,9 @@
     
     {{-- confirmation modal --}}
     @include('components.confirmation-modal')
+    
+    {{-- Calendar Modal --}}
+    @include('components.calendar-modal')
 
     {{-- Maintenance Countdown Banner --}}
     @include('components.maintenance-countdown')

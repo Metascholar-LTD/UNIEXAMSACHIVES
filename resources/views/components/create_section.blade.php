@@ -20,7 +20,7 @@
             <!-- Calendar Section -->
             <div class="uda-calendar-section">
                 <div class="uda-separator"></div>
-                <div class="uda-calendar-widget">
+                <div class="uda-calendar-widget" onclick="openCalendarModal()" style="cursor: pointer;">
                     <svg class="uda-calendar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="16" y1="2" x2="16" y2="6"></line>
