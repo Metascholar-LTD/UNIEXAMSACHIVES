@@ -18,6 +18,13 @@
             <div class="notification-tray-header">
                 <h2 class="notification-tray-title">Notifications</h2>
                 <div class="notification-tray-header-actions">
+                    <button class="notification-clear-btn" onclick="clearNotificationTray()" title="Clear all notifications">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <polyline points="3 6 5 6 21 6"></polyline>
+                            <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                        </svg>
+                        <span>Clear</span>
+                    </button>
                     <form method="POST" action="{{ route('dashboard.notifications.markAllUnified') }}" class="notification-mark-all-form">
                         @csrf
                         <button type="submit" class="notification-mark-all-btn" title="Mark all as read">
@@ -180,6 +187,31 @@
 
         .notification-mark-all-form {
             margin: 0;
+        }
+
+        .notification-clear-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 10px;
+            border: none;
+            background: transparent;
+            color: #ef4444;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .notification-clear-btn:hover {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+
+        .notification-clear-btn svg {
+            width: 14px;
+            height: 14px;
         }
 
         .notification-mark-all-btn {
@@ -549,6 +581,62 @@
             }
         });
 
+        // Clear notification tray
+        function clearNotificationTray() {
+            if (!confirm('Are you sure you want to clear all notifications? This will mark all as read.')) {
+                return;
+            }
+            
+            // Mark all as read
+            const form = document.querySelector('.notification-mark-all-form');
+            if (form) {
+                const button = form.querySelector('.notification-mark-all-btn');
+                const originalHTML = button.innerHTML;
+                button.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg><span>Clearing...</span>';
+                button.disabled = true;
+                
+                fetch(form.action, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                    },
+                    body: new URLSearchParams(new FormData(form))
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Clear the notification tray
+                        notificationTrayState.items = [];
+                        notificationTrayState.currentIndex = 0;
+                        
+                        // Update UI
+                        const emptyState = document.getElementById('notification-empty');
+                        const content = document.getElementById('notification-tray-content');
+                        if (emptyState) emptyState.style.display = 'block';
+                        if (content) content.style.display = 'none';
+                        
+                        // Update badge
+                        if (typeof updateNotificationBadge === 'function') {
+                            updateNotificationBadge(0, 0);
+                        } else {
+                            const badge = document.querySelector('.notification-badge');
+                            if (badge) badge.style.display = 'none';
+                        }
+                        
+                        // Reset button
+                        button.innerHTML = originalHTML;
+                        button.disabled = false;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error clearing notifications:', error);
+                    button.innerHTML = originalHTML;
+                    button.disabled = false;
+                });
+            }
+        }
+
         // Toggle between carousel and list view
         function toggleNotificationView() {
             notificationTrayState.isCarousel = !notificationTrayState.isCarousel;
@@ -725,8 +813,23 @@
                         });
                     }
 
+                    // Preserve current index if items haven't changed significantly
+                    const previousItems = notificationTrayState.items;
+                    const itemsChanged = !previousItems || 
+                        previousItems.length !== items.length ||
+                        items.some((item, idx) => !previousItems[idx] || item.id !== previousItems[idx].id);
+                    
+                    // Only reset index if items changed or if current index is out of bounds
+                    if (itemsChanged || notificationTrayState.currentIndex >= items.length) {
+                        notificationTrayState.currentIndex = 0;
+                    } else {
+                        // Keep current index, but ensure it's within bounds
+                        if (notificationTrayState.currentIndex >= items.length) {
+                            notificationTrayState.currentIndex = 0;
+                        }
+                    }
+                    
                     notificationTrayState.items = items;
-                    notificationTrayState.currentIndex = 0;
 
                     // Show/hide empty state
                     const emptyState = document.getElementById('notification-empty');
@@ -734,10 +837,14 @@
                     if (items.length === 0) {
                         emptyState.style.display = 'block';
                         content.style.display = 'none';
+                        notificationTrayState.currentIndex = 0;
                     } else {
                         emptyState.style.display = 'none';
                         content.style.display = 'block';
-                        renderCarouselCard();
+                        // Only re-render if in carousel view
+                        if (notificationTrayState.isCarousel) {
+                            renderCarouselCard();
+                        }
                         renderListView();
                     }
                 })
@@ -758,9 +865,29 @@
                             });
                         });
                     }
+                    
+                    // Preserve current index if items haven't changed significantly
+                    const previousItems = notificationTrayState.items;
+                    const itemsChanged = !previousItems || 
+                        previousItems.length !== items.length ||
+                        items.some((item, idx) => !previousItems[idx] || item.id !== previousItems[idx].id);
+                    
+                    // Only reset index if items changed or if current index is out of bounds
+                    if (itemsChanged || notificationTrayState.currentIndex >= items.length) {
+                        notificationTrayState.currentIndex = 0;
+                    } else {
+                        // Keep current index, but ensure it's within bounds
+                        if (notificationTrayState.currentIndex >= items.length) {
+                            notificationTrayState.currentIndex = 0;
+                        }
+                    }
+                    
                     notificationTrayState.items = items;
-                    notificationTrayState.currentIndex = 0;
-                    renderCarouselCard();
+                    
+                    // Only re-render if in carousel view
+                    if (notificationTrayState.isCarousel) {
+                        renderCarouselCard();
+                    }
                     renderListView();
                 });
             })
