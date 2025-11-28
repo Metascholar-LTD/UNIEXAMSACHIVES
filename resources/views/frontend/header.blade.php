@@ -90,55 +90,7 @@
                     <!-- Right: Auth Buttons & Notifications -->
                     <div class="uda-nav-right">
                         @if (Auth::check())
-                            <div class="uda-notify">
-                                <button class="uda-bell" onclick="toggleMemoDropdown(event)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                    @php
-                                        $totalNotifications = ($newMessagesCount ?? 0) + ($newReplyNotifications ?? 0);
-                                    @endphp
-                                    @if($totalNotifications > 0)
-                                    <span class="uda-badge">{{$totalNotifications}}</span>
-                                    @endif
-                                </button>
-                                <div id="uda-memo-dropdown" class="uda-dropdown">
-                                    <div class="uda-dropdown-header">
-                                        <div class="uda-header-title">
-                                            <span class="uda-notification-icon">🔔</span>
-                                            <span>Notifications</span>
-                                        </div>
-                                        <form method="POST" action="{{ route('dashboard.notifications.markAllUnified') }}" class="uda-mark-all-form">
-                                            @csrf
-                                            <button type="submit" class="uda-mark-all-btn">
-                                                <span class="uda-mark-all-icon">✓</span>
-                                                Mark all as read
-                                            </button>
-                                        </form>
-                                    </div>
-                                    <div class="uda-dropdown-list" id="uda-memo-list">
-                                        @php
-                                            $recentMemos = \App\Models\EmailCampaignRecipient::with('campaign')
-                                                ->where('user_id', Auth::id())
-                                                ->orderBy('created_at','desc')
-                                                ->limit(5)
-                                                ->get();
-                                        @endphp
-                                        @forelse($recentMemos as $rm)
-                                            <a class="uda-dropdown-item" href="{{ route('dashboard.memo.read', $rm->id) }}">
-                                                <span class="uda-item-title">{{ Str::limit($rm->campaign->subject, 40) }}</span>
-                                                <span class="uda-item-time">{{ $rm->created_at->diffForHumans() }}</span>
-                                                @if(!$rm->is_read)
-                                                    <span class="uda-dot"></span>
-                                                @endif
-                                            </a>
-                                        @empty
-                                            <div class="uda-empty">No memos yet</div>
-                                        @endforelse
-                                    </div>
-                                    <div class="uda-dropdown-footer">
-                                        <a href="{{ route('dashboard.message') }}" class="uda-link">View all</a>
-                                    </div>
-                                </div>
-                            </div>
+                            @include('components.notification-tray')
                             <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
                         @else
                             <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
@@ -262,22 +214,7 @@
 
 
 <style>
-.uda-notify { position: relative; margin-right: 12px; }
-.uda-bell { position: relative; border: none; background: transparent; cursor: pointer; padding: 6px; border-radius: 8px; }
-.uda-bell:hover { background: rgba(0,0,0,0.06); }
-.uda-badge { position: absolute; top: -2px; right: -2px; background: #ef4444; color: #fff; font-size: 11px; line-height: 1; padding: 3px 6px; border-radius: 999px; font-weight: 700; }
-.uda-dropdown { position: absolute; right: 0; top: 36px; min-width: 280px; background: #fff; border: 1px solid #e5e7eb; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.12); display: none; z-index: 1000; overflow: hidden; }
-.uda-dropdown-header, .uda-dropdown-footer { display: flex; align-items: center; justify-content: space-between; padding: 10px 12px; background: #f9fafb; border-bottom: 1px solid #eef2f7; }
-.uda-dropdown-footer { border-top: 1px solid #eef2f7; border-bottom: none; }
-.uda-dropdown-list { max-height: 320px; overflow-y: auto; }
-.uda-dropdown-item { display: flex; align-items: center; gap: 8px; padding: 10px 12px; text-decoration: none; color: #111827; border-bottom: 1px solid #f3f4f6; position: relative; }
-.uda-dropdown-item:hover { background: #f9fafb; }
-.uda-item-title { font-weight: 600; font-size: 13px; flex: 1; }
-.uda-item-time { font-size: 12px; color: #6b7280; }
-.uda-dot { width: 8px; height: 8px; background: #10b981; border-radius: 50%; }
-.uda-link { background: none; border: none; padding: 0; color: #2563eb; font-weight: 600; cursor: pointer; text-decoration: none; }
-.uda-empty { padding: 14px; font-size: 13px; color: #6b7280; text-align: center; }
-.uda-section-header { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #6b7280; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; }
+/* Old notification styles removed - now using notification-tray component */
 .uda-clock-bar {
     width: 100%;
     background: linear-gradient(90deg, #fbfcf9 0%, #fffaf4 50%, #fff8ef 100%);
@@ -421,17 +358,6 @@
 </style>
 
 <script>
-function toggleMemoDropdown(e) {
-  e.stopPropagation();
-  var dd = document.getElementById('uda-memo-dropdown');
-  if (!dd) return;
-  dd.style.display = (dd.style.display === 'block') ? 'none' : 'block';
-}
-document.addEventListener('click', function(){
-  var dd = document.getElementById('uda-memo-dropdown');
-  if (dd) dd.style.display = 'none';
-});
-
 // Notification sound and polling for unread count
 let udaBellAudio;
 function initBellAudio(){
@@ -463,7 +389,7 @@ let lastUnread = Number({{ $newMessagesCount ?? 0 }});
 let lastReplyNotifications = Number({{ $newReplyNotifications ?? 0 }});
 
 function updateNotificationBadge(unreadCount, replyCount = 0) {
-  const badge = document.querySelector('.uda-badge');
+  const badge = document.querySelector('.notification-badge');
   if (badge) {
     const totalCount = unreadCount + replyCount;
     if (totalCount > 0) {
@@ -509,8 +435,10 @@ function pollUnread(){
         lastUnread = unread;
         lastReplyNotifications = replyCount;
         
-        // Refresh the memo list in the dropdown
-        refreshMemoList();
+        // Refresh the notification tray if open
+        if (typeof refreshNotificationTray === 'function') {
+          refreshNotificationTray();
+        }
       })
       .catch(err => {
         console.log('Error polling reply notifications:', err);
@@ -525,85 +453,10 @@ function pollUnread(){
 }
 
 function refreshMemoList(){
-  // Fetch memos
-  fetch('{{ route('dashboard.memos.recent') }}', {
-    credentials: 'same-origin',
-    cache: 'no-cache',
-    headers: {
-      'Cache-Control': 'no-cache',
-      'Pragma': 'no-cache'
-    }
-  })
-    .then(r => r.json())
-    .then(data => {
-      // Fetch reply notifications
-      fetch('/dashboard/notifications', {
-        credentials: 'same-origin',
-        cache: 'no-cache',
-        headers: {
-          'Cache-Control': 'no-cache',
-          'Pragma': 'no-cache'
-        }
-      })
-      .then(r => r.json())
-      .then(notificationData => {
-        const memoList = document.getElementById('uda-memo-list');
-        if (memoList) {
-          let html = '';
-          
-          // Add memos
-          if (data.memos && data.memos.length > 0) {
-            html += '<div class="uda-section-header">📧 Memos</div>';
-            html += data.memos.map(memo => 
-              `<a class="uda-dropdown-item" href="${memo.url}">
-                <span class="uda-item-title">${memo.subject}</span>
-                <span class="uda-item-time">${memo.created_at}</span>
-                ${!memo.is_read ? '<span class="uda-dot"></span>' : ''}
-              </a>`
-            ).join('');
-          }
-          
-          // Add reply notifications
-          if (notificationData.notifications && notificationData.notifications.length > 0) {
-            html += '<div class="uda-section-header">💬 Reply Notifications</div>';
-            html += notificationData.notifications.map(notification => 
-              `<a class="uda-dropdown-item" href="${notification.url}">
-                <span class="uda-item-title">${notification.title}</span>
-                <span class="uda-item-time">${notification.time_ago}</span>
-                ${!notification.is_read ? '<span class="uda-dot"></span>' : ''}
-              </a>`
-            ).join('');
-          }
-          
-          if (html === '') {
-            html = '<div class="uda-empty">No notifications yet</div>';
-          }
-          
-          memoList.innerHTML = html;
-        }
-      })
-      .catch(err => {
-        console.log('Error refreshing notifications:', err);
-        // Fallback to just memos
-        const memoList = document.getElementById('uda-memo-list');
-        if (memoList && data.memos) {
-          if (data.memos.length > 0) {
-            memoList.innerHTML = data.memos.map(memo => 
-              `<a class="uda-dropdown-item" href="${memo.url}">
-                <span class="uda-item-title">${memo.subject}</span>
-                <span class="uda-item-time">${memo.created_at}</span>
-                ${!memo.is_read ? '<span class="uda-dot"></span>' : ''}
-              </a>`
-            ).join('');
-          } else {
-            memoList.innerHTML = '<div class="uda-empty">No memos yet</div>';
-          }
-        }
-      });
-    })
-    .catch(err => {
-      console.log('Error refreshing memo list:', err);
-    });
+  // Refresh notification tray if it's open
+  if (typeof refreshNotificationTray === 'function') {
+    refreshNotificationTray();
+  }
 }
 
 const liveClockDateFormatter = new Intl.DateTimeFormat(undefined, {
@@ -645,57 +498,7 @@ function startLiveDateTimeTicker() {
   window.__liveClockInterval = setInterval(updateLiveDateTimeWidgets, 1000);
 }
 
-// Handle unified "Mark all as read" button
-document.addEventListener('DOMContentLoaded', function(){
-  const markAllForm = document.querySelector('.uda-mark-all-form');
-  if (markAllForm) {
-    markAllForm.addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Show loading state
-      const button = this.querySelector('.uda-mark-all-btn');
-      const originalText = button.innerHTML;
-      button.innerHTML = '<span class="uda-mark-all-icon">⏳</span>Marking all as read...';
-      button.disabled = true;
-      
-      // Submit the form
-      fetch(this.action, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-          'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-        },
-        body: new URLSearchParams(new FormData(this))
-      })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Reset button
-          button.innerHTML = '<span class="uda-mark-all-icon">✓</span>All marked as read';
-          button.style.background = 'linear-gradient(135deg, #10b981 0%, #059669 100%)';
-          
-          // Refresh the notification list
-          refreshMemoList();
-          
-          // Update badge
-          updateNotificationBadge(0, 0);
-          
-          // Reset button after 2 seconds
-          setTimeout(() => {
-            button.innerHTML = originalText;
-            button.style.background = 'linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)';
-            button.disabled = false;
-          }, 2000);
-        }
-      })
-      .catch(error => {
-        console.error('Error marking all as read:', error);
-        button.innerHTML = originalText;
-        button.disabled = false;
-      });
-    });
-  }
-});
+// Mark all as read is now handled in the notification-tray component
 
 document.addEventListener('DOMContentLoaded', function(){
   initBellAudio();
