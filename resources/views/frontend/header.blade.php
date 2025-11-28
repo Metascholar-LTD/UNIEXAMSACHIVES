@@ -288,7 +288,7 @@
     border-bottom: 1px solid rgba(148, 163, 184, 0.25);
     box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.15);
     font-size: 14px;
-    font-weight: 650;
+    font-weight: 600;
     color: #111827;
     z-index: 20;
     font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", "Noto Sans", "Liberation Sans", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
