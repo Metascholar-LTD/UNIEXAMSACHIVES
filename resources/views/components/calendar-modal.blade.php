@@ -697,7 +697,154 @@
     filter: grayscale(0.6);
 }
 
-/* Event Popover */
+/* Event Hover Card */
+.event-hover-card {
+    position: fixed;
+    z-index: 10001;
+    width: 320px;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(0, 0, 0, 0.05);
+    pointer-events: none;
+    opacity: 0;
+    transform: scale(0.95) translateY(-4px);
+    transition: opacity 0.2s cubic-bezier(0.16, 1, 0.3, 1), 
+                transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.event-hover-card.show {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: auto;
+}
+
+.event-hover-card-content {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.event-hover-card-header {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.event-hover-card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin: 0;
+}
+
+.event-hover-card-description {
+    font-size: 14px;
+    color: #64748b;
+    line-height: 1.5;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin: 0;
+}
+
+.event-hover-card-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #94a3b8;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    padding-top: 8px;
+    border-top: 1px solid #f1f5f9;
+}
+
+.event-hover-card-meta span {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.event-hover-card-meta .separator {
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #cbd5e1;
+}
+
+.event-hover-card-events-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 4px;
+}
+
+.event-hover-card-events-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.event-hover-card-events-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.event-hover-card-events-list::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 3px;
+}
+
+.event-hover-card-events-list::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+.event-hover-card-event-item {
+    padding: 12px;
+    background: #f8fafc;
+    border-radius: 8px;
+    border-left: 3px solid #3b82f6;
+    transition: all 0.2s ease;
+}
+
+.event-hover-card-event-item:hover {
+    background: #f1f5f9;
+    transform: translateX(2px);
+}
+
+.event-hover-card-event-item.meeting {
+    border-left-color: #10b981;
+}
+
+.event-hover-card-event-item.event {
+    border-left-color: #f59e0b;
+}
+
+.event-hover-card-event-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 4px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+.event-hover-card-event-time {
+    font-size: 12px;
+    color: #64748b;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    margin-top: 4px;
+}
+
+.event-hover-card-event-description {
+    font-size: 12px;
+    color: #94a3b8;
+    margin-top: 6px;
+    line-height: 1.4;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+}
+
+/* Event Popover (for click) */
 .event-popover {
     position: absolute;
     background: white;
@@ -885,6 +1032,8 @@ let dragStart = { x: 0, y: 0 };
 let tiltX = 18;
 let tiltY = 0;
 let activePopover = null;
+let activeHoverCard = null;
+let hoverCardTimeout = null;
 
 // Open calendar modal
 function openCalendarModal() {
@@ -954,6 +1103,7 @@ function closeCalendarModal() {
         activePopover.style.display = 'none';
         activePopover = null;
     }
+    hideEventHoverCard();
 }
 
 // Load events from API
@@ -1069,6 +1219,21 @@ function createDayCard(date, isOtherMonth) {
         ${dayEvents.length > 0 ? `<div class="calendar-event-count">${dayEvents.length} event(s)</div>` : ''}
     `;
     
+    // Add hover card functionality for dates with events
+    if (dayEvents.length > 0) {
+        card.addEventListener('mouseenter', (e) => {
+            clearTimeout(hoverCardTimeout);
+            hoverCardTimeout = setTimeout(() => {
+                showEventHoverCard(e, date, dayEvents);
+            }, 300); // Small delay for better UX
+        });
+        
+        card.addEventListener('mouseleave', () => {
+            clearTimeout(hoverCardTimeout);
+            hideEventHoverCard();
+        });
+    }
+    
     return card;
 }
 
@@ -1092,6 +1257,9 @@ function handleDateClick(date) {
 
 // Collapse calendar into hamburger
 function collapseCalendar() {
+    // Hide hover card when collapsing
+    hideEventHoverCard();
+    
     const container = document.getElementById('calendarWallContainer');
     const wall = document.getElementById('calendarWall');
     const navHeader = document.getElementById('calendarNavHeader');
@@ -1312,6 +1480,162 @@ function showEventPopover(e, eventId, title, date, description, type) {
 // Show event tooltip on hover
 function showEventTooltip(e, title) {
     // Simple tooltip could be added here if needed
+}
+
+// Show event hover card
+function showEventHoverCard(e, date, events) {
+    // Hide existing hover card
+    hideEventHoverCard();
+    
+    if (!events || events.length === 0) return;
+    
+    const hoverCard = document.createElement('div');
+    hoverCard.className = 'event-hover-card';
+    hoverCard.id = 'eventHoverCard';
+    
+    // Format date
+    const dateStr = date.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric'
+    });
+    
+    // Build events list
+    let eventsHTML = '';
+    if (events.length === 1) {
+        // Single event - show detailed view
+        const event = events[0];
+        const eventDate = new Date(event.date);
+        const timeStr = eventDate.toLocaleTimeString('en-US', { 
+            hour: '2-digit', 
+            minute: '2-digit' 
+        });
+        
+        const typeLabels = {
+            'appointment': 'Appointment',
+            'meeting': 'Meeting',
+            'event': 'Event'
+        };
+        
+        const shortDateStr = date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric' 
+        });
+        
+        eventsHTML = `
+            <div class="event-hover-card-content">
+                <div class="event-hover-card-header">
+                    <h3 class="event-hover-card-title">${escapeHtml(event.title)}</h3>
+                    ${event.description ? `<p class="event-hover-card-description">${escapeHtml(event.description)}</p>` : ''}
+                </div>
+                <div class="event-hover-card-meta">
+                    <span>${timeStr}</span>
+                    <span class="separator"></span>
+                    <span>${typeLabels[event.type] || 'Event'}</span>
+                    <span class="separator"></span>
+                    <span>${shortDateStr}</span>
+                </div>
+            </div>
+        `;
+    } else {
+        // Multiple events - show list
+        const shortDateStr = date.toLocaleDateString('en-US', { 
+            month: 'short', 
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        eventsHTML = '<div class="event-hover-card-content"><div class="event-hover-card-header"><h3 class="event-hover-card-title">' + events.length + ' Events on ' + shortDateStr + '</h3></div><div class="event-hover-card-events-list">';
+        
+        events.forEach(event => {
+            const eventDate = new Date(event.date);
+            const timeStr = eventDate.toLocaleTimeString('en-US', { 
+                hour: '2-digit', 
+                minute: '2-digit' 
+            });
+            
+            const typeLabels = {
+                'appointment': 'Appointment',
+                'meeting': 'Meeting',
+                'event': 'Event'
+            };
+            
+            eventsHTML += `
+                <div class="event-hover-card-event-item ${event.type}">
+                    <div class="event-hover-card-event-title">${escapeHtml(event.title)}</div>
+                    <div class="event-hover-card-event-time">${timeStr} · ${typeLabels[event.type] || 'Event'}</div>
+                    ${event.description ? `<div class="event-hover-card-event-description">${escapeHtml(event.description)}</div>` : ''}
+                </div>
+            `;
+        });
+        
+        eventsHTML += '</div></div>';
+    }
+    
+    hoverCard.innerHTML = eventsHTML;
+    document.body.appendChild(hoverCard);
+    
+    // Position the hover card
+    const cardRect = e.currentTarget.getBoundingClientRect();
+    const hoverCardRect = hoverCard.getBoundingClientRect();
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+    
+    let left = cardRect.left + cardRect.width / 2 - hoverCardRect.width / 2;
+    let top = cardRect.bottom + 12;
+    
+    // Adjust if card goes off screen
+    if (left + hoverCardRect.width > viewportWidth) {
+        left = viewportWidth - hoverCardRect.width - 20;
+    }
+    if (left < 20) {
+        left = 20;
+    }
+    
+    // If card would go below viewport, show above instead
+    if (top + hoverCardRect.height > viewportHeight) {
+        top = cardRect.top - hoverCardRect.height - 12;
+    }
+    
+    hoverCard.style.left = left + 'px';
+    hoverCard.style.top = top + 'px';
+    
+    // Trigger animation
+    requestAnimationFrame(() => {
+        hoverCard.classList.add('show');
+    });
+    
+    activeHoverCard = hoverCard;
+    
+    // Keep card visible when hovering over it
+    hoverCard.addEventListener('mouseenter', () => {
+        clearTimeout(hoverCardTimeout);
+    });
+    
+    hoverCard.addEventListener('mouseleave', () => {
+        hideEventHoverCard();
+    });
+}
+
+// Hide event hover card
+function hideEventHoverCard() {
+    if (activeHoverCard) {
+        activeHoverCard.classList.remove('show');
+        setTimeout(() => {
+            if (activeHoverCard && activeHoverCard.parentNode) {
+                activeHoverCard.parentNode.removeChild(activeHoverCard);
+            }
+            activeHoverCard = null;
+        }, 200);
+    }
+}
+
+// Escape HTML to prevent XSS
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
 }
 
 // Apply 3D effect - DISABLED
