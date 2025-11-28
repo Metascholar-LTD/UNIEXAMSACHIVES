@@ -116,9 +116,9 @@
     background: #ffffff;
     border-radius: 20px;
     box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
-    max-width: 1400px;
+    max-width: 1100px;
     width: 100%;
-    max-height: 95vh;
+    max-height: 98vh;
     overflow: hidden;
     transform: scale(0.9) translateY(20px);
     transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
@@ -214,9 +214,9 @@
     width: 100%;
     overflow: visible;
     margin: 0 auto 16px;
-    perspective: 1200px;
-    min-height: 400px;
-    max-height: 550px;
+    perspective: none;
+    min-height: 450px;
+    max-height: 600px;
     padding: 20px;
     display: flex;
     justify-content: center;
@@ -247,8 +247,9 @@
     display: grid;
     grid-template-columns: repeat(7, 100px);
     gap: 8px;
-    transform-style: preserve-3d;
-    transition: transform 120ms linear;
+    transform-style: flat;
+    transform: none !important;
+    transition: none;
     padding: 8px;
     width: fit-content;
     margin: 0;
@@ -262,13 +263,14 @@
     min-height: 75px;
     position: relative;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: all 0.2s;
-    transform-style: preserve-3d;
+    transition: box-shadow 0.2s;
+    transform-style: flat;
+    transform: none !important;
 }
 
 .calendar-day-card:hover {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    transform: translateZ(10px);
+    transform: none !important;
 }
 
 .calendar-day-header {
@@ -312,13 +314,13 @@
     font-weight: 700;
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-    transform: translateZ(20px);
-    transition: all 0.2s;
+    transform: none;
+    transition: box-shadow 0.2s, scale 0.2s;
     z-index: 10;
 }
 
 .calendar-event-dot:hover {
-    transform: translateZ(30px) scale(1.1);
+    transform: scale(1.1);
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
@@ -959,68 +961,33 @@ function showEventTooltip(e, title) {
     // Simple tooltip could be added here if needed
 }
 
-// Apply 3D effect
+// Apply 3D effect - DISABLED
 function apply3DEffect() {
     const wall = document.getElementById('calendarWall');
-    const rowCount = Math.ceil(wall.children.length / 7);
-    const wallCenterRow = (rowCount - 1) / 2;
+    if (!wall) return;
     
-    Array.from(wall.children).forEach((card, idx) => {
-        const row = Math.floor(idx / 7);
-        const rowOffset = row - wallCenterRow;
-        const z = Math.max(-80, 40 - Math.abs(rowOffset) * 20);
-        card.style.transform = `translateZ(${z}px)`;
-        card.style.zIndex = Math.round(100 - Math.abs(rowOffset));
+    // Disable 3D transforms - keep calendar flat
+    Array.from(wall.children).forEach((card) => {
+        card.style.transform = 'none';
+        card.style.zIndex = '1';
     });
     
-    updateWallTransform();
+    // Keep wall flat
+    wall.style.transform = 'none';
 }
 
-// Update wall transform
+// Update wall transform - DISABLED
 function updateWallTransform() {
     const wall = document.getElementById('calendarWall');
-    wall.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg)`;
+    if (wall) {
+        wall.style.transform = 'none';
+    }
 }
 
-// Initialize 3D interaction handlers
+// Initialize 3D interaction handlers - DISABLED
 let interactionHandlersInitialized = false;
 function init3DInteractions() {
-    if (interactionHandlersInitialized) return;
-    
-    const wallContainer = document.getElementById('calendarWallContainer');
-    if (!wallContainer) return;
-    
-    wallContainer.addEventListener('wheel', (e) => {
-        e.preventDefault();
-        tiltX = Math.max(0, Math.min(50, tiltX + e.deltaY * 0.02));
-        tiltY = Math.max(-45, Math.min(45, tiltY + e.deltaX * 0.05));
-        updateWallTransform();
-    });
-    
-    wallContainer.addEventListener('pointerdown', (e) => {
-        isDragging = true;
-        dragStart = { x: e.clientX, y: e.clientY };
-        wallContainer.setPointerCapture(e.pointerId);
-    });
-    
-    wallContainer.addEventListener('pointermove', (e) => {
-        if (!isDragging) return;
-        const dx = e.clientX - dragStart.x;
-        const dy = e.clientY - dragStart.y;
-        tiltY = Math.max(-60, Math.min(60, tiltY + dx * 0.1));
-        tiltX = Math.max(0, Math.min(60, tiltX - dy * 0.1));
-        dragStart = { x: e.clientX, y: e.clientY };
-        updateWallTransform();
-    });
-    
-    wallContainer.addEventListener('pointerup', () => {
-        isDragging = false;
-    });
-    
-    wallContainer.addEventListener('pointercancel', () => {
-        isDragging = false;
-    });
-    
+    // Disabled - no 3D interactions
     interactionHandlersInitialized = true;
 }
 
