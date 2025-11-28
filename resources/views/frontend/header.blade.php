@@ -1,96 +1,108 @@
 <header>
     <div class="headerarea headerarea__2 header__sticky header__area">
         <div class="container desktop__menu__wrapper uda-header-container">
-            <div class="uda-navbar">
-                <!-- Left: Logo -->
-                <div class="uda-nav-left">
-                    @if (Auth::check())
-                        @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                            <a href="{{route('dashboard')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
-                        @else
-                            <a href="{{route('dashboard')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
-                        @endif
-                    @else
-                        @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
-                            <a href="{{route('frontend.welcome')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
-                        @else
-                            <a href="{{route('frontend.welcome')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
-                        @endif
-                    @endif
+            <div class="uda-navbar-with-clock">
+                <div class="uda-floating-clock" data-live-clock="navbar">
+                    <span class="clock-pill">
+                        <i class="icofont-location-pin"></i>
+                        Accra, Ghana
+                    </span>
+                    <span class="clock-pill">
+                        <i class="icofont-clock-time"></i>
+                        <span class="live-date">Fetching date...</span>
+                    </span>
+                    <span class="clock-pill clock-time-pill">
+                        <i class="icofont-ui-calendar"></i>
+                        <span class="live-time">--:-- --</span>
+                    </span>
                 </div>
+                <div class="uda-navbar">
+                    <!-- Left: Logo -->
+                    <div class="uda-nav-left">
+                        @if (Auth::check())
+                            @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
+                                <a href="{{route('dashboard')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
+                            @else
+                                <a href="{{route('dashboard')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
+                            @endif
+                        @else
+                            @if (count($systemDetail) > 0 && $systemDetail[0]->logo_image !== null)
+                                <a href="{{route('frontend.welcome')}}"><img loading="lazy" src="{{asset('logo/'.$systemDetail[0]->logo_image)}}" class="uda-logo" alt="logo"></a>
+                            @else
+                                <a href="{{route('frontend.welcome')}}"><img loading="lazy" src="{{asset('img/cug_logo_new.jpeg')}}" class="uda-logo" alt="logo"></a>
+                            @endif
+                        @endif
+                    </div>
 
-                <!-- Center: Title Pill -->
-                <div class="uda-nav-center">
-                    @php
-                        $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Archive System';
-                    @endphp
-                    <div class="uda-title-pill">{{ $udaTitle }}</div>
-                </div>
+                    <!-- Center: Title Pill -->
+                    <div class="uda-nav-center">
+                        @php
+                            $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Archive System';
+                        @endphp
+                        <div class="uda-title-pill">{{ $udaTitle }}</div>
+                    </div>
 
-                <!-- Right: Auth Buttons & Notifications -->
-                <div class="uda-nav-right">
-                    @if (Auth::check())
-                        <div class="uda-live-clock" data-live-clock="navbar">
-                            <span class="live-date">Fetching date...</span>
-                            <span class="live-time">--:-- --</span>
-                        </div>
-                    @endif
-                    @if (Auth::check())
-                        <div class="uda-notify">
-                            <button class="uda-bell" onclick="toggleMemoDropdown(event)">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-                                @php
-                                    $totalNotifications = ($newMessagesCount ?? 0) + ($newReplyNotifications ?? 0);
-                                @endphp
-                                @if($totalNotifications > 0)
-                                <span class="uda-badge">{{$totalNotifications}}</span>
-                                @endif
-                            </button>
-                            <div id="uda-memo-dropdown" class="uda-dropdown">
-                                <div class="uda-dropdown-header">
-                                    <div class="uda-header-title">
-                                        <span class="uda-notification-icon">🔔</span>
-                                        <span>Notifications</span>
-                                    </div>
-                                    <form method="POST" action="{{ route('dashboard.notifications.markAllUnified') }}" class="uda-mark-all-form">
-                                        @csrf
-                                        <button type="submit" class="uda-mark-all-btn">
-                                            <span class="uda-mark-all-icon">✓</span>
-                                            Mark all as read
-                                        </button>
-                                    </form>
-                                </div>
-                                <div class="uda-dropdown-list" id="uda-memo-list">
+                    <!-- Right: Auth Buttons & Notifications -->
+                    <div class="uda-nav-right">
+                        @if (Auth::check())
+                            <div class="uda-notify">
+                                <button class="uda-bell" onclick="toggleMemoDropdown(event)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
                                     @php
-                                        $recentMemos = \App\Models\EmailCampaignRecipient::with('campaign')
-                                            ->where('user_id', Auth::id())
-                                            ->orderBy('created_at','desc')
-                                            ->limit(5)
-                                            ->get();
+                                        $totalNotifications = ($newMessagesCount ?? 0) + ($newReplyNotifications ?? 0);
                                     @endphp
-                                    @forelse($recentMemos as $rm)
-                                        <a class="uda-dropdown-item" href="{{ route('dashboard.memo.read', $rm->id) }}">
-                                            <span class="uda-item-title">{{ Str::limit($rm->campaign->subject, 40) }}</span>
-                                            <span class="uda-item-time">{{ $rm->created_at->diffForHumans() }}</span>
-                                            @if(!$rm->is_read)
-                                                <span class="uda-dot"></span>
-                                            @endif
-                                        </a>
-                                    @empty
-                                        <div class="uda-empty">No memos yet</div>
-                                    @endforelse
-                                </div>
-                                <div class="uda-dropdown-footer">
-                                    <a href="{{ route('dashboard.message') }}" class="uda-link">View all</a>
+                                    @if($totalNotifications > 0)
+                                    <span class="uda-badge">{{$totalNotifications}}</span>
+                                    @endif
+                                </button>
+                                <div id="uda-memo-dropdown" class="uda-dropdown">
+                                    <div class="uda-dropdown-header">
+                                        <div class="uda-header-title">
+                                            <span class="uda-notification-icon">🔔</span>
+                                            <span>Notifications</span>
+                                        </div>
+                                        <form method="POST" action="{{ route('dashboard.notifications.markAllUnified') }}" class="uda-mark-all-form">
+                                            @csrf
+                                            <button type="submit" class="uda-mark-all-btn">
+                                                <span class="uda-mark-all-icon">✓</span>
+                                                Mark all as read
+                                            </button>
+                                        </form>
+                                    </div>
+                                    <div class="uda-dropdown-list" id="uda-memo-list">
+                                        @php
+                                            $recentMemos = \App\Models\EmailCampaignRecipient::with('campaign')
+                                                ->where('user_id', Auth::id())
+                                                ->orderBy('created_at','desc')
+                                                ->limit(5)
+                                                ->get();
+                                        @endphp
+                                        @forelse($recentMemos as $rm)
+                                            <a class="uda-dropdown-item" href="{{ route('dashboard.memo.read', $rm->id) }}">
+                                                <span class="uda-item-title">{{ Str::limit($rm->campaign->subject, 40) }}</span>
+                                                <span class="uda-item-time">{{ $rm->created_at->diffForHumans() }}</span>
+                                                @if(!$rm->is_read)
+                                                    <span class="uda-dot"></span>
+                                                @endif
+                                            </a>
+                                        @empty
+                                            <div class="uda-empty">No memos yet</div>
+                                        @endforelse
+                                    </div>
+                                    <div class="uda-dropdown-footer">
+                                        <a href="{{ route('dashboard.message') }}" class="uda-link">View all</a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
-                    @else
-                        <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
-                    @endif
+                            <a href="{{route('logout')}}" class="uda-btn uda-btn-primary">Logout</a>
+                        @else
+                            <a href="{{route('frontend.login')}}" class="uda-btn uda-btn-primary">Register / Login</a>
+                        @endif
+                    </div>
                 </div>
             </div>
+            </div>
+        </div>
         </div>
 
 
@@ -221,29 +233,59 @@
 .uda-link { background: none; border: none; padding: 0; color: #2563eb; font-weight: 600; cursor: pointer; text-decoration: none; }
 .uda-empty { padding: 14px; font-size: 13px; color: #6b7280; text-align: center; }
 .uda-section-header { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #6b7280; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; }
-.uda-live-clock {
+.uda-navbar-with-clock {
+    position: relative;
+}
+
+.uda-floating-clock {
+    position: absolute;
+    top: -45px;
+    right: 0;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: 6px 12px;
-    margin-right: 16px;
-    background: rgba(15, 118, 110, 0.08);
-    border-radius: 10px;
+    gap: 8px;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.85);
+    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
+    padding: 6px 16px;
+    border-radius: 999px;
+    border: 1px solid rgba(148, 163, 184, 0.35);
+    backdrop-filter: blur(15px);
+    z-index: 5;
     font-size: 12px;
     color: #0f172a;
     font-weight: 600;
-    min-width: 150px;
 }
 
-.uda-live-clock .live-time {
-    font-size: 16px;
-    letter-spacing: 0.5px;
-    color: #047857;
+.uda-floating-clock .clock-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(226, 232, 240, 0.7);
+    color: #0f172a;
+}
+
+.uda-floating-clock .clock-time-pill {
+    background: rgba(59, 130, 246, 0.15);
+    color: #1d4ed8;
     font-weight: 700;
 }
 
-.uda-live-clock .live-date {
-    color: #334155;
+.uda-floating-clock i {
+    font-size: 14px;
+    color: inherit;
+}
+
+@media (max-width: 992px) {
+    .uda-floating-clock {
+        position: static;
+        margin-bottom: 12px;
+        flex-wrap: wrap;
+        width: 100%;
+        justify-content: center;
+        border-radius: 16px;
+    }
 }
 </style>
 
