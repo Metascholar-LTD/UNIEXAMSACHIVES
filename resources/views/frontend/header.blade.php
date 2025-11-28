@@ -1,22 +1,38 @@
 <header>
     <div class="headerarea headerarea__2 header__sticky header__area">
-        <div class="container desktop__menu__wrapper uda-header-container">
-            <div class="uda-navbar-with-clock">
-                <div class="uda-floating-clock" data-live-clock="navbar">
-                    <span class="clock-pill">
-                        <i class="icofont-location-pin"></i>
-                        Accra, Ghana
-                    </span>
-                    <span class="clock-pill">
-                        <i class="icofont-clock-time"></i>
-                        <span class="live-date">Fetching date...</span>
-                    </span>
-                    <span class="clock-pill clock-time-pill">
-                        <i class="icofont-ui-calendar"></i>
-                        <span class="live-time">--:-- --</span>
-                    </span>
+        <div class="uda-clock-bar" data-live-clock="navbar">
+            <div class="clock-left">
+                <span class="clock-item">
+                    <i class="icofont-location-pin"></i>
+                    Accra, Ghana
+                </span>
+                <span class="clock-item">
+                    <i class="icofont-clock-time"></i>
+                    <span class="live-date">Fetching date...</span>
+                </span>
+                <span class="clock-item clock-item-time">
+                    <i class="icofont-ui-calendar"></i>
+                    <span class="live-time">--:-- --</span>
+                </span>
+            </div>
+            <div class="clock-right">
+                <span class="clock-item">
+                    <i class="icofont-email"></i>
+                    info@gnrs.gov.gh
+                </span>
+                <span class="clock-item">
+                    <i class="icofont-ui-call"></i>
+                    +233 XX XXX XXXX
+                </span>
+                <div class="clock-social">
+                    <a href="#" aria-label="Facebook"><i class="icofont-facebook"></i></a>
+                    <a href="#" aria-label="Twitter"><i class="icofont-twitter"></i></a>
+                    <a href="#" aria-label="LinkedIn"><i class="icofont-linkedin"></i></a>
                 </div>
-                <div class="uda-navbar">
+            </div>
+        </div>
+        <div class="container desktop__menu__wrapper uda-header-container">
+            <div class="uda-navbar">
                     <!-- Left: Logo -->
                     <div class="uda-nav-left">
                         @if (Auth::check())
@@ -233,58 +249,76 @@
 .uda-link { background: none; border: none; padding: 0; color: #2563eb; font-weight: 600; cursor: pointer; text-decoration: none; }
 .uda-empty { padding: 14px; font-size: 13px; color: #6b7280; text-align: center; }
 .uda-section-header { padding: 8px 12px; font-size: 12px; font-weight: 600; color: #6b7280; background: #f3f4f6; border-bottom: 1px solid #e5e7eb; }
-.uda-navbar-with-clock {
-    position: relative;
-}
-
-.uda-floating-clock {
-    position: absolute;
-    top: -45px;
-    right: 0;
+.uda-clock-bar {
+    width: 100%;
+    background: linear-gradient(90deg, #fbfcf9 0%, #fffaf4 50%, #fff8ef 100%);
     display: flex;
-    gap: 8px;
+    justify-content: space-between;
     align-items: center;
-    background: rgba(255, 255, 255, 0.85);
-    box-shadow: 0 10px 35px rgba(15, 23, 42, 0.08);
-    padding: 6px 16px;
-    border-radius: 999px;
-    border: 1px solid rgba(148, 163, 184, 0.35);
-    backdrop-filter: blur(15px);
-    z-index: 5;
-    font-size: 12px;
-    color: #0f172a;
+    padding: 6px 32px;
+    border-bottom: 1px solid rgba(148, 163, 184, 0.25);
+    box-shadow: inset 0 -1px 0 rgba(148, 163, 184, 0.15);
+    font-size: 13px;
     font-weight: 600;
+    color: #111827;
+    z-index: 20;
 }
 
-.uda-floating-clock .clock-pill {
+.uda-clock-bar .clock-left,
+.uda-clock-bar .clock-right {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+.uda-clock-bar .clock-item {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 10px;
-    border-radius: 999px;
-    background: rgba(226, 232, 240, 0.7);
+    color: #1f2937;
+}
+
+.uda-clock-bar .clock-item i {
+    font-size: 15px;
     color: #0f172a;
 }
 
-.uda-floating-clock .clock-time-pill {
-    background: rgba(59, 130, 246, 0.15);
+.uda-clock-bar .clock-item-time {
     color: #1d4ed8;
-    font-weight: 700;
 }
 
-.uda-floating-clock i {
-    font-size: 14px;
-    color: inherit;
+.uda-clock-bar .clock-social {
+    display: inline-flex;
+    gap: 8px;
+}
+
+.uda-clock-bar .clock-social a {
+    width: 28px;
+    height: 28px;
+    border-radius: 999px;
+    background: rgba(99, 102, 241, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #374151;
+    text-decoration: none;
+}
+
+.uda-clock-bar .clock-social a:hover {
+    background: rgba(99, 102, 241, 0.3);
 }
 
 @media (max-width: 992px) {
-    .uda-floating-clock {
-        position: static;
-        margin-bottom: 12px;
-        flex-wrap: wrap;
+    .uda-clock-bar {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+    
+    .uda-clock-bar .clock-right {
         width: 100%;
-        justify-content: center;
-        border-radius: 16px;
+        justify-content: space-between;
     }
 }
 </style>
