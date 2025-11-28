@@ -284,7 +284,7 @@
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-lg-10">
-                    <h1 class="hero-title">Access The University Archives</h1>
+                    <h1 class="hero-title">Access The University Digital Transformation Suite (UDTS)</h1>
                     <p class="hero-subtitle">Enjoy seamless Advance Communication</p>
                     <p class="hero-description">
                         A comprehensive digital archive of university examinations, academic resources, 
