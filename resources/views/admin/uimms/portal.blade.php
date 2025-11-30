@@ -297,6 +297,31 @@
                                             opacity: 0.8;
                                         }
 
+                                        /* Laptop View - Reduce Card Sizes (xl breakpoint: 1200px+) */
+                                        @media (min-width: 1200px) and (max-width: 1599px) {
+                                            .dashboard__card__content {
+                                                padding: 15px;
+                                            }
+                                            
+                                            .dashboard__card__icon {
+                                                font-size: 36px;
+                                                margin-right: 15px;
+                                            }
+                                            
+                                            .dashboard__card__text h3 {
+                                                font-size: 2rem;
+                                            }
+                                            
+                                            .dashboard__card__text h5 {
+                                                font-size: 0.9rem;
+                                                margin: 0 0 8px 0;
+                                            }
+                                            
+                                            .dashboard__card__text p {
+                                                font-size: 0.85rem;
+                                            }
+                                        }
+
                                         /* Responsive Adjustments */
                                         @media (max-width: 1199px) {
                                             .dashboard__card__icon {
