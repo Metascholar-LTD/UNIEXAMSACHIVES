@@ -82,7 +82,7 @@
                     <!-- Center: Title Pill -->
                     <div class="uda-nav-center">
                         @php
-                            $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Archive System';
+                            $udaTitle = (count($systemDetail) > 0 && $systemDetail[0]->title) ? $systemDetail[0]->title : 'University Digital Transformation Suite (UDTS)';
                         @endphp
                         <div class="uda-title-pill">{{ $udaTitle }}</div>
                     </div>

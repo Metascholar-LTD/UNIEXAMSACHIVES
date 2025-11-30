@@ -97,7 +97,7 @@
         </div>
         
         <div class="tech-orbit-display">
-            <h1 class="orbit-title">University Digital Archive</h1>
+            <h1 class="orbit-title">University Digital Transformation Suite (UDTS)</h1>
             <h2 class="orbit-subtitle" id="typewriter-subtitle"></h2>
             <div class="orbit-container">
                 <div class="orbit-path"></div>
