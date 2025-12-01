@@ -232,6 +232,11 @@
                 <div class="dashboard__nav">
                     <ul>
                         <li>
+                            <a class="{{ request()->routeIs('admin.communication.create') ? 'active' : '' }}" href="{{route('admin.communication.create')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Compose Memo</a>
+                        </li>
+                        <li>
                             <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
                                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Memos Portal
@@ -247,11 +252,6 @@
                             <a class="{{ request()->routeIs('admin.communication.index') ? 'active' : '' }}" href="{{route('admin.communication.index')}}">
                                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Memos</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('admin.communication.create') ? 'active' : '' }}" href="{{route('admin.communication.create')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Compose Memo</a>
                         </li>
                     </ul>
                 </div>
@@ -282,6 +282,11 @@
                 <div class="dashboard__nav">
                     <ul>
                         <li>
+                            <a class="{{ request()->routeIs('admin.communication-admin.create') ? 'active' : '' }}" href="{{route('admin.communication-admin.create')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Compose Memo</a>
+                        </li>
+                        <li>
                             <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
                                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Memos Portal
@@ -297,11 +302,6 @@
                             <a class="{{ request()->routeIs('admin.communication-admin.index') ? 'active' : '' }}" href="{{route('admin.communication-admin.index')}}">
                                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
                                 Memos</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('admin.communication-admin.create') ? 'active' : '' }}" href="{{route('admin.communication-admin.create')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Compose Memo</a>
                         </li>
                     </ul>
                 </div>
