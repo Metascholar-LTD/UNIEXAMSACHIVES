@@ -1154,8 +1154,6 @@
                             <h4>Dashboard</h4>
                         </div>
 
-                        {{-- Subscription Status Widget --}}
-                        @include('components.subscription-status')
 
                         @auth
                             @if(auth()->user()->is_admin)
