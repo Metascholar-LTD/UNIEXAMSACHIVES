@@ -39,6 +39,106 @@
 
             </ul>
         </div>
+
+        {{-- Internal Memo Management System (Users Only) --}}
+        @auth
+            @unless(auth()->user()->is_admin)
+                <div class="sidebar-section-header">
+                    <div class="section-header-content">
+                        <div class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
+                            </svg>
+                        </div>
+                        <div class="section-text">
+                            <h6 class="section-title">INTERNAL MEMO MANAGEMENT SYSTEM</h6>
+                            <span class="section-subtitle">4 features</span>
+                        </div>
+                        <div class="section-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard__nav">
+                    <ul>
+                        <li>
+                            <a class="{{ request()->routeIs('admin.communication.create') ? 'active' : '' }}" href="{{route('admin.communication.create')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Compose Memo</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Memos Portal
+                            </a><span class="dashboard__label">{{ $newMessagesCount ?? 0 }}</span>
+                        </li>
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.keep-in-view')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Keep in View
+                            </a><span class="dashboard__label">{{ $bookmarkedCount ?? 0 }}</span>
+                        </li>
+                        <li>
+                            <a class="{{ request()->routeIs('admin.communication.index') ? 'active' : '' }}" href="{{route('admin.communication.index')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Memos</a>
+                        </li>
+                    </ul>
+                </div>
+            @endunless
+        @endauth
+
+        {{-- Internal Memo Management System (Admin Only) --}}
+        @auth
+            @if(auth()->user()->is_admin)
+                <div class="sidebar-section-header">
+                    <div class="section-header-content">
+                        <div class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
+                                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
+                            </svg>
+                        </div>
+                        <div class="section-text">
+                            <h6 class="section-title">INTERNAL MEMO MANAGEMENT SYSTEM</h6>
+                            <span class="section-subtitle">4 features</span>
+                        </div>
+                        <div class="section-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard__nav">
+                    <ul>
+                        <li>
+                            <a class="{{ request()->routeIs('admin.communication-admin.create') ? 'active' : '' }}" href="{{route('admin.communication-admin.create')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Compose Memo</a>
+                        </li>
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Memos Portal
+                            </a><span class="dashboard__label">{{ $newMessagesCount ?? 0 }}</span>
+                        </li>
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.keep-in-view')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Keep in View
+                            </a><span class="dashboard__label">{{ $bookmarkedCount ?? 0 }}</span>
+                        </li>
+                        <li>
+                            <a class="{{ request()->routeIs('admin.communication-admin.index') ? 'active' : '' }}" href="{{route('admin.communication-admin.index')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                Memos</a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
+        @endauth
         
         {{-- Exams --}}
         <div class="sidebar-section-header">
@@ -207,106 +307,6 @@
 
             </ul>
         </div>
-
-        {{-- Internal Memo Management System (Users Only) --}}
-        @auth
-            @unless(auth()->user()->is_admin)
-                <div class="sidebar-section-header">
-                    <div class="section-header-content">
-                        <div class="section-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
-                                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                            </svg>
-                        </div>
-                        <div class="section-text">
-                            <h6 class="section-title">INTERNAL MEMO MANAGEMENT SYSTEM</h6>
-                            <span class="section-subtitle">4 features</span>
-                        </div>
-                        <div class="section-arrow">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
-                                <polyline points="6,9 12,15 18,9"></polyline>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard__nav">
-                    <ul>
-                        <li>
-                            <a class="{{ request()->routeIs('admin.communication.create') ? 'active' : '' }}" href="{{route('admin.communication.create')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Compose Memo</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Memos Portal
-                            </a><span class="dashboard__label">{{ $newMessagesCount ?? 0 }}</span>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.keep-in-view')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Keep in View
-                            </a><span class="dashboard__label">{{ $bookmarkedCount ?? 0 }}</span>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('admin.communication.index') ? 'active' : '' }}" href="{{route('admin.communication.index')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Memos</a>
-                        </li>
-                    </ul>
-                </div>
-            @endunless
-        @endauth
-
-        {{-- Internal Memo Management System (Admin Only) --}}
-        @auth
-            @if(auth()->user()->is_admin)
-                <div class="sidebar-section-header">
-                    <div class="section-header-content">
-                        <div class="section-icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-folder">
-                                <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.93a2 2 0 0 1-1.66-.9l-.82-1.2A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"></path>
-                            </svg>
-                        </div>
-                        <div class="section-text">
-                            <h6 class="section-title">INTERNAL MEMO MANAGEMENT SYSTEM</h6>
-                            <span class="section-subtitle">4 features</span>
-                        </div>
-                        <div class="section-arrow">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
-                                <polyline points="6,9 12,15 18,9"></polyline>
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-                <div class="dashboard__nav">
-                    <ul>
-                        <li>
-                            <a class="{{ request()->routeIs('admin.communication-admin.create') ? 'active' : '' }}" href="{{route('admin.communication-admin.create')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941334/bc12957e-52a0-4a05-8ee8-02bb753d6b58.png" alt="Compose Memo" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Compose Memo</a>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.uimms.*') && !request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.portal')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762943555/0f798328-ccf6-4f51-91b5-13873791d869.png" alt="Memos Portal" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Memos Portal
-                            </a><span class="dashboard__label">{{ $newMessagesCount ?? 0 }}</span>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('dashboard.uimms.keep-in-view') ? 'active' : '' }}" href="{{route('dashboard.uimms.keep-in-view')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762872342/image_pgg76v.png" alt="Keep in View" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Keep in View
-                            </a><span class="dashboard__label">{{ $bookmarkedCount ?? 0 }}</span>
-                        </li>
-                        <li>
-                            <a class="{{ request()->routeIs('admin.communication-admin.index') ? 'active' : '' }}" href="{{route('admin.communication-admin.index')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762940231/message_uzbtkd.png" alt="Memos" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                Memos</a>
-                        </li>
-                    </ul>
-                </div>
-            @endif
-        @endauth
 
         {{-- Users --}}
         <div class="sidebar-section-header">
