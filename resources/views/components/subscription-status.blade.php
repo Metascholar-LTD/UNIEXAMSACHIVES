@@ -46,9 +46,10 @@
             </div>
         </div>
         <div class="header-right">
-            <div class="status-badge" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
+            {{-- Payment Status Badge - Commented Out --}}
+            {{-- <div class="status-badge" style="background: {{ $colors['light'] }}; border-color: {{ $colors['border'] }};">
                 <span style="color: {{ $colors['bg'] }};">{{ ucfirst(str_replace('_', ' ', $subscription->status)) }}</span>
-            </div>
+            </div> --}}
             <button type="button" class="collapse-btn" aria-label="Toggle subscription details">
                 <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="6 9 12 15 18 9"/>
