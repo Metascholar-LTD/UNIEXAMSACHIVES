@@ -670,8 +670,8 @@ class AdvanceCommunicationController extends Controller
     
     private function checkAdminOnlyAccess()
     {
-        // Only admin users are allowed to access admin communication pages
-        if (!auth()->check() || !auth()->user()->is_admin) {
+        // Only Admin (role='user') users are allowed to access admin communication pages
+        if (!auth()->check() || (!auth()->user()->isRegularUser() && !auth()->user()->isSuperAdmin())) {
             abort(403, 'Unauthorized action. Admin access required.');
         }
     }

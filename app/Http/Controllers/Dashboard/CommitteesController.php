@@ -15,8 +15,8 @@ class CommitteesController extends Controller
      */
     public function index()
     {
-        // Only admin can access
-        if (!Auth::user()->is_admin) {
+        // Only Admin (role='user') can access
+        if (!Auth::user()->isRegularUser() && !Auth::user()->isSuperAdmin()) {
             abort(403, 'Unauthorized access.');
         }
 
