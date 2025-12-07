@@ -308,9 +308,50 @@
             </ul>
         </div>
 
-        {{-- Committees & Boards --}}
+        {{-- Committees & Boards - For UI "Admin" users (database role='user') - View Only --}}
         @auth
             @if(auth()->user()->isRegularUser() || auth()->user()->isSuperAdmin())
+                <div class="sidebar-section-header">
+                    <div class="section-header-content">
+                        <div class="section-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-users">
+                                <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                <circle cx="9" cy="7" r="4"></circle>
+                                <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                            </svg>
+                        </div>
+                        <div class="section-text">
+                            <h6 class="section-title">COMMITTEES & BOARDS</h6>
+                            <span class="section-subtitle">My committees</span>
+                        </div>
+                        <div class="section-arrow">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-down">
+                                <polyline points="6,9 12,15 18,9"></polyline>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+                <div class="dashboard__nav">
+                    <ul>
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{route('dashboard')}}#my-committees">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+                                    <circle cx="9" cy="7" r="4"></circle>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                </svg>
+                                My Committees & Boards</a>
+                        </li>
+                    </ul>
+                </div>
+            @endif
+        @endauth
+
+        {{-- Committees & Boards Management - For UI "User" users (database role='admin') - Management --}}
+        @auth
+            @if(auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
                 <div class="sidebar-section-header">
                     <div class="section-header-content">
                         <div class="section-icon">

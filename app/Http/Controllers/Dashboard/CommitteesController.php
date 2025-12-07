@@ -12,11 +12,11 @@ class CommitteesController extends Controller
 {
     /**
      * Check if user has permission to manage committees
-     * Only UI "Admin" users (database role='user') can manage committees
+     * Only UI "User" users (database role='admin') can manage committees
      */
     private function checkAdminPermission()
     {
-        if (!Auth::user()->isRegularUser() && !Auth::user()->isSuperAdmin()) {
+        if (!Auth::user()->isAdmin() && !Auth::user()->isSuperAdmin()) {
             abort(403, 'Unauthorized access. Only administrators can manage committees and boards.');
         }
     }
