@@ -30,7 +30,11 @@ class CommitteesController extends Controller
         $this->checkAdminPermission();
 
         $committees = Committee::with('users')->withCount('users')->orderBy('created_at', 'desc')->get();
-        $users = User::where('is_approve', true)->orderBy('first_name')->get();
+        $users = User::where('is_approve', true)
+                    ->with('position')
+                    ->select('id', 'first_name', 'last_name', 'email', 'position_id', 'profile_picture')
+                    ->orderBy('first_name')
+                    ->get();
         
         return view('admin.committees.index', compact('committees', 'users'));
     }
