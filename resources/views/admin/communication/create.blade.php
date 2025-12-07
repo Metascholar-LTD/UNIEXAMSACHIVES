@@ -388,6 +388,49 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- Committees & Boards Section -->
+                                                <div class="committees-section mt-4">
+                                                    <h6 class="section-title">
+                                                        <i class="icofont-users-alt-5"></i> Committees & Boards
+                                                    </h6>
+                                                    <p class="section-subtitle mb-3">Select one or more committees/boards to send the memo to all their members</p>
+                                                    <div class="committees-grid">
+                                                        @forelse ($committees as $committee)
+                                                        <div class="option-card committee-option">
+                                                            <input class="committee-checkbox" type="checkbox" name="selected_committees[]" 
+                                                                   id="committee_{{ $committee->id }}" value="{{ $committee->id }}"
+                                                                   {{ in_array($committee->id, old('selected_committees', [])) ? 'checked' : '' }}>
+                                                            <label class="option-label" for="committee_{{ $committee->id }}">
+                                                                <div class="option-icon">
+                                                                    <i class="icofont-users-alt-5"></i>
+                                                                </div>
+                                                                <div class="option-content">
+                                                                    <strong>{{ $committee->name }}</strong>
+                                                                    <span class="option-desc">
+                                                                        {{ $committee->users_count }} {{ $committee->users_count === 1 ? 'member' : 'members' }}
+                                                                        @if($committee->description)
+                                                                            • {{ Str::limit($committee->description, 50) }}
+                                                                        @endif
+                                                                    </span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                        @empty
+                                                        <div class="alert alert-info">
+                                                            <i class="icofont-info-circle"></i> No active committees/boards available. Create one in the Committees & Boards section.
+                                                        </div>
+                                                        @endforelse
+                                                    </div>
+                                                    <div class="committee-actions mt-3">
+                                                        <button type="button" class="btn btn-sm btn-outline-primary" id="select-all-committees-btn">
+                                                            <i class="icofont-check-circled"></i> Select All Committees
+                                                        </button>
+                                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="clear-all-committees-btn">
+                                                            <i class="icofont-close-circled"></i> Clear All
+                                                        </button>
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         <div class="form-group">
@@ -2237,6 +2280,52 @@ document.addEventListener('DOMContentLoaded', function() {
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
+    });
+    
+    // Committee selection handling
+    const committeeCheckboxes = document.querySelectorAll('.committee-checkbox');
+    const selectAllCommitteesBtn = document.getElementById('select-all-committees-btn');
+    const clearAllCommitteesBtn = document.getElementById('clear-all-committees-btn');
+    
+    if (selectAllCommitteesBtn) {
+        selectAllCommitteesBtn.addEventListener('click', function() {
+            committeeCheckboxes.forEach(checkbox => {
+                checkbox.checked = true;
+            });
+            updatePreview();
+        });
+    }
+    
+    if (clearAllCommitteesBtn) {
+        clearAllCommitteesBtn.addEventListener('click', function() {
+            committeeCheckboxes.forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            updatePreview();
+        });
+    }
+    
+    // Update committee card states on checkbox change
+    committeeCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            const card = this.closest('.committee-option');
+            if (this.checked) {
+                card.classList.add('selected');
+            } else {
+                card.classList.remove('selected');
+            }
+            updatePreview();
+        });
+        
+        // Initialize card state
+        const card = checkbox.closest('.committee-option');
+        if (checkbox.checked) {
+            card.classList.add('selected');
+        }
+    });
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
         
         // Show success message
         this.innerHTML = '<i class="icofont-check-circled"></i> Exported!';
@@ -2559,7 +2648,15 @@ document.addEventListener('DOMContentLoaded', function() {
         modalSubjectPreview.textContent = subject.length > 50 ? subject.substring(0, 50) + '...' : subject;
         
         const recipientType = document.querySelector('input[name="recipient_type"]:checked');
-        if (recipientType) {
+        const selectedCommittees = Array.from(committeeCheckboxes).filter(cb => cb.checked);
+        
+        if (selectedCommittees.length > 0) {
+            const committeeNames = selectedCommittees.map(cb => {
+                const label = cb.closest('.committee-option').querySelector('strong');
+                return label ? label.textContent : '';
+            }).filter(name => name);
+            modalRecipientsPreview.textContent = `${selectedCommittees.length} Committee/Board${selectedCommittees.length !== 1 ? 's' : ''}: ${committeeNames.join(', ')}`;
+        } else if (recipientType) {
             if (recipientType.value === 'all') {
                 modalRecipientsPreview.textContent = `All Registered Users ({{ $users->count() }} users)`;
             } else if (recipientType.value === 'selected') {
