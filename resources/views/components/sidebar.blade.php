@@ -310,7 +310,7 @@
 
         {{-- Committees & Boards --}}
         @auth
-            @if(auth()->user()->isRegularUser() || auth()->user()->isSuperAdmin())
+            @if(auth()->user()->isRegularUser())
                 <div class="sidebar-section-header">
                     <div class="section-header-content">
                         <div class="section-icon">
