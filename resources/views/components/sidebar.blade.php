@@ -308,9 +308,10 @@
             </ul>
         </div>
 
-        {{-- Committees & Boards Management (Admin only) --}}
+        {{-- Committees & Boards --}}
         @auth
             @unless(auth()->user()->is_admin)
+                {{-- Manage Committees & Boards (For users who can access Manage Users, Departments, etc.) --}}
                 <div class="sidebar-section-header">
                     <div class="section-header-content">
                         <div class="section-icon">
@@ -346,12 +347,8 @@
                         </li>
                     </ul>
                 </div>
-            @endif
-        @endauth
-
-        {{-- My Committees & Boards (Normal users - view only) --}}
-        @auth
-            @if(auth()->user()->role === 'admin')
+            @else
+                {{-- My Committees & Boards (For normal users who cannot manage) --}}
                 <div class="sidebar-section-header">
                     <div class="section-header-content">
                         <div class="section-icon">
@@ -387,7 +384,7 @@
                         </li>
                     </ul>
                 </div>
-            @endif
+            @endunless
         @endauth
 
         {{-- Users --}}
