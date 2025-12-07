@@ -351,7 +351,7 @@
 
         {{-- My Committees & Boards (Normal users - view only) --}}
         @auth
-            @if(auth()->user()->isAdmin() && !auth()->user()->isSuperAdmin())
+            @if(auth()->user()->role === 'admin')
                 <div class="sidebar-section-header">
                     <div class="section-header-content">
                         <div class="section-icon">
