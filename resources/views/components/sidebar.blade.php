@@ -310,7 +310,7 @@
 
         {{-- Committees & Boards Management (Admin only) --}}
         @auth
-            @if(auth()->user()->isRegularUser())
+            @unless(auth()->user()->is_admin)
                 <div class="sidebar-section-header">
                     <div class="section-header-content">
                         <div class="section-icon">
