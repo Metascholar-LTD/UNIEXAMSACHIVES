@@ -1534,6 +1534,57 @@
                                     </div>
                                 </div>
                             </div>
+
+                            {{-- My Committees & Boards Section --}}
+                            <div class="row mt-4">
+                                <div class="col-xl-12 col-lg-12 col-md-12 col-12">
+                                    <div class="dashboard__content__wraper admin__content__wrapper">
+                                        <div class="dashboard__section__title clean-section-title">
+                                            <div class="title-content">
+                                                <h4><i class="icofont-users"></i> My Committees & Boards</h4>
+                                            </div>
+                                        </div>
+
+                                        @if (isset($userCommittees) && count($userCommittees) > 0)
+                                            <div class="row mt-3">
+                                                @foreach ($userCommittees as $committee)
+                                                <div class="col-xl-4 col-lg-6 col-md-6 col-12 mb-3">
+                                                    <div class="card h-100" style="border: 1px solid #e9ecef; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);">
+                                                        <div class="card-body">
+                                                            <h5 class="card-title d-flex justify-content-between align-items-center">
+                                                                <span>{{ $committee->name }}</span>
+                                                                <span class="badge bg-{{ $committee->status === 'active' ? 'success' : 'secondary' }}">
+                                                                    {{ ucfirst($committee->status) }}
+                                                                </span>
+                                                            </h5>
+                                                            @if($committee->description)
+                                                            <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                                                {{ Str::limit($committee->description, 100) }}
+                                                            </p>
+                                                            @else
+                                                            <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                                                <em>No description provided</em>
+                                                            </p>
+                                                            @endif
+                                                            <div class="mt-2">
+                                                                <small class="text-muted">
+                                                                    <i class="fas fa-users"></i> {{ $committee->users->count() }} member(s)
+                                                                </small>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @endforeach
+                                            </div>
+                                        @else
+                                            <div class="clean-empty-state">
+                                                <i class="icofont-users"></i>
+                                                <p>You are not assigned to any committees or boards yet</p>
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
                         @endunless
                     @endauth
                 </div>

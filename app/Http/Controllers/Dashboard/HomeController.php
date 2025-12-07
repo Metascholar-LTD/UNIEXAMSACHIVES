@@ -17,6 +17,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Exam;
 use App\Models\User;
 use App\Models\Visit;
+use App\Models\Committee;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -33,6 +34,9 @@ class HomeController extends Controller
         $dailyVisitCount = Visit::where('visited_at', '>=', $twentyFourHoursAgo)->count();
         $numberOfExamsToFetch = 2;
         $files = File::all();
+        // Get user's committees/boards
+        $userCommittees = Auth::user()->committees()->with('users')->get();
+        
         return view('admin.dashboard',[
             'total_papers' => Exam::count(),
             'total_users' => User::count(),
@@ -50,6 +54,7 @@ class HomeController extends Controller
             'admin_total_files' => File::where('user_id', Auth::user()->id)->count(),
             'admin_pending_files' => File::where('user_id', Auth::user()->id)->where('is_approve', 0)->count(),
             'admin_approve_files' => File::where('user_id', Auth::user()->id)->where('is_approve', 1)->count(),
+            'userCommittees' => $userCommittees,
         ]);
     }
 

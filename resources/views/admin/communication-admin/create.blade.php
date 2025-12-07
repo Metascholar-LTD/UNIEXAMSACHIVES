@@ -388,6 +388,36 @@
                                                         </div>
                                                     </div>
                                                 </div>
+
+                                                <!-- Committees & Boards Section -->
+                                                <div class="committees-section mt-4">
+                                                    <h6 class="section-title">Committees & Boards</h6>
+                                                    <div class="committees-grid">
+                                                        @php
+                                                            $committees = \App\Models\Committee::active()->withCount('users')->get();
+                                                        @endphp
+                                                        @forelse ($committees as $committee)
+                                                        <div class="option-card">
+                                                            <input class="option-radio" type="radio" name="recipient_type" 
+                                                                   id="committee_{{ $committee->id }}" value="committee_{{ $committee->id }}"
+                                                                   {{ old('recipient_type') === 'committee_' . $committee->id ? 'checked' : '' }}>
+                                                            <label class="option-label" for="committee_{{ $committee->id }}">
+                                                                <div class="option-icon">
+                                                                    <i class="icofont-users-alt-5"></i>
+                                                                </div>
+                                                                <div class="option-content">
+                                                                    <strong>{{ $committee->name }}</strong>
+                                                                    <span class="option-desc">Send to all members of {{ $committee->name }} ({{ $committee->users_count }} members)</span>
+                                                                </div>
+                                                            </label>
+                                                        </div>
+                                                        @empty
+                                                        <div class="alert alert-info">
+                                                            <i class="icofont-info-circle"></i> No active committees/boards available. Create one in the Committees & Boards section.
+                                                        </div>
+                                                        @endforelse
+                                                    </div>
+                                                </div>
                                             </div>
 
                                         <div class="form-group">

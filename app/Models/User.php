@@ -326,4 +326,21 @@ class User extends Authenticatable
                     ->withTimestamps()
                     ->orderBy('memo_user_bookmarks.created_at', 'desc');
     }
+
+    /**
+     * Get the committees/boards that this user belongs to
+     */
+    public function committees()
+    {
+        return $this->belongsToMany(Committee::class, 'committee_user')
+                    ->withTimestamps();
+    }
+
+    /**
+     * Get active committees/boards that this user belongs to
+     */
+    public function activeCommittees()
+    {
+        return $this->committees()->where('status', 'active');
+    }
 }
