@@ -23,7 +23,7 @@ class CommitteesController extends Controller
     }
 
     /**
-     * Display a listing of committees/boards
+     * Display a listing of committees/boards (Admin only - for management)
      */
     public function index()
     {
@@ -33,6 +33,16 @@ class CommitteesController extends Controller
         $users = User::where('is_approve', true)->orderBy('first_name')->get();
         
         return view('admin.committees.index', compact('committees', 'users'));
+    }
+
+    /**
+     * Display user's own committees/boards (Normal users - view only)
+     */
+    public function myCommittees()
+    {
+        $userCommittees = Auth::user()->committees()->with('users')->orderBy('created_at', 'desc')->get();
+        
+        return view('admin.committees.my-committees', compact('userCommittees'));
     }
 
     /**

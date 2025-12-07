@@ -232,6 +232,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('committees', \App\Http\Controllers\Dashboard\CommitteesController::class);
     Route::post('/committees/{committee}/add-users', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'addUsers'])->name('committees.add-users');
     Route::delete('/committees/{committee}/users/{user}', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'removeUser'])->name('committees.remove-user');
+    Route::get('/committees/my-committees', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'myCommittees'])->name('committees.my-committees');
 
     #Academic Year
     Route::post('/dashboard/academic-year/store', [AcademicController::class, 'store'])->name('dashboard.academic.store');
