@@ -229,7 +229,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('positions', PositionController::class);
 
     #committees & boards
-    Route::resource('committees', \App\Http\Controllers\Dashboard\CommitteesController::class);
+    Route::resource('committees', \App\Http\Controllers\Dashboard\CommitteesController::class)->except(['show', 'create', 'edit']);
     Route::post('/committees/{committee}/add-users', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'addUsers'])->name('committees.add-users');
     Route::delete('/committees/{committee}/users/{user}', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'removeUser'])->name('committees.remove-user');
     Route::get('/committees/my-committees', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'myCommittees'])->name('committees.my-committees');
