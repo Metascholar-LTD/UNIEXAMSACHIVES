@@ -11,14 +11,22 @@ use Illuminate\Support\Facades\Auth;
 class CommitteesController extends Controller
 {
     /**
+     * Check if user has permission to manage committees
+     * Only UI "Admin" users (database role='user') can manage committees
+     */
+    private function checkAdminPermission()
+    {
+        if (!Auth::user()->isRegularUser() && !Auth::user()->isSuperAdmin()) {
+            abort(403, 'Unauthorized access. Only administrators can manage committees and boards.');
+        }
+    }
+
+    /**
      * Display a listing of committees/boards
      */
     public function index()
     {
-        // Only Admin (role='user') can access
-        if (!Auth::user()->isRegularUser() && !Auth::user()->isSuperAdmin()) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->checkAdminPermission();
 
         $committees = Committee::with('users')->withCount('users')->orderBy('created_at', 'desc')->get();
         $users = User::where('is_approve', true)->orderBy('first_name')->get();
@@ -31,10 +39,7 @@ class CommitteesController extends Controller
      */
     public function store(Request $request)
     {
-        // Only admin can create
-        if (!Auth::user()->is_admin) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->checkAdminPermission();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -53,10 +58,7 @@ class CommitteesController extends Controller
      */
     public function update(Request $request, Committee $committee)
     {
-        // Only admin can update
-        if (!Auth::user()->is_admin) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->checkAdminPermission();
 
         $request->validate([
             'name' => 'required|string|max:255',
@@ -75,10 +77,7 @@ class CommitteesController extends Controller
      */
     public function destroy(Committee $committee)
     {
-        // Only admin can delete
-        if (!Auth::user()->is_admin) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->checkAdminPermission();
 
         $committee->delete();
 
@@ -91,10 +90,7 @@ class CommitteesController extends Controller
      */
     public function addUsers(Request $request, Committee $committee)
     {
-        // Only admin can add users
-        if (!Auth::user()->is_admin) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->checkAdminPermission();
 
         $request->validate([
             'user_ids' => 'required|array',
@@ -112,10 +108,7 @@ class CommitteesController extends Controller
      */
     public function removeUser(Committee $committee, User $user)
     {
-        // Only admin can remove users
-        if (!Auth::user()->is_admin) {
-            abort(403, 'Unauthorized access.');
-        }
+        $this->checkAdminPermission();
 
         $committee->users()->detach($user->id);
 
