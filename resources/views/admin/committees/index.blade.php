@@ -206,6 +206,44 @@
         color: white;
     }
 
+    .action-btn-icon {
+        padding: 8px;
+        width: 36px;
+        height: 36px;
+        border: none;
+        border-radius: 8px;
+        font-size: 0.875rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+    }
+
+    .action-btn-icon.edit {
+        background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+        color: white;
+    }
+
+    .action-btn-icon.edit:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
+        color: white;
+        text-decoration: none;
+    }
+
+    .action-btn-icon.delete {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+    }
+
+    .action-btn-icon.delete:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+        color: white;
+    }
+
     /* Empty State */
     .empty-state {
         text-align: center;
@@ -379,7 +417,7 @@
     }
 
     .user-list-container {
-        max-height: 400px;
+        max-height: 300px;
         overflow-y: auto;
         background: #f8f9fa;
     }
@@ -735,11 +773,11 @@
                                                     title="Manage Members">
                                                 <i class="fas fa-users"></i> Manage
                                             </button>
-                                            <button type="button" class="action-btn edit" 
+                                            <button type="button" class="action-btn-icon edit" 
                                                     data-bs-toggle="modal" 
                                                     data-bs-target="#editCommitteeModal{{ $committee->id }}"
                                                     title="Edit">
-                                                <i class="fas fa-edit"></i> Edit
+                                                <i class="fas fa-edit"></i>
                                             </button>
                                             <form action="{{ route('committees.destroy', $committee->id) }}" 
                                                   method="POST" 
@@ -747,8 +785,8 @@
                                                   onsubmit="return confirm('Are you sure you want to delete this committee/board?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="action-btn delete" title="Delete">
-                                                    <i class="fas fa-trash"></i> Delete
+                                                <button type="submit" class="action-btn-icon delete" title="Delete">
+                                                    <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
                                         </div>
@@ -796,7 +834,7 @@
 
                                 {{-- Manage Users Modal --}}
                                 <div class="modal fade" id="manageUsersModal{{ $committee->id }}" tabindex="-1" aria-hidden="true">
-                                    <div class="modal-dialog modal-xl">
+                                    <div class="modal-dialog modal-lg">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title">Manage Members - {{ $committee->name }}</h5>
