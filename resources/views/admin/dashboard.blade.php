@@ -1539,7 +1539,7 @@
 
                         {{-- My Committees & Boards Section - Visible to ALL users --}}
                         @auth
-                            <div class="row mt-4" id="my-committees">
+                            <div class="row mt-4">
                                 <div class="col-xl-12 col-lg-12 col-md-12 col-12">
                                     <div class="dashboard__content__wraper admin__content__wrapper">
                                         <div class="dashboard__section__title clean-section-title">
