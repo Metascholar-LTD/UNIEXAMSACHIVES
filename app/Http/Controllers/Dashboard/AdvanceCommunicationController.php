@@ -103,10 +103,7 @@ class AdvanceCommunicationController extends Controller
                                             ->count(),
         ];
 
-        // Get active committees for selection
-        $committees = Committee::active()->withCount('users')->orderBy('name')->get();
-
-        return view('admin.communication.create', compact('users', 'staffCategoryCounts', 'committees'));
+        return view('admin.communication.create', compact('users', 'staffCategoryCounts'));
     }
 
     public function store(Request $request)
@@ -378,35 +375,19 @@ class AdvanceCommunicationController extends Controller
         // Remove old recipients
         $campaign->recipients()->delete();
 
-        // Get recipients using helper method (handles committees if selected)
-        $recipientUsers = $this->getRecipientsByType(
-            $request->recipient_type, 
-            $request->selected_users, 
-            $request->selected_committees
-        );
-
-        // Determine recipient type for storage
-        $storedRecipientType = $request->recipient_type;
-        $storedSelectedUsers = null;
-        
-        // If committees are selected, use a special format
-        if (!empty($request->selected_committees)) {
-            $storedRecipientType = 'committees';
-            $storedSelectedUsers = $request->selected_committees; // Store committee IDs
-        } elseif ($request->recipient_type === 'selected') {
-            $storedSelectedUsers = $recipientUsers->pluck('id')->toArray();
-        } elseif ($request->recipient_type === 'all') {
-            $storedSelectedUsers = null;
-        }
+        // Determine new recipients
+        $recipients = $request->recipient_type === 'all' 
+            ? User::where('is_approve', true)->pluck('id')->toArray()
+            : $request->selected_users;
 
         // Update campaign
         $campaign->update([
             'subject' => $request->subject,
             'message' => $request->message,
             'attachments' => $attachmentPaths,
-            'recipient_type' => $storedRecipientType,
-            'selected_users' => $storedSelectedUsers,
-            'total_recipients' => $recipientUsers->count(),
+            'recipient_type' => $request->recipient_type,
+            'selected_users' => $request->recipient_type === 'selected' ? $recipients : null,
+            'total_recipients' => count($recipients),
         ]);
 
         // For drafts, we don't create recipient records until they're ready to send
@@ -452,8 +433,7 @@ class AdvanceCommunicationController extends Controller
         }
 
         // Determine recipients based on campaign settings using helper method
-        // For committees, selected_users contains committee IDs
-        $recipientUsers = $this->getRecipientsByType($campaign->recipient_type, $campaign->selected_users, null);
+        $recipientUsers = $this->getRecipientsByType($campaign->recipient_type, $campaign->selected_users);
 
         // Ensure recipient records exist (create if draft or missing)
         if ($campaign->status === 'draft' || $campaign->recipients()->count() === 0) {
@@ -787,8 +767,6 @@ class AdvanceCommunicationController extends Controller
             }],
             'selected_users' => 'required_if:recipient_type,selected|array',
             'selected_users.*' => 'exists:users,id',
-            'selected_committees' => 'nullable|array',
-            'selected_committees.*' => 'exists:committees,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
             'send_immediately' => 'boolean',
             'scheduled_at' => $isDraft ? 'nullable|date' : 'nullable|required_if:send_immediately,false|date|after:now',
@@ -812,32 +790,16 @@ class AdvanceCommunicationController extends Controller
             }
         }
 
-        // Get recipients using helper method (handles committees if selected)
-        $recipientUsers = $this->getRecipientsByType(
-            $request->recipient_type, 
-            $request->selected_users, 
-            $request->selected_committees
-        );
-
-        // Determine recipient type for storage
-        $storedRecipientType = $request->recipient_type;
-        $storedSelectedUsers = null;
-        
-        // If committees are selected, use a special format
-        if (!empty($request->selected_committees)) {
-            $storedRecipientType = 'committees';
-            $storedSelectedUsers = $request->selected_committees; // Store committee IDs
-        } elseif ($request->recipient_type === 'selected') {
-            $storedSelectedUsers = $recipientUsers->pluck('id')->toArray();
-        }
+        // Get recipients using helper method
+        $recipientUsers = $this->getRecipientsByType($request->recipient_type, $request->selected_users);
 
         // Create campaign
         $campaign = EmailCampaign::create([
             'subject' => $request->subject,
             'message' => $request->message,
             'attachments' => $attachmentPaths,
-            'recipient_type' => $storedRecipientType,
-            'selected_users' => $storedSelectedUsers,
+            'recipient_type' => $request->recipient_type,
+            'selected_users' => $request->recipient_type === 'selected' ? $recipientUsers->pluck('id')->toArray() : null,
             'status' => $isDraft ? 'draft' : 'sending',
             'scheduled_at' => $isDraft ? null : ($request->scheduled_at ?? now()),
             'total_recipients' => $recipientUsers->count(),
@@ -1019,8 +981,6 @@ class AdvanceCommunicationController extends Controller
             }],
             'selected_users' => 'required_if:recipient_type,selected|array',
             'selected_users.*' => 'exists:users,id',
-            'selected_committees' => 'nullable|array',
-            'selected_committees.*' => 'exists:committees,id',
             'attachments.*' => 'nullable|file|max:10240|mimes:pdf,doc,docx,txt,jpg,png,gif,zip',
             'send_immediately' => 'boolean',
             'scheduled_at' => $isDraft ? 'nullable|date' : 'nullable|required_if:send_immediately,false|date|after:now',
@@ -1044,32 +1004,16 @@ class AdvanceCommunicationController extends Controller
             }
         }
 
-        // Get recipients using helper method (handles committees if selected)
-        $recipientUsers = $this->getRecipientsByType(
-            $request->recipient_type, 
-            $request->selected_users, 
-            $request->selected_committees
-        );
-
-        // Determine recipient type for storage
-        $storedRecipientType = $request->recipient_type;
-        $storedSelectedUsers = null;
-        
-        // If committees are selected, use a special format
-        if (!empty($request->selected_committees)) {
-            $storedRecipientType = 'committees';
-            $storedSelectedUsers = $request->selected_committees; // Store committee IDs
-        } elseif ($request->recipient_type === 'selected') {
-            $storedSelectedUsers = $recipientUsers->pluck('id')->toArray();
-        }
+        // Get recipients using helper method
+        $recipientUsers = $this->getRecipientsByType($request->recipient_type, $request->selected_users);
 
         // Update campaign
         $campaign->update([
             'subject' => $request->subject,
             'message' => $request->message,
             'attachments' => $attachmentPaths,
-            'recipient_type' => $storedRecipientType,
-            'selected_users' => $storedSelectedUsers,
+            'recipient_type' => $request->recipient_type,
+            'selected_users' => $request->recipient_type === 'selected' ? $recipientUsers->pluck('id')->toArray() : null,
             'status' => $isDraft ? 'draft' : 'sending',
             'scheduled_at' => $isDraft ? null : ($request->scheduled_at ?? now()),
             'total_recipients' => $recipientUsers->count(),
@@ -1227,8 +1171,7 @@ class AdvanceCommunicationController extends Controller
         }
 
         // Determine recipients based on campaign settings using helper method
-        // For committees, selected_users contains committee IDs
-        $recipientUsers = $this->getRecipientsByType($campaign->recipient_type, $campaign->selected_users, null);
+        $recipientUsers = $this->getRecipientsByType($campaign->recipient_type, $campaign->selected_users);
 
         // Ensure recipient records exist (create if draft or missing)
         if ($campaign->status === 'draft' || $campaign->recipients()->count() === 0) {
@@ -1469,24 +1412,8 @@ class AdvanceCommunicationController extends Controller
     /**
      * Get recipients based on recipient type
      */
-    private function getRecipientsByType($recipientType, $selectedUsers = null, $selectedCommittees = null)
+    private function getRecipientsByType($recipientType, $selectedUsers = null)
     {
-        // Handle multiple committee selections (highest priority)
-        if (!empty($selectedCommittees) && is_array($selectedCommittees)) {
-            $allRecipients = collect();
-            
-            foreach ($selectedCommittees as $committeeId) {
-                $committee = Committee::find($committeeId);
-                if ($committee) {
-                    $committeeUsers = $committee->users()->where('is_approve', true)->get();
-                    $allRecipients = $allRecipients->merge($committeeUsers);
-                }
-            }
-            
-            // Remove duplicates (in case a user is in multiple committees)
-            return $allRecipients->unique('id');
-        }
-        
         if ($recipientType === 'all') {
             return User::where('is_approve', true)->get();
         } elseif ($recipientType === 'selected') {
@@ -1509,31 +1436,13 @@ class AdvanceCommunicationController extends Controller
                       ->where('staff_category', $staffCategory)
                       ->get();
         } elseif (str_starts_with($recipientType, 'committee_')) {
-            // Handle single committee/board recipient type (legacy support)
+            // Handle committee/board recipient type
             $committeeId = str_replace('committee_', '', $recipientType);
             $committee = Committee::find($committeeId);
             
             if ($committee) {
                 // Get all users who belong to this committee
                 return $committee->users()->where('is_approve', true)->get();
-            }
-            
-            return collect();
-        } elseif ($recipientType === 'committees') {
-            // Handle stored committee selection
-            if (!empty($selectedUsers) && is_array($selectedUsers)) {
-                $allRecipients = collect();
-                
-                foreach ($selectedUsers as $committeeId) {
-                    $committee = Committee::find($committeeId);
-                    if ($committee) {
-                        $committeeUsers = $committee->users()->where('is_approve', true)->get();
-                        $allRecipients = $allRecipients->merge($committeeUsers);
-                    }
-                }
-                
-                // Remove duplicates
-                return $allRecipients->unique('id');
             }
             
             return collect();
