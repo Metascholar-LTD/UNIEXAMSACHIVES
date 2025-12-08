@@ -102,6 +102,12 @@ class PagesController extends Controller
         }
 
         Auth::login($user);
+        
+        // Redirect to password change if using temporary password
+        if (!$user->password_changed) {
+            return redirect()->route('dashboard.settings')->with('warning', 'Please change your temporary password to continue.');
+        }
+        
         return redirect()->route('dashboard')->with('success', 'Login successful');
     }
 
@@ -235,6 +241,12 @@ class PagesController extends Controller
         }
 
         Auth::login($user);
+        
+        // Redirect to password change if using temporary password
+        if (!$user->password_changed) {
+            return redirect()->route('dashboard.settings')->with('warning', 'Please change your temporary password to continue.');
+        }
+        
         return redirect()->route('dashboard')->with('success', 'Login successful');
     }
 

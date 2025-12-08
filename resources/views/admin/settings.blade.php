@@ -158,13 +158,29 @@
                                 <div class="tab-pane fade" id="projects__two" role="tabpanel"
                                     aria-labelledby="projects__two">
 
+                                    @if(!auth()->user()->password_changed)
+                                    <div class="alert alert-warning" style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 24px; display: flex; align-items: center; gap: 12px;">
+                                        <i class="fas fa-exclamation-triangle" style="font-size: 20px; color: #92400e;"></i>
+                                        <div>
+                                            <strong style="color: #92400e; display: block; margin-bottom: 4px;">Password Change Required</strong>
+                                            <p style="margin: 0; color: #92400e; font-size: 14px;">You are using a temporary password. Please change it now to secure your account.</p>
+                                        </div>
+                                    </div>
+                                    @endif
+
+                                    @if(session('warning'))
+                                    <div class="alert alert-warning" style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
+                                        <i class="fas fa-exclamation-triangle"></i> {{ session('warning') }}
+                                    </div>
+                                    @endif
+
                                     <form action="{{ route('dashboard.password.update') }}" method="POST">
                                         @csrf
                                         <div class="row">
                                             <div class="col-xl-12">
                                                 <div class="dashboard__form__wraper">
                                                     <div class="dashboard__form__input">
-                                                        <label>Current Password</label>
+                                                        <label>Current Password {{ !auth()->user()->password_changed ? '(Temporary Password)' : '' }}</label>
                                                         <input type="password" name="current_password" placeholder="Enter your current password" required>
                                                         @error('current_password')
                                                             <span class="text-danger">{{ $message }}</span>

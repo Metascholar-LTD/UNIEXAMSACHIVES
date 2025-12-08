@@ -682,7 +682,49 @@ class HomeController extends Controller
     public function users(){
         return view('admin.users',[
             'users' => User::with('position')->get(),
+            'departments' => \App\Models\Department::orderBy('name')->get(),
+            'positions' => \App\Models\Position::orderBy('name')->get(),
         ]);
+    }
+
+    public function storeUser(Request $request)
+    {
+        $validatedData = $request->validate([
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'temporary_password' => 'required|string|min:8|confirmed',
+            'department_id' => 'required|exists:departments,id',
+            'staff_category' => 'required|string|in:Junior Staff,Senior Staff,Senior Member (Non-Teaching),Senior Member (Teaching)',
+            'position_id' => 'nullable|exists:positions,id',
+        ], [
+            'temporary_password.confirmed' => 'The password confirmation does not match.',
+            'temporary_password.min' => 'The password must be at least 8 characters.',
+            'email.unique' => 'This email is already registered.',
+        ]);
+
+        try {
+            $user = User::create([
+                'first_name' => $validatedData['first_name'],
+                'last_name' => $validatedData['last_name'],
+                'email' => $validatedData['email'],
+                'is_admin' => 1, // Admin users (those who manage committees)
+                'is_approve' => true, // Auto-approve since admin is adding them
+                'password_changed' => false, // Require password change on first login
+                'password' => Hash::make($validatedData['temporary_password']),
+                'department_id' => $validatedData['department_id'],
+                'staff_category' => $validatedData['staff_category'],
+                'position_id' => $validatedData['position_id'] ?? null,
+            ]);
+
+            return redirect()->route('dashboard.users')
+                ->with('success', "User '{$user->first_name} {$user->last_name}' has been added successfully. They will be required to change their password on first login.");
+        } catch (\Exception $e) {
+            \Log::error('Failed to add user: ' . $e->getMessage());
+            return redirect()->back()
+                ->withErrors(['error' => 'Failed to add user. Please try again.'])
+                ->withInput();
+        }
     }
 
     public function approve(User $user)

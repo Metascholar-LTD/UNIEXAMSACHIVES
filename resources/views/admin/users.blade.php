@@ -536,8 +536,15 @@
                     <div class="users-hero">
                         <div class="container">
                             <div class="users-hero-content">
-                                <h1 class="hero-title">Manage Users Account</h1>
-                                <p class="hero-subtitle">Administer user accounts and permissions</p>
+                                <div style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                                    <div>
+                                        <h1 class="hero-title">Manage Users Account</h1>
+                                        <p class="hero-subtitle">Administer user accounts and permissions</p>
+                                    </div>
+                                    <button type="button" class="add-user-btn" id="addUserBtn" style="background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: white; border: none; padding: 14px 28px; border-radius: 12px; font-weight: 600; font-size: 15px; cursor: pointer; box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3); transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;">
+                                        <i class="fas fa-user-plus"></i> Add User
+                                    </button>
+                                </div>
                                 
                                 <div class="hero-stats">
                                     <div class="stat-item">
@@ -739,6 +746,355 @@
         </div>
     </div>
 </div>
+<!-- Add User Modal -->
+<div id="addUserModal" class="add-user-modal" style="display: none;">
+    <div class="add-user-modal-overlay"></div>
+    <div class="add-user-modal-content">
+        <div class="add-user-modal-header">
+            <h3><i class="fas fa-user-plus"></i> Add New User</h3>
+            <button type="button" class="close-modal-btn" id="closeAddUserModal">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="add-user-modal-body">
+            <form id="addUserForm" method="POST" action="{{ route('users.store') }}">
+                @csrf
+                <div class="form-row">
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input type="text" name="first_name" id="add-user-firstname" class="animated-input" placeholder="First name" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-container">
+                            <input type="text" name="last_name" id="add-user-lastname" class="animated-input" placeholder="Last name" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-container">
+                        <input type="email" name="email" id="add-user-email" class="animated-input" placeholder="Enter email address" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-container">
+                        <select name="department_id" id="add-user-department" class="animated-input" required>
+                            <option value="" disabled selected>Choose Department/Faculty/Unit</option>
+                            @foreach($departments as $department)
+                                <option value="{{ $department->id }}">{{ $department->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-container">
+                        <select name="staff_category" id="add-user-staff-category" class="animated-input" required>
+                            <option value="" disabled selected>Choose Staff Category</option>
+                            <option value="Junior Staff">Junior Staff</option>
+                            <option value="Senior Staff">Senior Staff</option>
+                            <option value="Senior Member (Non-Teaching)">Senior Member (Non-Teaching)</option>
+                            <option value="Senior Member (Teaching)">Senior Member (Teaching)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-container">
+                        <select name="position_id" id="add-user-position" class="animated-input">
+                            <option value="" selected>Choose Position (Optional)</option>
+                            @foreach($positions as $position)
+                                <option value="{{ $position->id }}">{{ $position->name }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-container">
+                        <input type="password" name="temporary_password" id="add-user-password" class="animated-input" placeholder="Set temporary password" required minlength="8">
+                        <button type="button" class="password-toggle" onclick="toggleAddUserPassword()">
+                            <i class="icofont-eye"></i>
+                        </button>
+                    </div>
+                    <small class="form-text text-muted">User will be required to change this password on first login</small>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-container">
+                        <input type="password" name="temporary_password_confirmation" id="add-user-password-confirm" class="animated-input" placeholder="Confirm temporary password" required minlength="8">
+                        <button type="button" class="password-toggle" onclick="toggleAddUserPasswordConfirm()">
+                            <i class="icofont-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-actions-modal">
+                    <button type="button" class="cancel-btn" id="cancelAddUserBtn">Cancel</button>
+                    <button type="submit" class="submit-btn-modal">
+                        <i class="fas fa-user-plus"></i> Add User
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+.add-user-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.add-user-modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+}
+
+.add-user-modal-content {
+    position: relative;
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    max-width: 600px;
+    width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    z-index: 10001;
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.add-user-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 32px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.add-user-modal-header h3 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.close-modal-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #64748b;
+    cursor: pointer;
+    padding: 5px;
+    transition: color 0.2s;
+}
+
+.close-modal-btn:hover {
+    color: #1e293b;
+}
+
+.add-user-modal-body {
+    padding: 32px;
+}
+
+.form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-container {
+    position: relative;
+}
+
+.animated-input {
+    width: 100%;
+    padding: 18px 24px;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    font-size: 1rem;
+    background: #f8fafc;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    color: #0f172a;
+    font-weight: 500;
+    box-sizing: border-box;
+}
+
+.animated-input:focus {
+    border-color: #3b82f6;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+.password-toggle {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: #64748b;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 5px;
+}
+
+.form-text {
+    display: block;
+    margin-top: 8px;
+    font-size: 13px;
+    color: #64748b;
+}
+
+.form-actions-modal {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.cancel-btn {
+    padding: 14px 28px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    color: #64748b;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-btn:hover {
+    border-color: #cbd5e1;
+    background: #f8fafc;
+}
+
+.submit-btn-modal {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+}
+
+.submit-btn-modal:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+</style>
+
+<script>
+// Add User Modal Functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const addUserBtn = document.getElementById('addUserBtn');
+    const addUserModal = document.getElementById('addUserModal');
+    const closeModalBtn = document.getElementById('closeAddUserModal');
+    const cancelBtn = document.getElementById('cancelAddUserBtn');
+    
+    if (addUserBtn) {
+        addUserBtn.addEventListener('click', function() {
+            addUserModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+    }
+    
+    function closeModal() {
+        addUserModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+        document.getElementById('addUserForm').reset();
+    }
+    
+    if (closeModalBtn) {
+        closeModalBtn.addEventListener('click', closeModal);
+    }
+    
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', closeModal);
+    }
+    
+    // Close on overlay click
+    if (addUserModal) {
+        addUserModal.addEventListener('click', function(e) {
+            if (e.target.classList.contains('add-user-modal-overlay')) {
+                closeModal();
+            }
+        });
+    }
+});
+
+function toggleAddUserPassword() {
+    const passwordInput = document.getElementById('add-user-password');
+    const icon = event.target.closest('.password-toggle').querySelector('i');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('icofont-eye');
+        icon.classList.add('icofont-eye-blocked');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('icofont-eye-blocked');
+        icon.classList.add('icofont-eye');
+    }
+}
+
+function toggleAddUserPasswordConfirm() {
+    const passwordInput = document.getElementById('add-user-password-confirm');
+    const icon = event.target.closest('.password-toggle').querySelector('i');
+    if (passwordInput.type === 'password') {
+        passwordInput.type = 'text';
+        icon.classList.remove('icofont-eye');
+        icon.classList.add('icofont-eye-blocked');
+    } else {
+        passwordInput.type = 'password';
+        icon.classList.remove('icofont-eye-blocked');
+        icon.classList.add('icofont-eye');
+    }
+}
+</script>
+
 @endsection
 
 <script>

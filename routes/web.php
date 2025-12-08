@@ -215,6 +215,7 @@ Route::middleware(['auth'])->group(function () {
 
     #users
     Route::get('/dashboard/users',[HomeController::class, 'users'])->name('dashboard.users');
+    Route::post('/dashboard/users', [HomeController::class, 'storeUser'])->name('users.store');
     Route::post('/dashboard/users/{user}/approve', [HomeController::class, 'approve'])->name('users.approve');
     Route::post('/dashboard/users/{user}/disapprove', [HomeController::class, 'disapprove'])->name('users.disapprove');
     Route::delete('/dashboard/users/{user}', [HomeController::class, 'destroy'])->name('users.destroy');
