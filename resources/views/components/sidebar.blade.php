@@ -323,7 +323,7 @@
                             </svg>
                         </div>
                         <div class="section-text">
-                            <h6 class="section-title">COMMITTEES & BOARDS MANAGEMENT SYSTEM</h6>
+                            <h6 class="section-title">COMMITTEES & BOARDS MANAGEMENT SYSTEM (CBMS)</h6>
                             <span class="section-subtitle">Manage committees</span>
                         </div>
                         <div class="section-arrow">
@@ -360,7 +360,7 @@
                             </svg>
                         </div>
                         <div class="section-text">
-                            <h6 class="section-title">MY COMMITTEES & BOARDS</h6>
+                            <h6 class="section-title">COMMITTEES AND BOARDS MANAGEMENT SYSTEM (CBMS)</h6>
                             <span class="section-subtitle">View your committees</span>
                         </div>
                         <div class="section-arrow">
