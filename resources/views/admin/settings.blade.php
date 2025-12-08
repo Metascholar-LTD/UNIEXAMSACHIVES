@@ -168,12 +168,6 @@
                                     </div>
                                     @endif
 
-                                    @if(session('warning'))
-                                    <div class="alert alert-warning" style="background: #fef3c7; border: 1px solid #fcd34d; border-radius: 12px; padding: 16px; margin-bottom: 24px;">
-                                        <i class="fas fa-exclamation-triangle"></i> {{ session('warning') }}
-                                    </div>
-                                    @endif
-
                                     <form action="{{ route('dashboard.password.update') }}" method="POST">
                                         @csrf
                                         <div class="row">
