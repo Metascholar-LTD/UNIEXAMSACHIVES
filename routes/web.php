@@ -231,6 +231,7 @@ Route::middleware(['auth'])->group(function () {
 
     #committees & boards
     Route::resource('committees', \App\Http\Controllers\Dashboard\CommitteesController::class)->except(['show', 'create', 'edit']);
+    Route::get('/committees/{committee}/show', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'show'])->name('committees.show');
     Route::post('/committees/{committee}/add-users', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'addUsers'])->name('committees.add-users');
     Route::delete('/committees/{committee}/users/{user}', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'removeUser'])->name('committees.remove-user');
     Route::get('/committees/my-committees', [\App\Http\Controllers\Dashboard\CommitteesController::class, 'myCommittees'])->name('committees.my-committees');

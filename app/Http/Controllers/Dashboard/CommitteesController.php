@@ -50,6 +50,23 @@ class CommitteesController extends Controller
     }
 
     /**
+     * Display the specified committee/board details
+     */
+    public function show(Committee $committee)
+    {
+        // Check if user belongs to this committee
+        if (!Auth::user()->committees->contains($committee->id)) {
+            abort(403, 'You do not have access to this committee/board.');
+        }
+
+        $committee->load(['users' => function($query) {
+            $query->with('position')->orderBy('first_name');
+        }]);
+
+        return view('admin.committees.show', compact('committee'));
+    }
+
+    /**
      * Store a newly created committee/board
      */
     public function store(Request $request)

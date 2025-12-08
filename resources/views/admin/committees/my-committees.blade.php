@@ -3,7 +3,7 @@
 @push('styles')
 <style>
     .committees-header {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        background: #667eea;
         border-radius: 16px;
         padding: 2rem;
         margin-bottom: 2rem;
@@ -22,6 +22,10 @@
         color: rgba(255, 255, 255, 0.9);
         margin: 0;
         font-size: 1rem;
+    }
+    
+    .committee-card-link {
+        cursor: pointer;
     }
     
     .committee-card {
@@ -43,12 +47,23 @@
         left: 0;
         right: 0;
         height: 4px;
-        background: linear-gradient(90deg, #667eea, #764ba2);
+        background: #667eea;
     }
     
     .committee-card:hover {
         transform: translateY(-4px);
         box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        border-color: #667eea;
+    }
+    
+    .view-details-hint {
+        color: #667eea;
+        font-size: 0.875rem;
+        transition: transform 0.3s ease;
+    }
+    
+    .committee-card:hover .view-details-hint {
+        transform: translateX(4px);
     }
     
     .committee-card-header {
@@ -158,40 +173,36 @@
                             <div class="row">
                                 @foreach ($userCommittees as $committee)
                                 <div class="col-xl-4 col-lg-6 col-md-6 col-12 mb-4">
-                                    <div class="committee-card">
-                                        <div class="committee-card-header">
-                                            <h5 class="committee-title">{{ $committee->name }}</h5>
-                                            <span class="committee-status-badge badge bg-{{ $committee->status === 'active' ? 'success' : 'secondary' }}">
-                                                {{ ucfirst($committee->status) }}
-                                            </span>
-                                        </div>
-                                        
-                                        @if($committee->description)
-                                        <p class="committee-description">
-                                            {{ Str::limit($committee->description, 150) }}
-                                        </p>
-                                        @else
-                                        <p class="committee-description" style="font-style: italic; color: #94a3b8;">
-                                            No description provided
-                                        </p>
-                                        @endif
-                                        
-                                        <div class="committee-footer">
-                                            <div class="committee-members">
-                                                <i class="fas fa-users"></i>
-                                                <span><strong>{{ $committee->users->count() }}</strong> {{ $committee->users->count() === 1 ? 'member' : 'members' }}</span>
+                                    <a href="{{ route('committees.show', $committee->id) }}" class="committee-card-link" style="text-decoration: none; display: block;">
+                                        <div class="committee-card">
+                                            <div class="committee-card-header">
+                                                <h5 class="committee-title">{{ $committee->name }}</h5>
+                                                <span class="committee-status-badge badge bg-{{ $committee->status === 'active' ? 'success' : 'secondary' }}">
+                                                    {{ ucfirst($committee->status) }}
+                                                </span>
                                             </div>
-                                            @if($committee->status === 'active')
-                                                <span class="badge bg-success">
-                                                    <i class="fas fa-check-circle"></i> Active
-                                                </span>
+                                            
+                                            @if($committee->description)
+                                            <p class="committee-description">
+                                                {{ Str::limit($committee->description, 150) }}
+                                            </p>
                                             @else
-                                                <span class="badge bg-secondary">
-                                                    <i class="fas fa-pause-circle"></i> Inactive
-                                                </span>
+                                            <p class="committee-description" style="font-style: italic; color: #94a3b8;">
+                                                No description provided
+                                            </p>
                                             @endif
+                                            
+                                            <div class="committee-footer">
+                                                <div class="committee-members">
+                                                    <i class="fas fa-users"></i>
+                                                    <span><strong>{{ $committee->users->count() }}</strong> {{ $committee->users->count() === 1 ? 'member' : 'members' }}</span>
+                                                </div>
+                                                <div class="view-details-hint">
+                                                    <i class="fas fa-arrow-right"></i>
+                                                </div>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </a>
                                 </div>
                                 @endforeach
                             </div>
