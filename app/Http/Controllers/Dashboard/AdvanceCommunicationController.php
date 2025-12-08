@@ -103,7 +103,10 @@ class AdvanceCommunicationController extends Controller
                                             ->count(),
         ];
 
-        return view('admin.communication.create', compact('users', 'staffCategoryCounts'));
+        // Get active committees for selection (for users who manage committees/boards)
+        $committees = Committee::active()->withCount('users')->get();
+
+        return view('admin.communication.create', compact('users', 'staffCategoryCounts', 'committees'));
     }
 
     public function store(Request $request)
@@ -742,10 +745,7 @@ class AdvanceCommunicationController extends Controller
                                             ->count(),
         ];
 
-        // Get active committees for selection
-        $committees = Committee::active()->withCount('users')->get();
-
-        return view('admin.communication-admin.create', compact('users', 'staffCategoryCounts', 'committees'));
+        return view('admin.communication-admin.create', compact('users', 'staffCategoryCounts'));
     }
 
     public function adminStore(Request $request)
