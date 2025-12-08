@@ -397,6 +397,8 @@
                                                         <div class="option-card">
                                                             <input class="option-radio" type="radio" name="recipient_type" 
                                                                    id="committee_{{ $committee->id }}" value="committee_{{ $committee->id }}"
+                                                                   data-committee-name="{{ $committee->name }}"
+                                                                   data-committee-members="{{ $committee->users_count }}"
                                                                    {{ old('recipient_type') === 'committee_' . $committee->id ? 'checked' : '' }}>
                                                             <label class="option-label" for="committee_{{ $committee->id }}">
                                                                 <div class="option-icon">
@@ -2604,6 +2606,11 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (recipientType.value === 'selected') {
                 const selectedCount = Array.from(userCheckboxes).filter(checkbox => checkbox.checked).length;
                 modalRecipientsPreview.textContent = `${selectedCount} Selected User${selectedCount !== 1 ? 's' : ''}`;
+            } else if (recipientType.value.startsWith('committee_')) {
+                // Committee/Board
+                const committeeName = recipientType.getAttribute('data-committee-name') || 'Committee';
+                const memberCount = recipientType.getAttribute('data-committee-members') || '0';
+                modalRecipientsPreview.textContent = `${committeeName} (${memberCount} member${memberCount !== '1' ? 's' : ''})`;
             } else {
                 // Staff category
                 const categoryLabels = {
