@@ -107,8 +107,8 @@
         color: #1f2937;
     }
 
-    .licenses-table tbody tr:hover {
-        background: #f9fafb;
+    .licenses-table tbody tr {
+        background: white;
     }
 
     .status-badge {
@@ -422,16 +422,68 @@
         word-wrap: break-word;
     }
 
-    .license-name-link {
-        color: #3b82f6;
+    /* Clickable Row Styles */
+    .licenses-table tbody tr {
         cursor: pointer;
-        text-decoration: none;
-        transition: color 0.2s;
+        transition: all 0.2s ease;
+        position: relative;
     }
 
-    .license-name-link:hover {
-        color: #2563eb;
-        text-decoration: underline;
+    .licenses-table tbody tr:hover {
+        background: #f0f9ff !important;
+        transform: translateX(4px);
+        box-shadow: -4px 0 0 0 #3b82f6;
+    }
+
+    .licenses-table tbody tr:active {
+        transform: translateX(2px);
+        box-shadow: -2px 0 0 0 #2563eb;
+    }
+
+    .row-click-indicator {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 3px;
+        background: transparent;
+        transition: width 0.2s ease;
+    }
+
+    .licenses-table tbody tr:hover .row-click-indicator {
+        width: 4px;
+        background: #3b82f6;
+    }
+
+    .license-name-with-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .license-name-with-icon::after {
+        content: '→';
+        opacity: 0;
+        transform: translateX(-5px);
+        transition: all 0.2s ease;
+        color: #3b82f6;
+        font-weight: 600;
+    }
+
+    .licenses-table tbody tr:hover .license-name-with-icon::after {
+        opacity: 1;
+        transform: translateX(0);
+    }
+
+    /* Prevent action buttons from triggering row click */
+    .action-buttons,
+    .action-buttons * {
+        cursor: default;
+        pointer-events: auto;
+    }
+
+    .licenses-table tbody tr:hover .action-buttons {
+        opacity: 1;
     }
 
     /* Pagination Styles */
@@ -617,14 +669,12 @@
                 <tbody>
                     @if ($licenses->count() > 0)
                         @foreach ($licenses as $license)
-                        <tr>
+                        <tr onclick="event.stopPropagation(); openLicenseModal('{{ addslashes($license->name) }}', '{{ addslashes($license->description) }}')">
                             <td>{{ $licenses->firstItem() + $loop->index }}</td>
                             <td>
-                                <strong>
-                                    <a href="#" class="license-name-link" onclick="openLicenseModal('{{ addslashes($license->name) }}', '{{ addslashes($license->description) }}'); return false;">
-                                        {{ $license->name }}
-                                    </a>
-                                </strong>
+                                <div class="license-name-with-icon">
+                                    <strong>{{ $license->name }}</strong>
+                                </div>
                             </td>
                             <td>{{ Str::limit($license->description, 80) }}</td>
                             <td>
@@ -632,7 +682,7 @@
                                     {{ $license->is_active ? 'Active' : 'Inactive' }}
                                 </span>
                             </td>
-                            <td>
+                            <td onclick="event.stopPropagation()">
                                 <div class="action-buttons">
                                     <form action="{{ route('super-admin.licenses.toggle-status', $license->id) }}" method="POST" style="display: inline;">
                                         @csrf
