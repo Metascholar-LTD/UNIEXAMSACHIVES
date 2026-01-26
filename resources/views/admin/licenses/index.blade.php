@@ -320,6 +320,33 @@
         word-wrap: break-word;
     }
 
+    .license-modal-status {
+        margin-top: 1.5rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #f3f4f6;
+    }
+
+    .license-modal-status-badge {
+        display: inline-flex;
+        align-items: center;
+        padding: 0.5rem 1rem;
+        border-radius: 0.5rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+    }
+
+    .license-modal-status-badge.active {
+        background-color: #d1fae5;
+        color: #065f46;
+        border: 1px solid #10b981;
+    }
+
+    .license-modal-status-badge.inactive {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #ef4444;
+    }
+
     /* Clickable Row Styles */
     .licenses-table tbody tr {
         cursor: pointer;
@@ -409,7 +436,7 @@
                                             <tbody>
                                                 @if ($licenses->count() > 0)
                                                     @foreach ($licenses as $license)
-                                                    <tr onclick="openLicenseModal('{{ addslashes($license->name) }}', '{{ addslashes($license->description) }}')">
+                                                    <tr onclick="openLicenseModal('{{ addslashes($license->name) }}', '{{ addslashes($license->description) }}', {{ $license->is_active ? 'true' : 'false' }})">
                                                         <td>{{ $licenses->firstItem() + $loop->index }}</td>
                                                         <td>
                                                             <div class="license-name-with-icon">
@@ -546,6 +573,12 @@
             <div class="license-modal-name" id="modalLicenseName"></div>
             <span class="license-modal-label">Full Description</span>
             <div class="license-modal-description" id="modalLicenseDescription"></div>
+            <div class="license-modal-status">
+                <span class="license-modal-label">Status</span>
+                <div>
+                    <span class="license-modal-status-badge" id="modalLicenseStatus"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -560,9 +593,19 @@ function changePageSize(size) {
 }
 
 // Open license detail modal
-function openLicenseModal(name, description) {
+function openLicenseModal(name, description, isActive) {
     document.getElementById('modalLicenseName').textContent = name;
     document.getElementById('modalLicenseDescription').textContent = description;
+    
+    const statusBadge = document.getElementById('modalLicenseStatus');
+    if (isActive) {
+        statusBadge.textContent = 'Active';
+        statusBadge.className = 'license-modal-status-badge active';
+    } else {
+        statusBadge.textContent = 'Inactive';
+        statusBadge.className = 'license-modal-status-badge inactive';
+    }
+    
     document.getElementById('licenseDetailModal').classList.add('show');
     document.body.style.overflow = 'hidden';
 }
