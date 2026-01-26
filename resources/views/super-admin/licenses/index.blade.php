@@ -809,14 +809,12 @@
                                     </form>
                                     <button class="btn-action btn-edit" onclick="openEditModal({{ $license->id }}, '{{ $license->name }}', '{{ addslashes($license->description) }}', {{ $license->is_active ? 'true' : 'false' }})">
                                         <i class="icofont-edit"></i>
-                                        Edit
                                     </button>
                                     <form action="{{ route('super-admin.licenses.destroy', $license->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this license?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-action btn-delete">
                                             <i class="icofont-trash"></i>
-                                            Delete
                                         </button>
                                     </form>
                                 </div>
