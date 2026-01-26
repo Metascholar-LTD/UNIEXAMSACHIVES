@@ -309,15 +309,16 @@
         border: 1px solid #ef4444;
     }
 
-    /* Pagination Styles */
+    /* Pagination Styles - Compact */
     .pagination {
         display: flex;
         justify-content: center;
         align-items: center;
-        gap: 0.5rem;
+        gap: 0.25rem;
         list-style: none;
-        padding: 0;
+        padding: 0.75rem 0;
         margin: 0;
+        font-size: 0.875rem;
     }
 
     .pagination li {
@@ -329,13 +330,15 @@
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        padding: 0.5rem 0.75rem;
+        padding: 0.25rem 0.5rem;
         border: 1px solid #e5e7eb;
-        border-radius: 0.375rem;
+        border-radius: 0.25rem;
         color: #374151;
         text-decoration: none;
-        font-weight: 500;
-        min-width: 2.5rem;
+        font-weight: 400;
+        font-size: 0.875rem;
+        min-width: 1.75rem;
+        height: 1.75rem;
         transition: all 0.2s;
     }
 
@@ -349,6 +352,7 @@
         background-color: #3b82f6;
         color: white;
         border-color: #3b82f6;
+        font-weight: 500;
     }
 
     .pagination .disabled span {
@@ -443,7 +447,7 @@
         
         {{-- Pagination --}}
         @if($licenses->hasPages())
-        <div style="padding: 1.5rem; border-top: 1px solid #e5e7eb;">
+        <div style="padding: 0.75rem 1.5rem; border-top: 1px solid #e5e7eb;">
             {{ $licenses->links() }}
         </div>
         @endif
