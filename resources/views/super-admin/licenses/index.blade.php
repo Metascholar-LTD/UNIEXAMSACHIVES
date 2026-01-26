@@ -309,6 +309,131 @@
         border: 1px solid #ef4444;
     }
 
+    /* License Detail Modal */
+    .license-modal {
+        display: none;
+        position: fixed;
+        z-index: 10000;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(2px);
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    .license-modal.show {
+        display: flex;
+    }
+
+    .license-modal-content {
+        background: white;
+        border-radius: 0.75rem;
+        max-width: 600px;
+        width: 100%;
+        max-height: 90vh;
+        overflow-y: auto;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        border: 1px solid #e5e7eb;
+        animation: modalSlideIn 0.3s ease-out;
+    }
+
+    @keyframes modalSlideIn {
+        from {
+            opacity: 0;
+            transform: translateY(-20px) scale(0.95);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+    }
+
+    .license-modal-header {
+        padding: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f9fafb;
+        border-radius: 0.75rem 0.75rem 0 0;
+    }
+
+    .license-modal-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 0;
+    }
+
+    .license-modal-close {
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        color: #6b7280;
+        cursor: pointer;
+        padding: 0.25rem;
+        line-height: 1;
+        transition: color 0.2s;
+        width: 2rem;
+        height: 2rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 0.375rem;
+    }
+
+    .license-modal-close:hover {
+        color: #1f2937;
+        background: #f3f4f6;
+    }
+
+    .license-modal-body {
+        padding: 1.5rem;
+    }
+
+    .license-modal-label {
+        font-size: 0.875rem;
+        font-weight: 600;
+        color: #6b7280;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 0.5rem;
+        display: block;
+    }
+
+    .license-modal-name {
+        font-size: 1.125rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        padding-bottom: 1rem;
+        border-bottom: 1px solid #f3f4f6;
+    }
+
+    .license-modal-description {
+        font-size: 0.9375rem;
+        color: #374151;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+    }
+
+    .license-name-link {
+        color: #3b82f6;
+        cursor: pointer;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+    .license-name-link:hover {
+        color: #2563eb;
+        text-decoration: underline;
+    }
+
     /* Pagination Styles */
     .pagination-wrapper {
         display: flex;
@@ -494,8 +619,14 @@
                         @foreach ($licenses as $license)
                         <tr>
                             <td>{{ $licenses->firstItem() + $loop->index }}</td>
-                            <td><strong>{{ $license->name }}</strong></td>
-                            <td>{{ $license->description }}</td>
+                            <td>
+                                <strong>
+                                    <a href="#" class="license-name-link" onclick="openLicenseModal('{{ addslashes($license->name) }}', '{{ addslashes($license->description) }}'); return false;">
+                                        {{ $license->name }}
+                                    </a>
+                                </strong>
+                            </td>
+                            <td>{{ Str::limit($license->description, 80) }}</td>
                             <td>
                                 <span class="status-badge {{ $license->is_active ? 'active' : 'inactive' }}">
                                     {{ $license->is_active ? 'Active' : 'Inactive' }}
@@ -699,6 +830,11 @@ window.onclick = function(event) {
     if (event.target == modal) {
         closeModal();
     }
+    
+    const detailModal = document.getElementById('licenseDetailModal');
+    if (event.target == detailModal) {
+        closeLicenseModal();
+    }
 }
 
 // Change page size
@@ -708,5 +844,43 @@ function changePageSize(size) {
     url.searchParams.set('page', '1'); // Reset to first page
     window.location.href = url.toString();
 }
+
+// Open license detail modal
+function openLicenseModal(name, description) {
+    document.getElementById('modalLicenseName').textContent = name;
+    document.getElementById('modalLicenseDescription').textContent = description;
+    document.getElementById('licenseDetailModal').classList.add('show');
+    document.body.style.overflow = 'hidden';
+}
+
+// Close license detail modal
+function closeLicenseModal() {
+    document.getElementById('licenseDetailModal').classList.remove('show');
+    document.body.style.overflow = '';
+}
+
+// Close modal with Escape key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        closeLicenseModal();
+        closeModal();
+    }
+});
 </script>
+
+<!-- License Detail Modal -->
+<div id="licenseDetailModal" class="license-modal">
+    <div class="license-modal-content">
+        <div class="license-modal-header">
+            <h3 class="license-modal-title">License Details</h3>
+            <button class="license-modal-close" onclick="closeLicenseModal()">&times;</button>
+        </div>
+        <div class="license-modal-body">
+            <span class="license-modal-label">License Name</span>
+            <div class="license-modal-name" id="modalLicenseName"></div>
+            <span class="license-modal-label">Full Description</span>
+            <div class="license-modal-description" id="modalLicenseDescription"></div>
+        </div>
+    </div>
+</div>
 @endsection
