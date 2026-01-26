@@ -2369,6 +2369,7 @@ li {
   }
 }
 .mode_switcher.my_switcher {
+  display: none !important;
   position: fixed;
   right: -50px;
   top: 100px;
