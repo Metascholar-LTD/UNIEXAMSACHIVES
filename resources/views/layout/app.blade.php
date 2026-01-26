@@ -46,9 +46,6 @@
 
     {{-- preloader --}}
     @include('components.preloader')
-
-    {{-- dark/light skin --}}
-    @include('components.dark_light')
     
     {{-- modern notifications --}}
     @include('components.modern-notifications')
