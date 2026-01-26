@@ -13,7 +13,7 @@ class LicenseController extends Controller
      */
     public function index()
     {
-        $licenses = License::orderBy('name')->orderBy('created_at')->get();
+        $licenses = License::orderBy('name')->orderBy('created_at')->paginate(20);
         
         return view('super-admin.licenses.index', compact('licenses'));
     }

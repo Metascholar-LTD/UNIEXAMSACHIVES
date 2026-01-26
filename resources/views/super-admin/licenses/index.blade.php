@@ -308,6 +308,54 @@
         color: #991b1b;
         border: 1px solid #ef4444;
     }
+
+    /* Pagination Styles */
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 0.5rem;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .pagination li {
+        display: inline-block;
+    }
+
+    .pagination a,
+    .pagination span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.375rem;
+        color: #374151;
+        text-decoration: none;
+        font-weight: 500;
+        min-width: 2.5rem;
+        transition: all 0.2s;
+    }
+
+    .pagination a:hover {
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+
+    .pagination .active span {
+        background-color: #3b82f6;
+        color: white;
+        border-color: #3b82f6;
+    }
+
+    .pagination .disabled span {
+        color: #9ca3af;
+        cursor: not-allowed;
+        background-color: #f9fafb;
+    }
 </style>
 @endpush
 
@@ -348,10 +396,10 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @if (count($licenses) > 0)
-                        @foreach ($licenses as $index => $license)
+                    @if ($licenses->count() > 0)
+                        @foreach ($licenses as $license)
                         <tr>
-                            <td>{{ $index + 1 }}</td>
+                            <td>{{ $licenses->firstItem() + $loop->index }}</td>
                             <td><strong>{{ $license->name }}</strong></td>
                             <td>{{ $license->description }}</td>
                             <td>
@@ -392,6 +440,13 @@
                 </tbody>
             </table>
         </div>
+        
+        {{-- Pagination --}}
+        @if($licenses->hasPages())
+        <div style="padding: 1.5rem; border-top: 1px solid #e5e7eb;">
+            {{ $licenses->links() }}
+        </div>
+        @endif
     </div>
 </div>
 
