@@ -513,6 +513,94 @@
         opacity: 1;
     }
 
+    /* Search and Filter Styles */
+    .search-filter-container {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+
+    .search-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .search-input {
+        padding: 0.625rem 2.5rem 0.625rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        width: 220px;
+        transition: all 0.2s;
+        background: white;
+        color: #374151;
+    }
+
+    .search-input:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .search-input::placeholder {
+        color: #9ca3af;
+    }
+
+    .search-icon {
+        position: absolute;
+        right: 0.75rem;
+        color: #6b7280;
+        pointer-events: none;
+    }
+
+    .filter-select {
+        padding: 0.625rem 2rem 0.625rem 1rem;
+        border: 1px solid #d1d5db;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        background: white;
+        color: #374151;
+        cursor: pointer;
+        transition: all 0.2s;
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 0.75rem center;
+        background-size: 12px;
+        padding-right: 2.5rem;
+    }
+
+    .filter-select:hover {
+        border-color: #9ca3af;
+    }
+
+    .filter-select:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    @media (max-width: 768px) {
+        .page-header-modern {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .search-filter-container {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        .search-input {
+            width: 100%;
+        }
+
+        .filter-select {
+            flex: 1;
+        }
+    }
+
     /* Pagination Styles */
     .pagination-wrapper {
         display: flex;
@@ -663,15 +751,28 @@
         <div class="page-header-left">
             <h1 class="page-header-title">System Licences</h1>
         </div>
-        <button class="btn-add" onclick="openAddModal()">
-            <i class="icofont-plus"></i>
-            Add New Licence
-        </button>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <div class="search-filter-container">
+                <div class="search-wrapper">
+                    <input type="text" class="search-input" id="licenseSearchInput" placeholder="Search licenses...">
+                    <i class="icofont-search-1 search-icon"></i>
+                </div>
+                <select class="filter-select" id="licenseStatusFilter">
+                    <option value="all">All Status</option>
+                    <option value="active">Active Only</option>
+                    <option value="inactive">Inactive Only</option>
+                </select>
+            </div>
+            <button class="btn-add" onclick="openAddModal()">
+                <i class="icofont-plus"></i>
+                Add New Licence
+            </button>
+        </div>
     </div>
 
     <div class="modern-card">
-        <div class="table-container">
-            <table class="licenses-table">
+                                    <div class="table-container">
+            <table class="licenses-table" id="licensesTable">
                 <thead>
                     <tr>
                         <th>S/N</th>
@@ -939,6 +1040,55 @@ document.addEventListener('keydown', function(event) {
     if (event.key === 'Escape') {
         closeLicenseModal();
         closeModal();
+    }
+});
+
+// Search and Filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('licenseSearchInput');
+    const statusFilter = document.getElementById('licenseStatusFilter');
+    const tableRows = document.querySelectorAll('#licensesTable tbody tr');
+
+    function performSearchAndFilter() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const statusValue = statusFilter.value;
+
+        tableRows.forEach(row => {
+            const licenseName = row.cells[1].textContent.toLowerCase();
+            const description = row.cells[2].textContent.toLowerCase();
+            const statusBadge = row.cells[3].querySelector('.status-badge');
+            const isActive = statusBadge && statusBadge.classList.contains('active');
+
+            // Search filter
+            const matchesSearch = searchTerm === '' || 
+                                 licenseName.includes(searchTerm) || 
+                                 description.includes(searchTerm);
+
+            // Status filter
+            let matchesStatus = true;
+            if (statusValue === 'active') {
+                matchesStatus = isActive;
+            } else if (statusValue === 'inactive') {
+                matchesStatus = !isActive;
+            }
+
+            // Show/hide row
+            if (matchesSearch && matchesStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    }
+
+    // Search on input
+    if (searchInput) {
+        searchInput.addEventListener('input', performSearchAndFilter);
+    }
+
+    // Filter on change
+    if (statusFilter) {
+        statusFilter.addEventListener('change', performSearchAndFilter);
     }
 });
 </script>
