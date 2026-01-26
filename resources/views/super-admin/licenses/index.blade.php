@@ -133,19 +133,11 @@
 
     .action-buttons {
         display: flex;
-        align-items: center;
         gap: 0.5rem;
-        flex-wrap: nowrap;
-    }
-
-    .action-buttons form {
-        display: inline-flex;
-        margin: 0;
-        padding: 0;
     }
 
     .btn-action {
-        padding: 0.5rem 0.875rem;
+        padding: 0.5rem 1rem;
         border: none;
         border-radius: 0.375rem;
         font-weight: 600;
@@ -155,17 +147,12 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
-        justify-content: center;
         gap: 0.375rem;
-        height: 2.25rem;
-        white-space: nowrap;
-        box-sizing: border-box;
     }
 
     .btn-toggle {
         background-color: #f59e0b;
         color: white;
-        min-width: fit-content;
     }
 
     .btn-toggle:hover {
@@ -176,12 +163,6 @@
         background-color: #f3f4f6;
         color: #1f2937;
         border: 1px solid #e5e7eb;
-        width: 2.25rem;
-        padding: 0.5rem;
-    }
-
-    .btn-edit i {
-        color: #1f2937;
     }
 
     .btn-edit:hover {
@@ -189,21 +170,23 @@
         border-color: #d1d5db;
     }
 
-    .btn-delete {
-        background-color: #fee2e2;
-        color: #991b1b;
-        border: 1px solid #fecaca;
-        width: 2.25rem;
-        padding: 0.5rem;
+    .btn-edit i {
+        color: #1f2937;
     }
 
-    .btn-delete i {
-        color: #991b1b;
+    .btn-delete {
+        background-color: #fee2e2;
+        color: #1f2937;
+        border: 1px solid #fecaca;
     }
 
     .btn-delete:hover {
         background-color: #fecaca;
         border-color: #fca5a5;
+    }
+
+    .btn-delete i {
+        color: #1f2937;
     }
 
     .modal {
@@ -829,17 +812,17 @@
                             </td>
                             <td onclick="event.stopPropagation()">
                                 <div class="action-buttons">
-                                    <form action="{{ route('super-admin.licenses.toggle-status', $license->id) }}" method="POST" style="display: inline-flex; margin: 0;">
+                                    <form action="{{ route('super-admin.licenses.toggle-status', $license->id) }}" method="POST" style="display: inline;">
                                         @csrf
                                         <button type="submit" class="btn-action btn-toggle">
                                             <i class="icofont-{{ $license->is_active ? 'eye-blocked' : 'eye' }}"></i>
-                                            <span>{{ $license->is_active ? 'Deactivate' : 'Activate' }}</span>
+                                            {{ $license->is_active ? 'Deactivate' : 'Activate' }}
                                         </button>
                                     </form>
                                     <button class="btn-action btn-edit" onclick="openEditModal({{ $license->id }}, '{{ $license->name }}', '{{ addslashes($license->description) }}', {{ $license->is_active ? 'true' : 'false' }})">
                                         <i class="icofont-edit"></i>
                                     </button>
-                                    <form action="{{ route('super-admin.licenses.destroy', $license->id) }}" method="POST" style="display: inline-flex; margin: 0;" onsubmit="return confirm('Are you sure you want to delete this license?');">
+                                    <form action="{{ route('super-admin.licenses.destroy', $license->id) }}" method="POST" style="display: inline;" onsubmit="return confirm('Are you sure you want to delete this license?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="btn-action btn-delete">
