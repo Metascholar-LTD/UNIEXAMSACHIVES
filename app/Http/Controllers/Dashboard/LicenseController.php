@@ -11,9 +11,10 @@ class LicenseController extends Controller
     /**
      * Display a listing of licenses (view-only for regular users/admins)
      */
-    public function index()
+    public function index(Request $request)
     {
-        $licenses = License::orderBy('name')->orderBy('created_at')->get();
+        $perPage = $request->get('per_page', 10);
+        $licenses = License::orderBy('name')->orderBy('created_at')->paginate($perPage)->withQueryString();
         
         return view('admin.licenses.index', compact('licenses'));
     }
