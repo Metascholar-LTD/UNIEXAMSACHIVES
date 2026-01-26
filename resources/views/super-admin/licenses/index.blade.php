@@ -669,18 +669,6 @@
         </button>
     </div>
 
-    @if(session('success'))
-        <div class="alert alert-success">
-            {{ session('success') }}
-        </div>
-    @endif
-
-    @if(session('error'))
-        <div class="alert alert-error">
-            {{ session('error') }}
-        </div>
-    @endif
-
     <div class="modern-card">
         <div class="table-container">
             <table class="licenses-table">

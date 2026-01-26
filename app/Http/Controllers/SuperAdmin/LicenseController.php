@@ -27,10 +27,11 @@ class LicenseController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'is_active' => 'boolean',
         ]);
 
-        $validated['is_active'] = $request->has('is_active') ? true : false;
+        // Handle checkbox: HTML checkboxes send "on" when checked, nothing when unchecked
+        // filled() checks if field exists and is not empty - perfect for checkboxes
+        $validated['is_active'] = $request->filled('is_active');
 
         License::create($validated);
 
@@ -48,10 +49,11 @@ class LicenseController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'required|string',
-            'is_active' => 'boolean',
         ]);
 
-        $validated['is_active'] = $request->has('is_active') ? true : false;
+        // Handle checkbox: HTML checkboxes send "on" when checked, nothing when unchecked
+        // filled() checks if field exists and is not empty - perfect for checkboxes
+        $validated['is_active'] = $request->filled('is_active');
 
         $license->update($validated);
 
