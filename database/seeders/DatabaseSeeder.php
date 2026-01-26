@@ -15,6 +15,11 @@ class DatabaseSeeder extends Seeder
     {
         User::factory(1)->create();
 
+        // Seed licenses
+        $this->call([
+            LicenseSeeder::class,
+        ]);
+
         // User::factory()->create([
         //     'first_name' => 'Test User',
         //     'email' => 'test@example.com',

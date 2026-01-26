@@ -213,6 +213,9 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/dashboard/update-user-info',[HomeController::class,'updateUserInfo'])->name('dashboard.user.info');
     Route::post('/dashboard/update-password',[HomeController::class,'updatePassword'])->name('dashboard.password.update');
 
+    #licenses
+    Route::get('/dashboard/system-licences',[\App\Http\Controllers\Dashboard\LicenseController::class, 'index'])->name('dashboard.system-licences');
+
     #users
     Route::get('/dashboard/users',[HomeController::class, 'users'])->name('dashboard.users');
     Route::post('/dashboard/users', [HomeController::class, 'storeUser'])->name('users.store');
@@ -346,6 +349,13 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])-
     Route::post('/maintenance/{id}/rollback', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'rollback'])->name('maintenance.rollback');
     Route::post('/maintenance/{id}/approve', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'approve'])->name('maintenance.approve');
     Route::post('/maintenance/{id}/notify', [\App\Http\Controllers\SuperAdmin\MaintenanceController::class, 'notifyUsers'])->name('maintenance.notify');
+    
+    // License Management
+    Route::get('/system-licences', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'index'])->name('system-licences');
+    Route::post('/licenses', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'store'])->name('licenses.store');
+    Route::put('/licenses/{id}', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'update'])->name('licenses.update');
+    Route::post('/licenses/{id}/toggle-status', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'toggleStatus'])->name('licenses.toggle-status');
+    Route::delete('/licenses/{id}', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'destroy'])->name('licenses.destroy');
     
     // System Settings
     Route::get('/settings', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'index'])->name('settings.index');

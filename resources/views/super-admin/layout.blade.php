@@ -354,6 +354,12 @@
                 </a>
             </li>
             <li>
+                <a href="{{ route('super-admin.system-licences') }}" class="{{ request()->routeIs('super-admin.system-licences') ? 'active' : '' }}">
+                    <i class="icofont-file-document"></i>
+                    <span>System Licences</span>
+                </a>
+            </li>
+            <li>
                 <a href="{{ route('super-admin.settings.index') }}" class="{{ request()->routeIs('super-admin.settings.*') ? 'active' : '' }}">
                     <i class="icofont-settings-alt"></i>
                     <span>Settings</span>
