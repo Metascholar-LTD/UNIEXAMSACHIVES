@@ -79,6 +79,7 @@
 
     .table-container {
         overflow-x: auto;
+        overflow-y: visible;
     }
 
     .licenses-table {
@@ -431,13 +432,12 @@
 
     .licenses-table tbody tr:hover {
         background: #f0f9ff !important;
-        transform: translateX(4px);
         box-shadow: -4px 0 0 0 #3b82f6;
     }
 
     .licenses-table tbody tr:active {
-        transform: translateX(2px);
         box-shadow: -2px 0 0 0 #2563eb;
+        background: #e0f2fe !important;
     }
 
     .row-click-indicator {
