@@ -541,6 +541,11 @@ function attachPasswordStrengthListener() {
 
         strengthContainer.classList.add(evaluation.level);
 
+        // Let CSS classes control the bar width/color when there is input
+        if (fillEl) {
+            fillEl.style.width = '';
+        }
+
         if (valueSpan) {
             valueSpan.textContent = evaluation.label;
         }
