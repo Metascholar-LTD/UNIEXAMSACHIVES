@@ -84,6 +84,9 @@
         display: flex;
         flex-direction: column;
         gap: 0.25rem;
+        /* Visually attach to password field, give breathing room above button */
+        margin-top: 0.35rem;
+        margin-bottom: 0.85rem;
     }
 
     .password-strength-label {
@@ -355,7 +358,7 @@
 
                         <div class="form-group">
                             <div class="input-container">
-                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a temporary password" required>
+                                <input type="password" name="password" id="register-password" class="animated-input" placeholder="Create a password" required>
                                 <button type="button" class="password-toggle" onclick="togglePassword('register-password')">
                                     <i class="icofont-eye"></i>
                                 </button>
@@ -373,7 +376,7 @@
                             </div>
                         </div>
 
-                        <button type="submit" class="submit-btn">
+                        <button type="submit" class="submit-btn" id="register-submit-btn" disabled>
                             <span>Create Account</span>
                             <div class="btn-ripple"></div>
                         </button>
@@ -518,6 +521,7 @@ function evaluatePasswordStrength(password) {
 function attachPasswordStrengthListener() {
     const passwordInput = document.getElementById('register-password');
     const strengthContainer = document.getElementById('register-password-strength');
+    const submitBtn = document.getElementById('register-submit-btn');
 
     if (!passwordInput || !strengthContainer) return;
 
@@ -536,6 +540,7 @@ function attachPasswordStrengthListener() {
             if (valueSpan) valueSpan.textContent = '';
             if (messageEl) messageEl.textContent = '';
             if (fillEl) fillEl.style.width = '0%';
+            if (submitBtn) submitBtn.disabled = true;
             return;
         }
 
@@ -552,6 +557,11 @@ function attachPasswordStrengthListener() {
 
         if (messageEl) {
             messageEl.textContent = evaluation.message;
+        }
+
+        // Enable submit only when password is strong
+        if (submitBtn) {
+            submitBtn.disabled = evaluation.level !== 'strong';
         }
     }
 
