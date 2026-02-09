@@ -16,31 +16,8 @@
                     <!-- Intentionally left empty for auth pages -->
                 </div>
 
-                <!-- Right: Language Switcher -->
+                <!-- Right: Empty on auth pages -->
                 <div class="uda-nav-right">
-                    <div class="language-switcher">
-                        <button class="language-btn" id="languageToggle" title="Change Language">
-                            <i class="icofont-globe"></i>
-                        </button>
-                        <div class="language-dropdown" id="languageDropdown">
-                            <a href="#" class="language-option" data-lang="en">
-                                <span class="flag">🇺🇸</span>
-                                <span class="lang-name">English</span>
-                            </a>
-                            <a href="#" class="language-option" data-lang="fr">
-                                <span class="flag">🇫🇷</span>
-                                <span class="lang-name">Français</span>
-                            </a>
-                            <a href="#" class="language-option" data-lang="es">
-                                <span class="flag">🇪🇸</span>
-                                <span class="lang-name">Español</span>
-                            </a>
-                            <a href="#" class="language-option" data-lang="ar">
-                                <span class="flag">🇸🇦</span>
-                                <span class="lang-name">العربية</span>
-                            </a>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -59,30 +36,6 @@
                 <div class="col-6">
                     <div class="header-right-wrap">
                         <div class="headerarea__right">
-                            <!-- Mobile Language Switcher -->
-                            <div class="language-switcher mobile-language-switcher">
-                                <button class="language-btn mobile-language-btn" id="mobileLanguageToggle" title="Change Language">
-                                    <i class="icofont-globe"></i>
-                                </button>
-                                <div class="language-dropdown mobile-language-dropdown" id="mobileLanguageDropdown">
-                                    <a href="#" class="language-option" data-lang="en">
-                                        <span class="flag">🇺🇸</span>
-                                        <span class="lang-name">English</span>
-                                    </a>
-                                    <a href="#" class="language-option" data-lang="fr">
-                                        <span class="flag">🇫🇷</span>
-                                        <span class="lang-name">Français</span>
-                                    </a>
-                                    <a href="#" class="language-option" data-lang="es">
-                                        <span class="flag">🇪🇸</span>
-                                        <span class="lang-name">Español</span>
-                                    </a>
-                                    <a href="#" class="language-option" data-lang="ar">
-                                        <span class="flag">🇸🇦</span>
-                                        <span class="lang-name">العربية</span>
-                                    </a>
-                                </div>
-                            </div>
                         </div>
                         <div class="mobile-off-canvas">
                             <!-- Intentionally left empty for auth pages -->
