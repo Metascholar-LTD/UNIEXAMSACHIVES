@@ -80,21 +80,6 @@
     }
 
     /* Password hint & strength meter */
-    .password-helper {
-        margin-top: 0.5rem;
-        font-size: 0.85rem;
-    }
-
-    .password-hint {
-        margin: 0 0 0.35rem 0;
-        color: #4b5563;
-    }
-
-    .password-hint strong {
-        font-weight: 600;
-        color: #111827;
-    }
-
     .password-strength {
         display: flex;
         flex-direction: column;
@@ -375,23 +360,16 @@
                                     <i class="icofont-eye"></i>
                                 </button>
                             </div>
-                            <div class="password-helper">
-                                <p class="password-hint">
-                                    <strong>Security tip:</strong> Passwords must be <strong>more than 8 characters</strong> and should mix letters, numbers, and symbols.
-                                </p>
-                                <div class="password-strength weak" id="register-password-strength">
-                                    <div class="password-strength-label">
-                                        <span class="strength-icon"></span>
-                                        <span>Strength:</span>
-                                        <span class="strength-value">Too short</span>
-                                    </div>
-                                    <div class="password-strength-bar">
-                                        <span class="password-strength-fill"></span>
-                                    </div>
-                                    <p class="password-strength-message">
-                                        Your password is currently weak. Add more characters and variety to protect your account.
-                                    </p>
+                            <div class="password-strength" id="register-password-strength">
+                                <div class="password-strength-label">
+                                    <span class="strength-icon"></span>
+                                    <span>Strength:</span>
+                                    <span class="strength-value"></span>
                                 </div>
+                                <div class="password-strength-bar">
+                                    <span class="password-strength-fill"></span>
+                                </div>
+                                <p class="password-strength-message"></p>
                             </div>
                         </div>
 
@@ -515,6 +493,10 @@ document.addEventListener('click', function(e) {
 
 // Simple password strength evaluator for the register form
 function evaluatePasswordStrength(password) {
+    if (!password) {
+        return { level: '', label: '', message: '' };
+    }
+
     let score = 0;
 
     if (password.length >= 9) score++; // more than 8 chars
@@ -542,10 +524,21 @@ function attachPasswordStrengthListener() {
     const valueSpan = strengthContainer.querySelector('.strength-value');
     const messageEl = strengthContainer.querySelector('.password-strength-message');
 
+    const fillEl = strengthContainer.querySelector('.password-strength-fill');
+
     function updateStrength() {
-        const evaluation = evaluatePasswordStrength(passwordInput.value);
+        const value = passwordInput.value;
+        const evaluation = evaluatePasswordStrength(value);
 
         strengthContainer.classList.remove('weak', 'medium', 'strong');
+
+        if (!value) {
+            if (valueSpan) valueSpan.textContent = '';
+            if (messageEl) messageEl.textContent = '';
+            if (fillEl) fillEl.style.width = '0%';
+            return;
+        }
+
         strengthContainer.classList.add(evaluation.level);
 
         if (valueSpan) {
@@ -557,7 +550,7 @@ function attachPasswordStrengthListener() {
         }
     }
 
-    // Evaluate on input and on initial load
+    // Evaluate on input and on initial load (which keeps bar empty until typing)
     passwordInput.addEventListener('input', updateStrength);
     updateStrength();
 }
