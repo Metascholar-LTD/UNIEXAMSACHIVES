@@ -78,6 +78,102 @@
         border-bottom-color: #3b82f6;
         text-decoration: none;
     }
+
+    /* Password hint & strength meter */
+    .password-helper {
+        margin-top: 0.5rem;
+        font-size: 0.85rem;
+    }
+
+    .password-hint {
+        margin: 0 0 0.35rem 0;
+        color: #4b5563;
+    }
+
+    .password-hint strong {
+        font-weight: 600;
+        color: #111827;
+    }
+
+    .password-strength {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .password-strength-label {
+        display: flex;
+        align-items: center;
+        gap: 0.35rem;
+        font-weight: 500;
+    }
+
+    .password-strength-label .strength-value {
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+        font-size: 0.75rem;
+    }
+
+    .password-strength-label .strength-icon {
+        width: 16px;
+        height: 16px;
+        border-radius: 999px;
+        display: inline-block;
+    }
+
+    .password-strength-bar {
+        position: relative;
+        width: 100%;
+        height: 6px;
+        border-radius: 999px;
+        background: #e5e7eb;
+        overflow: hidden;
+    }
+
+    .password-strength-fill {
+        position: absolute;
+        inset: 0;
+        width: 0%;
+        border-radius: inherit;
+        transition: width 0.25s ease, background 0.25s ease;
+    }
+
+    .password-strength.weak .password-strength-fill {
+        width: 33%;
+        background: linear-gradient(90deg, #f97373, #ef4444);
+    }
+
+    .password-strength.medium .password-strength-fill {
+        width: 66%;
+        background: linear-gradient(90deg, #facc15, #eab308);
+    }
+
+    .password-strength.strong .password-strength-fill {
+        width: 100%;
+        background: linear-gradient(90deg, #22c55e, #16a34a);
+    }
+
+    .password-strength.weak .password-strength-label {
+        color: #b91c1c;
+    }
+
+    .password-strength.medium .password-strength-label {
+        color: #92400e;
+    }
+
+    .password-strength.strong .password-strength-label {
+        color: #065f46;
+    }
+
+    .password-strength-message {
+        margin: 0;
+        font-size: 0.78rem;
+        color: #6b7280;
+    }
+
+    .password-strength.weak .password-strength-message {
+        color: #b91c1c;
+    }
 </style>
 @endpush
 
@@ -279,6 +375,24 @@
                                     <i class="icofont-eye"></i>
                                 </button>
                             </div>
+                            <div class="password-helper">
+                                <p class="password-hint">
+                                    <strong>Security tip:</strong> Passwords must be <strong>more than 8 characters</strong> and should mix letters, numbers, and symbols.
+                                </p>
+                                <div class="password-strength weak" id="register-password-strength">
+                                    <div class="password-strength-label">
+                                        <span class="strength-icon"></span>
+                                        <span>Strength:</span>
+                                        <span class="strength-value">Too short</span>
+                                    </div>
+                                    <div class="password-strength-bar">
+                                        <span class="password-strength-fill"></span>
+                                    </div>
+                                    <p class="password-strength-message">
+                                        Your password is currently weak. Add more characters and variety to protect your account.
+                                    </p>
+                                </div>
+                            </div>
                         </div>
 
                         <button type="submit" class="submit-btn">
@@ -398,6 +512,57 @@ document.addEventListener('click', function(e) {
         }
     }
 });
+
+// Simple password strength evaluator for the register form
+function evaluatePasswordStrength(password) {
+    let score = 0;
+
+    if (password.length >= 9) score++; // more than 8 chars
+    if (password.length >= 12) score++; // bonus for length
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++; // mixed case
+    if (/\d/.test(password)) score++; // numbers
+    if (/[^A-Za-z0-9]/.test(password)) score++; // symbols
+
+    // Map score to buckets with a bias towards warning on weak passwords
+    if (!password || password.length < 9 || score <= 1) {
+        return { level: 'weak', label: 'Weak', message: 'Password is too weak. Use at least 9 characters with letters, numbers & symbols.' };
+    } else if (score <= 3) {
+        return { level: 'medium', label: 'Okay', message: 'Decent start. Make it longer or add symbols to strengthen it.' };
+    }
+
+    return { level: 'strong', label: 'Strong', message: 'Great! This password offers strong protection for your account.' };
+}
+
+function attachPasswordStrengthListener() {
+    const passwordInput = document.getElementById('register-password');
+    const strengthContainer = document.getElementById('register-password-strength');
+
+    if (!passwordInput || !strengthContainer) return;
+
+    const valueSpan = strengthContainer.querySelector('.strength-value');
+    const messageEl = strengthContainer.querySelector('.password-strength-message');
+
+    function updateStrength() {
+        const evaluation = evaluatePasswordStrength(passwordInput.value);
+
+        strengthContainer.classList.remove('weak', 'medium', 'strong');
+        strengthContainer.classList.add(evaluation.level);
+
+        if (valueSpan) {
+            valueSpan.textContent = evaluation.label;
+        }
+
+        if (messageEl) {
+            messageEl.textContent = evaluation.message;
+        }
+    }
+
+    // Evaluate on input and on initial load
+    passwordInput.addEventListener('input', updateStrength);
+    updateStrength();
+}
+
+document.addEventListener('DOMContentLoaded', attachPasswordStrengthListener);
 
 // Language switcher functionality
 document.addEventListener('DOMContentLoaded', function() {
