@@ -521,13 +521,13 @@ function evaluatePasswordStrength(password) {
 function attachPasswordStrengthListener() {
     const passwordInput = document.getElementById('register-password');
     const strengthContainer = document.getElementById('register-password-strength');
-    const submitBtn = document.getElementById('register-submit-btn');
+    const registerForm = passwordInput ? passwordInput.closest('form') : null;
+    const submitBtn = registerForm ? registerForm.querySelector('button[type="submit"]') : null;
 
-    if (!passwordInput || !strengthContainer) return;
+    if (!passwordInput || !strengthContainer || !submitBtn) return;
 
     const valueSpan = strengthContainer.querySelector('.strength-value');
     const messageEl = strengthContainer.querySelector('.password-strength-message');
-
     const fillEl = strengthContainer.querySelector('.password-strength-fill');
 
     function updateStrength() {
@@ -540,33 +540,24 @@ function attachPasswordStrengthListener() {
             if (valueSpan) valueSpan.textContent = '';
             if (messageEl) messageEl.textContent = '';
             if (fillEl) fillEl.style.width = '0%';
-            if (submitBtn) submitBtn.disabled = true;
+            submitBtn.disabled = true;
             return;
         }
 
         strengthContainer.classList.add(evaluation.level);
-
-        // Let CSS classes control the bar width/color when there is input
-        if (fillEl) {
-            fillEl.style.width = '';
-        }
-
-        if (valueSpan) {
-            valueSpan.textContent = evaluation.label;
-        }
-
-        if (messageEl) {
-            messageEl.textContent = evaluation.message;
-        }
-
-        // Enable submit only when password is strong
-        if (submitBtn) {
-            submitBtn.disabled = evaluation.level !== 'strong';
-        }
+        if (fillEl) fillEl.style.width = '';
+        if (valueSpan) valueSpan.textContent = evaluation.label;
+        if (messageEl) messageEl.textContent = evaluation.message;
+        submitBtn.disabled = evaluation.level !== 'strong';
     }
 
-    // Evaluate on input and on initial load (which keeps bar empty until typing)
     passwordInput.addEventListener('input', updateStrength);
+    passwordInput.addEventListener('paste', updateStrength);
+    registerForm.addEventListener('submit', function(e) {
+        if (evaluatePasswordStrength(passwordInput.value).level !== 'strong') {
+            e.preventDefault();
+        }
+    });
     updateStrength();
 }
 
