@@ -377,11 +377,6 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])-
     Route::post('/licenses/{id}/toggle-status', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'toggleStatus'])->name('licenses.toggle-status');
     Route::delete('/licenses/{id}', [\App\Http\Controllers\SuperAdmin\LicenseController::class, 'destroy'])->name('licenses.destroy');
     
-    // System Documentation Management (Super Admin view only)
-    Route::get('/system-documentation', function() {
-        return redirect()->route('dashboard.system-documentation');
-    })->name('system-documentation');
-    
     // System Settings
     Route::get('/settings', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'index'])->name('settings.index');
     Route::post('/settings', [\App\Http\Controllers\SuperAdmin\SystemSettingsController::class, 'update'])->name('settings.update');

@@ -360,12 +360,6 @@
                 </a>
             </li>
             <li>
-                <a href="{{ route('super-admin.system-documentation') }}" class="{{ request()->routeIs('super-admin.system-documentation') ? 'active' : '' }}">
-                    <i class="icofont-book-alt"></i>
-                    <span>System Documentation</span>
-                </a>
-            </li>
-            <li>
                 <a href="{{ route('super-admin.settings.index') }}" class="{{ request()->routeIs('super-admin.settings.*') ? 'active' : '' }}">
                     <i class="icofont-settings-alt"></i>
                     <span>Settings</span>
