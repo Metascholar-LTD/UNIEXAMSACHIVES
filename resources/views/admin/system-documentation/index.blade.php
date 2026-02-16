@@ -586,7 +586,7 @@
                                             <tbody>
                                                 @if ($documents->count() > 0)
                                                     @foreach ($documents as $document)
-                                                    <tr onclick="openDocumentModal('{{ addslashes($document->title) }}', '{{ addslashes($document->description) }}', '{{ $document->file_type }}', '{{ $document->file_size }}', '{{ $document->creator->first_name ?? '' }} {{ $document->creator->last_name ?? '' }}')">
+                                                    <tr data-file-type="{{ strtolower($document->file_type) }}" onclick="openDocumentModal('{{ addslashes($document->title) }}', '{{ addslashes($document->description) }}', '{{ $document->file_type }}', '{{ $document->file_size }}', '{{ $document->creator->first_name ?? '' }} {{ $document->creator->last_name ?? '' }}')">
                                                         <td>{{ $documents->firstItem() + $loop->index }}</td>
                                                         <td>
                                                             <div class="document-title-with-icon">
@@ -803,14 +803,13 @@ document.addEventListener('DOMContentLoaded', function() {
 
         tableRows.forEach(row => {
             // Skip the "no documents" row
-            if (row.cells.length < 5) {
+            if (row.cells.length < 4) {
                 return;
             }
 
             const documentTitle = row.cells[1].textContent.toLowerCase();
             const description = row.cells[2].textContent.toLowerCase();
-            const fileTypeBadge = row.cells[3].querySelector('.file-type-badge');
-            const fileType = fileTypeBadge ? fileTypeBadge.textContent.toLowerCase() : '';
+            const fileType = row.getAttribute('data-file-type') || '';
 
             // Search filter
             const matchesSearch = searchTerm === '' || 
@@ -820,7 +819,11 @@ document.addEventListener('DOMContentLoaded', function() {
             // Type filter
             let matchesType = true;
             if (typeValue !== 'all') {
-                matchesType = fileType.includes(typeValue);
+                if (typeValue === 'doc') {
+                    matchesType = fileType === 'doc' || fileType === 'docx';
+                } else {
+                    matchesType = fileType === typeValue;
+                }
             }
 
             // Show/hide row
