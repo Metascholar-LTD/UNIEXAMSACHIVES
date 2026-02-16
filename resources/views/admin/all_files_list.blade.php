@@ -660,6 +660,9 @@
                                                             <i class="fas fa-download"></i>
                                                         </span>
                                                     @endif
+                                                    <a href="{{ route('files.edit', $file->id) }}" class="action-btn edit" title="Edit File">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                     <form action="{{ route('file.destroy', $file->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')

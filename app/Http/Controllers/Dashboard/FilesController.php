@@ -91,8 +91,9 @@ class FilesController extends Controller
         ]);
     }
     public function allUploadedFile(){
+        // Only show user's own files (no approval system means users manage their own content)
         return view('admin.all_files',[
-            'files' => File::all(),
+            'files' => File::where('user_id', Auth::id())->get(),
         ]);
     }
 
@@ -103,7 +104,8 @@ class FilesController extends Controller
     }
 
     public function allFiles(){
-        $files = File::all();
+        // Only show user's own files (no approval system means users manage their own content)
+        $files = File::where('user_id', Auth::user()->id)->get();
         return view('admin.all_files_list',compact('files'));
     }
 

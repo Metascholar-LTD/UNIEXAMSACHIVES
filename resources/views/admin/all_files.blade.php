@@ -390,14 +390,23 @@
         color: white;
     }
 
-    .action-btn.approve {
-        border-color: #10b981;
-        color: #10b981;
-        background: rgba(16, 185, 129, 0.1);
+    .action-btn.edit {
+        border-color: #3b82f6;
+        color: #3b82f6;
     }
 
-    .action-btn.approve:hover {
-        background: #10b981;
+    .action-btn.edit:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .action-btn.delete {
+        border-color: #ef4444;
+        color: #ef4444;
+    }
+
+    .action-btn.delete:hover {
+        background: #ef4444;
         color: white;
     }
 
@@ -643,6 +652,9 @@
                                                     @endif
                                                     <a href="{{ asset($file->document_file) }}" download class="action-btn download" title="Download File">
                                                         <i class="fas fa-download"></i>
+                                                    </a>
+                                                    <a href="{{ route('files.edit', $file->id) }}" class="action-btn edit" title="Edit File">
+                                                        <i class="fas fa-edit"></i>
                                                     </a>
                                                     <form action="{{ route('file.destroy', $file->id) }}" method="post" style="display: inline;">
                                                         @csrf

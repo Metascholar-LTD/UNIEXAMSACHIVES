@@ -385,14 +385,23 @@
         color: white;
     }
 
-    .action-btn.approve {
-        border-color: #10b981;
-        color: #10b981;
-        background: rgba(16, 185, 129, 0.1);
+    .action-btn.edit {
+        border-color: #3b82f6;
+        color: #3b82f6;
     }
 
-    .action-btn.approve:hover {
-        background: #10b981;
+    .action-btn.edit:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .action-btn.delete {
+        border-color: #ef4444;
+        color: #ef4444;
+    }
+
+    .action-btn.delete:hover {
+        background: #ef4444;
         color: white;
     }
 
@@ -649,6 +658,9 @@
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
                                                     @endif
+                                                    <a href="{{ route('exams.edit', $exam->id) }}" class="action-btn edit" title="Edit Exam">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                     <form action="{{ route('exams.destroy', $exam->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')

@@ -661,18 +661,16 @@
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
                                                     @endif
-                                                    @if (!$exam->is_approve)
-                                                        <a href="{{ route('exams.edit', $exam->id) }}" class="action-btn edit" title="Edit Exam">
-                                                            <i class="fas fa-edit"></i>
-                                                        </a>
-                                                        <form action="{{ route('exams.destroy', $exam->id) }}" method="post" style="display: inline;">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="action-btn delete" title="Delete Exam" onclick="return confirm('Are you sure you want to delete this exam?')">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
+                                                    <a href="{{ route('exams.edit', $exam->id) }}" class="action-btn edit" title="Edit Exam">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('exams.destroy', $exam->id) }}" method="post" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="action-btn delete" title="Delete Exam" onclick="return confirm('Are you sure you want to delete this exam?')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                                 
                                                 <div class="exam-status">

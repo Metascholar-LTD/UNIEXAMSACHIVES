@@ -78,18 +78,18 @@ class AppServiceProvider extends ServiceProvider
                         'showPasswordReminder' => !Auth::user()->password_changed,
                     ]);
                 }else{
-                    // Admin users (is_admin = 0) - see all exams/files in system
-                    $allExams = Exam::count();
-                    $allFiles = File::count();
+                    // Admin users (is_admin = 0) - also see only their own exams/files (no approval system)
+                    $myExams = Exam::where('user_id', Auth::user()->id)->count();
+                    $myFiles = File::where('user_id', Auth::user()->id)->count();
                     
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
                         'bookmarkedCount' => $bookmarkedCount,
-                        'myExamsCount' => Exam::where('user_id', Auth::user()->id)->count(),
-                        'allExamsCount' => $allExams,
-                        'myFilesCount' => File::where('user_id', Auth::user()->id)->count(),
-                        'allFilesCount' => $allFiles,
+                        'myExamsCount' => $myExams,
+                        'allExamsCount' => $myExams, // Admins also only see their own
+                        'myFilesCount' => $myFiles,
+                        'allFilesCount' => $myFiles, // Admins also only see their own
                         'systemDetail' => Detail::all(),
                         'showPasswordReminder' => !Auth::user()->password_changed,
                     ]);

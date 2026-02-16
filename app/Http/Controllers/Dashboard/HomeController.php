@@ -99,7 +99,8 @@ class HomeController extends Controller
     }
 
     public function allUploadedDocument(){
-        $exams = Exam::all();
+        // Only show user's own exams (no approval system means users manage their own content)
+        $exams = Exam::where('user_id', Auth::user()->id)->get();
         return view('admin.all_uploaded_documents',compact('exams'));
     }
 
@@ -110,7 +111,8 @@ class HomeController extends Controller
     }
 
     public function allExams(){
-        $exams = Exam::all();
+        // Only show user's own exams (no approval system means users manage their own content)
+        $exams = Exam::where('user_id', Auth::user()->id)->get();
         return view('admin.all_exams',compact('exams'));
     }
 

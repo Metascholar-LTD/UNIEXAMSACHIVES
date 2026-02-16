@@ -390,6 +390,26 @@
         color: white;
     }
 
+    .action-btn.edit {
+        border-color: #3b82f6;
+        color: #3b82f6;
+    }
+
+    .action-btn.edit:hover {
+        background: #3b82f6;
+        color: white;
+    }
+
+    .action-btn.delete {
+        border-color: #ef4444;
+        color: #ef4444;
+    }
+
+    .action-btn.delete:hover {
+        background: #ef4444;
+        color: white;
+    }
+
     .action-btn.disabled {
         opacity: 0.5;
         cursor: not-allowed;
@@ -639,6 +659,16 @@
                                                             <i class="fas fa-download"></i>
                                                         </span>
                                                     @endif
+                                                    <a href="{{ route('files.edit', $file->id) }}" class="action-btn edit" title="Edit File">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <form action="{{ route('file.destroy', $file->id) }}" method="post" style="display: inline;">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="action-btn delete" title="Delete File" onclick="return confirm('Are you sure you want to delete this file?')">
+                                                            <i class="fas fa-trash"></i>
+                                                        </button>
+                                                    </form>
                                                 </div>
                                                 
                                             </div>

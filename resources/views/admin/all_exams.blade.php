@@ -651,6 +651,9 @@
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
                                                     @endif
+                                                    <a href="{{ route('exams.edit', $exam->id) }}" class="action-btn edit" title="Edit Exam">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
                                                     <form action="{{ route('exams.destroy', $exam->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -658,13 +661,6 @@
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>
-                                                </div>
-                                                
-                                                <div class="exam-status">
-                                                    <span class="status-badge pending">
-                                                        <i class="fas fa-clock"></i>
-                                                        Pending
-                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
