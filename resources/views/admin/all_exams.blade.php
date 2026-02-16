@@ -571,7 +571,7 @@
                             </div>
                             
                             <div class="filter-tabs">
-                                <a href="#" class="filter-tab active" data-filter="all">All Pending</a>
+                                <a href="#" class="filter-tab active" data-filter="all">All Exams</a>
                                 <a href="#" class="filter-tab" data-filter="final">Final Exams</a>
                                 <a href="#" class="filter-tab" data-filter="midterm">Midterm</a>
                                 <a href="#" class="filter-tab" data-filter="quiz">Quiz</a>
@@ -683,7 +683,7 @@
 @endsection
 
 <script>
-// Search and Filter functionality for All Pending Exams
+// Search and Filter functionality for All Exams
 document.addEventListener('DOMContentLoaded', function() {
     const searchInput = document.getElementById('searchInput');
     const filterTabs = document.querySelectorAll('.filter-tab');

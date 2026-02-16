@@ -1505,19 +1505,6 @@
                                                             @endif
                                                         </div>
                                                         
-                                                        <div class="exam-status">
-                                                            @if($item->is_approve)
-                                                                <span class="status-badge approved">
-                                                                    <i class="fas fa-check-circle"></i>
-                                                                    Approved
-                                                                </span>
-                                                            @else
-                                                                <span class="status-badge pending">
-                                                                    <i class="fas fa-clock"></i>
-                                                                    Pending
-                                                                </span>
-                                                            @endif
-                                                        </div>
                                                     </div>
                                                 </div>
                                                 @endforeach

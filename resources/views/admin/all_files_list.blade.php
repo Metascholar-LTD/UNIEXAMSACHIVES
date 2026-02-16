@@ -583,7 +583,7 @@
                             </div>
                             
                             <div class="filter-tabs">
-                                <a href="#" class="filter-tab active" data-filter="all">All Pending</a>
+                                <a href="#" class="filter-tab active" data-filter="all">All Files</a>
                                 <a href="#" class="filter-tab" data-filter="pdf">PDF Files</a>
                                 <a href="#" class="filter-tab" data-filter="doc">Word Documents</a>
                                 <a href="#" class="filter-tab" data-filter="recent">Recently Added</a>
@@ -678,8 +678,8 @@
                             @else
                                 <div class="no-files">
                                     <i class="fas fa-folder-open"></i>
-                                    <h4>No All Files</h4>
-                                    <p>There are no files currently awaiting approval in the system.</p>
+                                    <h4>No Files</h4>
+                                    <p>You haven't uploaded any files yet.</p>
                                 </div>
                             @endif
                         </div>

@@ -568,10 +568,10 @@
                             </div>
                             
                             <div class="filter-tabs">
-                                <a href="#" class="filter-tab active" data-filter="all">All Uploaded</a>
-                                <a href="#" class="filter-tab" data-filter="approved">Approved</a>
-                                <a href="#" class="filter-tab" data-filter="pending">Pending</a>
+                                <a href="#" class="filter-tab active" data-filter="all">All Exams</a>
                                 <a href="#" class="filter-tab" data-filter="final">Final Exams</a>
+                                <a href="#" class="filter-tab" data-filter="midterm">Midterm</a>
+                                <a href="#" class="filter-tab" data-filter="quiz">Quiz</a>
                                 <a href="#" class="filter-tab" data-filter="with-keys">With Answer Keys</a>
                             </div>
                         </div>
@@ -699,11 +699,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             // Apply filters
             if (activeFilter !== 'all') {
-                if (activeFilter === 'approved') {
-                    showByFilter = cardStatus === 'approved';
-                } else if (activeFilter === 'pending') {
-                    showByFilter = cardStatus === 'pending';
-                } else if (activeFilter === 'with-keys') {
+                if (activeFilter === 'with-keys') {
                     showByFilter = hasAnswerKey;
                 } else {
                     showByFilter = cardType === activeFilter;

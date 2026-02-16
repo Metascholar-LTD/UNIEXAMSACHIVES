@@ -559,12 +559,12 @@
                         <div class="container">
                             <div class="pending-files-hero-content">
                                 <h1 class="hero-title">My Files</h1>
-                                <p class="hero-subtitle">Review and manage files awaiting approval</p>
+                                <p class="hero-subtitle">View and manage your uploaded files</p>
                                 
                                 <div class="hero-stats">
                                     <div class="stat-item">
                                         <span class="stat-number">{{ count($files) }}</span>
-                                        <div class="stat-label">Total Pending</div>
+                                        <div class="stat-label">Total Files</div>
                                     </div>
                                 </div>
                             </div>
@@ -575,14 +575,14 @@
                     <div class="search-filter-section">
                         <div class="container">
                             <div class="search-box">
-                                <input type="text" class="search-input" id="searchInput" placeholder="Search pending files by title, depositor, or document ID...">
+                                <input type="text" class="search-input" id="searchInput" placeholder="Search files by title, depositor, or document ID...">
                                 <button class="search-btn" onclick="performSearch()">
                                     <i class="fas fa-search"></i>
                                 </button>
                             </div>
                             
                             <div class="filter-tabs">
-                                <a href="#" class="filter-tab active" data-filter="all">All Pending</a>
+                                <a href="#" class="filter-tab active" data-filter="all">All Files</a>
                                 <a href="#" class="filter-tab" data-filter="pdf">PDF Files</a>
                                 <a href="#" class="filter-tab" data-filter="doc">Word Documents</a>
                                 <a href="#" class="filter-tab" data-filter="recent">Recently Added</a>
@@ -678,8 +678,8 @@
                             @else
                                 <div class="no-files">
                                     <i class="fas fa-folder-open"></i>
-                                    <h4>No My Files</h4>
-                                    <p>There are no files currently awaiting approval.</p>
+                                    <h4>No Files</h4>
+                                    <p>You haven't uploaded any files yet.</p>
                                 </div>
                             @endif
                         </div>
