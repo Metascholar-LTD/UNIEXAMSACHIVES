@@ -827,7 +827,6 @@
                                                     <th style="width: 60px;">#</th>
                                                     <th>Document Title</th>
                                                     <th>About</th>
-                                                    <th style="width: 100px;">File Type</th>
                                                     <th style="width: 280px;">Actions</th>
                                                 </tr>
                                             </thead>
@@ -842,11 +841,6 @@
                                                             </div>
                                                         </td>
                                                         <td>{{ Str::limit($document->description, 80) }}</td>
-                                                        <td>
-                                                            <span class="file-type-badge {{ $document->file_type }}">
-                                                                {{ strtoupper($document->file_type) }}
-                                                            </span>
-                                                        </td>
                                                         <td onclick="event.stopPropagation()">
                                                             <div class="action-buttons">
                                                                 @if($document->isPdf())
@@ -873,7 +867,7 @@
                                                     @endforeach
                                                 @else
                                                     <tr>
-                                                        <td colspan="5" class="text-center" style="padding: 2rem; color: #6b7280;">No documents found.</td>
+                                                        <td colspan="4" class="text-center" style="padding: 2rem; color: #6b7280;">No documents found.</td>
                                                     </tr>
                                                 @endif
                                             </tbody>
