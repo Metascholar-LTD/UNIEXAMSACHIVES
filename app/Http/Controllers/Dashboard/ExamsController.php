@@ -63,7 +63,7 @@ class ExamsController extends Controller
 
     public function edit(Exam $exam)
     {
-        return view('admin.edit_exam', [
+        return view('admin.deposition_form', [
             'exam' => $exam,
             'departments' => Department::all(),
             'years' => Academic::all(),

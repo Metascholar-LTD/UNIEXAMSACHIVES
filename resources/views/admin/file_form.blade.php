@@ -535,10 +535,10 @@
     <div class="container">
         <div class="hero-badge">
             <i class="fas fa-folder-open"></i>
-            File Deposit
+            {{ isset($file) ? 'Edit File' : 'File Deposit' }}
         </div>
-        <h1>File Deposition Form</h1>
-        <p>Upload and archive institutional files securely to the university system.</p>
+        <h1>{{ isset($file) ? 'Edit File Document' : 'File Deposition Form' }}</h1>
+        <p>{{ isset($file) ? 'Update your file document information below.' : 'Upload and archive institutional files securely to the university system.' }}</p>
         <div class="breadcrumb-nav">
             <a href="{{route('dashboard')}}">Dashboard</a>
             <span class="sep"><i class="fas fa-chevron-right"></i></span>
@@ -576,8 +576,11 @@
         <div class="row">
             {{-- MAIN FORM --}}
             <div class="col-xl-8 col-lg-8 col-md-12 col-12">
-                <form action="{{route('dashboard.file.store')}}" method="post" enctype="multipart/form-data" id="fileDepoForm">
+                <form action="{{ isset($file) ? route('files.update', $file->id) : route('dashboard.file.store') }}" method="post" enctype="multipart/form-data" id="fileDepoForm">
                     @csrf
+                    @if(isset($file))
+                        @method('PUT')
+                    @endif
 
                     @if ($errors->any())
                     <div class="file-alert-danger">
@@ -605,7 +608,7 @@
                                     <label>Depositor's Name <span class="req"></span></label>
                                     <div class="icon-wrap">
                                         <i class="fas fa-user"></i>
-                                        <input type="text" placeholder="Enter your full name" name="depositor_name" value="{{ old('depositor_name') }}" required>
+                                        <input type="text" placeholder="Enter your full name" name="depositor_name" value="{{ old('depositor_name', $file->depositor_name ?? '') }}" required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -614,7 +617,7 @@
                                             <label>Email Address <span class="req"></span></label>
                                             <div class="icon-wrap">
                                                 <i class="fas fa-envelope"></i>
-                                                <input type="email" placeholder="email@university.edu" name="email" value="{{ old('email') }}" required>
+                                                <input type="email" placeholder="email@university.edu" name="email" value="{{ old('email', $file->email ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -623,7 +626,7 @@
                                             <label>Phone Number <span class="req"></span></label>
                                             <div class="icon-wrap">
                                                 <i class="fas fa-phone"></i>
-                                                <input type="text" placeholder="Enter phone number" name="phone_number" value="{{ old('phone_number') }}" required>
+                                                <input type="text" placeholder="Enter phone number" name="phone_number" value="{{ old('phone_number', $file->phone_number ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -655,7 +658,7 @@
                                             <label>File Title <span class="req"></span></label>
                                             <div class="icon-wrap">
                                                 <i class="fas fa-heading"></i>
-                                                <input type="text" placeholder="Enter file title" name="file_title" value="{{ old('file_title') }}" required>
+                                                <input type="text" placeholder="Enter file title" name="file_title" value="{{ old('file_title', $file->file_title ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -665,10 +668,10 @@
                                             <div class="icon-wrap">
                                                 <i class="fas fa-file-circle-check"></i>
                                                 <select name="file_format" required>
-                                                    <option value="Pdf" {{ old('file_format') == 'Pdf' ? 'selected' : '' }}>PDF</option>
-                                                    <option value="Word" {{ old('file_format') == 'Word' ? 'selected' : '' }}>Word</option>
-                                                    <option value="Excel" {{ old('file_format') == 'Excel' ? 'selected' : '' }}>Excel</option>
-                                                    <option value="Csv" {{ old('file_format') == 'Csv' ? 'selected' : '' }}>CSV</option>
+                                                    <option value="Pdf" {{ old('file_format', $file->file_format ?? '') == 'Pdf' ? 'selected' : '' }}>PDF</option>
+                                                    <option value="Word" {{ old('file_format', $file->file_format ?? '') == 'Word' ? 'selected' : '' }}>Word</option>
+                                                    <option value="Excel" {{ old('file_format', $file->file_format ?? '') == 'Excel' ? 'selected' : '' }}>Excel</option>
+                                                    <option value="Csv" {{ old('file_format', $file->file_format ?? '') == 'Csv' ? 'selected' : '' }}>CSV</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -680,7 +683,7 @@
                                             <label>Date Created <span class="req"></span></label>
                                             <div class="icon-wrap">
                                                 <i class="fas fa-calendar-plus"></i>
-                                                <input type="date" name="year_created" value="{{ old('year_created') }}" required>
+                                                <input type="date" name="year_created" value="{{ old('year_created', isset($file) ? \Carbon\Carbon::parse($file->year_created)->format('Y-m-d') : '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -689,7 +692,7 @@
                                             <label>Date Deposited <span class="req"></span></label>
                                             <div class="icon-wrap">
                                                 <i class="fas fa-calendar-check"></i>
-                                                <input type="date" name="year_deposit" value="{{ old('year_deposit') }}" required>
+                                                <input type="date" name="year_deposit" value="{{ old('year_deposit', isset($file) ? \Carbon\Carbon::parse($file->year_deposit)->format('Y-m-d') : '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -701,7 +704,7 @@
                                         <div class="drop-icon"><i class="fas fa-cloud-arrow-up"></i></div>
                                         <h4>Drag & drop or <em>browse files</em></h4>
                                         <p>All common document formats accepted</p>
-                                        <input type="file" name="document_file" required onchange="fileShowName(this, 'filePickedName')">
+                                        <input type="file" name="document_file" {{ isset($file) ? '' : 'required' }} onchange="fileShowName(this, 'filePickedName')">
                                     </div>
                                     <div class="file-picked" id="filePickedName">
                                         <i class="fas fa-check-circle"></i>
@@ -741,22 +744,22 @@
                                     <div class="icon-wrap">
                                         <i class="fas fa-building-columns"></i>
                                         <select name="unit" required>
-                                            <option value="Registry" {{ old('unit') == 'Registry' ? 'selected' : '' }}>Registry</option>
-                                            <option value="School of Nursing and Midwifery" {{ old('unit') == 'School of Nursing and Midwifery' ? 'selected' : '' }}>School of Nursing and Midwifery</option>
-                                            <option value="Assurance Directorate" {{ old('unit') == 'Assurance Directorate' ? 'selected' : '' }}>Assurance Directorate</option>
-                                            <option value="Directorate" {{ old('unit') == 'Directorate' ? 'selected' : '' }}>Directorate</option>
-                                            <option value="Finance Directorate" {{ old('unit') == 'Finance Directorate' ? 'selected' : '' }}>Finance Directorate</option>
-                                            <option value="Works and Physical Development Office" {{ old('unit') == 'Works and Physical Development Office' ? 'selected' : '' }}>Works and Physical Development Office</option>
-                                            <option value="Audit" {{ old('unit') == 'Audit' ? 'selected' : '' }}>Audit</option>
-                                            <option value="Guidance and Counselling Unit" {{ old('unit') == 'Guidance and Counselling Unit' ? 'selected' : '' }}>Guidance and Counselling Unit</option>
-                                            <option value="The University Library" {{ old('unit') == 'The University Library' ? 'selected' : '' }}>The University Library</option>
-                                            <option value="Human Resource Unit" {{ old('unit') == 'Human Resource Unit' ? 'selected' : '' }}>Human Resource Unit</option>
-                                            <option value="Hostels" {{ old('unit') == 'Hostels' ? 'selected' : '' }}>Hostels</option>
-                                            <option value="Faculty of Economics and Business Administration" {{ old('unit') == 'Faculty of Economics and Business Administration' ? 'selected' : '' }}>Faculty of Economics and Business Administration</option>
-                                            <option value="Faculty of Education" {{ old('unit') == 'Faculty of Education' ? 'selected' : '' }}>Faculty of Education</option>
-                                            <option value="School of Public Health and Allied Science" {{ old('unit') == 'School of Public Health and Allied Science' ? 'selected' : '' }}>School of Public Health and Allied Science</option>
-                                            <option value="Faculty of Religious and Social Sciences" {{ old('unit') == 'Faculty of Religious and Social Sciences' ? 'selected' : '' }}>Faculty of Religious and Social Sciences</option>
-                                            <option value="Faculty of Computing, Engineering and Mathematical Sciences" {{ old('unit') == 'Faculty of Computing, Engineering and Mathematical Sciences' ? 'selected' : '' }}>Faculty of Computing, Engineering and Mathematical Sciences</option>
+                                            <option value="Registry" {{ old('unit', $file->unit ?? '') == 'Registry' ? 'selected' : '' }}>Registry</option>
+                                            <option value="School of Nursing and Midwifery" {{ old('unit', $file->unit ?? '') == 'School of Nursing and Midwifery' ? 'selected' : '' }}>School of Nursing and Midwifery</option>
+                                            <option value="Assurance Directorate" {{ old('unit', $file->unit ?? '') == 'Assurance Directorate' ? 'selected' : '' }}>Assurance Directorate</option>
+                                            <option value="Directorate" {{ old('unit', $file->unit ?? '') == 'Directorate' ? 'selected' : '' }}>Directorate</option>
+                                            <option value="Finance Directorate" {{ old('unit', $file->unit ?? '') == 'Finance Directorate' ? 'selected' : '' }}>Finance Directorate</option>
+                                            <option value="Works and Physical Development Office" {{ old('unit', $file->unit ?? '') == 'Works and Physical Development Office' ? 'selected' : '' }}>Works and Physical Development Office</option>
+                                            <option value="Audit" {{ old('unit', $file->unit ?? '') == 'Audit' ? 'selected' : '' }}>Audit</option>
+                                            <option value="Guidance and Counselling Unit" {{ old('unit', $file->unit ?? '') == 'Guidance and Counselling Unit' ? 'selected' : '' }}>Guidance and Counselling Unit</option>
+                                            <option value="The University Library" {{ old('unit', $file->unit ?? '') == 'The University Library' ? 'selected' : '' }}>The University Library</option>
+                                            <option value="Human Resource Unit" {{ old('unit', $file->unit ?? '') == 'Human Resource Unit' ? 'selected' : '' }}>Human Resource Unit</option>
+                                            <option value="Hostels" {{ old('unit', $file->unit ?? '') == 'Hostels' ? 'selected' : '' }}>Hostels</option>
+                                            <option value="Faculty of Economics and Business Administration" {{ old('unit', $file->unit ?? '') == 'Faculty of Economics and Business Administration' ? 'selected' : '' }}>Faculty of Economics and Business Administration</option>
+                                            <option value="Faculty of Education" {{ old('unit', $file->unit ?? '') == 'Faculty of Education' ? 'selected' : '' }}>Faculty of Education</option>
+                                            <option value="School of Public Health and Allied Science" {{ old('unit', $file->unit ?? '') == 'School of Public Health and Allied Science' ? 'selected' : '' }}>School of Public Health and Allied Science</option>
+                                            <option value="Faculty of Religious and Social Sciences" {{ old('unit', $file->unit ?? '') == 'Faculty of Religious and Social Sciences' ? 'selected' : '' }}>Faculty of Religious and Social Sciences</option>
+                                            <option value="Faculty of Computing, Engineering and Mathematical Sciences" {{ old('unit', $file->unit ?? '') == 'Faculty of Computing, Engineering and Mathematical Sciences' ? 'selected' : '' }}>Faculty of Computing, Engineering and Mathematical Sciences</option>
                                         </select>
                                     </div>
                                 </div>

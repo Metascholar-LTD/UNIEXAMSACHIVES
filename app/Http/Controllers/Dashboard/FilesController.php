@@ -40,7 +40,7 @@ class FilesController extends Controller
 
     public function edit(File $file)
     {
-        return view('admin.edit_file', [
+        return view('admin.file_form', [
             'file' => $file,
         ]);
     }

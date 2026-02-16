@@ -514,10 +514,10 @@
     <div class="container">
         <div class="hero-badge">
             <i class="fas fa-file-signature"></i>
-            Exam Deposit
+            {{ isset($exam) ? 'Edit Exam' : 'Exam Deposit' }}
         </div>
-        <h1>Exams Deposition Form</h1>
-        <p>Submit your exam documents securely to the university archive system.</p>
+        <h1>{{ isset($exam) ? 'Edit Exam Document' : 'Exams Deposition Form' }}</h1>
+        <p>{{ isset($exam) ? 'Update your exam document information below.' : 'Submit your exam documents securely to the university archive system.' }}</p>
         <div class="breadcrumb-nav">
             <a href="{{route('dashboard')}}">Dashboard</a>
             <span class="sep"><i class="fas fa-chevron-right"></i></span>
@@ -560,8 +560,11 @@
         <div class="row">
             {{-- MAIN FORM --}}
             <div class="col-xl-8 col-lg-8 col-md-12 col-12">
-                <form action="{{route('dashboard.exam.store')}}" method="post" enctype="multipart/form-data" id="examDepoForm">
+                <form action="{{ isset($exam) ? route('exams.update', $exam->id) : route('dashboard.exam.store') }}" method="post" enctype="multipart/form-data" id="examDepoForm">
                     @csrf
+                    @if(isset($exam))
+                        @method('PUT')
+                    @endif
 
                     @if ($errors->any())
                     <div class="modern-alert-danger">
@@ -589,7 +592,7 @@
                                     <label>Full Name <span class="required-dot"></span></label>
                                     <div class="input-icon-wrap">
                                         <i class="fas fa-user"></i>
-                                        <input type="text" placeholder="Enter your full name" name="instructor_name" value="{{ old('instructor_name') }}" required>
+                                        <input type="text" placeholder="Enter your full name" name="instructor_name" value="{{ old('instructor_name', $exam->instructor_name ?? '') }}" required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -598,7 +601,7 @@
                                             <label>Staff ID <span class="required-dot"></span></label>
                                             <div class="input-icon-wrap">
                                                 <i class="fas fa-id-badge"></i>
-                                                <input type="text" placeholder="e.g. STF-00123" name="student_id" value="{{ old('student_id') }}" required>
+                                                <input type="text" placeholder="e.g. STF-00123" name="student_id" value="{{ old('student_id', $exam->student_id ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -610,7 +613,7 @@
                                                 <select name="faculty" required>
                                                     @if (count($departments) > 0)
                                                         @foreach ($departments as $department)
-                                                            <option value="{{$department->name}}" {{ old('faculty') == $department->name ? 'selected' : '' }}>{{$department->name}}</option>
+                                                            <option value="{{$department->name}}" {{ old('faculty', $exam->faculty ?? '') == $department->name ? 'selected' : '' }}>{{$department->name}}</option>
                                                         @endforeach
                                                     @else
                                                         <option value="" disabled>No Department Added</option>
@@ -626,7 +629,7 @@
                                             <label>Email Address <span class="required-dot"></span></label>
                                             <div class="input-icon-wrap">
                                                 <i class="fas fa-envelope"></i>
-                                                <input type="email" placeholder="email@university.edu" name="email" value="{{ old('email') }}" required>
+                                                <input type="email" placeholder="email@university.edu" name="email" value="{{ old('email', $exam->email ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -635,7 +638,7 @@
                                             <label>Phone Number <span class="required-dot"></span></label>
                                             <div class="input-icon-wrap">
                                                 <i class="fas fa-phone"></i>
-                                                <input type="text" placeholder="Enter phone number" name="phone_number" value="{{ old('phone_number') }}" required>
+                                                <input type="text" placeholder="Enter phone number" name="phone_number" value="{{ old('phone_number', $exam->phone_number ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -665,14 +668,14 @@
                                     <label>Course Title <span class="required-dot"></span></label>
                                     <div class="input-icon-wrap">
                                         <i class="fas fa-graduation-cap"></i>
-                                        <input type="text" placeholder="e.g. Introduction to Computer Science" name="course_title" value="{{ old('course_title') }}" required>
+                                        <input type="text" placeholder="e.g. Introduction to Computer Science" name="course_title" value="{{ old('course_title', $exam->course_title ?? '') }}" required>
                                     </div>
                                 </div>
                                 <div class="field-group">
                                     <label>Course Code <span class="required-dot"></span></label>
                                     <div class="input-icon-wrap">
                                         <i class="fas fa-hashtag"></i>
-                                        <input type="text" placeholder="e.g. CS101" name="course_code" value="{{ old('course_code') }}" required>
+                                        <input type="text" placeholder="e.g. CS101" name="course_code" value="{{ old('course_code', $exam->course_code ?? '') }}" required>
                                     </div>
                                 </div>
                                 <div class="row">
@@ -682,8 +685,8 @@
                                             <div class="input-icon-wrap">
                                                 <i class="fas fa-calendar-alt"></i>
                                                 <select name="semester" required>
-                                                    <option value="First Semester" {{ old('semester') == 'First Semester' ? 'selected' : '' }}>First Semester</option>
-                                                    <option value="Second Semester" {{ old('semester') == 'Second Semester' ? 'selected' : '' }}>Second Semester</option>
+                                                    <option value="First Semester" {{ old('semester', $exam->semester ?? '') == 'First Semester' ? 'selected' : '' }}>First Semester</option>
+                                                    <option value="Second Semester" {{ old('semester', $exam->semester ?? '') == 'Second Semester' ? 'selected' : '' }}>Second Semester</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -696,7 +699,7 @@
                                                 <select name="academic_year" required>
                                                     @if (count($years) > 0)
                                                         @foreach ($years as $year)
-                                                            <option value="{{$year->year}}" {{ old('academic_year') == $year->year ? 'selected' : '' }}>{{$year->year}}</option>
+                                                            <option value="{{$year->year}}" {{ old('academic_year', $exam->academic_year ?? '') == $year->year ? 'selected' : '' }}>{{$year->year}}</option>
                                                         @endforeach
                                                     @else
                                                         <option value="" disabled>No Academic Year Added</option>
@@ -734,9 +737,9 @@
                                     <div class="input-icon-wrap">
                                         <i class="fas fa-list-check"></i>
                                         <select name="exams_type" required>
-                                            <option value="Midterm" {{ old('exams_type') == 'Midterm' ? 'selected' : '' }}>Midterm</option>
-                                            <option value="Final Exams" {{ old('exams_type') == 'Final Exams' ? 'selected' : '' }}>Final Exams</option>
-                                            <option value="Quiz" {{ old('exams_type') == 'Quiz' ? 'selected' : '' }}>Quiz</option>
+                                            <option value="Midterm" {{ old('exams_type', $exam->exams_type ?? '') == 'Midterm' ? 'selected' : '' }}>Midterm</option>
+                                            <option value="Final Exams" {{ old('exams_type', $exam->exams_type ?? '') == 'Final Exams' ? 'selected' : '' }}>Final Exams</option>
+                                            <option value="Quiz" {{ old('exams_type', $exam->exams_type ?? '') == 'Quiz' ? 'selected' : '' }}>Quiz</option>
                                         </select>
                                     </div>
                                 </div>
@@ -746,7 +749,7 @@
                                             <label>Exam Date <span class="required-dot"></span></label>
                                             <div class="input-icon-wrap">
                                                 <i class="fas fa-calendar-day"></i>
-                                                <input type="date" name="exam_date" value="{{ old('exam_date') }}" required>
+                                                <input type="date" name="exam_date" value="{{ old('exam_date', $exam->exam_date ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -755,7 +758,7 @@
                                             <label>Duration <span class="required-dot"></span></label>
                                             <div class="input-icon-wrap">
                                                 <i class="fas fa-clock"></i>
-                                                <input type="text" placeholder="e.g. 2 hours" name="duration" value="{{ old('duration') }}" required>
+                                                <input type="text" placeholder="e.g. 2 hours" name="duration" value="{{ old('duration', $exam->duration ?? '') }}" required>
                                             </div>
                                         </div>
                                     </div>
@@ -765,11 +768,11 @@
                                     <div class="input-icon-wrap">
                                         <i class="fas fa-file-alt"></i>
                                         <select name="exam_format" required>
-                                            <option value="In-Person Written" {{ old('exam_format') == 'In-Person Written' ? 'selected' : '' }}>In-Person Written</option>
-                                            <option value="Online" {{ old('exam_format') == 'Online' ? 'selected' : '' }}>Online</option>
-                                            <option value="Take-Home" {{ old('exam_format') == 'Take-Home' ? 'selected' : '' }}>Take-Home</option>
-                                            <option value="Oral" {{ old('exam_format') == 'Oral' ? 'selected' : '' }}>Oral</option>
-                                            <option value="Practical" {{ old('exam_format') == 'Practical' ? 'selected' : '' }}>Practical</option>
+                                            <option value="In-Person Written" {{ old('exam_format', $exam->exam_format ?? '') == 'In-Person Written' ? 'selected' : '' }}>In-Person Written</option>
+                                            <option value="Online" {{ old('exam_format', $exam->exam_format ?? '') == 'Online' ? 'selected' : '' }}>Online</option>
+                                            <option value="Take-Home" {{ old('exam_format', $exam->exam_format ?? '') == 'Take-Home' ? 'selected' : '' }}>Take-Home</option>
+                                            <option value="Oral" {{ old('exam_format', $exam->exam_format ?? '') == 'Oral' ? 'selected' : '' }}>Oral</option>
+                                            <option value="Practical" {{ old('exam_format', $exam->exam_format ?? '') == 'Practical' ? 'selected' : '' }}>Practical</option>
                                         </select>
                                     </div>
                                 </div>
@@ -802,7 +805,7 @@
                                         <div class="upload-icon"><i class="fas fa-file-pdf"></i></div>
                                         <h4>Drag & drop or <em>browse</em></h4>
                                         <p>Accepted formats: PDF, DOCX</p>
-                                        <input type="file" name="exam_document" accept=".pdf,.docx" required onchange="showFileName(this, 'examDocName')">
+                                        <input type="file" name="exam_document" accept=".pdf,.docx" {{ isset($exam) ? '' : 'required' }} onchange="showFileName(this, 'examDocName')">
                                     </div>
                                     <div class="file-name-display" id="examDocName">
                                         <i class="fas fa-check-circle"></i>
