@@ -16,11 +16,11 @@
                                     <i class="icofont-dashboard-web"></i>
                                     <span>Dashboard</span>
                                 </a>
-                                <a href="{{ route('dashboard.all.approve.exams') }}" class="footer-link">
+                                <a href="{{ route('dashboard.all.exams') }}" class="footer-link">
                                     <i class="icofont-file-document"></i>
                                     <span>Exam Archives</span>
                                 </a>
-                                <a href="{{ route('dashboard.all.approve.files') }}" class="footer-link">
+                                <a href="{{ route('dashboard.all.files') }}" class="footer-link">
                                     <i class="icofont-folder-open"></i>
                                     <span>Academic Files</span>
                                 </a>

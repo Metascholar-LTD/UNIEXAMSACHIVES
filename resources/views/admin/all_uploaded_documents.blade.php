@@ -553,14 +553,6 @@
                                         <span class="stat-number">{{ count($exams) }}</span>
                                         <div class="stat-label">Total Exams</div>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $exams->where('is_approve', 1)->count() }}</span>
-                                        <div class="stat-label">Approved</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $exams->where('is_approve', 0)->count() }}</span>
-                                        <div class="stat-label">Pending</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -595,7 +587,7 @@
                                         @php
                                             $extension = pathinfo($exam->exam_document, PATHINFO_EXTENSION);
                                         @endphp
-                                        <div class="all-exam-archive-card pdf-card" data-type="{{ strtolower($exam->exams_type) }}" data-status="{{ $exam->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($exam->course_title . ' ' . $exam->course_code . ' ' . $exam->instructor_name) }}">
+                                        <div class="all-exam-archive-card pdf-card" data-type="{{ strtolower($exam->exams_type) }}"  data-search="{{ strtolower($exam->course_title . ' ' . $exam->course_code . ' ' . $exam->instructor_name) }}">
                                             <div class="exam-card-header">
                                                 <div class="exam-header-info">
                                                     <div class="exam-icon">
@@ -657,14 +649,6 @@
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
                                                     @endif
-                                                    @if (!$exam->is_approve)
-                                                        <form action="{{ route('exams.approve', $exam->id) }}" method="post" style="display: inline;">
-                                                            @csrf
-                                                            <button type="submit" class="action-btn approve" title="Approve Exam" onclick="return confirm('Are you sure you want to approve this exam?')">
-                                                                <i class="fas fa-check"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
                                                     <form action="{{ route('exams.destroy', $exam->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -674,19 +658,6 @@
                                                     </form>
                                                 </div>
                                                 
-                                                <div class="exam-status">
-                                                    @if ($exam->is_approve)
-                                                        <span class="status-badge approved">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            Approved
-                                                        </span>
-                                                    @else
-                                                        <span class="status-badge pending">
-                                                            <i class="fas fa-clock"></i>
-                                                            Pending
-                                                        </span>
-                                                    @endif
-                                                </div>
                                             </div>
                                         </div>
                                     @endforeach

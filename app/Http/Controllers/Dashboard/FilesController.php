@@ -107,13 +107,6 @@ class FilesController extends Controller
         return view('admin.all_files_list',compact('files'));
     }
 
-    public function approve(File $file)
-    {
-        $file->update(['is_approve' => true]);
-
-        return redirect()->route('dashboard.all.upload.file')->with('success', 'File approved successfully');
-    }
-
     public function destroy(File $file)
     {
         $file->delete();

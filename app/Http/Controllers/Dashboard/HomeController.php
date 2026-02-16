@@ -63,14 +63,14 @@ class HomeController extends Controller
 
     public function document(){
         //super admin
-        $allExams = Exam::where('is_approve', 1)->get();
-        $files = File::where('is_approve', 1)->get();
-        $exams = Exam::where('is_approve', 1)->get();
+        $allExams = Exam::all();
+        $files = File::all();
+        $exams = Exam::all();
 
         if (Auth::user()->is_admin == 1) {
-            $allExams = Exam::where(['is_approve' => 1,'user_id' => Auth::user()->id])->get();
-            $files = File::where(['is_approve' => 1,'user_id' => Auth::user()->id])->get();
-            $exams = Exam::where(['is_approve' => 1,'user_id' => Auth::user()->id])->get();
+            $allExams = Exam::where('user_id', Auth::user()->id)->get();
+            $files = File::where('user_id', Auth::user()->id)->get();
+            $exams = Exam::where('user_id', Auth::user()->id)->get();
 
         }
 

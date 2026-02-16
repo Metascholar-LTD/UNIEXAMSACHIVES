@@ -651,14 +651,6 @@
                                                             <i class="fas fa-file-download"></i>
                                                         </a>
                                                     @endif
-                                                    @if (!$exam->is_approve)
-                                                        <form action="{{ route('exams.approve', $exam->id) }}" method="post" style="display: inline;">
-                                                            @csrf
-                                                            <button type="submit" class="action-btn approve" title="Approve Exam" onclick="return confirm('Are you sure you want to approve this exam?')">
-                                                                <i class="fas fa-check"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
                                                     <form action="{{ route('exams.destroy', $exam->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -680,9 +672,9 @@
                                 </div>
                             @else
                                 <div class="no-exams">
-                                    <i class="fas fa-clock"></i>
-                                    <h4>No Pending Exams</h4>
-                                    <p>There are currently no exams awaiting approval. All exams have been processed.</p>
+                                    <i class="fas fa-file-alt"></i>
+                                    <h4>No Exams</h4>
+                                    <p>There are currently no exams in the system.</p>
                                 </div>
                             @endif
                         </div>

@@ -567,14 +567,6 @@
                                         <span class="stat-number">{{ count($files) }}</span>
                                         <div class="stat-label">Total Files</div>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $files->where('is_approve', 0)->count() }}</span>
-                                        <div class="stat-label">Awaiting Review</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $files->where('is_approve', 1)->count() }}</span>
-                                        <div class="stat-label">Already Approved</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -668,14 +660,6 @@
                                                             <i class="fas fa-download"></i>
                                                         </span>
                                                     @endif
-                                                    @if (!$file->is_approve)
-                                                        <form action="{{ route('file.approve', $file->id) }}" method="post" style="display: inline;">
-                                                            @csrf
-                                                            <button type="submit" class="action-btn approve" title="Approve File">
-                                                                <i class="fas fa-check"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
                                                     <form action="{{ route('file.destroy', $file->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -683,20 +667,6 @@
                                                             <i class="fas fa-trash"></i>
                                                         </button>
                                                     </form>
-                                                </div>
-                                                
-                                                <div class="file-status">
-                                                    @if ($file->is_approve)
-                                                        <span class="status-badge approved">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            Approved
-                                                        </span>
-                                                    @else
-                                                        <span class="status-badge pending">
-                                                            <i class="fas fa-clock"></i>
-                                                            Pending
-                                                        </span>
-                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

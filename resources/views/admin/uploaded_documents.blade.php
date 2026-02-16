@@ -532,14 +532,6 @@
                                         <span class="stat-number">{{ count($exams) }}</span>
                                         <div class="stat-label">Total Uploaded</div>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $exams->where('is_approve', 1)->count() }}</span>
-                                        <div class="stat-label">Approved</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $exams->where('is_approve', 0)->count() }}</span>
-                                        <div class="stat-label">Pending</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -574,7 +566,7 @@
                                         @php
                                             $extension = pathinfo($exam->exam_document, PATHINFO_EXTENSION);
                                         @endphp
-                                        <div class="user-uploaded-doc-card pdf-card" data-type="{{ strtolower($exam->exams_type) }}" data-status="{{ $exam->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($exam->course_title . ' ' . $exam->course_code . ' ' . $exam->instructor_name) }}">
+                                        <div class="user-uploaded-doc-card pdf-card" data-type="{{ strtolower($exam->exams_type) }}"  data-search="{{ strtolower($exam->course_title . ' ' . $exam->course_code . ' ' . $exam->instructor_name) }}">
                                             <div class="exam-card-header">
                                                 <div class="exam-header-info">
                                                     <div class="exam-icon">
@@ -634,19 +626,6 @@
                                                     @endif
                                                 </div>
                                                 
-                                                <div class="exam-status">
-                                                    @if ($exam->is_approve)
-                                                        <span class="status-badge approved">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            Approved
-                                                        </span>
-                                                    @else
-                                                        <span class="status-badge pending">
-                                                            <i class="fas fa-clock"></i>
-                                                            Pending
-                                                        </span>
-                                                    @endif
-                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -683,7 +662,6 @@ document.addEventListener('DOMContentLoaded', function() {
         examCards.forEach(card => {
             const searchData = card.getAttribute('data-search');
             const cardType = card.getAttribute('data-type');
-            const cardStatus = card.getAttribute('data-status');
             const hasAnswerKey = card.querySelector('.fa-key') !== null;
             
             let showBySearch = searchData.includes(searchTerm);

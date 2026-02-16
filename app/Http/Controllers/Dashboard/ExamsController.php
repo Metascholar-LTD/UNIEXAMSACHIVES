@@ -129,13 +129,6 @@ class ExamsController extends Controller
         return redirect()->route('dashboard')->with('success', 'Exam Document updated successfully.');
     }
 
-    public function approve(Exam $exam)
-    {
-        $exam->update(['is_approve' => true]);
-
-        return redirect()->route('dashboard.all.upload.document')->with('success', 'Document approved successfully');
-    }
-
     public function downloadExam(Exam $exam)
     {
         // Check if user has permission to download this exam

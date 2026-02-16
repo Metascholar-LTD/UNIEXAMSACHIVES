@@ -558,14 +558,6 @@
                                         <span class="stat-number">{{ count($files) }}</span>
                                         <div class="stat-label">Total Files</div>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $files->where('is_approve', 1)->count() }}</span>
-                                        <div class="stat-label">Approved</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $files->where('is_approve', 0)->count() }}</span>
-                                        <div class="stat-label">Pending</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -585,8 +577,6 @@
                                 <a href="#" class="filter-tab active" data-filter="all">All Files</a>
                                 <a href="#" class="filter-tab" data-filter="pdf">PDF Files</a>
                                 <a href="#" class="filter-tab" data-filter="doc">Word Documents</a>
-                                <a href="#" class="filter-tab" data-filter="approved">Approved Only</a>
-                                <a href="#" class="filter-tab" data-filter="pending">Pending Only</a>
                             </div>
                         </div>
                     </div>
@@ -602,7 +592,7 @@
                                             $isPdf = strtolower($extension) === 'pdf';
                                             $isDoc = in_array(strtolower($extension), ['doc', 'docx']);
                                         @endphp
-                                        <div class="all-files-archive-card {{ $isPdf ? 'pdf-file' : ($isDoc ? 'doc-file' : '') }}" data-type="{{ strtolower($extension) }}" data-status="{{ $file->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($file->file_title . ' ' . $file->depositor_name . ' ' . $file->document_id) }}">
+                                        <div class="all-files-archive-card {{ $isPdf ? 'pdf-file' : ($isDoc ? 'doc-file' : '') }}" data-type="{{ strtolower($extension) }}"  data-search="{{ strtolower($file->file_title . ' ' . $file->depositor_name . ' ' . $file->document_id) }}">
                                             <div class="file-card-header">
                                                 <div class="file-icon">
                                                     @if($isPdf)
@@ -654,14 +644,6 @@
                                                     <a href="{{ asset($file->document_file) }}" download class="action-btn download" title="Download File">
                                                         <i class="fas fa-download"></i>
                                                     </a>
-                                                    @if (!$file->is_approve)
-                                                        <form action="{{ route('file.approve', $file->id) }}" method="post" style="display: inline;">
-                                                            @csrf
-                                                            <button type="submit" class="action-btn approve" title="Approve File">
-                                                                <i class="fas fa-check"></i>
-                                                            </button>
-                                                        </form>
-                                                    @endif
                                                     <form action="{{ route('file.destroy', $file->id) }}" method="post" style="display: inline;">
                                                         @csrf
                                                         @method('DELETE')
@@ -671,19 +653,6 @@
                                                     </form>
                                                 </div>
                                                 
-                                                <div class="file-status">
-                                                    @if ($file->is_approve)
-                                                        <span class="status-badge approved">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            Approved
-                                                        </span>
-                                                    @else
-                                                        <span class="status-badge pending">
-                                                            <i class="fas fa-clock"></i>
-                                                            Pending
-                                                        </span>
-                                                    @endif
-                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
@@ -731,10 +700,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     showByFilter = cardType === 'pdf';
                 } else if (activeFilter === 'doc') {
                     showByFilter = cardType === 'doc' || cardType === 'docx';
-                } else if (activeFilter === 'approved') {
-                    showByFilter = cardStatus === 'approved';
-                } else if (activeFilter === 'pending') {
-                    showByFilter = cardStatus === 'pending';
                 }
             }
 

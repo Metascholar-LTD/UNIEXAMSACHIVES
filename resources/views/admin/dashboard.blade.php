@@ -1184,10 +1184,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$admin_approve_papers}}</span>
+                                                    <span class="counter">{{$admin_total_papers}}</span>
 
                                                 </div>
-                                                <p>Approved Exams</p>
+                                                <p>My Exams</p>
 
                                             </div>
                                         </div>
@@ -1201,10 +1201,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$admin_pending_papers}}</span>
+                                                    <span class="counter">{{$admin_total_files}}</span>
 
                                                 </div>
-                                                <p>Pending Exams</p>
+                                                <p>My Files</p>
 
                                             </div>
                                         </div>
@@ -1237,10 +1237,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$admin_approve_files}}</span>
+                                                    <span class="counter">{{$total_papers}}</span>
 
                                                 </div>
-                                                <p>Approved Files</p>
+                                                <p>Total Exams</p>
 
                                             </div>
                                         </div>
@@ -1254,10 +1254,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$admin_pending_files}}</span>
+                                                    <span class="counter">{{$total_files}}</span>
 
                                                 </div>
-                                                <p>Pending Files</p>
+                                                <p>Total Files</p>
 
                                             </div>
                                         </div>
@@ -1295,10 +1295,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$total_approved_papers}}</span>
+                                                    <span class="counter">{{$total_papers}}</span>
 
                                                 </div>
-                                                <p>Approved Exam Papers</p>
+                                                <p>All Exam Papers</p>
 
                                             </div>
                                         </div>
@@ -1312,10 +1312,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$total_pending_papers}}</span>
+                                                    <span class="counter">{{$total_users}}</span>
 
                                                 </div>
-                                                <p>Pending Exam Papers</p>
+                                                <p>Total Users</p>
 
                                             </div>
                                         </div>
@@ -1348,10 +1348,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$total_approved_files}}</span>
+                                                    <span class="counter">{{$total_files}}</span>
 
                                                 </div>
-                                                <p>Approved Files</p>
+                                                <p>All Files</p>
 
                                             </div>
                                         </div>
@@ -1365,10 +1365,10 @@
                                             </div>
                                             <div class="counter__content__wraper">
                                                 <div class="counter__number">
-                                                    <span class="counter">{{$total_pending_files}}</span>
+                                                    <span class="counter">{{$admin_total_files}}</span>
 
                                                 </div>
-                                                <p>Pending Files</p>
+                                                <p>My Files</p>
 
                                             </div>
                                         </div>

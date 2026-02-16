@@ -546,14 +546,6 @@
                                         <span class="stat-number">{{ count($files) }}</span>
                                         <div class="stat-label">Total Files</div>
                                     </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $files->where('is_approve', 1)->count() }}</span>
-                                        <div class="stat-label">Approved</div>
-                                    </div>
-                                    <div class="stat-item">
-                                        <span class="stat-number">{{ $files->where('is_approve', 0)->count() }}</span>
-                                        <div class="stat-label">Pending</div>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -649,19 +641,6 @@
                                                     @endif
                                                 </div>
                                                 
-                                                <div class="file-status">
-                                                    @if ($file->is_approve)
-                                                        <span class="status-badge approved">
-                                                            <i class="fas fa-check-circle"></i>
-                                                            Approved
-                                                        </span>
-                                                    @else
-                                                        <span class="status-badge pending">
-                                                            <i class="fas fa-clock"></i>
-                                                            Pending
-                                                        </span>
-                                                    @endif
-                                                </div>
                                             </div>
                                         </div>
                                     @endforeach
