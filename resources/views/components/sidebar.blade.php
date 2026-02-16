@@ -450,6 +450,27 @@
                         </svg>
                         System Licences</a>
                 </li>
+                @auth
+                    @unless(Auth::user()->role === 'employee')
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.system-documentation.manage') ? 'active' : '' }}" href="{{route('dashboard.system-documentation.manage')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                System Documentation</a>
+                        </li>
+                    @else
+                        <li>
+                            <a class="{{ request()->routeIs('dashboard.system-documentation') ? 'active' : '' }}" href="{{route('dashboard.system-documentation')}}">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 10px;">
+                                    <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+                                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+                                </svg>
+                                System Documentation</a>
+                        </li>
+                    @endunless
+                @endauth
                 <li>
                     <a class="{{ request()->routeIs('dashboard.settings') ? 'active' : '' }}" href="{{route('dashboard.settings')}}">
                         <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762941932/2d648212-6d23-4431-beb3-a679d2a6dc43.png" alt="Settings" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
