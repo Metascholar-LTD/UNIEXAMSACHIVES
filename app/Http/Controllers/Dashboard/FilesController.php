@@ -32,6 +32,7 @@ class FilesController extends Controller
         }
         $validatedData['user_id'] = Auth::user()->id;
         $validatedData['document_id'] = random_int(1000000000, 9999999999);
+        $validatedData['is_approve'] = true; // Auto-approve all uploads
         File::create($validatedData);
         return redirect()->route('dashboard')->with('success', 'File has been deposited successfully.');
     }
@@ -95,26 +96,15 @@ class FilesController extends Controller
         ]);
     }
 
-    public function approvedFiles(){
-        $files = File::where('user_id', Auth::user()->id)
-        ->where('is_approve', 1)->get();
-        return view('admin.approved_files',compact('files'));
+    // Unified Files view (no more pending/approved separation)
+    public function myFiles(){
+        $files = File::where('user_id', Auth::user()->id)->get();
+        return view('admin.my_files',compact('files'));
     }
 
-    public function allApprovedFiles(){
-        $files = File::where('is_approve', 1)->get();
-        return view('admin.all_approved_files',compact('files'));
-    }
-
-    public function pendingFiles(){
-        $files = File::where('user_id', Auth::user()->id)
-        ->where('is_approve', 0)->get();
-        return view('admin.pending_files',compact('files'));
-    }
-
-    public function allPendingFiles(){
-        $files = File::where('is_approve', 0)->get();
-        return view('admin.all_pending_files',compact('files'));
+    public function allFiles(){
+        $files = File::all();
+        return view('admin.all_files_list',compact('files'));
     }
 
     public function approve(File $file)

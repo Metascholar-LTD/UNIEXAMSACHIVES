@@ -55,6 +55,7 @@ class ExamsController extends Controller
         }
 
         $validatedData['user_id'] = Auth::user()->id;
+        $validatedData['is_approve'] = true; // Auto-approve all uploads
 
         Exam::create($validatedData);
         return redirect()->route('dashboard')->with('success', 'Exam Document deposited successfully.');

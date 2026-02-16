@@ -86,24 +86,23 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/upload-exams',[HomeController::class, 'uploadedDocument'])->name('dashboard.upload.document');
     Route::get('/dashboard/all-upload-exams',[HomeController::class, 'allUploadedDocument'])->name('dashboard.all.upload.document');
 
-    #Approved Exams
-    Route::get('/dashboard/approved-exams',[HomeController::class, 'approvedExams'])->name('dashboard.approve.exams');
-    Route::get('/dashboard/all-approved-exams',[HomeController::class, 'allApprovedExams'])->name('dashboard.all.approve.exams');
-
-    #pending Exams
-    Route::get('/dashboard/pending-exams',[HomeController::class, 'pendingExams'])->name('dashboard.pending.exams');
-    Route::get('/dashboard/all-pending-exams',[HomeController::class, 'allPendingExams'])->name('dashboard.all.pending.exams');
+    #Unified Exams (No more pending/approved separation)
+    Route::get('/dashboard/my-exams',[HomeController::class, 'myExams'])->name('dashboard.my.exams');
+    Route::get('/dashboard/all-exams',[HomeController::class, 'allExams'])->name('dashboard.all.exams');
 
     #exams
     Route::post('/dashbaord/exam/store',[ExamsController::class, 'store'])->name('dashboard.exam.store');
     Route::get('/dashboard/exams/{exam}/edit', [ExamsController::class, 'edit'])->name('exams.edit');
     Route::put('/dashboard/exams/{exam}', [ExamsController::class, 'update'])->name('exams.update');
 
-    Route::post('/dashboard/exams/{exam}/approve', [ExamsController::class, 'approve'])->name('exams.approve');
     Route::delete('/dashboard/exams/{exam}', [ExamsController::class, 'destroy'])->name('exams.destroy');
     Route::delete('/dashboard/exam/{exam}', [ExamsController::class, 'delete'])->name('exam.destroy');
     Route::get('/exams/filter', [ExamsController::class, 'filter']);
     Route::get('/exams/search', [ExamsController::class, 'search'])->name('exam.search');
+
+    #Unified Files (No more pending/approved separation)
+    Route::get('/dashboard/my-files',[FilesController::class, 'myFiles'])->name('dashboard.my.files');
+    Route::get('/dashboard/all-files',[FilesController::class, 'allFiles'])->name('dashboard.all.files');
 
     #Files
     Route::post('/dashbaord/file/store',[FilesController::class, 'store'])->name('dashboard.file.store');
@@ -113,15 +112,6 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/file/{file}/edit', [FilesController::class, 'edit'])->name('files.edit');
     Route::put('/dashboard/files/{file}', [FilesController::class, 'update'])->name('files.update');
 
-    #Approved Files
-    Route::get('/dashboard/approved-files',[FilesController::class, 'approvedFiles'])->name('dashboard.approve.files');
-    Route::get('/dashboard/all-approved-files',[FilesController::class, 'allApprovedFiles'])->name('dashboard.all.approve.files');
-
-    #pending Exams
-    Route::get('/dashboard/pending-files',[FilesController::class, 'pendingFiles'])->name('dashboard.pending.files');
-    Route::get('/dashboard/all-pending-files',[FilesController::class, 'allPendingFiles'])->name('dashboard.all.pending.files');
-
-    Route::post('/dashboard/file/{file}/approve', [FilesController::class, 'approve'])->name('file.approve');
     Route::delete('/dashboard/file/{file}', [FilesController::class, 'destroy'])->name('file.destroy');
 
     #Folders

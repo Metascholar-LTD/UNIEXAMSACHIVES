@@ -62,35 +62,34 @@ class AppServiceProvider extends ServiceProvider
                 $bookmarkedCount = count($bookmarkedMemoIds);
                 
                 if (Auth::user()->is_admin) {
-                    $exams = Exam::where('user_id', Auth::user()->id)->get();
-                    $files = File::where('user_id', Auth::user()->id)->get();
+                    // Regular users (is_admin = 1) - see only their own exams/files
+                    $myExams = Exam::where('user_id', Auth::user()->id)->count();
+                    $myFiles = File::where('user_id', Auth::user()->id)->count();
 
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
                         'bookmarkedCount' => $bookmarkedCount,
-                        'allExansCount' => $exams->count(),
-                        'approvedCount' => $exams->where('is_approve', 1)->count(),
-                        'pendingCount' => $exams->where('is_approve', 0)->count(),
-                        'allFilesCount' => $files->count(),
-                        'approvedFilesCount' => $files->where('is_approve', 1)->count(),
-                        'pendingFilesCount' => $files->where('is_approve', 0)->count(),
+                        'myExamsCount' => $myExams,
+                        'allExamsCount' => $myExams, // For regular users, "all" is just their own
+                        'myFilesCount' => $myFiles,
+                        'allFilesCount' => $myFiles, // For regular users, "all" is just their own
                         'systemDetail' => Detail::all(),
                         'showPasswordReminder' => !Auth::user()->password_changed,
                     ]);
                 }else{
-                    $exams = Exam::all();
-                    $files = File::all();
+                    // Admin users (is_admin = 0) - see all exams/files in system
+                    $allExams = Exam::count();
+                    $allFiles = File::count();
+                    
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
                         'bookmarkedCount' => $bookmarkedCount,
-                        'allExansCount' => $exams->count(),
-                        'approvedCount' => $exams->where('is_approve', 1)->count(),
-                        'pendingCount' => $exams->where('is_approve', 0)->count(),
-                        'allFilesCount' => $files->count(),
-                        'approvedFilesCount' => $files->where('is_approve', 1)->count(),
-                        'pendingFilesCount' => $files->where('is_approve', 0)->count(),
+                        'myExamsCount' => Exam::where('user_id', Auth::user()->id)->count(),
+                        'allExamsCount' => $allExams,
+                        'myFilesCount' => File::where('user_id', Auth::user()->id)->count(),
+                        'allFilesCount' => $allFiles,
                         'systemDetail' => Detail::all(),
                         'showPasswordReminder' => !Auth::user()->password_changed,
                     ]);

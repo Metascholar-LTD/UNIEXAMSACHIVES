@@ -164,54 +164,24 @@
                 @auth
                 @if(auth()->user()->is_admin)
                 <li>
-                    <a class="{{ request()->routeIs('dashboard.pending.exams') ? 'active' : '' }}" href="{{route('dashboard.pending.exams')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-bookmark">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        Pending Exams</a><span class="dashboard__label">{{$pendingCount}}</span>
-                </li>
-                <li>
-                    <a class="{{ request()->routeIs('dashboard.approve.exams') ? 'active' : '' }}" href="{{route('dashboard.approve.exams')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892670/exam_esftn0.png" alt="Approved Exams" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                        Approved Exams </a><span class="dashboard__label">{{$approvedCount}}</span>
+                    <a class="{{ request()->routeIs('dashboard.my.exams') ? 'active' : '' }}" href="{{route('dashboard.my.exams')}}">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892670/exam_esftn0.png" alt="My Exams" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                        My Exams</a><span class="dashboard__label">{{$myExamsCount}}</span>
                 </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.upload.document') ? 'active' : '' }}" href="{{route('dashboard.upload.document')}}">
                             <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892811/exam_1_jho0sq.png" alt="All Exams Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                            All Exams Archive</a><span class="dashboard__label">{{$allExansCount}}</span>
+                            All Exams Archive</a><span class="dashboard__label">{{$allExamsCount}}</span>
                     </li>
                 @endif
                 @endauth
                 @auth
                     @unless(auth()->user()->is_admin)
-                    <li>
-                        <a class="{{ request()->routeIs('dashboard.all.pending.exams') ? 'active' : '' }}" href="{{route('dashboard.all.pending.exams')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-bookmark">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                            Pending Exams
-                        </a><span class="dashboard__label">{{$pendingCount}}</span>
-
-                    </li>
-                    <li>
-                        <a class="{{ request()->routeIs('dashboard.all.approve.exams') ? 'active' : '' }}" href="{{route('dashboard.all.approve.exams')}}">
-                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892670/exam_esftn0.png" alt="Approved Exams" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                            Approved Exams
-                        </a><span class="dashboard__label">{{$approvedCount}}</span>
-
-                    </li>
                         <li>
-                            <a class="{{ request()->routeIs('dashboard.all.upload.document') ? 'active' : '' }}" href="{{route('dashboard.all.upload.document')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892811/exam_1_jho0sq.png" alt="All Exams Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                All Exams Archive
-                            </a><span class="dashboard__label">{{$allExansCount}}</span>
-
+                            <a class="{{ request()->routeIs('dashboard.all.exams') ? 'active' : '' }}" href="{{route('dashboard.all.exams')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762892811/exam_1_jho0sq.png" alt="All Exams" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                All Exams
+                            </a><span class="dashboard__label">{{$allExamsCount}}</span>
                         </li>
                     @endunless
                 @endauth
@@ -243,19 +213,9 @@
                 @auth
                 @if(auth()->user()->is_admin)
                 <li>
-                    <a class="{{ request()->routeIs('dashboard.pending.files') ? 'active' : '' }}" href="{{route('dashboard.pending.files')}}">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                            viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                            class="feather feather-bookmark">
-                            <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                        </svg>
-                        Pending Files</a><span class="dashboard__label">{{$pendingFilesCount}}</span>
-                </li>
-                <li>
-                    <a class="{{ request()->routeIs('dashboard.approve.files') ? 'active' : '' }}" href="{{route('dashboard.approve.files')}}">
-                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939971/approved_jjmla9.png" alt="Files Approved" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                        Files Approved</a><span class="dashboard__label">{{$approvedFilesCount}}</span>
+                    <a class="{{ request()->routeIs('dashboard.my.files') ? 'active' : '' }}" href="{{route('dashboard.my.files')}}">
+                        <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939971/approved_jjmla9.png" alt="My Files" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                        My Files</a><span class="dashboard__label">{{$myFilesCount}}</span>
                 </li>
                     <li>
                         <a class="{{ request()->routeIs('dashboard.upload.file') ? 'active' : '' }}" href="{{route('dashboard.upload.file')}}">
@@ -271,31 +231,11 @@
                 @endauth
                 @auth
                     @unless(auth()->user()->is_admin)
-                    <li>
-                        <a class="{{ request()->routeIs('dashboard.all.pending.files') ? 'active' : '' }}" href="{{route('dashboard.all.pending.files')}}">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-                                class="feather feather-bookmark">
-                                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                            </svg>
-                            Pending Files
-                        </a><span class="dashboard__label">{{$pendingFilesCount}}</span>
-
-                    </li>
-                    <li>
-                        <a class="{{ request()->routeIs('dashboard.all.approve.files') ? 'active' : '' }}" href="{{route('dashboard.all.approve.files')}}">
-                            <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939971/approved_jjmla9.png" alt="Approved Files" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                            Approved Files
-                        </a><span class="dashboard__label">{{$approvedFilesCount}}</span>
-
-                    </li>
                         <li>
-                            <a class="{{ request()->routeIs('dashboard.all.upload.file') ? 'active' : '' }}" href="{{route('dashboard.all.upload.file')}}">
-                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939473/file_k1pnab.png" alt="All Files Archive" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
-                                All Files Archive
+                            <a class="{{ request()->routeIs('dashboard.all.files') ? 'active' : '' }}" href="{{route('dashboard.all.files')}}">
+                                <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1762939473/file_k1pnab.png" alt="All Files" style="width: 18px; height: 18px; object-fit: contain; margin-right: 10px;">
+                                All Files
                             </a><span class="dashboard__label">{{$allFilesCount}}</span>
-
                         </li>
                         <li>
                             <a class="{{ request()->routeIs('dashboard.folders.*') ? 'active' : '' }}" href="{{route('dashboard.folders.index')}}">

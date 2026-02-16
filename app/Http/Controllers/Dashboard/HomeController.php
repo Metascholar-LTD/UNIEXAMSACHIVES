@@ -40,20 +40,12 @@ class HomeController extends Controller
         return view('admin.dashboard',[
             'total_papers' => Exam::count(),
             'total_users' => User::count(),
-            'total_approved_papers' => Exam::where('is_approve', 1)->count(),
-            'total_pending_papers' => Exam::where('is_approve', 0)->count(),
             'dailyVisits' => $dailyVisitCount,
             'totalVisits' => Visit::all()->count(),
             'admin_total_papers' => Exam::where('user_id', Auth::user()->id)->count(),
-            'admin_pending_papers' => Exam::where('user_id', Auth::user()->id)->where('is_approve', 0)->count(),
-            'admin_approve_papers' => Exam::where('user_id', Auth::user()->id)->where('is_approve', 1)->count(),
             'recentlyUploadedExams' => Exam::orderBy('created_at', 'desc')->take($numberOfExamsToFetch)->get(),
             'total_files' => $files->count(),
-            'total_approved_files' => $files->where('is_approve', 1)->count(),
-            'total_pending_files' => $files->where('is_approve', 0)->count(),
             'admin_total_files' => File::where('user_id', Auth::user()->id)->count(),
-            'admin_pending_files' => File::where('user_id', Auth::user()->id)->where('is_approve', 0)->count(),
-            'admin_approve_files' => File::where('user_id', Auth::user()->id)->where('is_approve', 1)->count(),
             'userCommittees' => $userCommittees,
         ]);
     }
@@ -111,26 +103,15 @@ class HomeController extends Controller
         return view('admin.all_uploaded_documents',compact('exams'));
     }
 
-    public function approvedExams(){
-        $exams = Exam::where('user_id', Auth::user()->id)
-        ->where('is_approve', 1)->get();
-        return view('admin.approved_exams',compact('exams'));
+    // Unified Exams view (no more pending/approved separation)
+    public function myExams(){
+        $exams = Exam::where('user_id', Auth::user()->id)->get();
+        return view('admin.my_exams',compact('exams'));
     }
 
-    public function allApprovedExams(){
-        $exams = Exam::where('is_approve', 1)->get();
-        return view('admin.all_approved_exams',compact('exams'));
-    }
-
-    public function pendingExams(){
-        $exams = Exam::where('user_id', Auth::user()->id)
-        ->where('is_approve', 0)->get();
-        return view('admin.pending_exams',compact('exams'));
-    }
-
-    public function allPendingExams(){
-        $exams = Exam::where('is_approve', 0)->get();
-        return view('admin.all_pending_exams',compact('exams'));
+    public function allExams(){
+        $exams = Exam::all();
+        return view('admin.all_exams',compact('exams'));
     }
 
 
