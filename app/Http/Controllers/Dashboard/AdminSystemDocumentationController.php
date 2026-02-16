@@ -58,13 +58,17 @@ class AdminSystemDocumentationController extends Controller
         // Handle file upload
         if ($request->hasFile('document_file')) {
             $file = $request->file('document_file');
+            
+            // Get file info BEFORE moving (important!)
+            $fileType = strtolower($file->getClientOriginalExtension());
+            $fileSize = $this->formatBytes($file->getSize());
+            
+            // Now move the file
             $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9\-\_\.]/', '_', $file->getClientOriginalName());
             $destinationPath = 'system-documentation';
             $file->move(public_path($destinationPath), $fileName);
             
             $filePath = $destinationPath . '/' . $fileName;
-            $fileType = strtolower($file->getClientOriginalExtension());
-            $fileSize = $this->formatBytes($file->getSize());
 
             SystemDocumentation::create([
                 'title' => $validated['title'],
@@ -113,13 +117,19 @@ class AdminSystemDocumentationController extends Controller
 
             // Upload new file
             $file = $request->file('document_file');
+            
+            // Get file info BEFORE moving (important!)
+            $fileType = strtolower($file->getClientOriginalExtension());
+            $fileSize = $this->formatBytes($file->getSize());
+            
+            // Now move the file
             $fileName = time() . '_' . preg_replace('/[^A-Za-z0-9\-\_\.]/', '_', $file->getClientOriginalName());
             $destinationPath = 'system-documentation';
             $file->move(public_path($destinationPath), $fileName);
             
             $document->file_path = $destinationPath . '/' . $fileName;
-            $document->file_type = strtolower($file->getClientOriginalExtension());
-            $document->file_size = $this->formatBytes($file->getSize());
+            $document->file_type = $fileType;
+            $document->file_size = $fileSize;
         }
 
         $document->save();
