@@ -100,6 +100,11 @@
         color: #5b21b6;
     }
 
+    .file-type-badge.zip {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+
     .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -561,6 +566,7 @@
                                     <option value="all">All Types</option>
                                     <option value="pdf">PDF Only</option>
                                     <option value="doc">Word Only</option>
+                                    <option value="zip">ZIP Only</option>
                                 </select>
                             </div>
                         </div>
@@ -590,7 +596,7 @@
                                                         <td>{{ Str::limit($document->description, 80) }}</td>
                                                         <td onclick="event.stopPropagation()">
                                                             <div class="action-buttons">
-                                                                @if($document->isPdf())
+                                                                @if($document->isPdf() && !$document->isZip())
                                                                 <a href="{{ route('dashboard.system-documentation.preview', $document->id) }}" target="_blank" class="btn-action btn-preview">
                                                                     <i class="icofont-eye-alt"></i>
                                                                     Preview

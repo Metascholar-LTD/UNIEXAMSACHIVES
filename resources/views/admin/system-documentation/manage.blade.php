@@ -100,6 +100,11 @@
         color: #5b21b6;
     }
 
+    .file-type-badge.zip {
+        background-color: #fef3c7;
+        color: #92400e;
+    }
+
     .action-buttons {
         display: flex;
         gap: 0.5rem;
@@ -795,6 +800,7 @@
                                         <option value="all">All Types</option>
                                         <option value="pdf">PDF Only</option>
                                         <option value="doc">Word Only</option>
+                                        <option value="zip">ZIP Only</option>
                                     </select>
                                 </div>
                                 <button class="add-document-btn" onclick="openAddModal()">
@@ -843,7 +849,7 @@
                                                         <td>{{ Str::limit($document->description, 80) }}</td>
                                                         <td onclick="event.stopPropagation()">
                                                             <div class="action-buttons">
-                                                                @if($document->isPdf())
+                                                                @if($document->isPdf() && !$document->isZip())
                                                                 <a href="{{ route('dashboard.system-documentation.manage.preview', $document->id) }}" target="_blank" class="btn-action btn-preview">
                                                                     <i class="icofont-eye-alt"></i>
                                                                 </a>
@@ -1025,13 +1031,13 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label required">Document File</label>
-                    <input type="file" name="document_file" id="addDocumentFile" accept=".pdf,.doc,.docx" required style="display: none;">
+                    <input type="file" name="document_file" id="addDocumentFile" accept=".pdf,.doc,.docx,.zip" required style="display: none;">
                     <div class="file-upload-area" onclick="document.getElementById('addDocumentFile').click()">
                         <div class="file-upload-icon">
                             <i class="icofont-file-document"></i>
                         </div>
                         <div class="file-upload-text">Click to upload or drag and drop</div>
-                        <div class="file-upload-hint">PDF, DOC, DOCX (Max 10MB)</div>
+                        <div class="file-upload-hint">PDF, DOC, DOCX, ZIP (Max 10MB)</div>
                     </div>
                     <div class="file-selected-display" id="addFileDisplay">
                         <span class="file-name-display">
@@ -1071,13 +1077,13 @@
                 </div>
                 <div class="form-group">
                     <label class="form-label">Replace Document File (optional)</label>
-                    <input type="file" name="document_file" id="editDocumentFile" accept=".pdf,.doc,.docx" style="display: none;">
+                    <input type="file" name="document_file" id="editDocumentFile" accept=".pdf,.doc,.docx,.zip" style="display: none;">
                     <div class="file-upload-area" onclick="document.getElementById('editDocumentFile').click()">
                         <div class="file-upload-icon">
                             <i class="icofont-file-document"></i>
                         </div>
                         <div class="file-upload-text">Click to upload new file (optional)</div>
-                        <div class="file-upload-hint">PDF, DOC, DOCX (Max 10MB)</div>
+                        <div class="file-upload-hint">PDF, DOC, DOCX, ZIP (Max 10MB)</div>
                     </div>
                     <div class="file-selected-display" id="editFileDisplay">
                         <span class="file-name-display">

@@ -52,7 +52,7 @@ class AdminSystemDocumentationController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'document_file' => 'required|file|mimes:pdf,doc,docx|max:10240', // 10MB max
+            'document_file' => 'required|file|mimes:pdf,doc,docx,zip|max:10240', // 10MB max
         ]);
 
         // Handle file upload
@@ -101,7 +101,7 @@ class AdminSystemDocumentationController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
-            'document_file' => 'nullable|file|mimes:pdf,doc,docx|max:10240',
+            'document_file' => 'nullable|file|mimes:pdf,doc,docx,zip|max:10240',
         ]);
 
         $document->title = $validated['title'];
@@ -173,9 +173,9 @@ class AdminSystemDocumentationController extends Controller
 
         $document = SystemDocumentation::findOrFail($id);
         
-        if (!$document->isPdf()) {
+        if (!$document->isPdf() || $document->isZip()) {
             return redirect()->route('dashboard.system-documentation.manage')
-                ->with('error', 'Only PDF files can be previewed.');
+                ->with('error', 'Only PDF files can be previewed. ZIP files must be downloaded.');
         }
 
         $filePath = public_path($document->file_path);

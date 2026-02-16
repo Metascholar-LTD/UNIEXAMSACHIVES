@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->string('file_path');
-            $table->string('file_type'); // pdf, doc, docx
+            $table->string('file_type'); // pdf, doc, docx, zip
             $table->string('file_size')->nullable();
             $table->unsignedBigInteger('created_by');
             $table->foreign('created_by')->references('id')->on('users')->onDelete('cascade');

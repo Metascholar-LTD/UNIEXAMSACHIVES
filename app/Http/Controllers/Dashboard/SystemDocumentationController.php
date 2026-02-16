@@ -30,9 +30,9 @@ class SystemDocumentationController extends Controller
     {
         $document = SystemDocumentation::findOrFail($id);
         
-        if (!$document->isPdf()) {
+        if (!$document->isPdf() || $document->isZip()) {
             return redirect()->route('dashboard.system-documentation')
-                ->with('error', 'Only PDF files can be previewed.');
+                ->with('error', 'Only PDF files can be previewed. ZIP files must be downloaded.');
         }
 
         $filePath = public_path($document->file_path);

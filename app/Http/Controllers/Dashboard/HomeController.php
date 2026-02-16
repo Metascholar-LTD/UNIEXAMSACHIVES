@@ -43,7 +43,7 @@ class HomeController extends Controller
             'dailyVisits' => $dailyVisitCount,
             'totalVisits' => Visit::all()->count(),
             'admin_total_papers' => Exam::where('user_id', Auth::user()->id)->count(),
-            'recentlyUploadedExams' => Exam::orderBy('created_at', 'desc')->take($numberOfExamsToFetch)->get(),
+            'recentlyUploadedExams' => Exam::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->take($numberOfExamsToFetch)->get(),
             'total_files' => $files->count(),
             'admin_total_files' => File::where('user_id', Auth::user()->id)->count(),
             'userCommittees' => $userCommittees,

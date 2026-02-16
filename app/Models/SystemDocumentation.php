@@ -42,4 +42,12 @@ class SystemDocumentation extends Model
     {
         return in_array(strtolower($this->file_type), ['doc', 'docx']);
     }
+
+    /**
+     * Check if file is ZIP archive
+     */
+    public function isZip()
+    {
+        return strtolower($this->file_type) === 'zip';
+    }
 }
