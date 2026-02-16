@@ -11,17 +11,15 @@ use Illuminate\Support\Facades\Storage;
 class AdminSystemDocumentationController extends Controller
 {
     /**
-     * Create a new controller instance.
+     * Check if user is authorized (not an employee)
      */
-    public function __construct()
+    private function checkAuthorization()
     {
-        $this->middleware(function ($request, $next) {
-            if (Auth::check() && Auth::user()->role === 'employee') {
-                return redirect()->route('dashboard.system-documentation')
-                    ->with('error', 'Access denied. Only administrators can manage documents.');
-            }
-            return $next($request);
-        });
+        if (Auth::check() && Auth::user()->role === 'employee') {
+            return redirect()->route('dashboard.system-documentation')
+                ->with('error', 'Access denied. Only administrators can manage documents.');
+        }
+        return null;
     }
 
     /**
@@ -29,6 +27,10 @@ class AdminSystemDocumentationController extends Controller
      */
     public function index(Request $request)
     {
+        if ($redirect = $this->checkAuthorization()) {
+            return $redirect;
+        }
+
         $perPage = $request->get('per_page', 10);
         $documents = SystemDocumentation::with('creator')
             ->orderBy('created_at', 'desc')
@@ -43,6 +45,10 @@ class AdminSystemDocumentationController extends Controller
      */
     public function store(Request $request)
     {
+        if ($redirect = $this->checkAuthorization()) {
+            return $redirect;
+        }
+
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'description' => 'required|string',
@@ -82,6 +88,10 @@ class AdminSystemDocumentationController extends Controller
      */
     public function update(Request $request, $id)
     {
+        if ($redirect = $this->checkAuthorization()) {
+            return $redirect;
+        }
+
         $document = SystemDocumentation::findOrFail($id);
 
         $validated = $request->validate([
@@ -123,6 +133,10 @@ class AdminSystemDocumentationController extends Controller
      */
     public function destroy($id)
     {
+        if ($redirect = $this->checkAuthorization()) {
+            return $redirect;
+        }
+
         $document = SystemDocumentation::findOrFail($id);
         
         // Delete file from storage
@@ -143,6 +157,10 @@ class AdminSystemDocumentationController extends Controller
      */
     public function preview($id)
     {
+        if ($redirect = $this->checkAuthorization()) {
+            return $redirect;
+        }
+
         $document = SystemDocumentation::findOrFail($id);
         
         if (!$document->isPdf()) {
@@ -168,6 +186,10 @@ class AdminSystemDocumentationController extends Controller
      */
     public function download($id)
     {
+        if ($redirect = $this->checkAuthorization()) {
+            return $redirect;
+        }
+
         $document = SystemDocumentation::findOrFail($id);
         
         $filePath = public_path($document->file_path);
