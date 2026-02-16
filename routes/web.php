@@ -222,19 +222,12 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard/system-documentation/{id}/download',[\App\Http\Controllers\Dashboard\SystemDocumentationController::class, 'download'])->name('dashboard.system-documentation.download');
 
     #system documentation (admin users - manage) - Only accessible to non-employee users (admins)
-    Route::middleware(['auth', function ($request, $next) {
-        if (auth()->user()->role === 'employee') {
-            return redirect()->route('dashboard.system-documentation')->with('error', 'Access denied. Only administrators can manage documents.');
-        }
-        return $next($request);
-    }])->group(function () {
-        Route::get('/dashboard/system-documentation/manage',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'index'])->name('dashboard.system-documentation.manage');
-        Route::post('/dashboard/system-documentation/manage',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'store'])->name('dashboard.system-documentation.manage.store');
-        Route::put('/dashboard/system-documentation/manage/{id}',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'update'])->name('dashboard.system-documentation.manage.update');
-        Route::delete('/dashboard/system-documentation/manage/{id}',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'destroy'])->name('dashboard.system-documentation.manage.destroy');
-        Route::get('/dashboard/system-documentation/manage/{id}/preview',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'preview'])->name('dashboard.system-documentation.manage.preview');
-        Route::get('/dashboard/system-documentation/manage/{id}/download',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'download'])->name('dashboard.system-documentation.manage.download');
-    });
+    Route::get('/dashboard/system-documentation/manage',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'index'])->name('dashboard.system-documentation.manage');
+    Route::post('/dashboard/system-documentation/manage',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'store'])->name('dashboard.system-documentation.manage.store');
+    Route::put('/dashboard/system-documentation/manage/{id}',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'update'])->name('dashboard.system-documentation.manage.update');
+    Route::delete('/dashboard/system-documentation/manage/{id}',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'destroy'])->name('dashboard.system-documentation.manage.destroy');
+    Route::get('/dashboard/system-documentation/manage/{id}/preview',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'preview'])->name('dashboard.system-documentation.manage.preview');
+    Route::get('/dashboard/system-documentation/manage/{id}/download',[\App\Http\Controllers\Dashboard\AdminSystemDocumentationController::class, 'download'])->name('dashboard.system-documentation.manage.download');
 
     #users
     Route::get('/dashboard/users',[HomeController::class, 'users'])->name('dashboard.users');

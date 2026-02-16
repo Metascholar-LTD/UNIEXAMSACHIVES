@@ -11,6 +11,20 @@ use Illuminate\Support\Facades\Storage;
 class AdminSystemDocumentationController extends Controller
 {
     /**
+     * Create a new controller instance.
+     */
+    public function __construct()
+    {
+        $this->middleware(function ($request, $next) {
+            if (Auth::check() && Auth::user()->role === 'employee') {
+                return redirect()->route('dashboard.system-documentation')
+                    ->with('error', 'Access denied. Only administrators can manage documents.');
+            }
+            return $next($request);
+        });
+    }
+
+    /**
      * Display a listing of system documentation (with management for admins)
      */
     public function index(Request $request)
