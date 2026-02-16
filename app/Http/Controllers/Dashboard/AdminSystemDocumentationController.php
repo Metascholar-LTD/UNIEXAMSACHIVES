@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Storage;
 class AdminSystemDocumentationController extends Controller
 {
     /**
-     * Check if user is authorized (not an employee)
+     * Check if user is authorized (admins only - those with is_admin = 0)
      */
     private function checkAuthorization()
     {
-        if (Auth::check() && Auth::user()->role === 'employee') {
+        if (Auth::check() && Auth::user()->is_admin) {
             return redirect()->route('dashboard.system-documentation')
                 ->with('error', 'Access denied. Only administrators can manage documents.');
         }
