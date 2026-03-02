@@ -371,12 +371,6 @@
                     <span>User Roles</span>
                 </a>
             </li>
-            <li>
-                <a href="{{ route('super-admin.analytics') }}" class="{{ request()->routeIs('super-admin.analytics') ? 'active' : '' }}">
-                    <i class="icofont-chart-bar-graph"></i>
-                    <span>Analytics</span>
-                </a>
-            </li>
         </ul>
     </aside>
 
