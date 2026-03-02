@@ -325,6 +325,8 @@ Route::prefix('super-admin')->name('super-admin.')->middleware(['super_admin'])-
     Route::get('/roles', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'manageRoles'])->name('roles.index');
     Route::post('/users/{id}/grant-super-admin', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'grantSuperAdmin'])->name('users.grant-super-admin');
     Route::post('/users/{id}/revoke-super-admin', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'revokeSuperAdmin'])->name('users.revoke-super-admin');
+    Route::post('/users/{id}/grant-admin', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'grantAdmin'])->name('users.grant-admin');
+    Route::post('/users/{id}/revoke-admin', [\App\Http\Controllers\SuperAdmin\SuperAdminController::class, 'revokeAdmin'])->name('users.revoke-admin');
     
     // Subscription Management
     Route::resource('subscriptions', \App\Http\Controllers\SuperAdmin\SubscriptionController::class);

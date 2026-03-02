@@ -366,15 +366,23 @@
                                           onsubmit="return confirm('Are you sure you want to revoke Super Admin access from this user?')">
                                         @csrf
                                         <input type="hidden" name="confirm" value="1">
-                                        <button type="submit" class="btn-modern btn-modern-danger">Revoke</button>
+                                        <button type="submit" class="btn-modern btn-modern-danger">Revoke Super Admin</button>
                                     </form>
-                                @else
-                                    <form method="POST" action="{{ route('super-admin.users.grant-super-admin', $user->id) }}" 
+                                @elseif($user->is_admin == 0)
+                                    <form method="POST" action="{{ route('super-admin.users.revoke-admin', $user->id) }}" 
                                           class="d-inline" 
-                                          onsubmit="return confirm('Are you sure you want to grant Super Admin access to this user?')">
+                                          onsubmit="return confirm('Are you sure you want to make this user a Regular User?')">
                                         @csrf
                                         <input type="hidden" name="confirm" value="1">
-                                        <button type="submit" class="btn-modern btn-modern-primary">Grant Super Admin</button>
+                                        <button type="submit" class="btn-modern btn-modern-danger">Revoke Admin</button>
+                                    </form>
+                                @else
+                                    <form method="POST" action="{{ route('super-admin.users.grant-admin', $user->id) }}" 
+                                          class="d-inline" 
+                                          onsubmit="return confirm('Are you sure you want to make this user an Admin?')">
+                                        @csrf
+                                        <input type="hidden" name="confirm" value="1">
+                                        <button type="submit" class="btn-modern btn-modern-primary">Grant Admin</button>
                                     </form>
                                 @endif
                             </td>

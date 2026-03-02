@@ -213,6 +213,50 @@ class SuperAdminController extends Controller
         return back()->with('success', "Super Admin access revoked from {$user->first_name} {$user->last_name}.");
     }
 
+    /**
+     * Grant admin access (make regular user a dashboard admin: is_admin = 0)
+     */
+    public function grantAdmin(Request $request, int $userId)
+    {
+        $request->validate(['confirm' => 'required|accepted']);
+
+        $user = User::findOrFail($userId);
+
+        if ($user->isSuperAdmin()) {
+            return back()->with('warning', 'User is a Super Administrator. Use Revoke to change role.');
+        }
+
+        if ($user->is_admin == 0) {
+            return back()->with('warning', 'User is already an Admin.');
+        }
+
+        $user->update(['is_admin' => 0]);
+
+        return back()->with('success', "{$user->first_name} {$user->last_name} is now an Admin.");
+    }
+
+    /**
+     * Revoke admin access (make admin a regular user: is_admin = 1)
+     */
+    public function revokeAdmin(Request $request, int $userId)
+    {
+        $request->validate(['confirm' => 'required|accepted']);
+
+        $user = User::findOrFail($userId);
+
+        if ($user->isSuperAdmin()) {
+            return back()->with('error', 'Cannot revoke Admin from a Super Administrator. Use Revoke to remove Super Admin first.');
+        }
+
+        if ($user->is_admin == 1) {
+            return back()->with('warning', 'User is already a Regular User.');
+        }
+
+        $user->update(['is_admin' => 1]);
+
+        return back()->with('success', "{$user->first_name} {$user->last_name} is now a Regular User.");
+    }
+
     // ===== Private Helper Methods =====
 
     private function getRevenueChartData(): array
