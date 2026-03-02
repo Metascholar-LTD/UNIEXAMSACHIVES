@@ -203,6 +203,83 @@
         background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(248, 113, 113, 0.1));
         transform: translateY(-1px);
     }
+
+    /* Pagination (same as Manage Users page) */
+    .pagination-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        background: #f9fafb;
+        border-radius: 0 0 1rem 1rem;
+        flex-wrap: wrap;
+    }
+    .pagination-info { font-size: 0.875rem; color: #6b7280; white-space: nowrap; }
+    .pagination-info strong { color: #1f2937; font-weight: 600; }
+    .pagination-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .pagination { display: flex; list-style: none; margin: 0; padding: 0; gap: 0.25rem; }
+    .pagination-item { display: inline-block; }
+    .pagination-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        padding: 0 0.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        background: white;
+        color: #374151;
+        font-size: 0.875rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .pagination-link:hover:not(.disabled):not(.active) {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+    .pagination-link.active {
+        background: #64748b;
+        color: white;
+        border-color: #64748b;
+        font-weight: 600;
+    }
+    .pagination-link.disabled {
+        color: #9ca3af;
+        cursor: not-allowed;
+        background: #f9fafb;
+        opacity: 0.5;
+    }
+    .pagination-link.icon { width: 2.5rem; padding: 0; }
+    .pagination-ellipsis {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    .page-size-selector { display: flex; align-items: center; gap: 0.5rem; }
+    .page-size-label { font-size: 0.875rem; color: #6b7280; }
+    .page-size-select {
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        background: white;
+        color: #374151;
+        cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .pagination-wrapper { flex-direction: column; align-items: stretch; }
+        .pagination-controls { justify-content: center; }
+        .page-size-selector { justify-content: center; }
+    }
 </style>
 @endpush
 
@@ -235,6 +312,10 @@
         <div class="stat-card">
             <div class="stat-card-label">Admins</div>
             <div class="stat-card-value">{{ $admins->count() }}</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Regular Users</div>
+            <div class="stat-card-value">{{ $regularUsers->count() }}</div>
         </div>
     </div>
 
@@ -270,10 +351,10 @@
                             <td>
                                 @if($user->isSuperAdmin())
                                     <span class="badge-modern badge-super-admin">Super Admin</span>
-                                @elseif($user->role == 'admin')
-                                    <span class="badge-modern badge-admin">User</span>
+                                @elseif($user->is_admin == 0)
+                                    <span class="badge-modern badge-admin">Admin</span>
                                 @else
-                                    <span class="badge-modern badge-user">Admin</span>
+                                    <span class="badge-modern badge-user">Regular User</span>
                                 @endif
                             </td>
                             <td>{{ $user->department->name ?? 'N/A' }}</td>
@@ -303,10 +384,75 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
-            <div class="mt-4">
-                {{ $users->links() }}
+            @if ($users->hasPages())
+            <div class="pagination-wrapper">
+                <div class="pagination-info">
+                    Showing <strong>{{ $users->firstItem() }}</strong> to <strong>{{ $users->lastItem() }}</strong> of <strong>{{ $users->total() }}</strong> users
+                </div>
+                <div class="pagination-controls">
+                    <ul class="pagination">
+                        @if ($users->onFirstPage())
+                            <li class="pagination-item">
+                                <span class="pagination-link icon disabled"><i class="fas fa-chevron-left"></i></span>
+                            </li>
+                        @else
+                            <li class="pagination-item">
+                                <a href="{{ $users->previousPageUrl() }}" class="pagination-link icon"><i class="fas fa-chevron-left"></i></a>
+                            </li>
+                        @endif
+                        @php
+                            $currentPage = $users->currentPage();
+                            $lastPage = $users->lastPage();
+                            $startPage = max(1, $currentPage - 2);
+                            $endPage = min($lastPage, $currentPage + 2);
+                        @endphp
+                        @if ($startPage > 1)
+                            <li class="pagination-item">
+                                <a href="{{ $users->url(1) }}" class="pagination-link">1</a>
+                            </li>
+                            @if ($startPage > 2)
+                                <li class="pagination-item"><span class="pagination-ellipsis">...</span></li>
+                            @endif
+                        @endif
+                        @for ($i = $startPage; $i <= $endPage; $i++)
+                            <li class="pagination-item">
+                                @if ($i == $currentPage)
+                                    <span class="pagination-link active">{{ $i }}</span>
+                                @else
+                                    <a href="{{ $users->url($i) }}" class="pagination-link">{{ $i }}</a>
+                                @endif
+                            </li>
+                        @endfor
+                        @if ($endPage < $lastPage)
+                            @if ($endPage < $lastPage - 1)
+                                <li class="pagination-item"><span class="pagination-ellipsis">...</span></li>
+                            @endif
+                            <li class="pagination-item">
+                                <a href="{{ $users->url($lastPage) }}" class="pagination-link">{{ $lastPage }}</a>
+                            </li>
+                        @endif
+                        @if ($users->hasMorePages())
+                            <li class="pagination-item">
+                                <a href="{{ $users->nextPageUrl() }}" class="pagination-link icon"><i class="fas fa-chevron-right"></i></a>
+                            </li>
+                        @else
+                            <li class="pagination-item">
+                                <span class="pagination-link icon disabled"><i class="fas fa-chevron-right"></i></span>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+                <div class="page-size-selector">
+                    <span class="page-size-label">Per page:</span>
+                    <select class="page-size-select" onchange="changePageSize(this.value)">
+                        <option value="10" {{ request('per_page', 15) == 10 ? 'selected' : '' }}>10</option>
+                        <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+                        <option value="25" {{ request('per_page', 15) == 25 ? 'selected' : '' }}>25</option>
+                        <option value="50" {{ request('per_page', 15) == 50 ? 'selected' : '' }}>50</option>
+                    </select>
+                </div>
             </div>
+            @endif
             @else
             <div class="text-center py-5">
                 <i class="icofont-inbox" style="font-size: 3rem; color: #d1d5db;"></i>
@@ -316,5 +462,14 @@
         </div>
     </div>
 </div>
+
+<script>
+function changePageSize(size) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('per_page', size);
+    url.searchParams.set('page', '1');
+    window.location.href = url.toString();
+}
+</script>
 @endsection
 

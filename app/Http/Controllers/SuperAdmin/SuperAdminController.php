@@ -143,18 +143,23 @@ class SuperAdminController extends Controller
 
     /**
      * Manage user roles
+     * is_admin: 0 = dashboard admin, 1 = regular user. role: super_admin = super admin.
      */
-    public function manageRoles()
+    public function manageRoles(Request $request)
     {
+        $perPage = $request->get('per_page', 15);
         $users = User::with(['department', 'position', 'superAdminGrantor'])
-            ->orderBy('role', 'desc')
+            ->orderByRaw("CASE WHEN role = 'super_admin' THEN 0 ELSE 1 END")
+            ->orderBy('is_admin', 'asc')
             ->orderBy('created_at', 'desc')
-            ->paginate(20);
+            ->paginate($perPage)
+            ->withQueryString();
 
         $superAdmins = User::where('role', 'super_admin')->get();
-        $admins = User::where('role', 'admin')->get();
+        $admins = User::where('is_admin', 0)->where('role', '!=', 'super_admin')->get();
+        $regularUsers = User::where('is_admin', 1)->get();
 
-        return view('super-admin.roles.index', compact('users', 'superAdmins', 'admins'));
+        return view('super-admin.roles.index', compact('users', 'superAdmins', 'admins', 'regularUsers'));
     }
 
     /**
