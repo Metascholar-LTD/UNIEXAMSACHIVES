@@ -405,6 +405,91 @@
     .status-chip.approved { background: rgba(220, 252, 231, 0.8); color: #059669; border: 1px solid rgba(16,185,129,0.3); }
     .status-chip.pending { background: rgba(254, 243, 199, 0.8); color: #d97706; border: 1px solid rgba(245,158,11,0.3); }
 
+    /* Pagination */
+    .pagination-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+        padding: 1rem 1.5rem;
+        border-top: 1px solid #e5e7eb;
+        background: #f9fafb;
+        border-radius: 0 0 16px 16px;
+        flex-wrap: wrap;
+    }
+    .pagination-info {
+        font-size: 0.875rem;
+        color: #6b7280;
+        white-space: nowrap;
+    }
+    .pagination-info strong { color: #1f2937; font-weight: 600; }
+    .pagination-controls { display: flex; align-items: center; gap: 0.5rem; }
+    .pagination { display: flex; list-style: none; margin: 0; padding: 0; gap: 0.25rem; }
+    .pagination-item { display: inline-block; }
+    .pagination-link {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        padding: 0 0.5rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        background: white;
+        color: #374151;
+        font-size: 0.875rem;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .pagination-link:hover:not(.disabled):not(.active) {
+        background: #f3f4f6;
+        border-color: #d1d5db;
+        color: #1f2937;
+    }
+    .pagination-link.active {
+        background: #64748b;
+        color: white;
+        border-color: #64748b;
+        font-weight: 600;
+    }
+    .pagination-link.disabled {
+        color: #9ca3af;
+        cursor: not-allowed;
+        background: #f9fafb;
+        opacity: 0.5;
+    }
+    .pagination-link.icon { width: 2.5rem; padding: 0; }
+    .pagination-ellipsis {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 2.5rem;
+        height: 2.5rem;
+        color: #6b7280;
+        font-size: 0.875rem;
+    }
+    .page-size-selector {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
+    .page-size-label { font-size: 0.875rem; color: #6b7280; }
+    .page-size-select {
+        padding: 0.5rem 2rem 0.5rem 0.75rem;
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        font-size: 0.875rem;
+        background: white;
+        color: #374151;
+        cursor: pointer;
+    }
+    @media (max-width: 768px) {
+        .pagination-wrapper { flex-direction: column; align-items: stretch; }
+        .pagination-controls { justify-content: center; }
+        .page-size-selector { justify-content: center; }
+    }
+
     /* Staff Category Styles */
     .staff-category-badge {
         display: flex;
@@ -548,15 +633,15 @@
                                 
                                 <div class="hero-stats">
                                     <div class="stat-item">
-                                        <span class="stat-number">{{ count($users) }}</span>
+                                        <span class="stat-number">{{ $totalUsers }}</span>
                                         <div class="stat-label">Total Users</div>
                                     </div>
                                     <div class="stat-item">
-                                        <span class="stat-number">{{ $users->where('is_approve', 1)->count() }}</span>
+                                        <span class="stat-number">{{ $approvedCount }}</span>
                                         <div class="stat-label">Approved</div>
                                     </div>
                                     <div class="stat-item">
-                                        <span class="stat-number">{{ $users->where('is_approve', 0)->count() }}</span>
+                                        <span class="stat-number">{{ $pendingCount }}</span>
                                         <div class="stat-label">Pending</div>
                                     </div>
                                 </div>
@@ -592,7 +677,7 @@
                     <!-- Users Section -->
                     <div class="users-section">
                         <div class="container">
-                            @if (count($users) > 0)
+                            @if ($users->total() > 0)
                                 <div class="users-list" id="gridView">
                                     @foreach ($users as $user)
                                         <div class="user-card" data-status="{{ $user->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
@@ -671,7 +756,7 @@
                                         <tbody>
                                             @foreach ($users as $index => $user)
                                             <tr data-status="{{ $user->is_approve ? 'approved' : 'pending' }}" data-search="{{ strtolower($user->first_name . ' ' . $user->last_name . ' ' . $user->email) }}">
-                                                <td>{{ $index + 1 }}</td>
+                                                <td>{{ $users->firstItem() + $loop->index }}</td>
                                                 <td>
                                                     <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                                                         <span>{{ $user->first_name }} {{ $user->last_name }}</span>
@@ -731,6 +816,76 @@
                                         </tbody>
                                     </table>
                                 </div>
+
+                                @if ($users->hasPages())
+                                <div class="pagination-wrapper">
+                                    <div class="pagination-info">
+                                        Showing <strong>{{ $users->firstItem() }}</strong> to <strong>{{ $users->lastItem() }}</strong> of <strong>{{ $users->total() }}</strong> users
+                                    </div>
+                                    <div class="pagination-controls">
+                                        <ul class="pagination">
+                                            @if ($users->onFirstPage())
+                                                <li class="pagination-item">
+                                                    <span class="pagination-link icon disabled"><i class="fas fa-chevron-left"></i></span>
+                                                </li>
+                                            @else
+                                                <li class="pagination-item">
+                                                    <a href="{{ $users->previousPageUrl() }}" class="pagination-link icon"><i class="fas fa-chevron-left"></i></a>
+                                                </li>
+                                            @endif
+                                            @php
+                                                $currentPage = $users->currentPage();
+                                                $lastPage = $users->lastPage();
+                                                $startPage = max(1, $currentPage - 2);
+                                                $endPage = min($lastPage, $currentPage + 2);
+                                            @endphp
+                                            @if ($startPage > 1)
+                                                <li class="pagination-item">
+                                                    <a href="{{ $users->url(1) }}" class="pagination-link">1</a>
+                                                </li>
+                                                @if ($startPage > 2)
+                                                    <li class="pagination-item"><span class="pagination-ellipsis">...</span></li>
+                                                @endif
+                                            @endif
+                                            @for ($i = $startPage; $i <= $endPage; $i++)
+                                                <li class="pagination-item">
+                                                    @if ($i == $currentPage)
+                                                        <span class="pagination-link active">{{ $i }}</span>
+                                                    @else
+                                                        <a href="{{ $users->url($i) }}" class="pagination-link">{{ $i }}</a>
+                                                    @endif
+                                                </li>
+                                            @endfor
+                                            @if ($endPage < $lastPage)
+                                                @if ($endPage < $lastPage - 1)
+                                                    <li class="pagination-item"><span class="pagination-ellipsis">...</span></li>
+                                                @endif
+                                                <li class="pagination-item">
+                                                    <a href="{{ $users->url($lastPage) }}" class="pagination-link">{{ $lastPage }}</a>
+                                                </li>
+                                            @endif
+                                            @if ($users->hasMorePages())
+                                                <li class="pagination-item">
+                                                    <a href="{{ $users->nextPageUrl() }}" class="pagination-link icon"><i class="fas fa-chevron-right"></i></a>
+                                                </li>
+                                            @else
+                                                <li class="pagination-item">
+                                                    <span class="pagination-link icon disabled"><i class="fas fa-chevron-right"></i></span>
+                                                </li>
+                                            @endif
+                                        </ul>
+                                    </div>
+                                    <div class="page-size-selector">
+                                        <span class="page-size-label">Per page:</span>
+                                        <select class="page-size-select" onchange="changePageSize(this.value)">
+                                            <option value="10" {{ request('per_page', 15) == 10 ? 'selected' : '' }}>10</option>
+                                            <option value="15" {{ request('per_page', 15) == 15 ? 'selected' : '' }}>15</option>
+                                            <option value="25" {{ request('per_page', 15) == 25 ? 'selected' : '' }}>25</option>
+                                            <option value="50" {{ request('per_page', 15) == 50 ? 'selected' : '' }}>50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                @endif
                             @else
                                 <div class="no-users">
                                     <i class="fas fa-users"></i>
@@ -1028,6 +1183,14 @@
 </style>
 
 <script>
+// Change page size (pagination)
+function changePageSize(size) {
+    const url = new URL(window.location.href);
+    url.searchParams.set('per_page', size);
+    url.searchParams.set('page', '1');
+    window.location.href = url.toString();
+}
+
 // Add User Modal Functionality
 document.addEventListener('DOMContentLoaded', function() {
     const addUserBtn = document.getElementById('addUserBtn');

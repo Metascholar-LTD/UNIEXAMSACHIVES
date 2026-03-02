@@ -662,9 +662,17 @@ class HomeController extends Controller
         return view('admin.create_message');
     }
 
-    public function users(){
+    public function users(Request $request){
+        $perPage = $request->get('per_page', 15);
+        $users = User::with('position')->orderBy('created_at', 'desc')->paginate($perPage)->withQueryString();
+        $totalUsers = User::count();
+        $approvedCount = User::where('is_approve', 1)->count();
+        $pendingCount = User::where('is_approve', 0)->count();
         return view('admin.users',[
-            'users' => User::with('position')->get(),
+            'users' => $users,
+            'totalUsers' => $totalUsers,
+            'approvedCount' => $approvedCount,
+            'pendingCount' => $pendingCount,
             'departments' => \App\Models\Department::orderBy('name')->get(),
             'positions' => \App\Models\Position::orderBy('name')->get(),
         ]);
