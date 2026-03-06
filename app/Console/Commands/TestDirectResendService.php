@@ -86,7 +86,7 @@ class TestDirectResendService extends Command
             $this->info("📋 Creating test campaign...");
             $campaign = EmailCampaign::create([
                 'subject' => $subject,
-                'message' => "Hello!\n\nThis is a test email using the DIRECT ResendMailService approach (the same method the controller now uses).\n\nTest Details:\n- Sent at: " . now()->toDateTimeString() . "\n- Recipient: {$email}\n- Has attachment: " . ($withAttachment ? 'Yes' : 'No') . "\n- Method: Direct ResendMailService API\n\nIf you received this email, the direct ResendMailService approach is working!\n\nBest regards,\nUniversity Exams Archive System",
+                'message' => "Hello!\n\nThis is a test email using the DIRECT ResendMailService approach (the same method the controller now uses).\n\nTest Details:\n- Sent at: " . now()->toDateTimeString() . "\n- Recipient: {$email}\n- Has attachment: " . ($withAttachment ? 'Yes' : 'No') . "\n- Method: Direct ResendMailService API\n\nIf you received this email, the direct ResendMailService approach is working!\n\nBest regards,\nUniversity Digital Transformation Suite (UDTS)",
                 'attachments' => $attachmentPaths,
                 'recipient_type' => 'selected',
                 'selected_users' => [$user->id],

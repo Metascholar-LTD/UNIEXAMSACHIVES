@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New Contact Form Submission - University Exams Archive System</title>
+    <title>New Contact Form Submission - University Digital Transformation Suite (UDTS)</title>
     <style>
         * {
             margin: 0;
@@ -204,10 +204,10 @@
     <div class="email-container">
         <div class="header">
             <div style="margin-bottom: 15px;">
-                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" style="height: 50px; width: auto; max-width: 250px;" />
+                 <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Digital Transformation Suite (UDTS)" style="height: 50px; width: auto; max-width: 250px;" />
             </div>
             <h1>🚨 New Contact Form Submission</h1>
-            <p>University Exams Archive System Website</p>
+            <p>University Digital Transformation Suite (UDTS) Website</p>
         </div>
         
         <div class="content">
@@ -253,7 +253,7 @@
             </div>
             
             <div class="action-buttons">
-                <a href="mailto:{{ $email ?? '#' }}?subject=Re: {{ $subject ?? 'Inquiry' }}&body=Dear {{ $name ?? 'Valued Customer' }},%0D%0A%0D%0AThank you for contacting the University Exams Archive System. We have received your inquiry regarding: {{ $subject ?? 'your request' }}%0D%0A%0D%0A" class="btn btn-primary">
+                <a href="mailto:{{ $email ?? '#' }}?subject=Re: {{ $subject ?? 'Inquiry' }}&body=Dear {{ $name ?? 'Valued Customer' }},%0D%0A%0D%0AThank you for contacting the University Digital Transformation Suite (UDTS). We have received your inquiry regarding: {{ $subject ?? 'your request' }}%0D%0A%0D%0A" class="btn btn-primary">
                     📧 Reply to Customer
                 </a>
                 <a href="mailto:support@academicdigital.space?subject=Follow-up: {{ $subject ?? 'Inquiry' }} - {{ $name ?? 'Customer' }}" class="btn btn-secondary">
@@ -263,7 +263,7 @@
         </div>
         
         <div class="footer">
-            <p><strong>University Exams Archive System</strong> - Internal Notification</p>
+            <p><strong>University Digital Transformation Suite (UDTS)</strong> - Internal Notification</p>
             <p>This email was automatically generated from the website contact form.</p>
             <p>Customer Email: {{ $email ?? 'Not provided' }} | Submitted: {{ now()->format('F j, Y \a\t g:i A') }}</p>
         </div>

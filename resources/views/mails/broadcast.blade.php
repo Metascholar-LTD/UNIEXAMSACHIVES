@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title }} - University Exams Archive System</title>
+    <title>{{ $title }} - University Digital Transformation Suite (UDTS)</title>
     <style>
         * {
             margin: 0;
@@ -117,7 +117,7 @@
         <div class="header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Digital Transformation Suite (UDTS)" class="logo-image" />
                 </div>
                 <div class="tagline">Excellence in Academic Digital Archiving</div>
             </div>
@@ -134,7 +134,7 @@
                 
                 <div style="text-align: left; margin: 15px 0;">
                     <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
-                        Thank you for being part of our University Exams Archive System community.
+                        Thank you for being part of our University Digital Transformation Suite (UDTS) community.
                     </p>
                 </div>
             </div>
@@ -143,7 +143,7 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-disclaimer">
-                This message was sent from the University Exams Archive System. 
+                This message was sent from the University Digital Transformation Suite (UDTS). 
                 If you have any questions, please contact our support team.
             </div>
         </div>

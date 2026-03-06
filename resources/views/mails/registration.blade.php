@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome to University Exams Archive System</title>
+    <title>Welcome to University Digital Transformation Suite (UDTS)</title>
     <style>
         * {
             margin: 0;
@@ -219,7 +219,7 @@
         <div class="header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Digital Transformation Suite (UDTS)" class="logo-image" />
                 </div>
                 <div class="tagline">Excellence in Academic Digital Archiving</div>
             </div>
@@ -231,7 +231,7 @@
                 <div class="greeting">Hi {{ $firstname }},</div>
                 
                 <div class="message">
-                    Welcome to the University Archival System! 
+                    Welcome to the University Digital Transformation Suite (UDTS)! 
                     We're excited to have you join our digital archival community and look forward to collaborating with you.
                     1. You will enjoy seamless access to our Digital Archival System once approved.
                     2. You will enjoy seamless access to our Advanced Communication System once approved.
@@ -274,7 +274,7 @@
                 
                 <div style="text-align: left; margin: 15px 0;">
                     <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
-                        Thank you for choosing the University Archival System. We're committed to providing you with the best tools and support for your academic archival needs.
+                        Thank you for choosing the University Digital Transformation Suite (UDTS). We're committed to providing you with the best tools and support for your academic archival needs.
                     </p>
                 </div>
             </div>
@@ -283,7 +283,7 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-disclaimer">
-                This email was sent to {{ $email }} because you registered for on the University Archival System. 
+                This email was sent to {{ $email }} because you registered on our University Digital Transformation Suite (UDTS). 
                 If you didn't create this account, please contact us immediately.
             </div>
         </div>

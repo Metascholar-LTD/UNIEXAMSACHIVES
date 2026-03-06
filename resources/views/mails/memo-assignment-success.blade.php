@@ -210,7 +210,7 @@
         <div class="header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Digital Transformation Suite (UDTS)" class="logo-image" />
                 </div>
                 <div class="tagline">Excellence in Academic Digital Archiving</div>
             </div>

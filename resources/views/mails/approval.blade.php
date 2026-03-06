@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Account Successfully Approved - University Exams Archive System</title>
+    <title>Account Successfully Approved - University Digital Transformation Suite (UDTS)</title>
     <style>
         * {
             margin: 0;
@@ -219,7 +219,7 @@
         <div class="header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Digital Transformation Suite (UDTS)" class="logo-image" />
                 </div>
                 <div class="tagline">Excellence in Academic Digital Archiving</div>
             </div>
@@ -231,7 +231,7 @@
                 <div class="greeting">Hi {{ $firstname }},</div>
                 
                 <div class="message">
-                    Great news! Your account has been approved and you now have full access to our University Archival System.
+                    Great news! Your account has been approved and you now have full access to our University Digital Transformation Suite (UDTS).
                 </div>
                 
                 <div class="approval-box">
@@ -278,7 +278,7 @@
                 
                 <div style="text-align: left; margin: 15px 0;">
                     <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
-                        Welcome to the University Exams Archive System! We're excited to work with you and look forward to your contributions to our digital archive.
+                        Welcome to the University Digital Transformation Suite (UDTS)! We're excited to work with you and look forward to your contributions to our digital archive.
                     </p>
                 </div>
             </div>

@@ -27,7 +27,7 @@ class TestResendEmail extends Command
             $attachments = [];
             if ($withAttachment) {
                 // Create a simple test file
-                $testContent = "This is a test attachment from University Exams Archive System.\n\nGenerated on: " . now()->toDateTimeString();
+                $testContent = "This is a test attachment from University Digital Transformation Suite (UDTS).\n\nGenerated on: " . now()->toDateTimeString();
                 $tempFile = storage_path('app/temp_test_attachment.txt');
                 file_put_contents($tempFile, $testContent);
                 
@@ -50,7 +50,7 @@ class TestResendEmail extends Command
                     <div style='max-width: 600px; margin: 0 auto; padding: 20px;'>
                         <h2 style='color: #007bff;'>🧪 Resend Integration Test</h2>
                         <p>Hello!</p>
-                        <p>This is a test email from the <strong>University Exams Archive System</strong> to verify that Resend email integration is working correctly.</p>
+                        <p>This is a test email from the <strong>University Digital Transformation Suite (UDTS)</strong> to verify that Resend email integration is working correctly.</p>
                         <div style='background-color: #f8f9fa; padding: 15px; border-left: 4px solid #007bff; margin: 20px 0;'>
                             <p><strong>Test Details:</strong></p>
                             <ul>

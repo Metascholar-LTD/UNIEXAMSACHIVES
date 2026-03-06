@@ -3753,7 +3753,7 @@ function exportChatConversation() {
             <div class="export-header">
                 <div class="export-logo-section">
                     <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" 
-                         alt="University Exams Archive System" 
+                         alt="University Digital Transformation Suite (UDTS)" 
                          class="export-logo" />
                     <div class="export-logo-text">
                         <div class="export-logo-title">University Internal Memo Management System</div>

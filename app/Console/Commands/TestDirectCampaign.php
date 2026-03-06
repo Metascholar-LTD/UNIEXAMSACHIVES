@@ -77,7 +77,7 @@ class TestDirectCampaign extends Command
             $this->info("📋 Creating test campaign...");
             $campaign = EmailCampaign::create([
                 'subject' => $subject,
-                'message' => "Hello!\n\nThis is a test email from the NEW direct campaign system of the University Exams Archive System.\n\nWe have completely rewritten the advance communication system to work reliably.\n\nTest Details:\n- Sent at: " . now()->toDateTimeString() . "\n- Recipient: {$email}\n- Has attachment: " . ($withAttachment ? 'Yes' : 'No') . "\n- Method: Direct Mail (like broadcast system)\n\nIf you received this email, the NEW system is working correctly!\n\nBest regards,\nUniversity Exams Archive System",
+                'message' => "Hello!\n\nThis is a test email from the NEW direct campaign system of the University Digital Transformation Suite (UDTS).\n\nWe have completely rewritten the advance communication system to work reliably.\n\nTest Details:\n- Sent at: " . now()->toDateTimeString() . "\n- Recipient: {$email}\n- Has attachment: " . ($withAttachment ? 'Yes' : 'No') . "\n- Method: Direct Mail (like broadcast system)\n\nIf you received this email, the NEW system is working correctly!\n\nBest regards,\nUniversity Digital Transformation Suite (UDTS)",
                 'attachments' => $attachments,
                 'recipient_type' => 'selected',
                 'selected_users' => [$user->id],

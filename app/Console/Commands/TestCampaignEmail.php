@@ -76,7 +76,7 @@ class TestCampaignEmail extends Command
             $this->info("📋 Creating test campaign...");
             $campaign = EmailCampaign::create([
                 'subject' => $subject,
-                'message' => "Hello!\n\nThis is a test email from the University Exams Archive System's advance communication system.\n\nWe are testing the email functionality with attachments and queue processing.\n\nTest Details:\n- Sent at: " . now()->toDateTimeString() . "\n- Recipient: {$email}\n- Has attachment: " . ($withAttachment ? 'Yes' : 'No') . "\n\nIf you received this email, the system is working correctly!\n\nBest regards,\nUniversity Exams Archive System",
+                'message' => "Hello!\n\nThis is a test email from the University Digital Transformation Suite (UDTS) System's advance communication system.\n\nWe are testing the email functionality with attachments and queue processing.\n\nTest Details:\n- Sent at: " . now()->toDateTimeString() . "\n- Recipient: {$email}\n- Has attachment: " . ($withAttachment ? 'Yes' : 'No') . "\n\nIf you received this email, the system is working correctly!\n\nBest regards,\nUniversity Digital Transformation Suite (UDTS)",
                 'attachments' => $attachments,
                 'recipient_type' => 'selected',
                 'selected_users' => [$user->id],
