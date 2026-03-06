@@ -69,7 +69,7 @@
                                     <li class="nav-item" role="presentation">
                                         <button class="single__tab__link" data-bs-toggle="tab"
                                             data-bs-target="#projects__two" type="button" aria-selected="false"
-                                            role="tab" tabindex="-1" aria-controls="projects__two" id="password-tab-btn">Password</button>
+                                            role="tab" tabindex="-1" aria-controls="projects__two">Password</button>
                                     </li>
                                 </ul>
                             </div>
@@ -407,17 +407,6 @@ function previewImage(input) {
         preview.style.display = 'none';
     }
 }
-
-// Scroll password section into view when Password tab is clicked
-document.addEventListener('DOMContentLoaded', function() {
-    const passwordTabBtn = document.getElementById('password-tab-btn');
-    const passwordPane = document.getElementById('projects__two');
-    if (passwordTabBtn && passwordPane) {
-        passwordTabBtn.addEventListener('shown.bs.tab', function() {
-            passwordPane.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        });
-    }
-});
 
 // Form validation
 document.addEventListener('DOMContentLoaded', function() {
