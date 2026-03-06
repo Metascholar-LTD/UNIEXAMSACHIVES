@@ -231,7 +231,7 @@
                 <div class="greeting">Hi {{ $user->first_name }},</div>
                 
                 <div class="message">
-                    Your password has been successfully reset for your University Transformation Suite account.
+                    Your password has been successfully reset for your University Digital Transformation Suite (UDTS) account.
                 </div>
                 
                 <div class="success-box">
@@ -272,7 +272,7 @@
                 
                 <div style="text-align: left; margin: 15px 0;">
                     <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
-                        Thank you for keeping your account secure. We're committed to protecting your data and ensuring the safety of our University Transformation Suite.
+                        Thank you for keeping your account secure. We're committed to protecting your data and ensuring the safety of our University Digital Transformation Suite (UDTS).
                     </p>
                 </div>
             </div>

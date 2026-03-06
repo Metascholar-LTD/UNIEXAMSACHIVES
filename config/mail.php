@@ -109,7 +109,7 @@ return [
 
     'from' => [
         'address' => env('MAIL_FROM_ADDRESS', 'cug@academicdigital.space'),
-        'name' => env('MAIL_FROM_NAME', 'University Exams Archive System'),
+        'name' => env('MAIL_FROM_NAME', 'University Digital Transformation Suite (UDTS)'),
     ],
 
 ];
