@@ -30,7 +30,7 @@ class PasswordResetConfirmation extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Password Reset Confirmation - University Digital Archive',
+            subject: 'Password Reset Confirmation - University Digital Transformation Suite (UDTS)',
         );
     }
 

@@ -346,7 +346,7 @@ class PagesController extends Controller
                 
                 $response = $resendService->sendEmail(
                     $user->email,
-                    'Password Reset Confirmation - University Digital Archive',
+                    'Password Reset Confirmation - University Digital Transformation Suite (UDTS)',
                     $htmlContent,
                     'cug@academicdigital.space'
                 );

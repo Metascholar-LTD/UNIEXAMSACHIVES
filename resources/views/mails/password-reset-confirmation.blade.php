@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Reset Confirmation - University Exams Archive System</title>
+    <title>Password Reset Confirmation - University Digital Transformation Suite (UDTS)</title>
     <style>
         * {
             margin: 0;
@@ -219,7 +219,7 @@
         <div class="header">
             <div class="logo-section">
                 <div class="logo">
-                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Exams Archive System" class="logo-image" />
+                    <img src="https://res.cloudinary.com/dsypclqxk/image/upload/v1761222538/cug_logo_new_e9d6v9.jpg" alt="University Transformation Suite" class="logo-image" />
                 </div>
                 <div class="tagline">Excellence in Academic Digital Archiving</div>
             </div>
@@ -231,7 +231,7 @@
                 <div class="greeting">Hi {{ $user->first_name }},</div>
                 
                 <div class="message">
-                    Your password has been successfully reset for your University Exams Archive System account.
+                    Your password has been successfully reset for your University Transformation Suite account.
                 </div>
                 
                 <div class="success-box">
@@ -272,7 +272,7 @@
                 
                 <div style="text-align: left; margin: 15px 0;">
                     <p style="font-family: Georgia, Times, 'Times New Roman', serif; color: #000000; font-size: 16px; line-height: 1.4;">
-                        Thank you for keeping your account secure. We're committed to protecting your data and ensuring the safety of our University Exams Archive System.
+                        Thank you for keeping your account secure. We're committed to protecting your data and ensuring the safety of our University Transformation Suite.
                     </p>
                 </div>
             </div>
@@ -281,7 +281,7 @@
         <!-- Footer -->
         <div class="footer">
             <div class="footer-disclaimer">
-                This email was sent to {{ $user->email }} because a password reset was requested for your University Exams Archive System account. 
+                This email was sent to {{ $user->email }} because a password reset was requested for your University Transformation Suite account. 
                 If you didn't request this reset, please contact us immediately.
             </div>
         </div>
