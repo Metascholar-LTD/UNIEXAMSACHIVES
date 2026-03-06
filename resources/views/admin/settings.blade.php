@@ -3,8 +3,9 @@
 @section('content')
 @include('frontend.header')
 @include('frontend.theme_shadow')
-<div class="dashboardarea sp_bottom_100">
-    <div class="container-fluid full__width__padding">
+<div class="dashboardarea sp_bottom_100 settings-page-compact">
+    {{-- Hide hero on settings page to keep profile/password section visible without scrolling --}}
+    <div class="container-fluid full__width__padding settings-page-hero">
         <div class="row">
           @include('components.create_section')
         </div>
@@ -59,21 +60,21 @@
 
                         <div class="row">
                             <div class="col-xl-12 aos-init aos-animate" data-aos="fade-up">
-                                <ul class="nav  about__button__wrap dashboard__button__wrap" id="myTab"
-                                    role="tablist">
+                                <ul class="nav about__button__wrap dashboard__button__wrap" id="myTab" role="tablist">
                                     <li class="nav-item" role="presentation">
                                         <button class="single__tab__link active" data-bs-toggle="tab"
                                             data-bs-target="#projects__one" type="button" aria-selected="true"
-                                            role="tab">Profile</button>
+                                            role="tab" aria-controls="projects__one">Profile</button>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <button class="single__tab__link" data-bs-toggle="tab"
                                             data-bs-target="#projects__two" type="button" aria-selected="false"
-                                            role="tab" tabindex="-1">Password</button>
+                                            role="tab" tabindex="-1" aria-controls="projects__two" id="password-tab-btn">Password</button>
                                     </li>
                                 </ul>
                             </div>
 
+                            <div class="tab-content" id="myTabContent">
                                 <div class="tab-pane fade active show" id="projects__one" role="tabpanel"
                                     aria-labelledby="projects__one">
                                     <div class="row">
@@ -327,6 +328,7 @@
                                     </div>
                                 </div> --}}
                             </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -337,6 +339,21 @@
 </div>
 
 <style>
+/* Settings page: hide hero section to push profile/password content up */
+.settings-page-compact .settings-page-hero {
+    display: none;
+}
+
+/* Reduce spacing between tabs and content */
+.settings-page-compact .about__button__wrap.dashboard__button__wrap {
+    margin-bottom: 16px;
+}
+
+.settings-page-compact .dashboard__section__title {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+}
+
 .current-profile-pic {
     text-align: center;
 }
@@ -390,6 +407,17 @@ function previewImage(input) {
         preview.style.display = 'none';
     }
 }
+
+// Scroll password section into view when Password tab is clicked
+document.addEventListener('DOMContentLoaded', function() {
+    const passwordTabBtn = document.getElementById('password-tab-btn');
+    const passwordPane = document.getElementById('projects__two');
+    if (passwordTabBtn && passwordPane) {
+        passwordTabBtn.addEventListener('shown.bs.tab', function() {
+            passwordPane.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+    }
+});
 
 // Form validation
 document.addEventListener('DOMContentLoaded', function() {
