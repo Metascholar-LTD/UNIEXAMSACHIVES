@@ -88,7 +88,7 @@
                                         <div class="dashboard__meessage__chat memos-toolbar">
                                             <div class="memos-title-container">
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
-                                                {{-- Pending sub-tabs: Active Chat (unread/new) vs Read (only when Pending is selected) --}}
+                                                {{-- Pending: only show toggle (Active Chat | Read). Other statuses show section-badge only. --}}
                                                 <div class="pending-sub-tabs" id="pending-sub-tabs" style="display: none;">
                                                     <span class="pending-sub-tab active" id="pending-tab-active" data-sub="active">Active Chat</span>
                                                     <span class="pending-sub-tab" id="pending-tab-read" data-sub="read">Read</span>
@@ -923,7 +923,6 @@
                                                 pendingSubTab = 'active';
                                                 document.querySelectorAll('.pending-sub-tab').forEach(t => t.classList.remove('active'));
                                                 this.classList.add('active');
-                                                document.getElementById('section-badge').textContent = '💬 Active Chats';
                                                 displayMemos(allPendingMemos.filter(m => m.has_new_activity));
                                                 clearSelections();
                                                 updateSelectionUI();
@@ -933,7 +932,6 @@
                                                 pendingSubTab = 'read';
                                                 document.querySelectorAll('.pending-sub-tab').forEach(t => t.classList.remove('active'));
                                                 this.classList.add('active');
-                                                document.getElementById('section-badge').textContent = '📖 Read';
                                                 displayMemos(allPendingMemos.filter(m => !m.has_new_activity));
                                                 clearSelections();
                                                 updateSelectionUI();
@@ -949,20 +947,22 @@
                                             });
                                             document.querySelector(`.uimms-card[data-status="${status}"]`).classList.add('active');
                                             
-                                            // Pending sub-tabs: show only when Pending is selected
+                                            // Pending: show only toggle (Active Chat | Read); hide section badge. Other statuses: show badge, hide toggle.
+                                            const sectionBadgeEl = document.getElementById('section-badge');
                                             const pendingSubTabsEl = document.getElementById('pending-sub-tabs');
-                                            if (pendingSubTabsEl) {
-                                                pendingSubTabsEl.style.display = status === 'pending' ? 'inline-flex' : 'none';
+                                            if (status === 'pending') {
+                                                if (sectionBadgeEl) sectionBadgeEl.style.display = 'none';
+                                                if (pendingSubTabsEl) pendingSubTabsEl.style.display = 'inline-flex';
+                                            } else {
+                                                if (sectionBadgeEl) sectionBadgeEl.style.display = '';
+                                                if (pendingSubTabsEl) pendingSubTabsEl.style.display = 'none';
+                                                const badges = {
+                                                    'suspended': '⏸️ Suspended Conversations',
+                                                    'completed': '✅ Completed Conversations',
+                                                    'archived': '📦 Archived Conversations'
+                                                };
+                                                if (sectionBadgeEl) sectionBadgeEl.textContent = badges[status];
                                             }
-                                            
-                                            // Update section badge (for pending, badge depends on sub-tab)
-                                            const badges = {
-                                                'pending': pendingSubTab === 'read' ? '📖 Read' : '💬 Active Chats',
-                                                'suspended': '⏸️ Suspended Conversations',
-                                                'completed': '✅ Completed Conversations',
-                                                'archived': '📦 Archived Conversations'
-                                            };
-                                            document.getElementById('section-badge').textContent = badges[status];
                                             
                                             // Reset selection state on tab change
                                             if (typeof selectedMemos !== 'undefined' && selectedMemos) {
@@ -1024,7 +1024,6 @@
                                                         document.querySelectorAll('.pending-sub-tab').forEach(t => t.classList.remove('active'));
                                                         const activeTab = document.getElementById('pending-tab-active');
                                                         if (activeTab) activeTab.classList.add('active');
-                                                        document.getElementById('section-badge').textContent = '💬 Active Chats';
                                                         memos = memos.filter(m => m.has_new_activity);
                                                     }
                                                     displayMemos(memos);
