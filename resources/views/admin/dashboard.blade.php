@@ -1154,9 +1154,9 @@
                             <h4>Dashboard</h4>
                         </div>
 
-                        {{-- Payment renewal card: only for admins (role=admin, they pay on behalf of the system). Hidden for regular users (role=user) and super admins (role=super_admin). --}}
+                        {{-- Payment renewal card: only for Admin (is_admin=0, they pay on behalf of the system). Hidden for Regular User (is_admin=1) and Super Admin. Logic matches super-admin roles page. --}}
                         @auth
-                            @if(auth()->user()->role === 'admin')
+                            @if(auth()->user()->is_admin == 0 && !auth()->user()->isSuperAdmin())
                                 @include('components.subscription-status')
                             @endif
                         @endauth
