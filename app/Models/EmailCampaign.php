@@ -400,6 +400,35 @@ class EmailCampaign extends Model
     }
 
     /**
+     * Record that the given user has "read" this memo (opened the chat).
+     * Used to determine Active Chat vs Read for pending memos.
+     */
+    public function recordLastReadBy(int $userId): void
+    {
+        \App\Models\MemoUserRead::updateOrCreate(
+            [
+                'user_id' => $userId,
+                'campaign_id' => $this->id,
+            ],
+            [
+                'last_read_at' => now(),
+            ]
+        );
+    }
+
+    /**
+     * Get when the given user last read this memo, or null if never.
+     */
+    public function getLastReadAtForUser(int $userId): ?\Carbon\Carbon
+    {
+        $read = \App\Models\MemoUserRead::where('user_id', $userId)
+            ->where('campaign_id', $this->id)
+            ->first();
+
+        return $read?->last_read_at;
+    }
+
+    /**
      * Check if a user has bookmarked this memo
      */
     public function isBookmarkedBy($userId): bool

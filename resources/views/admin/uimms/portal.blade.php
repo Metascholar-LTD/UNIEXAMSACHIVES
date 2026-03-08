@@ -88,6 +88,11 @@
                                         <div class="dashboard__meessage__chat memos-toolbar">
                                             <div class="memos-title-container">
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
+                                                {{-- Pending sub-tabs: Active Chat (unread/new) vs Read (only when Pending is selected) --}}
+                                                <div class="pending-sub-tabs" id="pending-sub-tabs" style="display: none;">
+                                                    <span class="pending-sub-tab active" id="pending-tab-active" data-sub="active">Active Chat</span>
+                                                    <span class="pending-sub-tab" id="pending-tab-read" data-sub="read">Read</span>
+                                                </div>
                                             </div>
                                             <div class="memos-actions">
                                                 <div class="selection-controls" id="selection-controls" style="display: none;">
@@ -409,6 +414,33 @@
                                             background-color: #218838;
                                         }
                                         
+                                        .pending-sub-tabs {
+                                            display: inline-flex;
+                                            align-items: center;
+                                            gap: 0;
+                                            margin-left: 16px;
+                                            background: #f1f3f4;
+                                            border-radius: 20px;
+                                            padding: 2px;
+                                        }
+                                        .pending-sub-tab {
+                                            padding: 6px 14px;
+                                            border-radius: 18px;
+                                            font-size: 0.85rem;
+                                            font-weight: 600;
+                                            color: #5f6368;
+                                            cursor: pointer;
+                                            transition: background 0.2s, color 0.2s;
+                                        }
+                                        .pending-sub-tab:hover {
+                                            color: #1a4a9b;
+                                        }
+                                        .pending-sub-tab.active {
+                                            background: #fff;
+                                            color: #1a4a9b;
+                                            box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+                                        }
+
                                         .memos-badge {
                                             background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
                                             color: #1a4a9b;
@@ -879,10 +911,33 @@
 
                                         <script>
                                         let currentStatus = 'pending';
+                                        let allPendingMemos = [];
+                                        let pendingSubTab = 'active';
 
                                         // Load memos on page load
                                         window.addEventListener('load', function() {
                                             loadMemos('pending');
+                                            // Pending sub-tab clicks: switch between Active Chat and Read (no refetch)
+                                            document.getElementById('pending-tab-active')?.addEventListener('click', function() {
+                                                if (currentStatus !== 'pending' || pendingSubTab === 'active') return;
+                                                pendingSubTab = 'active';
+                                                document.querySelectorAll('.pending-sub-tab').forEach(t => t.classList.remove('active'));
+                                                this.classList.add('active');
+                                                document.getElementById('section-badge').textContent = '💬 Active Chats';
+                                                displayMemos(allPendingMemos.filter(m => m.has_new_activity));
+                                                clearSelections();
+                                                updateSelectionUI();
+                                            });
+                                            document.getElementById('pending-tab-read')?.addEventListener('click', function() {
+                                                if (currentStatus !== 'pending' || pendingSubTab === 'read') return;
+                                                pendingSubTab = 'read';
+                                                document.querySelectorAll('.pending-sub-tab').forEach(t => t.classList.remove('active'));
+                                                this.classList.add('active');
+                                                document.getElementById('section-badge').textContent = '📖 Read';
+                                                displayMemos(allPendingMemos.filter(m => !m.has_new_activity));
+                                                clearSelections();
+                                                updateSelectionUI();
+                                            });
                                         });
 
                                         function loadMemos(status) {
@@ -894,9 +949,15 @@
                                             });
                                             document.querySelector(`.uimms-card[data-status="${status}"]`).classList.add('active');
                                             
-                                            // Update section badge
+                                            // Pending sub-tabs: show only when Pending is selected
+                                            const pendingSubTabsEl = document.getElementById('pending-sub-tabs');
+                                            if (pendingSubTabsEl) {
+                                                pendingSubTabsEl.style.display = status === 'pending' ? 'inline-flex' : 'none';
+                                            }
+                                            
+                                            // Update section badge (for pending, badge depends on sub-tab)
                                             const badges = {
-                                                'pending': '💬 Active Chats',
+                                                'pending': pendingSubTab === 'read' ? '📖 Read' : '💬 Active Chats',
                                                 'suspended': '⏸️ Suspended Conversations',
                                                 'completed': '✅ Completed Conversations',
                                                 'archived': '📦 Archived Conversations'
@@ -957,6 +1018,15 @@
                                             fetch(`/dashboard/uimms/memos/${status}`)
                                                 .then(response => response.json())
                                                 .then(memos => {
+                                                    if (status === 'pending') {
+                                                        allPendingMemos = memos;
+                                                        pendingSubTab = 'active';
+                                                        document.querySelectorAll('.pending-sub-tab').forEach(t => t.classList.remove('active'));
+                                                        const activeTab = document.getElementById('pending-tab-active');
+                                                        if (activeTab) activeTab.classList.add('active');
+                                                        document.getElementById('section-badge').textContent = '💬 Active Chats';
+                                                        memos = memos.filter(m => m.has_new_activity);
+                                                    }
                                                     displayMemos(memos);
                                                     // After rendering, ensure selection UI is clean
                                                     clearSelections();
@@ -974,11 +1044,11 @@
                                         }
 
                                         function displayMemos(memos) {
-                                            // Update the counter based on current status and number of memos
+                                            // Update the counter based on current status
                                             if (currentStatus === 'pending') {
                                                 const pendingCounter = document.getElementById('count-pending');
                                                 if (pendingCounter) {
-                                                    pendingCounter.textContent = memos.length;
+                                                    pendingCounter.textContent = allPendingMemos.length;
                                                 }
                                             } else if (currentStatus === 'suspended') {
                                                 const suspendedCounter = document.getElementById('count-suspended');
@@ -1033,7 +1103,7 @@
                                                         const receivedDateTime = `${receivedDateFormatted} ${receivedTimeFormatted}`;
                                                         
                                                         const participants = memo.active_participants || [];
-                                                        const isUnread = false; // You can add unread logic here
+                                                        const isUnread = (currentStatus === 'pending' && memo.has_new_activity) || false;
                                                         
                                                         return `
                                                             <li class="memo-item" data-memo-id="${memo.id}">

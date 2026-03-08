@@ -952,6 +952,20 @@ class HomeController extends Controller
                 // Get when the memo was received by the current user (recipient's created_at)
                 $recipient = $memo->recipients->where('user_id', $userId)->first();
                 $receivedAt = $recipient ? $recipient->created_at : $memo->created_at;
+
+                // For pending memos only: compute "has new activity" (unread or new reply since last read)
+                $hasNewActivity = true;
+                if ($memo->memo_status === 'pending') {
+                    $memoUpdated = $memo->updated_at ?? $memo->created_at;
+                    $latestReplyAt = $memo->replies->isEmpty()
+                        ? null
+                        : $memo->replies->max('created_at');
+                    $latestActivityAt = $latestReplyAt
+                        ? (Carbon::parse($memoUpdated)->greaterThan(Carbon::parse($latestReplyAt)) ? Carbon::parse($memoUpdated) : Carbon::parse($latestReplyAt))
+                        : Carbon::parse($memoUpdated);
+                    $lastReadAt = $memo->getLastReadAtForUser($userId);
+                    $hasNewActivity = $lastReadAt === null || $latestActivityAt->greaterThan($lastReadAt);
+                }
                 
                 return [
                     'id' => $memo->id,
@@ -967,6 +981,7 @@ class HomeController extends Controller
                     'last_message' => $lastMessage,
                     'attachments' => $memo->attachments,
                     'is_bookmarked' => $isBookmarked,
+                    'has_new_activity' => $hasNewActivity,
                 ];
             });
 
@@ -1051,6 +1066,9 @@ class HomeController extends Controller
                 // Default: show the message (fallback for old messages without reply_mode)
                 return true;
             });
+
+            // Record that this user has "read" this memo (for Active Chat vs Read split on portal)
+            $memo->recordLastReadBy($userId);
 
             // Get all users for assignment dropdown
             $users = User::where('is_approve', true)
