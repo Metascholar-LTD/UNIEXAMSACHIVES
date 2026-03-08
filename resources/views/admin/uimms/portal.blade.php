@@ -88,9 +88,9 @@
                                         <div class="dashboard__meessage__chat memos-toolbar">
                                             <div class="memos-title-container">
                                                 <span class="memos-badge" id="section-badge">💬 Active Chats</span>
-                                                {{-- Pending: only show toggle (Active Chat | Read). Other statuses show section-badge only. --}}
+                                                {{-- Pending: only show toggle (Unread | Read). Other statuses show section-badge only. --}}
                                                 <div class="pending-sub-tabs" id="pending-sub-tabs" style="display: none;">
-                                                    <span class="pending-sub-tab active" id="pending-tab-active" data-sub="active">Active Chat</span>
+                                                    <span class="pending-sub-tab active" id="pending-tab-active" data-sub="active">New / Unread</span>
                                                     <span class="pending-sub-tab" id="pending-tab-read" data-sub="read">Read</span>
                                                 </div>
                                             </div>
