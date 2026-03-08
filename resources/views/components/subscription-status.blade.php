@@ -193,12 +193,11 @@
     @endif
 
     {{-- Action Buttons --}}
-    {{-- Note: isRegularUser() checks for role='user' which is displayed as "Admin" in UI --}}
-    {{-- See ROLE_TERMINOLOGY.md for role terminology documentation --}}
+    {{-- Renew actions: only for admins (role=admin) who pay on behalf of the system --}}
     <div class="subscription-actions">
         <div class="actions-group">
             @if($subscription->status === 'active' || $subscription->status === 'expiring_soon')
-                @if(auth()->user()->isRegularUser())
+                @if(auth()->user()->role === 'admin')
                 <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
                     @csrf
                     <button type="submit" class="modern-btn btn-primary">
@@ -211,7 +210,7 @@
                 </form>
                 @endif
             @elseif($subscription->status === 'expired' || $subscription->status === 'suspended')
-                @if(auth()->user()->isRegularUser())
+                @if(auth()->user()->role === 'admin')
                 <form method="POST" action="{{ route('admin.subscriptions.renew', $subscription->id) }}" class="d-inline">
                     @csrf
                     <button type="submit" class="modern-btn btn-danger">
