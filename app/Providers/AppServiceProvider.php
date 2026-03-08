@@ -60,6 +60,9 @@ class AppServiceProvider extends ServiceProvider
                 
                 // Calculate bookmarked memos count
                 $bookmarkedCount = count($bookmarkedMemoIds);
+
+                // Unread pending memos (portal Unread tab logic) for sidebar counter
+                $unreadMemosCount = EmailCampaign::countUnreadPendingForUser($userId);
                 
                 if (Auth::user()->is_admin) {
                     // Regular users (is_admin = 1) - see only their own exams/files
@@ -69,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
+                        'unreadMemosCount' => $unreadMemosCount,
                         'bookmarkedCount' => $bookmarkedCount,
                         'myExamsCount' => $myExams,
                         'allExamsCount' => $myExams, // For regular users, "all" is just their own
@@ -85,6 +89,7 @@ class AppServiceProvider extends ServiceProvider
                     $view->with([
                         'newMessagesCount' => $newMessagesCount,
                         'totalMemosCount' => $totalMemosCount,
+                        'unreadMemosCount' => $unreadMemosCount,
                         'bookmarkedCount' => $bookmarkedCount,
                         'myExamsCount' => $myExams,
                         'allExamsCount' => $myExams, // Admins also only see their own

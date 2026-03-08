@@ -469,4 +469,48 @@ class EmailCampaign extends Model
         $suspendedBy = $this->getSuspendedBy();
         return $suspendedBy && $suspendedBy == $userId;
     }
+
+    /**
+     * Count pending memos that are "unread" for the user (same logic as portal Unread tab).
+     * Used for the sidebar Memos Portal counter.
+     */
+    public static function countUnreadPendingForUser(int $userId): int
+    {
+        $memos = static::with(['replies' => fn ($q) => $q->select('campaign_id', 'created_at')])
+            ->where(function ($query) use ($userId) {
+                $query->whereHas('activeParticipants', fn ($q) => $q->where('user_id', $userId))
+                    ->orWhereHas('recipients', fn ($q) => $q->where('user_id', $userId))
+                    ->orWhereHas('replies', fn ($q) => $q->where('reply_mode', 'specific')->whereJsonContains('specific_recipients', (string) $userId));
+            })
+            ->where(function ($query) {
+                $query->where('memo_status', 'pending')->orWhereNull('memo_status');
+            })
+            ->whereDoesntHave('bookmarkedBy', fn ($q) => $q->where('user_id', $userId))
+            ->get(['id', 'updated_at', 'created_at']);
+
+        if ($memos->isEmpty()) {
+            return 0;
+        }
+
+        $campaignIds = $memos->pluck('id')->toArray();
+        $lastReads = \App\Models\MemoUserRead::where('user_id', $userId)
+            ->whereIn('campaign_id', $campaignIds)
+            ->get()
+            ->keyBy('campaign_id');
+
+        $count = 0;
+        foreach ($memos as $memo) {
+            $latestReplyAt = $memo->replies->isEmpty() ? null : $memo->replies->max('created_at');
+            $memoUpdated = $memo->updated_at ?? $memo->created_at;
+            $latestActivityAt = $latestReplyAt
+                ? (\Carbon\Carbon::parse($memoUpdated)->greaterThan(\Carbon\Carbon::parse($latestReplyAt)) ? \Carbon\Carbon::parse($memoUpdated) : \Carbon\Carbon::parse($latestReplyAt))
+                : \Carbon\Carbon::parse($memoUpdated);
+            $lastReadAt = $lastReads->get($memo->id)?->last_read_at;
+            if ($lastReadAt === null || $latestActivityAt->greaterThan($lastReadAt)) {
+                $count++;
+            }
+        }
+
+        return $count;
+    }
 }
