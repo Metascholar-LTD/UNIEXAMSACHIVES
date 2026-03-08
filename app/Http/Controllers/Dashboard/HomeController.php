@@ -906,18 +906,15 @@ class HomeController extends Controller
         $userId = Auth::id();
         
         try {
-            // First try to get memos with UIMMS data
+            // Memos where user is participant, recipient, or specific-reply recipient
             $memos = EmailCampaign::with(['creator', 'currentAssignee', 'recipients.user', 'replies.user'])
                 ->where(function($query) use ($userId) {
-                    // User is an active participant in the memo
                     $query->whereHas('activeParticipants', function($subQuery) use ($userId) {
                         $subQuery->where('user_id', $userId);
                     })
-                    // OR user is a recipient (for backward compatibility)
                     ->orWhereHas('recipients', function($subQuery) use ($userId) {
                         $subQuery->where('user_id', $userId);
                     })
-                    // OR user has received specific replies in this memo
                     ->orWhereHas('replies', function($subQuery) use ($userId) {
                         $subQuery->where('reply_mode', 'specific')
                                 ->whereJsonContains('specific_recipients', (string)$userId);
@@ -925,18 +922,39 @@ class HomeController extends Controller
                 })
                 ->where(function($query) use ($status) {
                     if ($status === 'pending') {
-                        // Pending memos: ALL active chats (all received/assigned memos)
-                        // No status filter - return all memos for this user
+                        // No status filter for pending
                     } else {
                         $query->where('memo_status', $status);
                     }
                 })
-                // Exclude bookmarked memos from portal - they should only appear in Keep in View
                 ->whereDoesntHave('bookmarkedBy', function($query) use ($userId) {
                     $query->where('user_id', $userId);
                 })
                 ->orderBy('updated_at', 'desc')
                 ->get();
+
+            // Pending only: also include memos the user created when there is activity so sender stays updated.
+            // "Activity" = replies exist OR campaign was updated (assign, status change, etc.).
+            // If you add new actions that should notify the creator, ensure they either create a reply or update the campaign (so updated_at changes).
+            if ($status === 'pending') {
+                $existingIds = $memos->pluck('id')->toArray();
+                $creatorMemosWithActivity = EmailCampaign::with(['creator', 'currentAssignee', 'recipients.user', 'replies.user'])
+                    ->where('created_by', $userId)
+                    ->where(function ($q) {
+                        $q->where('memo_status', 'pending')->orWhereNull('memo_status');
+                    })
+                    ->whereDoesntHave('bookmarkedBy', function($query) use ($userId) {
+                        $query->where('user_id', $userId);
+                    })
+                    ->where(function ($q) {
+                        $q->whereHas('replies')
+                            ->orWhereRaw('updated_at > created_at');
+                    })
+                    ->whereNotIn('id', $existingIds)
+                    ->orderBy('updated_at', 'desc')
+                    ->get();
+                $memos = $memos->merge($creatorMemosWithActivity)->unique('id')->sortByDesc('updated_at')->values();
+            }
 
             // Transform the data to include UIMMS-specific information
             $memos = $memos->map(function($memo) use ($userId) {

@@ -472,6 +472,8 @@ class EmailCampaign extends Model
 
     /**
      * Count pending memos that are "unread" for the user (same logic as portal Unread tab).
+     * Includes memos where user is creator and there is activity (so sender stays updated).
+     * Activity = has replies OR updated_at > created_at (covers assign, status change, etc.).
      * Used for the sidebar Memos Portal counter.
      */
     public static function countUnreadPendingForUser(int $userId): int
@@ -480,13 +482,19 @@ class EmailCampaign extends Model
             ->where(function ($query) use ($userId) {
                 $query->whereHas('activeParticipants', fn ($q) => $q->where('user_id', $userId))
                     ->orWhereHas('recipients', fn ($q) => $q->where('user_id', $userId))
-                    ->orWhereHas('replies', fn ($q) => $q->where('reply_mode', 'specific')->whereJsonContains('specific_recipients', (string) $userId));
+                    ->orWhereHas('replies', fn ($q) => $q->where('reply_mode', 'specific')->whereJsonContains('specific_recipients', (string) $userId))
+                    ->orWhere(function ($q) use ($userId) {
+                        $q->where('created_by', $userId)
+                            ->where(function ($q2) {
+                                $q2->whereHas('replies')->orWhereRaw('updated_at > created_at');
+                            });
+                    });
             })
             ->where(function ($query) {
                 $query->where('memo_status', 'pending')->orWhereNull('memo_status');
             })
             ->whereDoesntHave('bookmarkedBy', fn ($q) => $q->where('user_id', $userId))
-            ->get(['id', 'updated_at', 'created_at']);
+            ->get(['id', 'updated_at', 'created_at', 'created_by']);
 
         if ($memos->isEmpty()) {
             return 0;
@@ -500,6 +508,13 @@ class EmailCampaign extends Model
 
         $count = 0;
         foreach ($memos as $memo) {
+            // Creator-only memos: count only if there is activity (replies or update)
+            if ($memo->created_by == $userId) {
+                $hasActivity = ! $memo->replies->isEmpty() || \Carbon\Carbon::parse($memo->updated_at ?? $memo->created_at)->greaterThan(\Carbon\Carbon::parse($memo->created_at));
+                if (! $hasActivity) {
+                    continue;
+                }
+            }
             $latestReplyAt = $memo->replies->isEmpty() ? null : $memo->replies->max('created_at');
             $memoUpdated = $memo->updated_at ?? $memo->created_at;
             $latestActivityAt = $latestReplyAt
