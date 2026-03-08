@@ -2008,8 +2008,8 @@ class HomeController extends Controller
         $sender = Auth::user();
         
         try {
-            // Check if memo is pending
-            if ($memo->memo_status !== 'pending') {
+            // Check if memo is pending (uses model rule: pending includes null in DB)
+            if (!$memo->isPending()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Urgency alerts can only be sent for pending memos.'

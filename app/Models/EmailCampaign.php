@@ -54,6 +54,23 @@ class EmailCampaign extends Model
         'archived_at' => 'datetime',
     ];
 
+    /**
+     * Single source of truth: memo_status is never null in the app.
+     * DB column is nullable for legacy/backward compatibility; treat null as "pending".
+     */
+    public function getMemoStatusAttribute($value): string
+    {
+        return $value ?? 'pending';
+    }
+
+    /**
+     * Whether this memo is in a state that allows urgency alerts and other "active" actions.
+     */
+    public function isPending(): bool
+    {
+        return $this->memo_status === 'pending';
+    }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
